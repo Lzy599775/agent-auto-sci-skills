@@ -1,0 +1,17 @@
+.env
+*.key
+*.pem
+*.pfx
+*.sqlite
+*.db
+*.pdf
+*.docx
+*.xlsx
+*.zip
+*.7z
+*.rar
+node_modules/
+.venv/
+__pycache__/
+.DS_Store
+Thumbs.db

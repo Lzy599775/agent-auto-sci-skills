@@ -1,0 +1,9 @@
+interface:
+  display_name: "Auto Sci Data Viz"
+  short_description: "EDA、统计分析与论文级图表"
+  brand_color: "#B45309"
+  default_prompt: "Use $agent-auto-sci-data-viz to audit the dataset and design publication-ready tables and figures."
+policy:
+  allow_implicit_invocation: true
+
+

@@ -1,0 +1,9 @@
+interface:
+  display_name: "Auto Sci SciComm"
+  short_description: "论文、汇报、审稿与学术传播"
+  brand_color: "#7C2D12"
+  default_prompt: "Use $agent-auto-sci-scicomm to turn the evidence into a manuscript, rebuttal, poster, or research presentation."
+policy:
+  allow_implicit_invocation: true
+
+

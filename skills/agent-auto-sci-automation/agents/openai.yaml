@@ -1,0 +1,9 @@
+interface:
+  display_name: "Auto Sci Automation"
+  short_description: "科研自动化、记忆与工作流编排"
+  brand_color: "#0F766E"
+  default_prompt: "Use $agent-auto-sci-automation to turn this research task into a persistent, checkpointed workflow."
+policy:
+  allow_implicit_invocation: true
+
+

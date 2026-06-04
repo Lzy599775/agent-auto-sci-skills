@@ -1,0 +1,9 @@
+interface:
+  display_name: "Auto Sci Methodology"
+  short_description: "研究设计、证据质量与批判框架"
+  brand_color: "#4338CA"
+  default_prompt: "Use $agent-auto-sci-methodology to strengthen the research question, design, hypotheses, and evidence quality."
+policy:
+  allow_implicit_invocation: true
+
+

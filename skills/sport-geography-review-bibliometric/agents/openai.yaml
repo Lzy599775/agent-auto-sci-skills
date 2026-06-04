@@ -1,0 +1,8 @@
+interface:
+  display_name: "体育地理综述与文献计量"
+  short_description: "地理体育综述与文献计量写作助手"
+  brand_color: "#2F6F73"
+  default_prompt: "Use $sport-geography-review-bibliometric to design a systematic review and bibliometric manuscript for sports geography, green exposure, and urban health equity."
+policy:
+  allow_implicit_invocation: true
+

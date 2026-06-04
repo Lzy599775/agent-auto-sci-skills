@@ -1,0 +1,9 @@
+interface:
+  display_name: "Auto Sci Geospatial"
+  short_description: "GIS、遥感与空间可达性流程"
+  brand_color: "#15803D"
+  default_prompt: "Use $agent-auto-sci-geospatial to audit spatial data and design a reproducible GIS or exposure workflow."
+policy:
+  allow_implicit_invocation: true
+
+
