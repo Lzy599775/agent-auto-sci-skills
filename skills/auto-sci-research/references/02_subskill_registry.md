@@ -6,9 +6,9 @@ Use this file to choose the right local skill.
 
 | Skill | Role | Use when |
 |---|---|---|
-| `agent-auto-sci` | Umbrella router and evolution controller | Task spans multiple research stages, asks to update skills, or requires project memory and evolution archive. |
+| `auto-sci-research` | Umbrella router and evolution controller | Task spans multiple research stages, asks to update skills, or requires project memory and evolution archive. |
 
-## 2. Agent Auto Sci Subskills
+## 2. Auto-sci-research Subskills
 
 | Skill | Role | Typical outputs |
 |---|---|---|
@@ -43,7 +43,7 @@ These are not subskills of this project, but they can be invoked as technical he
 
 ## 5. Newly Deployed External Research Skills
 
-These are installed locally under `<codex-skills-dir>` and are part of the wider `agent-auto-sci` system.
+These are installed locally under `<codex-skills-dir>` and are part of the wider `auto-sci-research` system.
 
 | Skill | Source repo | Use when |
 |---|---|---|
@@ -57,7 +57,7 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 
 ## 6. Routing Rules
 
-1. If the task asks to update the system, start with `agent-auto-sci`.
+1. If the task asks to update the system, start with `auto-sci-research`.
 2. If the task is a concrete empirical sport-geography manuscript, use `sport-geography-sci-writing`.
 3. If the task is a review or bibliometric paper, use `sport-geography-review-bibliometric`.
 4. If the task involves spatial data or maps, add `agent-auto-sci-geospatial`.
@@ -67,7 +67,7 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 8. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
 9. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
 10. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
-11. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `agent-auto-sci`.
+11. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
 12. If the task asks to create a new thinking/persona skill, use `huashu-nuwa` and keep local evidence boundaries.
 13. If the task asks for writing prompts, use `awesome-ai-research-writing` plus local sport-geography writing rules.
 

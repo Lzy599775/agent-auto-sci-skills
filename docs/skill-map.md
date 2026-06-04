@@ -4,7 +4,7 @@
 
 | Skill | Role |
 |---|---|
-| `agent-auto-sci` | Umbrella router, project memory, skill routing, evolution archive |
+| `auto-sci-research` | Umbrella router, project memory, skill routing, full research writing pipeline, evolution archive |
 
 ## 2. Research Automation
 

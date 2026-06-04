@@ -1,11 +1,11 @@
 ---
-name: agent-auto-sci
-description: "总领型自动科研 Agent skill。用于统筹地理学+体育学研究中的科研自动化、长期记忆、文献库建设、idea 生成、方法设计、数据分析、机器学习、地理空间/遥感、综述与文献计量、SCI 写作、审稿回复、进化档案维护。触发于 agent-auto-sci、自动化科研、科研 Agent、跨项目记忆、skill 总控、科研工作流编排、进化档案、AutoSci/OmegaWiki 思路迁移、K-Dense scientific-agent-skills 精简封装等任务。"
+name: auto-sci-research
+description: "总领型自动科研 Agent skill。用于统筹地理学+体育学研究中的科研自动化、长期记忆、文献库建设、idea 生成、方法设计、数据分析、机器学习、地理空间/遥感、综述与文献计量、SCI 写作、审稿回复、进化档案维护。触发于 auto-sci-research、Auto-sci-research、agent-auto-sci、自动化科研、科研 Agent、跨项目记忆、skill 总控、科研工作流编排、进化档案、AutoSci/OmegaWiki 思路迁移、K-Dense scientific-agent-skills 精简封装等任务。"
 ---
 
-# Agent Auto Sci
+# Auto-sci-research
 
-This is the umbrella skill for the user's local scientific-agent system. It does not replace domain skills. It routes work to the right subskill, preserves reusable knowledge, and requires every major improvement to leave a visible evolution record.
+This is the umbrella skill for the user's local scientific-agent system. It replaces the earlier public label `agent-auto-sci` while keeping that phrase as a legacy trigger. It does not replace domain skills. It routes work to the right subskill, preserves reusable knowledge, and requires every major improvement to leave a visible evolution record.
 
 Core idea:
 

@@ -1,4 +1,4 @@
-# Agent Auto Sci System Architecture
+# Auto-sci-research System Architecture
 
 Use this file to reason about the umbrella research-agent system.
 
@@ -29,7 +29,7 @@ For this user's Codex setup, we do not require AutoSci's full runtime. We transl
 ## 3. Local Architecture
 
 ```text
-agent-auto-sci
+auto-sci-research
 ├── automation          -> research lifecycle, memory, source ingestion, evolution log
 ├── ai-ml               -> machine learning, deep learning, XAI, model validation
 ├── data-viz            -> EDA, statistics, tables, publication figures

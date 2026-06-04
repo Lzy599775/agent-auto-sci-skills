@@ -1,0 +1,124 @@
+# Auto-sci-research
+
+[中文](README.md) | [English](README_EN.md) | [🌐 Showcase](site/index.html)
+
+> A Codex-first skill suite for geography, sport science, urban health, geospatial exposure assessment, literature review, bibliometrics, machine learning, and SCI writing.
+
+`Auto-sci-research` is a reusable research-agent skill bundle for Codex. It is designed for research on sport parks, sport facilities, green exposure, heat exposure, spatial equity, urban health, GIS/remote sensing, systematic reviews, scoping reviews, bibliometrics, machine learning, scientific visualization, and manuscript writing.
+
+It is not a paper generator. It is a maintainable research workbench that helps researchers organize search, screening, coding, analysis, figures, writing, peer-review responses, and policy agendas.
+
+## Core Workflow
+
+```text
+sources
+-> structured memory
+-> idea and method design
+-> literature review / bibliometrics / coding
+-> GIS / exposure / data / ML analysis
+-> manuscript / figures / tables / policy agenda
+-> reviewer-risk audit / rebuttal
+-> evolution archive
+```
+
+## Installation for Codex
+
+```powershell
+git clone https://github.com/Lzy599775/agent-auto-sci-skills.git
+cd agent-auto-sci-skills
+.\scripts\install.ps1
+```
+
+Default target:
+
+```text
+$env:USERPROFILE\.codex\skills
+```
+
+Restart Codex after installation.
+
+Custom target:
+
+```powershell
+.\scripts\install.ps1 -Target "$env:USERPROFILE\.agents\skills"
+```
+
+## Skill Index
+
+| Skill | Status | Purpose | Typical trigger |
+|---|---:|---|---|
+| `auto-sci-research` / legacy `agent-auto-sci` | Stable | Router, project memory, workflow orchestration, evolution archive | “Use Auto-sci-research to plan this research task.” |
+| `agent-auto-sci-automation` | Stable | Source manifests, checkpoints, failure logs, API safety | “Build a persistent research workflow.” |
+| `agent-auto-sci-methodology` | Stable | Research questions, hypotheses, evidence grading, bias audit | “Turn this topic into testable questions.” |
+| `agent-auto-sci-geospatial` | Stable | GIS, remote sensing, accessibility, exposure, spatial equity | “Audit my spatial workflow.” |
+| `agent-auto-sci-data-viz` | Stable | EDA, statistics, publication figures, bibliometric visuals | “Design figures and captions.” |
+| `agent-auto-sci-ai-ml` | Stable | ML, SHAP/XAI, leakage checks, spatial validation | “Audit model validation and interpretation.” |
+| `agent-auto-sci-scicomm` | Stable | Manuscript structure, journal fit, rebuttal, slides | “Rebuild the manuscript argument.” |
+| `sport-geography-review-bibliometric` | Stable | Systematic/scoping reviews, bibliometrics, critical coding, policy agenda | “Design a review + bibliometrics manuscript.” |
+| `sport-geography-sci-writing` | Stable | Empirical SCI writing for sport geography, exposure, equity, urban health | “Turn my results into an SCI manuscript.” |
+
+## Full Research Pipelines
+
+### Review + bibliometrics + policy agenda
+
+```text
+auto-sci-research
+-> sport-geography-review-bibliometric
+-> agent-auto-sci-methodology
+-> agent-auto-sci-data-viz
+-> agent-auto-sci-scicomm
+```
+
+Outputs: search strategy, PRISMA protocol, screening criteria, coding framework, bibliometric figure plan, critical framework, and policy agenda.
+
+### Sport facility accessibility and spatial equity manuscript
+
+```text
+auto-sci-research
+-> sport-geography-sci-writing
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-data-viz
+-> agent-auto-sci-methodology
+```
+
+Outputs: research questions, mechanism pathway, spatial data audit, accessibility/exposure/equity metrics, figures, discussion, limitations, and reviewer-risk scan.
+
+### ML + spatial health interpretation
+
+```text
+auto-sci-research
+-> agent-auto-sci-ai-ml
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-methodology
+-> agent-auto-sci-scicomm
+```
+
+Outputs: baselines, spatial/temporal splits, leakage checks, SHAP/XAI interpretation boundaries, and manuscript-ready explanation.
+
+## Example Prompts
+
+```text
+Use Auto-sci-research and sport-geography-review-bibliometric to design a systematic review on sport park exposure, green equity, and urban health. Include search strategy, PRISMA, screening criteria, coding table, bibliometric figures, critical framework, and policy agenda. Target journals: Cities or Sustainable Cities and Society.
+```
+
+```text
+Use sport-geography-sci-writing and agent-auto-sci-geospatial to audit my empirical paper on sport facility accessibility. Focus on spatial units, network accessibility, exposure measurement, map compliance, spatial equity metrics, and reviewer risks.
+```
+
+## Public Safety
+
+This repository must not contain API keys, tokens, cookies, private PDFs, paid database exports, unpublished manuscripts, reviewer comments, private datasets, personal absolute paths, or unauthorized third-party content.
+
+Before release:
+
+```powershell
+.\scripts\scan_public_safety.ps1
+```
+
+## References
+
+The public presentation borrows structural ideas from several open-source skill repositories, including XiaohongshuSkills, academic-paper-writer-pro-2, and nature-skills. The workflows here are redesigned for geography + sport science research and do not vendor those projects.
+
+## License
+
+MIT License. Third-party code, templates, or assets must be reviewed separately for license compatibility and attribution.

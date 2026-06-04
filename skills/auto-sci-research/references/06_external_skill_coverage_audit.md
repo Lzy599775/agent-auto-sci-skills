@@ -1,6 +1,6 @@
 # External Skill Coverage Audit
 
-Use this file when checking whether the local `agent-auto-sci` system has preserved the useful logic of the two GitHub repositories while adapting it to geography + sport science.
+Use this file when checking whether the local `auto-sci-research` system has preserved the useful logic of the two GitHub repositories while adapting it to geography + sport science.
 
 ## 1. Source Status
 
@@ -23,7 +23,7 @@ Use this file when checking whether the local `agent-auto-sci` system has preser
 | `/paper-plan` | claim-evidence map, section plan, figure plan, citation plan | `agent-auto-sci-scicomm` |
 | `/review` | internal peer-review pass, evidence risk, method risk, writing risk | `agent-auto-sci-scicomm`, `agent-auto-sci-methodology` |
 | `/rebuttal` | reviewer-comment decomposition and response strategy | `agent-auto-sci-scicomm` |
-| `/visualize` | output visualization and evolution archive | `agent-auto-sci-data-viz`, `agent-auto-sci` |
+| `/visualize` | output visualization and evolution archive | `agent-auto-sci-data-viz`, `auto-sci-research` |
 
 ## 3. K-Dense Coverage
 

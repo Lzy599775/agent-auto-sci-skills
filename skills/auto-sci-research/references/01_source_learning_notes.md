@@ -61,7 +61,7 @@ For this user, keep only these directions:
 
 ### Local Adaptation Principle
 
-K-Dense provides library-level skills. `agent-auto-sci` adds project-level orchestration for sport geography, urban health, and sustainable cities research.
+K-Dense provides library-level skills. `auto-sci-research` adds project-level orchestration for sport geography, urban health, and sustainable cities research.
 
 ## 3. Hailuo AI Evolution HTML Guide
 

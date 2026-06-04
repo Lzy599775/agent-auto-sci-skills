@@ -7,7 +7,7 @@ Use when building a manuscript for Cities, Sustainable Cities and Society, Urban
 Recommended route:
 
 ```text
-agent-auto-sci
+auto-sci-research
 -> sport-geography-review-bibliometric
 -> agent-auto-sci-methodology
 -> agent-auto-sci-data-viz
@@ -21,7 +21,7 @@ Use when studying accessibility, green exposure, heat exposure, active-living op
 Recommended route:
 
 ```text
-agent-auto-sci
+auto-sci-research
 -> sport-geography-sci-writing
 -> agent-auto-sci-geospatial
 -> agent-auto-sci-data-viz

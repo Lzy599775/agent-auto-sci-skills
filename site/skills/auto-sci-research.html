@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>auto-sci-research | Auto-sci-research</title>
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;color:#17211f;background:#f6f7f4;line-height:1.75}
+    main{max-width:980px;margin:0 auto;padding:42px 20px 70px}
+    a{color:#0f766e;text-underline-offset:.18em} .back{display:inline-flex;margin-bottom:24px;text-decoration:none;color:#5a6863}
+    header{padding:28px 0 30px;border-bottom:1px solid #dce4df} h1{font-size:clamp(34px,6vw,58px);line-height:1.08;margin:0;letter-spacing:0}
+    .lead{font-size:18px;color:#5a6863;max-width:760px}.pill{display:inline-flex;padding:4px 10px;border-radius:999px;background:#eaf3ef;color:#196f55;font-size:13px;font-weight:800;margin-bottom:14px}
+    section{padding:30px 0;border-bottom:1px solid #dce4df} h2{font-size:26px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .card{background:#fff;border:1px solid #dce4df;border-radius:8px;padding:18px}.card h3{margin:0 0 8px}.card p,.card li{color:#5a6863}
+    pre{overflow:auto;background:#14211e;color:#ecf4ef;border-radius:8px;padding:16px;line-height:1.55}.en{color:#5a6863}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body><main>
+  <a class="back" href="../index.html">← 返回展示页</a>
+  <header>
+    <span class="pill">Router / Memory / Full Research Writing</span>
+    <h1>auto-sci-research</h1>
+    <p class="lead">总领型自动科研 Agent skill。它是整个 Auto-sci-research 套件的入口，用来统筹地理学、体育学与城市健康研究中的任务路由、长期记忆、全流程写作、子 skill 调度和进化档案维护。</p>
+    <p class="en">Umbrella research-agent skill for routing tasks, preserving reusable memory, selecting subskills, and maintaining the evolution archive.</p>
+  </header>
+  <section><h2>适合什么时候用</h2>
+    <div class="grid">
+      <div class="card"><h3>跨阶段科研任务</h3><p>当一个请求同时涉及文献、方法、GIS、数据分析、模型、写作或投稿时，先用它判断路线。</p></div>
+      <div class="card"><h3>Skill 体系维护</h3><p>当需要新增、合并、优化或审计子 skills 时，它负责检查是否重复、是否应该写入进化记录。</p></div>
+    </div>
+  </section>
+  <section><h2>典型输入</h2>
+    <pre>使用 auto-sci-research，帮我判断“体育公园暴露与城市健康”的研究应该走系统综述、文献计量还是实证分析路线，并列出需要调用的子 skills。</pre>
+  </section>
+  <section><h2>Codex 部署与调用</h2>
+    <pre>git clone https://github.com/Lzy599775/agent-auto-sci-skills.git
+cd agent-auto-sci-skills
+.\scripts\install.ps1</pre>
+    <p>安装后重启 Codex。推荐自然语言调用：<strong>“使用 auto-sci-research 规划这个科研任务”</strong>。旧触发词 <code>agent-auto-sci</code> 仍作为兼容关键词保留。</p>
+  </section>
+  <section><h2>它会输出什么</h2>
+    <ul>
+      <li>任务类型判断：文献、方法、空间、数据、模型、写作或 skill 进化。</li>
+      <li>子 skill 调用路线和执行顺序。</li>
+      <li>需要读取的项目记忆、参考文档和质量检查点。</li>
+      <li>重大变动后的进化档案更新要求。</li>
+    </ul>
+  </section>
+  <section><h2>使用注意</h2>
+    <p>它不是替代所有子 skill 的“大而全 prompt”。它的价值在于把任务分配到正确的专门模块，并保证长期项目不会失忆。</p>
+    <p><a href="https://github.com/Lzy599775/agent-auto-sci-skills/tree/main/skills/auto-sci-research">查看 GitHub 文件</a></p>
+  </section>
+</main></body></html>

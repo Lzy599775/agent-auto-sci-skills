@@ -1,6 +1,6 @@
 # Evolution Archive Protocol
 
-Use this file whenever any `agent-auto-sci*` or sport-geography skill is updated.
+Use this file whenever any `auto-sci-research`, `agent-auto-sci-*`, or sport-geography skill is updated.
 
 ## 1. Files
 
@@ -33,7 +33,7 @@ Then validate:
 
 ```powershell
 $env:PYTHONUTF8='1'
-python '<codex-skills-dir>\.system\skill-creator\scripts\quick_validate.py' '<codex-skills-dir>\agent-auto-sci'
+python '<codex-skills-dir>\.system\skill-creator\scripts\quick_validate.py' '<codex-skills-dir>\auto-sci-research'
 python '<project-root>\\agent_auto_sci\evolution_archive\update_evolution_html.py'
 ```
 

@@ -1,135 +1,62 @@
-# Agent Auto Sci Skills
+# Auto-sci-research
 
-> Geography + sport science research skills for Codex.
+[中文](README.md) | [English](README_EN.md) | [🌐 展示页](site/index.html)
 
-面向地理学 + 体育学交叉研究的本地科研 Agent Skills。这个项目把体育公园、体育设施、绿地/绿色暴露、热暴露、空间公平、城市健康、综述写作、系统综述、scoping review、文献计量分析、GIS/遥感、数据可视化、机器学习与 SCI 写作等工作流，整理成可复用的 Codex skills。
+> 面向 **Codex** 的地理学 + 体育学 + 城市健康科研 Skill 套件。  
+> From literature review to bibliometrics, geospatial exposure assessment, machine learning, SCI writing, peer review, and policy agenda.
 
-它不是一个“万能论文助手”。更准确地说，它是一套能持续积累、反复调用、逐步进化的科研工作流工具箱。
+`Auto-sci-research` 是一套面向科研写作与科研自动化的 Codex Skills。它服务于体育公园、体育设施、绿地暴露、热暴露、空间公平、城市健康、GIS/遥感、文献计量、系统综述、scoping review、机器学习、科学可视化与 SCI 论文写作。
+
+它不是“自动生成论文”的快捷方式，而是一个 **可复用、可审计、可进化的科研工作台**：帮助研究者把选题、检索、阅读、编码、分析、图表、写作、审稿回复和政策议程组织成稳定流程。
 
 ---
 
-## 为什么做这个项目
+## ✨ 一句话定位
 
-在体育地理、城市健康与环境暴露研究里，一个研究问题往往不会只停留在“写一段论文”：
+如果你的研究问题长这样：
 
-- 需要从 WoS/Scopus 等数据库设计检索式，并做系统综述或文献计量；
-- 需要处理 GIS、遥感、空间可达性、绿色暴露、热暴露和地图合规；
-- 需要做 EDA、统计检验、机器学习、SHAP/XAI 和稳健性分析；
-- 需要把图、表、证据和政策建议组织成 Cities、SCS、UFUG、Environment International、Nature Cities 等期刊能接受的论证；
-- 更重要的是，需要把失败经验、审稿意见、薄弱证据和写作规则保存下来，而不是每篇文章都从零开始。
+- 体育公园 / 体育设施是否公平可达？
+- 绿地暴露、热暴露与身体活动或城市健康之间有什么机制？
+- 城市公园、口袋公园、蓝绿空间如何影响健康与空间正义？
+- 文献计量结果如何从“关键词聚类”升级为“批判性框架 + 政策议程”？
+- 面向 Cities / SCS / UFUG / Environment International 等期刊，论文该怎么定位、分析和表达？
 
-本项目的核心思路是：
+那么 `Auto-sci-research` 的目标就是把这些问题拆解成可执行的 Codex workflow。
+
+核心链路：
 
 ```text
-sources -> structured memory -> idea and method design -> data/geo/ML analysis -> manuscript or review -> critique/rebuttal -> evolution archive
+sources
+-> structured memory
+-> idea and method design
+-> literature review / bibliometrics / coding
+-> GIS / exposure / data / ML analysis
+-> manuscript / figures / tables / policy agenda
+-> reviewer-risk audit / rebuttal
+-> evolution archive
 ```
 
 ---
 
-## 我们做了什么
+## 🧭 借鉴了什么
 
-- **科研 Agent 总控**：用 `agent-auto-sci` 统筹任务路由、长期记忆和 skill 进化。
-- **综述与文献计量**：为 systematic review、scoping review、bibliometric analysis、critical coding 和 policy agenda 提供完整工作流。
-- **体育地理实证写作**：把 sport park / sport facility / green exposure / heat exposure / equity / urban health 研究转成 SCI 论文叙事链。
-- **GIS 与遥感**：沉淀 CRS、矢量/栅格、网络可达性、LCZ、NDVI/LST、地图合规和空间公平检查。
-- **数据与图表**：建立 EDA、统计、图件、文献计量图、政策矩阵和 caption 规则。
-- **AI/ML 与方法论**：强调 baseline、泄露检查、空间验证、SHAP 非因果边界、证据强度和偏倚审计。
-- **科学交流**：覆盖论文结构、claim-evidence map、审稿回复、PPT、海报和期刊适配。
+本主页结构参考了三个优秀 skill 项目的公开呈现方式，但内容是针对地理学 + 体育学研究重新设计的：
 
----
+- [white0dew/XiaohongshuSkills](https://github.com/white0dew/XiaohongshuSkills)：清晰的功能特性、风险提示、快速开始和命令参考。
+- [BoHeFan/academic-paper-writer-pro-2](https://github.com/BoHeFan/academic-paper-writer-pro-2)：学术写作与排版流程的场景化表达。
+- [Yuan1z0825/nature-skills](https://github.com/Yuan1z0825/nature-skills)：Codex 优先的安装说明、Skill index、What it does / Key rules / Reference files 结构。
 
-## Skills 总览
-
-### 总领与自动科研
-
-| Skill | 用途 |
-|---|---|
-| `agent-auto-sci` | 科研 Agent 总控、子 skill 路由、长期记忆和进化档案维护 |
-| `agent-auto-sci-automation` | source manifest、checkpoint、失败经验、API 安全边界和自动科研流程 |
-
-### 方法、数据、空间与模型
-
-| Skill | 用途 |
-|---|---|
-| `agent-auto-sci-methodology` | 研究问题、假设、证据分级、偏倚审计和空间正义框架 |
-| `agent-auto-sci-geospatial` | GIS、遥感、可达性、绿地/热暴露、空间公平和地图合规 |
-| `agent-auto-sci-data-viz` | EDA、统计分析、论文图表、文献计量图和政策矩阵 |
-| `agent-auto-sci-ai-ml` | 机器学习、SHAP/XAI、模型评估、空间/时间泄露检查和可复现性 |
-
-### 写作、综述与体育地理
-
-| Skill | 用途 |
-|---|---|
-| `agent-auto-sci-scicomm` | 科学写作、图文叙事、投稿、审稿回复、PPT 和海报 |
-| `sport-geography-review-bibliometric` | 体育地理综述、系统综述、scoping review、文献计量、批判性编码和政策议程 |
-| `sport-geography-sci-writing` | 体育地理实证 SCI 写作、目标期刊适配、图表和讨论 |
+本仓库不会复制第三方项目代码或大段文本，只迁移其“好用的组织逻辑”。
 
 ---
 
-## 典型使用场景
+## 🚀 Codex 部署
 
-### 1. 系统综述 + 文献计量 + 政策议程
-
-适合主题：
-
-- sport park exposure
-- sport facility accessibility
-- green exposure
-- heat exposure
-- park equity
-- active-living infrastructure
-- urban health
-- environmental justice
-
-推荐 skill 组合：
-
-```text
-agent-auto-sci
-+ sport-geography-review-bibliometric
-+ agent-auto-sci-methodology
-+ agent-auto-sci-data-viz
-+ agent-auto-sci-scicomm
-```
-
-### 2. 体育设施可达性与空间公平实证论文
-
-推荐 skill 组合：
-
-```text
-agent-auto-sci
-+ sport-geography-sci-writing
-+ agent-auto-sci-geospatial
-+ agent-auto-sci-data-viz
-+ agent-auto-sci-methodology
-```
-
-### 3. GIS / 遥感 / 暴露评估
-
-推荐 skill 组合：
-
-```text
-agent-auto-sci-geospatial
-+ agent-auto-sci-data-viz
-+ sport-geography-sci-writing
-```
-
-### 4. 论文投稿前自检
-
-推荐 skill 组合：
-
-```text
-agent-auto-sci-scicomm
-+ agent-auto-sci-methodology
-+ sport-geography-sci-writing
-```
-
----
-
-## 安装方法
-
-把本仓库的 `skills/` 复制到 Codex skills 目录：
+### 方式 1：一键安装全部 skills
 
 ```powershell
+git clone https://github.com/Lzy599775/agent-auto-sci-skills.git
+cd agent-auto-sci-skills
 .\scripts\install.ps1
 ```
 
@@ -139,27 +66,340 @@ agent-auto-sci-scicomm
 $env:USERPROFILE\.codex\skills
 ```
 
-也可以指定目录：
+安装后重启 Codex，新的 skills 会出现在可用 skill 列表中。
+
+### 方式 2：安装到自定义目录
 
 ```powershell
 .\scripts\install.ps1 -Target "$env:USERPROFILE\.agents\skills"
 ```
 
-安装后重启 Codex，让 skill 列表刷新。
+### 方式 3：手动复制
+
+如果不想运行脚本，可以把 `skills/` 下需要的 skill 文件夹复制到 Codex 的 skills 目录。建议复制完整文件夹，而不是只复制 `SKILL.md`，因为很多 skill 依赖 `references/`、`scripts/` 和 `agents/openai.yaml`。
 
 ---
 
-## 公开安全原则
+## 🧩 Skill Index
+
+| Skill | 状态 | 适用任务 | 典型触发方式 |
+|---|---:|---|---|
+| `auto-sci-research` / legacy `agent-auto-sci` | Stable | 总控、路由、长期记忆、进化档案 | “使用 Auto-sci-research 规划这个科研任务” |
+| `agent-auto-sci-automation` | Stable | 自动科研、source manifest、checkpoint、API 安全 | “建立文献项目的自动化流程” |
+| `agent-auto-sci-methodology` | Stable | 研究问题、机制框架、证据分级、偏倚审计 | “把选题改成可检验研究问题” |
+| `agent-auto-sci-geospatial` | Stable | GIS、遥感、可达性、绿地/热暴露、空间公平 | “检查我的空间分析流程” |
+| `agent-auto-sci-data-viz` | Stable | EDA、统计分析、论文图表、文献计量图 | “设计主图、补充图和 caption” |
+| `agent-auto-sci-ai-ml` | Stable | 机器学习、SHAP/XAI、泄露检查、空间验证 | “检查模型验证和解释边界” |
+| `agent-auto-sci-scicomm` | Stable | SCI 写作、图文叙事、投稿、审稿回复 | “重构论文 argument 和回复审稿人” |
+| `sport-geography-review-bibliometric` | Stable | 系统综述、scoping review、文献计量、批判性编码 | “设计综述 + 文献计量 + 政策议程” |
+| `sport-geography-sci-writing` | Stable | 体育地理实证论文、目标期刊适配、讨论写作 | “把可达性/暴露结果写成 SCI 论文” |
+
+完整模块关系见 [docs/skill-map.md](docs/skill-map.md)。
+
+---
+
+## 🧠 每个子 skill 做什么
+
+### 1. `auto-sci-research` / `agent-auto-sci`
+
+**What it does**  
+总领型科研 Agent。它不替代子 skill，而是先判断任务类型，再把任务路由给文献、方法、空间、数据、模型或写作模块。
+
+**Key rules**
+
+- 不把科研任务当成一次性回答，要保留可复用知识。
+- 外部项目只能转化为本地 workflow，不能盲目整包复制。
+- 涉及重大 skill 变动时，需要更新进化记录。
+
+**Typical output**
+
+- 任务路线图；
+- 子 skill 调用顺序；
+- 需要读取的参考文件；
+- 质量检查点和下一步动作。
+
+### 2. `agent-auto-sci-automation`
+
+**What it does**  
+把科研自动化拆成安全、可恢复、可审计的流程，适合长期文献库、自动阅读、知识库、checkpoint 和失败复盘。
+
+**Key rules**
+
+- 密钥、私有 PDF、付费数据库导出和未发表论文不能进入公开仓库。
+- 自动化流程必须有 source manifest、状态记录和失败恢复点。
+- 复杂任务先 checkpoint，再运行长流程。
+
+**Typical output**
+
+- source manifest；
+- checkpoint 表；
+- 失败日志模板；
+- API 配置和安全边界。
+
+### 3. `agent-auto-sci-methodology`
+
+**What it does**  
+把宽泛选题转成研究问题、机制路径、假设矩阵、证据分级和偏倚审计。
+
+**Key rules**
+
+- 区分相关、机制和因果主张。
+- 横断面或观察性研究不能写成强因果。
+- 空间公平与环境正义需要明确受影响人群、空间机制和政策工具。
+
+**Typical output**
+
+- research question matrix；
+- mechanism map；
+- bias audit；
+- evidence grading；
+- limitations and policy boundary。
+
+### 4. `agent-auto-sci-geospatial`
+
+**What it does**  
+处理 GIS、遥感、可达性、暴露评估、空间公平和地图合规。
+
+**Key rules**
+
+- 先审计 CRS、空间单位、尺度、边界和网络假设。
+- 暴露指标要说明时间、空间、强度和人群权重。
+- 地图必须服务论证，不能只做装饰。
+
+**Typical output**
+
+- CRS / geometry audit；
+- accessibility workflow；
+- NDVI / LST / LCZ exposure plan；
+- spatial equity metrics；
+- publication map checklist。
+
+### 5. `agent-auto-sci-data-viz`
+
+**What it does**  
+把 EDA、统计分析、文献计量图、论文图表和 policy matrix 组织成支撑论文 claim 的视觉证据。
+
+**Key rules**
+
+- 每张图必须回答一个问题或支撑一个 claim。
+- caption 要说明发现，而不仅描述图里有什么。
+- 文献计量图不能停留在“漂亮网络”，要连接主题演化、证据缺口和政策意义。
+
+**Typical output**
+
+- figure plan；
+- main/supplementary figure split；
+- table shells；
+- caption drafts；
+- policy matrix。
+
+### 6. `agent-auto-sci-ai-ml`
+
+**What it does**  
+服务于地理学和体育学研究中的机器学习、SHAP/XAI、模型比较、泄露检查和可复现性。
+
+**Key rules**
+
+- baseline 先于复杂模型。
+- 空间/时间切分优先于随机切分。
+- SHAP 和特征重要性不是直接因果证据。
+
+**Typical output**
+
+- modeling plan；
+- feature/label audit；
+- validation split；
+- leakage checklist；
+- SHAP interpretation boundary。
+
+### 7. `agent-auto-sci-scicomm`
+
+**What it does**  
+用于 SCI 论文结构、段落功能、图文叙事、投稿信、审稿回复、PPT 和海报。
+
+**Key rules**
+
+- 写作必须围绕 claim-evidence map。
+- 不为了语言漂亮而扩张证据。
+- 审稿回复要把每条意见映射到行动、证据和修改位置。
+
+**Typical output**
+
+- manuscript outline；
+- claim-evidence map；
+- reviewer-risk scan；
+- cover letter；
+- response-to-reviewers。
+
+### 8. `sport-geography-review-bibliometric`
+
+**What it does**  
+体育地理综述与文献计量专用 skill。适合 systematic review、scoping review、bibliometric analysis，以及“综述 + 批判性框架 + 政策议程”路线。
+
+**Key rules**
+
+- 检索式必须能被复现。
+- PRISMA、纳入排除、编码表和图表必须互相支撑。
+- 高水平综述要提出机制框架和政策议程，而不是只报告关键词。
+
+**Typical output**
+
+- search strategy；
+- PRISMA protocol；
+- screening criteria；
+- coding framework；
+- CiteSpace / VOSviewer / R bibliometrix figure plan；
+- policy agenda。
+
+### 9. `sport-geography-sci-writing`
+
+**What it does**  
+体育地理实证 SCI 写作 skill。适合体育设施可达性、体育公园暴露、绿地/热暴露、空间公平、城市健康和身体活动机制研究。
+
+**Key rules**
+
+- Introduction 要从城市健康问题进入，而不是从技术指标进入。
+- Methods 要写清楚空间单位、暴露窗口、可达性假设和数据限制。
+- Discussion 要连接机制、治理、规划和公平，不只复述结果。
+
+**Typical output**
+
+- target-journal positioning；
+- introduction gap chain；
+- methods structure；
+- results narrative；
+- figure/table plan；
+- discussion and policy implications。
+
+---
+
+## 🧪 全流程写作 Pipeline
+
+### A. 综述 / 文献计量 / 政策议程
+
+```text
+auto-sci-research
+-> sport-geography-review-bibliometric
+-> agent-auto-sci-methodology
+-> agent-auto-sci-data-viz
+-> agent-auto-sci-scicomm
+```
+
+适合：
+
+- sport park exposure；
+- sport facility accessibility；
+- green exposure / green equity；
+- heat exposure；
+- urban health；
+- active-living infrastructure；
+- park equity and environmental justice。
+
+建议产物：
+
+1. 检索式与数据库策略；
+2. PRISMA 流程和纳入排除标准；
+3. 编码表和 evidence map；
+4. 文献计量图谱和主题演化；
+5. 批判性分析框架；
+6. 面向城市规划和公共健康的政策议程；
+7. 目标期刊版 manuscript outline。
+
+### B. 体育设施可达性 / 暴露 / 空间公平实证论文
+
+```text
+auto-sci-research
+-> sport-geography-sci-writing
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-data-viz
+-> agent-auto-sci-methodology
+```
+
+建议产物：
+
+1. 研究问题与机制路径；
+2. 数据源、空间单位、暴露窗口和可达性假设；
+3. GIS / 遥感 / 网络分析 workflow；
+4. 统计或机器学习方案；
+5. 主图、表格和补充材料；
+6. 讨论、政策启示和局限；
+7. 投稿前 reviewer-risk scan。
+
+### C. 机器学习 + 空间健康解释
+
+```text
+auto-sci-research
+-> agent-auto-sci-ai-ml
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-methodology
+-> agent-auto-sci-scicomm
+```
+
+建议产物：
+
+1. baseline 与模型比较；
+2. 空间/时间切分；
+3. 泄露检查；
+4. SHAP/XAI 解释边界；
+5. 结果写法和政策外推限制。
+
+---
+
+## 💬 Codex 使用示例
+
+```text
+使用 Auto-sci-research 和 sport-geography-review-bibliometric，
+为“体育公园暴露、绿色公平与城市健康”的系统综述设计完整路线。
+要求包括检索式、PRISMA、纳入排除标准、编码表、文献计量图表、批判性框架和政策议程。
+目标期刊偏向 Cities / Sustainable Cities and Society。
+```
+
+```text
+使用 sport-geography-sci-writing 和 agent-auto-sci-geospatial，
+检查我的体育设施可达性实证论文。
+重点看空间单位、网络可达性、暴露测度、地图合规、空间公平指标和审稿风险。
+```
+
+```text
+使用 agent-auto-sci-data-viz，
+把我的 CiteSpace、VOSviewer 和 R bibliometrix 结果整理成论文图表计划。
+每张图都要说明支撑哪个 claim，以及适合放主文还是补充材料。
+```
+
+```text
+使用 agent-auto-sci-scicomm，
+基于已有结果重构论文 Introduction 和 Discussion。
+要求输出 claim-evidence map、段落功能、目标期刊风险和需要补强的证据。
+```
+
+---
+
+## 📁 项目结构
+
+```text
+agent-auto-sci-skills/
+├─ skills/                 # 9 个可安装的 Codex skills
+├─ docs/                   # skill map、使用场景、第三方参考和发布说明
+├─ scripts/                # 安装脚本和公开安全扫描脚本
+├─ site/                   # GitHub Pages 展示页和子 skill 详情页
+├─ .github/workflows/      # 校验与 Pages 发布
+├─ README.md               # 中文主页
+└─ README_EN.md            # English README
+```
+
+---
+
+## 🔒 公开安全原则
 
 本仓库不应包含：
 
 - API key、token、cookie、password；
 - 私有 PDF 全文；
+- WoS / Scopus 等付费数据库原始导出；
 - 未发表论文正文；
 - 审稿意见原文；
-- WoS/Scopus 原始付费数据；
-- 带个人身份的本地绝对路径；
-- 用户自己的文献库、数据集和图件源文件。
+- 私人文献库、私人数据集或个人本地绝对路径；
+- 无授权的第三方代码或大段文本。
 
 发布前运行：
 
@@ -169,12 +409,21 @@ $env:USERPROFILE\.codex\skills
 
 ---
 
-## 第三方项目
+## 🤝 Contribution
 
-本项目参考了多个优秀开源项目的结构和思路。第三方项目不整包随仓库分发，只在文档中作为可选扩展和学习来源列出。见 [docs/external-skills.md](docs/external-skills.md)。
+欢迎 issue 和 PR。建议按下面格式提交新 skill 或改进建议：
+
+```text
+1. 这个 skill 解决什么科研任务？
+2. 适用学科、数据类型或期刊场景是什么？
+3. 需要哪些 references、scripts 或 assets？
+4. 触发关键词是什么？
+5. 如何验证它真的有用？
+6. 是否包含密钥、私有数据、版权风险或不可公开材料？
+```
 
 ---
 
 ## License
 
-MIT License。若未来引入第三方源码，请逐一核对许可证并保留 attribution。
+MIT License。若未来引入第三方源代码、模板或素材，需要逐一核对许可证并保留 attribution。

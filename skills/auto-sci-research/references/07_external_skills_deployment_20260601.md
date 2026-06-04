@@ -1,6 +1,6 @@
 # External Skills Deployment 2026-06-01
 
-Use this file to understand what was locally deployed on 2026-06-01 and how each source fits into `agent-auto-sci`.
+Use this file to understand what was locally deployed on 2026-06-01 and how each source fits into `auto-sci-research`.
 
 ## 1. Deployment Summary
 
@@ -37,11 +37,11 @@ Use this file to understand what was locally deployed on 2026-06-01 and how each
 
 For review and bibliometric writing:
 
-`agent-auto-sci -> sport-geography-review-bibliometric -> academic-research-suite if broader ARS workflow is needed -> codex-paper-reader for local PDFs -> awesome-ai-research-writing for prompt-level text operations`
+`auto-sci-research -> sport-geography-review-bibliometric -> academic-research-suite if broader ARS workflow is needed -> codex-paper-reader for local PDFs -> awesome-ai-research-writing for prompt-level text operations`
 
 For empirical sport-geography manuscripts:
 
-`agent-auto-sci -> sport-geography-sci-writing -> agent-auto-sci-geospatial/data-viz/ai-ml -> academic-research-suite for paper pipeline -> awesome-ai-research-writing for targeted polishing`
+`auto-sci-research -> sport-geography-sci-writing -> agent-auto-sci-geospatial/data-viz/ai-ml -> academic-research-suite for paper pipeline -> awesome-ai-research-writing for targeted polishing`
 
 For local literature library work:
 
