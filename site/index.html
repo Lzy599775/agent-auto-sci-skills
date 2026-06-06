@@ -339,9 +339,9 @@
     <section>
       <div class="wrap">
         <div class="stats">
-          <div class="stat"><strong>9</strong><span class="zh">个可安装 skills</span><span class="en">installable skills</span></div>
+          <div class="stat"><strong>10</strong><span class="zh">个可安装 skills</span><span class="en">installable skills</span></div>
           <div class="stat"><strong>5</strong><span class="zh">类核心能力：方法、空间、数据、模型、写作</span><span class="en">core capabilities: methods, geo, data, ML, writing</span></div>
-          <div class="stat"><strong>2</strong><span class="zh">条体育地理专用论文路线</span><span class="en">sport-geography manuscript routes</span></div>
+          <div class="stat"><strong>3</strong><span class="zh">条专用论文路线：综述雷达、计量综述、实证写作</span><span class="en">specialized manuscript routes</span></div>
           <div class="stat"><strong>0</strong><span class="zh">私有 PDF、密钥或付费数据</span><span class="en">private PDFs, secrets, or paid exports</span></div>
         </div>
       </div>
@@ -352,8 +352,8 @@
         <div class="section-head">
           <h2 class="zh">Skills 导航</h2>
           <h2 class="en">Skill Navigator</h2>
-          <p class="zh">每个 skill 都保留自己的职责边界：总控负责路由，子 skill 负责具体研究环节，体育地理两个专用 skill 负责综述/文献计量和实证写作。</p>
-          <p class="en">Each skill has a clear boundary: the router coordinates tasks, subskills handle research stages, and two sport-geography skills cover reviews/bibliometrics and empirical SCI writing.</p>
+          <p class="zh">每个 skill 都保留自己的职责边界：总控负责路由，子 skill 负责具体研究环节，新加入的综述雷达 skill 负责路线判别、前沿扫描、正式综述语料库和期刊证据门控。</p>
+          <p class="en">Each skill has a clear boundary: the router coordinates tasks, subskills handle research stages, and the new review-radar skill handles route decisions, frontier scans, formal corpora, and journal evidence gates.</p>
         </div>
         <div class="cards">
           <a class="card" href="skills/auto-sci-research.html">
@@ -405,6 +405,13 @@
             <p class="en">Manuscript structure, claim-evidence mapping, rebuttal, slides, posters, and journal fit.</p>
             <div class="tags"><span class="tag">writing</span><span class="tag">rebuttal</span></div>
           </a>
+          <a class="card" href="skills/urban-exposure-review-radar-workflow.html">
+            <span class="module">Review Radar</span>
+            <h3>urban-exposure-review-radar-workflow</h3>
+            <p class="zh">城市暴露、体育地理、遥感热环境、Geospatial AI 和医学数据库连接的综述全流程与前沿雷达。</p>
+            <p class="en">Review workflow and frontier radar for urban exposure, sport geography, remote sensing, Geospatial AI, and health linkage.</p>
+            <div class="tags"><span class="tag">review route</span><span class="tag">RS radar</span><span class="tag">health linkage</span></div>
+          </a>
           <a class="card" href="skills/sport-geography-review-bibliometric.html">
             <span class="module">Review & Bibliometrics</span>
             <h3>sport-geography-review-bibliometric</h3>
@@ -438,9 +445,21 @@
             <p class="zh">适合体育公园暴露、体育设施可达性、绿色公平、热暴露、城市健康等主题。</p>
             <p class="en">For sport park exposure, sport facility accessibility, green equity, heat exposure, and urban health.</p>
             <pre>auto-sci-research
+-> urban-exposure-review-radar-workflow
 -> sport-geography-review-bibliometric
 -> agent-auto-sci-methodology
 -> agent-auto-sci-data-viz
+-> agent-auto-sci-scicomm</pre>
+          </article>
+          <article>
+            <h3 class="zh">城市暴露 + 遥感前沿雷达 + 健康数据库连接</h3>
+            <h3 class="en">Urban exposure + RS radar + health linkage</h3>
+            <p class="zh">适合热暴露、绿地暴露、LCZ、Geospatial AI、CV-to-RS、公共医学数据库和分年龄/性别人群健康影响研究。</p>
+            <p class="en">For heat exposure, green exposure, LCZ, Geospatial AI, CV-to-RS, public-health databases, and stratified health outcomes.</p>
+            <pre>auto-sci-research
+-> urban-exposure-review-radar-workflow
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-methodology
 -> agent-auto-sci-scicomm</pre>
           </article>
           <article>
@@ -524,6 +543,13 @@
             <p class="en">Handles scientific writing and communication: manuscript structure, figure-story alignment, cover letters, rebuttals, slides, and posters.</p>
             <ul class="zh"><li>使用 claim-evidence map 检查论证</li><li>适配目标期刊的问题意识</li><li>把审稿风险前置处理</li></ul>
             <ul class="en"><li>Uses claim-evidence maps</li><li>Adapts arguments to target journals</li><li>Surfaces reviewer risks early</li></ul>
+          </article>
+          <article class="detail" id="review-radar">
+            <h3>urban-exposure-review-radar-workflow</h3>
+            <p class="zh">新增的综述雷达全流程 skill。它先判断任务应走系统综述、范围综述、文献计量+批判性综述、叙事/批判性综述、前沿雷达还是实证设计，再把检索、筛选、提取、编码、图表、写作和目标期刊门控串起来。</p>
+            <p class="en">The new review-radar workflow skill. It first decides whether the task is a systematic review, scoping review, bibliometric + critical review, narrative/critical review, frontier radar, or empirical design, then connects search, screening, extraction, coding, figures, writing, and journal gates.</p>
+            <ul class="zh"><li>区分 formal corpus 与 arXiv/GitHub/会议页面等 radar candidates</li><li>为 Cities/SCS/EI/Health & Place/UFUG/Nature-family 设置证据门槛</li><li>覆盖绿色暴露、热暴露、体育设施可达性、遥感热环境、Geospatial AI 和医学数据库连接</li></ul>
+            <ul class="en"><li>Separates formal corpora from arXiv/GitHub/conference radar candidates</li><li>Adds journal evidence gates for Cities, SCS, EI, Health & Place, UFUG, and Nature-family outlets</li><li>Covers green exposure, heat exposure, sport facility accessibility, remote-sensing heat, Geospatial AI, and health database linkage</li></ul>
           </article>
           <article class="detail" id="review">
             <h3>sport-geography-review-bibliometric</h3>

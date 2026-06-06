@@ -23,6 +23,7 @@ Use this skill first when the task spans multiple research stages or asks to imp
 | GIS, spatial accessibility, remote sensing, spatial ML | `agent-auto-sci-geospatial` |
 | Manuscript writing, slides, posters, peer review, rebuttal | `agent-auto-sci-scicomm` |
 | Hypothesis, research design, critical appraisal, evidence grading | `agent-auto-sci-methodology` |
+| Urban exposure review workflow, systematic/scoping review, bibliometric + critical review, remote-sensing frontier radar, CV-to-RS idea generation, public health database linkage | `urban-exposure-review-radar-workflow` |
 | Sport geography empirical SCI manuscript writing | `sport-geography-sci-writing` |
 | Sport geography review, systematic review, bibliometrics | `sport-geography-review-bibliometric` |
 | Web-based autonomous deep research | `gpt-researcher` |
@@ -81,6 +82,7 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 - `references/05_project_routes.md`: current sport-geography review and empirical-manuscript routes.
 - `references/06_external_skill_coverage_audit.md`: coverage matrix for AutoSci and K-Dense skills, including what is preserved, adapted, and intentionally excluded.
 - `references/07_external_skills_deployment_20260601.md`: 2026-06-01 deployment record for gpt-researcher, nuwa-skill, ARS, autoresearch, paper reader, Codex Academic Skills, and AI writing prompts.
+- `../urban-exposure-review-radar-workflow/references/workflow_playbook.md`: route-specific workflow for reviews, bibliometrics, urban exposure, remote sensing radar, and health database linkage.
 
 ## Local Project Files
 

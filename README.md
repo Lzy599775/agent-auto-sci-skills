@@ -9,6 +9,8 @@
 
 它不是“自动生成论文”的快捷方式，而是一个 **可复用、可审计、可进化的科研工作台**：帮助研究者把选题、检索、阅读、编码、分析、图表、写作、审稿回复和政策议程组织成稳定流程。
 
+当前版本新增 `urban-exposure-review-radar-workflow`：把医学叙事综述 workflow 的阶段化写作纪律，与遥感/Geospatial AI 前沿雷达的选题发现能力结合起来，专门服务城市暴露、体育地理、热-绿复合暴露、公共健康数据库连接和高水平综述写作。
+
 ---
 
 ## ✨ 一句话定位
@@ -91,6 +93,7 @@ $env:USERPROFILE\.codex\skills
 | `agent-auto-sci-data-viz` | Stable | EDA、统计分析、论文图表、文献计量图 | “设计主图、补充图和 caption” |
 | `agent-auto-sci-ai-ml` | Stable | 机器学习、SHAP/XAI、泄露检查、空间验证 | “检查模型验证和解释边界” |
 | `agent-auto-sci-scicomm` | Stable | SCI 写作、图文叙事、投稿、审稿回复 | “重构论文 argument 和回复审稿人” |
+| `urban-exposure-review-radar-workflow` | Stable | 综述类型判别、文献计量+批判性综述、系统/范围综述、遥感前沿雷达、CV-to-RS、医学数据库连接 | “先判断这篇综述/雷达/实证设计该走什么路线” |
 | `sport-geography-review-bibliometric` | Stable | 系统综述、scoping review、文献计量、批判性编码 | “设计综述 + 文献计量 + 政策议程” |
 | `sport-geography-sci-writing` | Stable | 体育地理实证论文、目标期刊适配、讨论写作 | “把可达性/暴露结果写成 SCI 论文” |
 
@@ -102,7 +105,7 @@ $env:USERPROFILE\.codex\skills
 
 ### 1. `auto-sci-research` / `agent-auto-sci`
 
-**What it does**  
+**What it does**
 总领型科研 Agent。它不替代子 skill，而是先判断任务类型，再把任务路由给文献、方法、空间、数据、模型或写作模块。
 
 **Key rules**
@@ -231,7 +234,29 @@ $env:USERPROFILE\.codex\skills
 - cover letter；
 - response-to-reviewers。
 
-### 8. `sport-geography-review-bibliometric`
+### 8. `urban-exposure-review-radar-workflow`
+
+**What it does**
+
+城市暴露与综述前沿雷达全流程 skill。它先判定任务应该走 narrative review、systematic review、scoping review、bibliometric + critical review、frontier radar 还是 review-informed empirical design，再给出检索、筛选、提取、编码、图表、写作和期刊门控。
+
+**Key rules**
+
+- 正式综述语料库和 arXiv/GitHub/会议页面等前沿雷达候选必须分开。
+- 前沿热点不能自动变成系统综述证据，除非通过同一纳入标准。
+- 目标期刊路线必须绑定证据门槛：Cities/SCS 强调城市治理与规划机制，EI/Health & Place 强调暴露-健康证据与混杂控制。
+
+**Typical output**
+
+- route decision table；
+- formal corpus / radar candidate handoff；
+- WoS/Scopus/PubMed/SPORTDiscus/OpenAlex 检索策略；
+- 遥感/Geospatial AI 前沿雷达；
+- 绿色暴露、热暴露、体育设施可达性、医学数据库连接的提取与编码框架；
+- journal evidence gate；
+- project scaffold。
+
+### 9. `sport-geography-review-bibliometric`
 
 **What it does**  
 体育地理综述与文献计量专用 skill。适合 systematic review、scoping review、bibliometric analysis，以及“综述 + 批判性框架 + 政策议程”路线。
@@ -251,7 +276,7 @@ $env:USERPROFILE\.codex\skills
 - CiteSpace / VOSviewer / R bibliometrix figure plan；
 - policy agenda。
 
-### 9. `sport-geography-sci-writing`
+### 10. `sport-geography-sci-writing`
 
 **What it does**  
 体育地理实证 SCI 写作 skill。适合体育设施可达性、体育公园暴露、绿地/热暴露、空间公平、城市健康和身体活动机制研究。
@@ -279,6 +304,7 @@ $env:USERPROFILE\.codex\skills
 
 ```text
 auto-sci-research
+-> urban-exposure-review-radar-workflow
 -> sport-geography-review-bibliometric
 -> agent-auto-sci-methodology
 -> agent-auto-sci-data-viz
@@ -304,6 +330,32 @@ auto-sci-research
 5. 批判性分析框架；
 6. 面向城市规划和公共健康的政策议程；
 7. 目标期刊版 manuscript outline。
+
+### A2. 城市暴露 / 遥感前沿雷达 / 医学数据库连接
+
+```text
+auto-sci-research
+-> urban-exposure-review-radar-workflow
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-methodology
+-> agent-auto-sci-scicomm
+```
+
+适合：
+
+- 城市热暴露、LCZ、UHI、LST 和人体热风险；
+- 绿地暴露、街景绿量、蓝绿空间和可见绿量；
+- Geospatial AI、遥感基础模型、开放词汇分割、VLM、CV-to-RS 迁移；
+- 城市暴露与公共医学数据库、队列、医院、医保、死亡登记或健康调查连接；
+- 不同年龄、性别、慢病和社会经济群体的健康影响研究设计。
+
+建议产物：
+
+1. 路线判别：系统综述、范围综述、计量综述、叙事综述、前沿雷达或实证设计；
+2. formal corpus 与 radar candidates 交接表；
+3. 遥感/AI 候选论文项目评分表；
+4. 暴露窗口、空间连接、健康结局、混杂控制和隐私伦理检查；
+5. 面向 Cities / SCS / EI / Health & Place / UFUG / Nature-family 的证据门槛。
 
 ### B. 体育设施可达性 / 暴露 / 空间公平实证论文
 
@@ -378,7 +430,7 @@ auto-sci-research
 
 ```text
 agent-auto-sci-skills/
-├─ skills/                 # 9 个可安装的 Codex skills
+├─ skills/                 # 10 个可安装的 Codex skills
 ├─ docs/                   # skill map、使用场景、第三方参考和发布说明
 ├─ scripts/                # 安装脚本和公开安全扫描脚本
 ├─ site/                   # GitHub Pages 展示页和子 skill 详情页

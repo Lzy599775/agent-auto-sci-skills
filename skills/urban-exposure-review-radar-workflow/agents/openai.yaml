@@ -1,0 +1,4 @@
+interface:
+  display_name: "Urban Exposure Review Radar Workflow"
+  short_description: "Route reviews, frontier radar, urban exposure, remote sensing, and health-linkage research."
+  default_prompt: "Decide the best route for an urban exposure or sport-geography review/radar task; provide search, screening, extraction, coding, evidence-gate, and journal-fit steps."

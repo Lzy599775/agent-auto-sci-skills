@@ -8,6 +8,8 @@
 
 It is not a paper generator. It is a maintainable research workbench that helps researchers organize search, screening, coding, analysis, figures, writing, peer-review responses, and policy agendas.
 
+This release adds `urban-exposure-review-radar-workflow`, a workflow skill that combines review-project discipline with remote-sensing / Geospatial AI frontier radar. It is designed for urban exposure, sport geography, heat-green compound exposure, public-health database linkage, and high-level review manuscripts.
+
 ## Core Workflow
 
 ```text
@@ -54,6 +56,7 @@ Custom target:
 | `agent-auto-sci-data-viz` | Stable | EDA, statistics, publication figures, bibliometric visuals | “Design figures and captions.” |
 | `agent-auto-sci-ai-ml` | Stable | ML, SHAP/XAI, leakage checks, spatial validation | “Audit model validation and interpretation.” |
 | `agent-auto-sci-scicomm` | Stable | Manuscript structure, journal fit, rebuttal, slides | “Rebuild the manuscript argument.” |
+| `urban-exposure-review-radar-workflow` | Stable | Review-route decision, bibliometric + critical review, systematic/scoping review, remote-sensing radar, CV-to-RS, medical database linkage | “Decide which route this review/radar/study should take.” |
 | `sport-geography-review-bibliometric` | Stable | Systematic/scoping reviews, bibliometrics, critical coding, policy agenda | “Design a review + bibliometrics manuscript.” |
 | `sport-geography-sci-writing` | Stable | Empirical SCI writing for sport geography, exposure, equity, urban health | “Turn my results into an SCI manuscript.” |
 
@@ -63,6 +66,7 @@ Custom target:
 
 ```text
 auto-sci-research
+-> urban-exposure-review-radar-workflow
 -> sport-geography-review-bibliometric
 -> agent-auto-sci-methodology
 -> agent-auto-sci-data-viz
@@ -70,6 +74,18 @@ auto-sci-research
 ```
 
 Outputs: search strategy, PRISMA protocol, screening criteria, coding framework, bibliometric figure plan, critical framework, and policy agenda.
+
+### Urban exposure + remote-sensing radar + health database linkage
+
+```text
+auto-sci-research
+-> urban-exposure-review-radar-workflow
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-methodology
+-> agent-auto-sci-scicomm
+```
+
+Outputs: route decision, formal-corpus / radar-candidate handoff, remote-sensing and Geospatial AI candidate ranking, exposure-window and spatial-linkage plan, public-health outcome framework, journal evidence gate, and publishable research ideas.
 
 ### Sport facility accessibility and spatial equity manuscript
 
@@ -96,6 +112,10 @@ auto-sci-research
 Outputs: baselines, spatial/temporal splits, leakage checks, SHAP/XAI interpretation boundaries, and manuscript-ready explanation.
 
 ## Example Prompts
+
+```text
+Use urban-exposure-review-radar-workflow to decide whether my project on heat exposure, green exposure, sport facility accessibility, and urban health should be a systematic review, scoping review, bibliometric + critical review, frontier radar, or empirical design. Include journal evidence gates for Cities, Sustainable Cities and Society, Environment International, and Health & Place.
+```
 
 ```text
 Use Auto-sci-research and sport-geography-review-bibliometric to design a systematic review on sport park exposure, green equity, and urban health. Include search strategy, PRISMA, screening criteria, coding table, bibliometric figures, critical framework, and policy agenda. Target journals: Cities or Sustainable Cities and Society.

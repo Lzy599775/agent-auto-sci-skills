@@ -1,0 +1,22 @@
+[
+  {
+    "id": "bibliometric_critical_review",
+    "prompt": "为 SCS/Cities 设计体育公园、绿地可达性与城市健康的文献计量+批判性综述路线。",
+    "expected": "明确贡献边界、WoS/Scopus 检索、计量分析、手工编码、政策议程和投稿门控。"
+  },
+  {
+    "id": "systematic_exposure_health",
+    "prompt": "设计绿色暴露、热暴露与心理健康/心血管结局的系统综述方案。",
+    "expected": "给出 PEO/PICOS、数据库、筛选、提取、偏倚风险、证据综合和因果语言边界。"
+  },
+  {
+    "id": "remote_sensing_radar",
+    "prompt": "做城市热暴露、LCZ、绿地暴露与 Geospatial AI 的月度前沿雷达。",
+    "expected": "输出趋势、候选表、深读、CV-to-RS 迁移、候选数据、最小实验和研究 idea。"
+  },
+  {
+    "id": "medical_database_linkage",
+    "prompt": "把城市绿地/热暴露/体育设施可达性与公共医学数据库结合，研究不同年龄和性别人群健康影响。",
+    "expected": "覆盖健康数据、空间连接、暴露窗口、分层、混杂、隐私伦理、空间偏差和期刊路线。"
+  }
+]

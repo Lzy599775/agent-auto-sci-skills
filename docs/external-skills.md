@@ -13,6 +13,8 @@ This repository does not vendor third-party repositories. Use the projects below
 | [hwang847/codex-paper-reader](https://github.com/hwang847/codex-paper-reader) | local PDF reading workflow |
 | [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | broad scientific agent skill organization |
 | [skyllwt/AutoSci](https://github.com/skyllwt/AutoSci) | long-horizon research-agent memory and workflow ideas |
+| [bionoob7/nlr-workflow](https://github.com/bionoob7/nlr-workflow) | narrative literature review workflow discipline: search, screening, extraction, synthesis, drafting, audit, citation export, and submission gates |
+| [limi124/remote-sensing-research-radar](https://github.com/limi124/remote-sensing-research-radar) | remote-sensing and Geospatial AI frontier radar, CV-to-RS transfer analysis, candidate ranking, and research idea generation |
 
 Before adapting a third-party project:
 

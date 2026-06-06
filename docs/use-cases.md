@@ -8,11 +8,36 @@ Recommended route:
 
 ```text
 auto-sci-research
+-> urban-exposure-review-radar-workflow
 -> sport-geography-review-bibliometric
 -> agent-auto-sci-methodology
 -> agent-auto-sci-data-viz
 -> agent-auto-sci-scicomm
 ```
+
+Use `urban-exposure-review-radar-workflow` first when the project still needs to decide between bibliometric + critical review, systematic review, scoping review, narrative review, frontier radar, or empirical design.
+
+## Urban Exposure + Remote Sensing Radar
+
+Use when tracking heat exposure, green exposure, LCZ, Geospatial AI, remote-sensing foundation models, CV-to-RS transfer, or public-health database linkage.
+
+Recommended route:
+
+```text
+auto-sci-research
+-> urban-exposure-review-radar-workflow
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-methodology
+-> agent-auto-sci-scicomm
+```
+
+Key outputs:
+
+- route decision table;
+- formal-corpus / radar-candidate handoff;
+- remote-sensing and Geospatial AI candidate ranking;
+- exposure window and spatial-linkage plan;
+- target-journal evidence gate.
 
 ## Sport Park / Sport Facility Exposure
 
