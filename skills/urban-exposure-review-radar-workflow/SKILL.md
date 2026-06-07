@@ -1,6 +1,6 @@
 ---
 name: urban-exposure-review-radar-workflow
-description: "用于地理学、体育学、城市健康和遥感交叉研究的综述与前沿雷达全流程 skill。触发于绿色暴露、热暴露、体育公园/体育设施暴露、公园/绿地可达性、城市健康、空间公平、遥感热环境、LCZ、Geospatial AI、CV-to-RS、系统综述、范围综述、文献计量+批判性综述、医学公开数据库连接、SCS/Cities/Environment International/Health & Place/Urban Forestry & Urban Greening 投稿路线等任务。"
+description: "用于地理学、体育学、城市健康和遥感交叉研究的综述与前沿雷达全流程 skill。触发于绿色暴露、热暴露、体育公园/体育设施暴露、公园/绿地可达性、城市健康、空间公平、遥感热环境、LCZ、Geospatial AI、CV-to-RS、系统综述、范围综述、文献计量+批判性综述、医学公开数据库连接、SCS/Cities/Environment International/Health & Place/Urban Forestry & Urban Greening 投稿路线，以及需要结合 Academic Research Suite/ARS、ars-plan、ars-lit-review、ars-reviewer、论文写作、同行评审、引用核查和完整科研管线的任务。"
 ---
 
 # Urban Exposure Review Radar Workflow
@@ -105,6 +105,32 @@ Use the relevant module from `references/workflow_playbook.md`:
 - `M8`: urban exposure + public health or medical databases.
 - `M9`: geospatial AI / CV-to-remote-sensing frontier radar.
 
+## Academic Research Suite Subskill
+
+When the request needs a general academic research pipeline beyond the urban-exposure domain workflow, use the vendored subskill at `subskills/academic-research-suite/SKILL.md`.
+
+Use this subskill for:
+
+- deep research, literature review, systematic review, meta-analysis, or fact-checking beyond the domain route table;
+- paper outlining, abstract drafting, revision planning, citation checking, disclosure wording, LaTeX/DOCX/PDF formatting guidance;
+- peer-review simulation, editorial decision support, reviewer-response roadmaps, or re-review after revision;
+- full research-to-paper pipelines, integrity gates, Material Passport style provenance, or experiment planning/validation;
+- Claude-style ARS aliases such as `/ars-plan`, `ars-plan`, `/ars-lit-review`, `/ars-reviewer`, `/ars-citation-check`, `/ars-revision`, and `/ars-full`.
+
+Routing rule:
+
+1. First decide the urban-exposure route and journal evidence gate from this parent skill.
+2. If ARS is needed, read only `subskills/academic-research-suite/SKILL.md` first.
+3. Follow the ARS router there to load a single `WORKFLOW.md` under `subskills/academic-research-suite/ars/`.
+4. Do not load the whole vendored suite unless the user explicitly asks for a package audit or update.
+5. Keep domain-specific constraints from this parent skill in force: exposure/accessibility/use are not interchangeable, causal language must match study design, and formal review corpus rules remain separate from frontier radar.
+
+Source and license:
+
+- The subskill vendors the Codex-native package `Imbad0202/academic-research-skills-codex` v0.1.11, which is the Codex sibling distribution of `Imbad0202/academic-research-skills`.
+- Upstream ARS content recorded in `subskills/academic-research-suite/manifest.json` tracks `Imbad0202/academic-research-skills@2560a072386d4b1a035e5a40ed24ce1edbc0a356`.
+- The vendored package is licensed under CC BY-NC 4.0. Preserve `subskills/academic-research-suite/LICENSE`, attribution, non-commercial limitation, and modification notes when copying or sharing.
+
 ## Checkpoints
 
 Stop and ask for user confirmation when:
@@ -147,9 +173,11 @@ Use this handoff rule whenever radar results and formal review evidence appear i
 - Do not use exact corpus-count language in a narrative review.
 - Do not infer health causality from ecological or cross-sectional exposure associations.
 - Do not include private PDFs, local absolute paths, API keys, or unpublished reviewer comments in reusable skill files.
-- Do not copy external skill text wholesale; preserve attribution and distill workflows.
+- Do not copy external skill text wholesale into the parent workflow. If a licensed upstream skill is vendored as a separate subskill, keep it isolated, preserve attribution and license files, and route through the subskill entrypoint.
 
 ## References
 
 - `references/workflow_playbook.md`: route-specific workflow teaching and templates.
 - `references/darwin_quality_gate.md`: 95-point quality gate used before merging into the public skill set.
+- `references/darwin_ars_subskill_evaluation.md`: Darwin 9-dimension evaluation, test summary, project value, and packaging risk controls for the ARS subskill.
+- `subskills/academic-research-suite/SKILL.md`: vendored Codex-native Academic Research Suite router for general research, writing, review, citation, integrity, and pipeline tasks.

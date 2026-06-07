@@ -18,5 +18,10 @@
     "id": "medical_database_linkage",
     "prompt": "把城市绿地/热暴露/体育设施可达性与公共医学数据库结合，研究不同年龄和性别人群健康影响。",
     "expected": "覆盖健康数据、空间连接、暴露窗口、分层、混杂、隐私伦理、空间偏差和期刊路线。"
+  },
+  {
+    "id": "ars_subskill_pipeline",
+    "prompt": "用 ARS 帮我把体育公园可达性与城市健康这篇论文从选题、文献综述、写作到审稿回复做成完整流程。",
+    "expected": "先保留 urban-exposure 的研究定位和证据门控，再路由到 subskills/academic-research-suite/SKILL.md，并只加载所需 ARS WORKFLOW。"
   }
 ]

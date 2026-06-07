@@ -1,4 +1,4 @@
 interface:
   display_name: "Urban Exposure Review Radar Workflow"
-  short_description: "Route reviews, frontier radar, urban exposure, remote sensing, and health-linkage research."
-  default_prompt: "Decide the best route for an urban exposure or sport-geography review/radar task; provide search, screening, extraction, coding, evidence-gate, and journal-fit steps."
+  short_description: "Urban exposure, sports geography, review radar, and ARS-backed academic pipeline workflow."
+  default_prompt: "Plan an urban exposure or sports-geography review/radar task, choose the evidence route, define search and coding gates, then call the ARS subskill only if the task needs writing, review, citation, or full research-pipeline support."

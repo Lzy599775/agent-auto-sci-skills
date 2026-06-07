@@ -1,0 +1,2 @@
+date	skill	score	dim1_frontmatter	dim2_workflow	dim3_failure_modes	dim4_checkpoints	dim5_specificity	dim6_resources	dim7_architecture	dim8_tested_performance	dim9_blacklist	test_mode	status	note
+2026-06-07	urban-exposure-review-radar-workflow+academic-research-suite-subskill	86.4	9.0	9.0	9.0	8.0	8.5	10.0	9.0	8.3	9.0	dry_run	keep	ARS vendored as isolated subskill; parent keeps urban-exposure evidence gates; independent judge not used in this run

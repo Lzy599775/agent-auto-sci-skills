@@ -12,6 +12,12 @@ $patterns = @(
 )
 
 $hits = @()
+$allowedFalsePositiveText = @(
+  'FLAG_TOKEN = "ARS_PASSPORT_RESET"',
+  'PROTOCOL_TOKEN = "passport_as_reset_boundary"',
+  'token = _annotation_match_token(literal)',
+  'suite_version, invalid_suite_token = _parse_suite_version(claude_text)'
+)
 $files = Get-ChildItem -Path $Root -Recurse -File | Where-Object {
   $_.FullName -notmatch "\\.git\\" -and
   $_.FullName -ne $PSCommandPath -and
@@ -22,6 +28,9 @@ foreach ($pattern in $patterns) {
   foreach ($file in $files) {
     $matches = Select-String -Path $file.FullName -Pattern $pattern -CaseSensitive:$false -ErrorAction SilentlyContinue
     foreach ($m in $matches) {
+      if ($allowedFalsePositiveText -contains $m.Line.Trim()) {
+        continue
+      }
       $hits += [PSCustomObject]@{
         Pattern = $pattern
         Path = $m.Path

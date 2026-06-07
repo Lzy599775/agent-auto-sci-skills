@@ -1,0 +1,30 @@
+# Local caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local environments and secrets
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.*
+credentials.*
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Generated local output
+dist/
+build/
+tmp/
+temp/

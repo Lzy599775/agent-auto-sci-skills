@@ -238,13 +238,60 @@ $env:USERPROFILE\.codex\skills
 
 **What it does**
 
-城市暴露与综述前沿雷达全流程 skill。它先判定任务应该走 narrative review、systematic review、scoping review、bibliometric + critical review、frontier radar 还是 review-informed empirical design，再给出检索、筛选、提取、编码、图表、写作和期刊门控。
+城市暴露、体育地理、遥感热环境、绿色暴露、体育设施可达性与公共健康连接的高级综述/前沿雷达工作流。它不是单一综述模板，而是一个 **domain router + evidence gate + research pipeline adapter**：先判断任务应该走 narrative review、systematic review、scoping review、bibliometric + critical review、frontier radar 还是 review-informed empirical design，再把检索、筛选、提取、编码、图表、写作、审稿和期刊门控组织成稳定流程。
+
+新版已封装独立子 skill：`subskills/academic-research-suite`。该子 skill 来自 `Imbad0202/academic-research-skills-codex` v0.1.11，是 `Imbad0202/academic-research-skills` 的 Codex 原生分发版。它负责通用科研生产链条：深度研究、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划、引用核查和完整性验证。父 skill 仍保留城市暴露和体育地理领域判断权，避免 ARS 的通用写作流程覆盖 exposure validity、accessibility/use 区分、因果语言和正式语料库边界。
+
+**Internal architecture**
+
+```text
+urban-exposure-review-radar-workflow
+├─ parent domain router
+│  ├─ review route decision
+│  ├─ journal evidence gate
+│  ├─ formal corpus vs frontier radar handoff
+│  ├─ exposure/accessibility/use boundary
+│  └─ M1-M9 urban exposure modules
+└─ subskills/academic-research-suite
+   ├─ deep-research
+   ├─ academic-paper
+   ├─ academic-paper-reviewer
+   ├─ academic-pipeline
+   └─ experiment-agent
+```
 
 **Key rules**
 
 - 正式综述语料库和 arXiv/GitHub/会议页面等前沿雷达候选必须分开。
 - 前沿热点不能自动变成系统综述证据，除非通过同一纳入标准。
 - 目标期刊路线必须绑定证据门槛：Cities/SCS 强调城市治理与规划机制，EI/Health & Place 强调暴露-健康证据与混杂控制。
+- ARS 子 skill 只能在需要写作、审稿、引用核查、完整科研管线或实验规划时调用；默认只读取 ARS router 和一个必要的 `WORKFLOW.md`。
+- 绿色暴露、热暴露、公园/设施可达性、设施质量、实际使用和健康收益不能互相替代。
+- 横截面、生态关联或空间描述性结果不能写成个体层面的强因果结论。
+
+**M1-M9 direction modules**
+
+| Module | Purpose |
+|---|---|
+| M1 | 文献计量 + 批判性综述：把 CiteSpace/VOSviewer/bibliometrix 从描述性图谱升级为机制框架和政策议程。 |
+| M2 | 系统综述：PRISMA、PEO/PICOS、筛选记录、提取字段、偏倚风险和证据综合。 |
+| M3 | 范围综述：概念边界、研究版图、方法谱系、证据地图和未来议程。 |
+| M4 | 绿色暴露 / 体育公园暴露：暴露窗口、活动空间、服务效用、人群异质性。 |
+| M5 | 公园 / 体育设施可达性：网络可达性、2SFCA、服务区、公平性和机会结构。 |
+| M6 | 遥感热暴露：LST、LCZ、传感器、尺度效应、验证数据和不确定性。 |
+| M7 | 热-绿复合暴露：绿地降温、复合风险、适应性规划和公平影响。 |
+| M8 | 城市暴露 + 公共健康数据库：空间连接、暴露窗口、混杂控制、隐私伦理和分层分析。 |
+| M9 | Geospatial AI / CV-to-RS 雷达：arXiv、OpenReview、CVF、GitHub、Hugging Face 和遥感迁移潜力。 |
+
+**ARS subskill workflows**
+
+| Sub-workflow | What it adds |
+|---|---|
+| `deep-research` | 研究问题收敛、文献检索、事实核查、source verification、meta-analysis 预判断。 |
+| `academic-paper` | 论文大纲、摘要、文献综述、方法叙述、讨论、修订、格式转换和 AI disclosure。 |
+| `academic-paper-reviewer` | EIC 初筛、领域审查、方法审查、反方审查、审稿意见整合和修改后复审。 |
+| `academic-pipeline` | 从选题到终稿的完整 research-to-paper 管线，包含 integrity gate 和 claim-reference alignment audit。 |
+| `experiment-agent` | 代码实验、人群研究方案、统计解释、复现验证和实验结果回写论文。 |
 
 **Typical output**
 
@@ -254,7 +301,15 @@ $env:USERPROFILE\.codex\skills
 - 遥感/Geospatial AI 前沿雷达；
 - 绿色暴露、热暴露、体育设施可达性、医学数据库连接的提取与编码框架；
 - journal evidence gate；
+- ARS-backed paper pipeline / reviewer-risk audit / citation check；
 - project scaffold。
+
+**Quality status**
+
+- Darwin 9 维评分：86.4 / 100。
+- 已通过 JSON 解析、路径完整性、脚手架创建、密钥模式扫描、`.git` 排除和 dry-run prompt 验证。
+- 详细记录见 `skills/urban-exposure-review-radar-workflow/references/darwin_ars_subskill_evaluation.md`。
+- 上游 ARS 许可证为 CC BY-NC 4.0；复制和二次封装必须保留署名、许可证和非商业限制。
 
 ### 9. `sport-geography-review-bibliometric`
 

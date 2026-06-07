@@ -8,7 +8,7 @@
 
 It is not a paper generator. It is a maintainable research workbench that helps researchers organize search, screening, coding, analysis, figures, writing, peer-review responses, and policy agendas.
 
-This release adds `urban-exposure-review-radar-workflow`, a workflow skill that combines review-project discipline with remote-sensing / Geospatial AI frontier radar. It is designed for urban exposure, sport geography, heat-green compound exposure, public-health database linkage, and high-level review manuscripts.
+This release upgrades `urban-exposure-review-radar-workflow` into a domain router plus research-pipeline adapter. It combines review-project discipline with remote-sensing / Geospatial AI frontier radar, and now vendors an isolated `academic-research-suite` subskill for deep research, paper writing, reviewer simulation, citation checks, full research-to-paper pipelines, and experiment planning.
 
 ## Core Workflow
 
@@ -61,6 +61,21 @@ Custom target:
 | `sport-geography-sci-writing` | Stable | Empirical SCI writing for sport geography, exposure, equity, urban health | “Turn my results into an SCI manuscript.” |
 
 ## Full Research Pipelines
+
+### Urban exposure review radar + ARS academic pipeline
+
+```text
+auto-sci-research
+-> urban-exposure-review-radar-workflow
+-> subskills/academic-research-suite
+   -> deep-research
+   -> academic-paper
+   -> academic-paper-reviewer
+   -> academic-pipeline
+   -> experiment-agent
+```
+
+Outputs: route decision, journal evidence gates, formal-corpus / radar-candidate handoff, extraction and coding plan, ARS-backed literature review, manuscript outline, citation check, reviewer-risk audit, revision roadmap, and integrity verification.
 
 ### Review + bibliometrics + policy agenda
 
