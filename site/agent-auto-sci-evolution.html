@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Auto Sci 进化档案</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --panel-2: #1e252b;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+      --red: #f87171;
+      --shadow: 0 20px 60px rgba(0, 0, 0, .28);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #101418 0%, #17211f 48%, #15191f 100%);
+      line-height: 1.7;
+    }
+    main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 56px; }
+    header { padding: 32px 0 28px; border-bottom: 1px solid var(--line); }
+    .identity { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+    .mark {
+      width: 84px; height: 84px; border-radius: 24px;
+      display: grid; place-items: center;
+      color: #06130f; background: linear-gradient(135deg, var(--teal), #d9f99d);
+      font-size: 28px; font-weight: 800; box-shadow: 0 0 40px rgba(52, 211, 153, .25);
+    }
+    h1 { margin: 0; font-size: clamp(30px, 4vw, 52px); letter-spacing: 0; }
+    .subtitle { margin: 6px 0 0; color: var(--muted); font-size: 17px; }
+    .meta { margin-top: 12px; color: #d6e4dc; font-size: 14px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 28px 0; }
+    .stat, .source-card, .skill-card, .panel, .event section {
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .stat { padding: 18px; }
+    .stat strong { display: block; font-size: 34px; line-height: 1; color: var(--teal); }
+    .stat span { display: block; margin-top: 8px; color: var(--muted); }
+    h2 { margin: 48px 0 16px; font-size: 24px; }
+    .panel { padding: 24px; }
+    .panel ul, .future ul { margin: 0; padding-left: 22px; }
+    .sources, .skills { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .source-card, .skill-card { padding: 20px; position: relative; overflow: hidden; }
+    .source-card::before, .skill-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--amber));
+    }
+    .source-card h3, .skill-card h3 { margin: 0 0 10px; font-size: 18px; overflow-wrap: anywhere; }
+    .source-card p, .skill-card p { color: var(--muted); margin: 0 0 12px; }
+    .source-card a { color: #93c5fd; overflow-wrap: anywhere; font-size: 13px; }
+    .skill-card-link { color: inherit; text-decoration: none; display: block; transition: transform .16s ease, border-color .16s ease; }
+    .skill-card-link:hover { transform: translateY(-2px); border-color: rgba(52,211,153,.45); }
+    .detail-link { display: inline-block; margin-top: 10px; color: #bbf7d0; font-size: 13px; }
+    .card-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .card-head b {
+      flex: 0 0 auto; padding: 2px 8px; border-radius: 999px;
+      background: rgba(52,211,153,.13); color: #bbf7d0; font-size: 12px;
+    }
+    dl { margin: 12px 0; }
+    dt { color: #d9f99d; font-size: 13px; }
+    dd { margin: 2px 0 10px; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tags span {
+      padding: 4px 8px; border-radius: 999px; background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18); color: #bfdbfe; font-size: 12px;
+    }
+    .timeline { position: relative; margin-left: 8px; }
+    .timeline::before {
+      content: ""; position: absolute; top: 0; bottom: 0; left: 112px; width: 2px;
+      background: linear-gradient(var(--teal), rgba(52,211,153,0));
+    }
+    .event { display: grid; grid-template-columns: 100px 1fr; gap: 28px; position: relative; margin: 16px 0; }
+    .event::after {
+      content: ""; position: absolute; left: 106px; top: 26px; width: 14px; height: 14px;
+      border-radius: 50%; background: var(--amber); border: 3px solid var(--bg);
+    }
+    .event time { padding-top: 18px; color: #fed7aa; font-weight: 700; }
+    .event section { padding: 18px; }
+    .event h3 { margin: 0 0 6px; }
+    .event p { margin: 0; color: var(--muted); }
+    footer { margin-top: 50px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+    @media (max-width: 900px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .sources, .skills { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      main { width: min(100% - 24px, 1120px); padding-top: 28px; }
+      .stats, .sources, .skills { grid-template-columns: 1fr; }
+      .event { grid-template-columns: 1fr; gap: 8px; margin-left: 22px; }
+      .timeline::before { left: 0; }
+      .event::after { left: -6px; top: 28px; }
+      .event time { padding: 0 0 0 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="identity">
+        <div class="mark">AS</div>
+        <div>
+          <h1>Agent Auto Sci 进化档案</h1>
+          <p class="subtitle">地理学 + 体育学方向的本地科研 Agent 能力成长追踪</p>
+          <p class="meta">版本 v0.5 · 更新日期 2026-06-08</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="stats"><div class="stat"><strong>1</strong><span>总领 Skill</span></div><div class="stat"><strong>6</strong><span>核心子 Skill</span></div><div class="stat"><strong>2</strong><span>体育地理既有 Skill</span></div><div class="stat"><strong>7</strong><span>新增外部部署 Skill</span></div><div class="stat"><strong>17</strong><span>Skill 详情页</span></div><div class="stat"><strong>15</strong><span>外部学习来源</span></div><div class="stat"><strong>1</strong><span>本地封装 Skill</span></div><div class="stat"><strong>1</strong><span>全流程 Pipeline</span></div></section>
+
+    <section>
+      <h2>系统原则</h2>
+      <div class="panel"><ul><li>科研知识应长期积累，而不是每次任务重新开始。</li><li>文献、数据、方法、失败经验、审稿意见和图表都应进入结构化记忆。</li><li>外部仓库只转化可复用思想，不盲目复制或安装全部技能。</li><li>任何重要能力变化都要更新进化档案，让进化过程可见。</li></ul></div>
+    </section>
+
+    <section>
+      <h2>学习来源</h2>
+      <div class="sources">
+        <article class="source-card">
+          <h3>skyllwt/AutoSci</h3>
+          <p>wiki式长期记忆、科研生命周期自动化、source manifest、checkpoint、idea/experiment/paper/rebuttal 流程、API 分层配置。</p>
+          <a href="https://github.com/skyllwt/AutoSci">https://github.com/skyllwt/AutoSci</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>K-Dense-AI/scientific-agent-skills</h3>
+          <p>多学科 agent skills 的组织方式、每个 skill 的触发描述、references/scripts/assets 分层、科学工具链的领域化封装。</p>
+          <a href="https://github.com/K-Dense-AI/scientific-agent-skills">https://github.com/K-Dense-AI/scientific-agent-skills</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>AI 进化可视化 HTML 页面制作指南</h3>
+          <p>用统计卡片、技能卡片、时间线、未来方向展示 AI 能力成长；本项目调整为研究仪表盘风格。</p>
+          <a href="https://cdn.hailuoai.com/mcp/cdn_upload/327407489771057158/388658179654272/1776829119_793b3324.txt">https://cdn.hailuoai.com/mcp/cdn_upload/327407489771057158/388658179654272/1776829119_793b3324.txt</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>assafelovic/gpt-researcher</h3>
+          <p>GPT Researcher 的自治式 web deep research、MCP/Codex skill 接入方式和研究代理框架。</p>
+          <a href="https://github.com/assafelovic/gpt-researcher">https://github.com/assafelovic/gpt-researcher</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>alchaincyf/nuwa-skill</h3>
+          <p>人物/主题思维框架蒸馏、多源材料采集、research 文件夹沉淀和可复用 persona skill 生成。</p>
+          <a href="https://github.com/alchaincyf/nuwa-skill">https://github.com/alchaincyf/nuwa-skill</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>Imbad0202/academic-research-skills-codex</h3>
+          <p>Codex-native ARS 工作流：deep research、paper writing、reviewer simulation、academic pipeline、experiment planning。</p>
+          <a href="https://github.com/Imbad0202/academic-research-skills-codex">https://github.com/Imbad0202/academic-research-skills-codex</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>leo-lilinxiao/codex-autoresearch</h3>
+          <p>长时段 improve-verify loop、foreground/background 运行、结构化状态记录和机械验证导向。</p>
+          <a href="https://github.com/leo-lilinxiao/codex-autoresearch">https://github.com/leo-lilinxiao/codex-autoresearch</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>hwang847/codex-paper-reader</h3>
+          <p>本地 PDF 文献库索引、source registry、readpack、PDF 页面渲染和 HTML 阅读笔记流程。</p>
+          <a href="https://github.com/hwang847/codex-paper-reader">https://github.com/hwang847/codex-paper-reader</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>Epsilon617/Codex-Academic-Skills</h3>
+          <p>科研向 Codex skill 索引、Core Picks、skill 选型原则和避免 skill 列表膨胀的安装策略。</p>
+          <a href="https://github.com/Epsilon617/Codex-Academic-Skills">https://github.com/Epsilon617/Codex-Academic-Skills</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>STRYXTN/awesome-ai-research-writing</h3>
+          <p>学术写作 prompt 库：中英互译、润色、缩写扩写、逻辑检查、图表标题、实验分析和 reviewer 视角审稿。</p>
+          <a href="https://github.com/STRYXTN/awesome-ai-research-writing">https://github.com/STRYXTN/awesome-ai-research-writing</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>bionoob7/nlr-workflow</h3>
+          <p>医学叙事综述全流程：项目结构、检索-筛选-提取-综合-写作-事实审计-去 AI 痕迹-引用导出-投稿门控。已蒸馏为本地城市暴露/体育地理综述工作流。</p>
+          <a href="https://github.com/bionoob7/nlr-workflow">https://github.com/bionoob7/nlr-workflow</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>limi124/remote-sensing-research-radar</h3>
+          <p>遥感与 Geospatial AI 前沿雷达：current-source scanning、CV-to-RS 迁移、候选论文/项目评分、研究 idea 生成。已改造为城市暴露与健康遥感雷达入口。</p>
+          <a href="https://github.com/limi124/remote-sensing-research-radar">https://github.com/limi124/remote-sensing-research-radar</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>本地 PDF: GPT 学术高级 Prompt 大全_AIplus 高级扩充版</h3>
+          <p>按选题、文献、研究设计、数据分析、写作、投稿审稿和终稿质控七段结构提炼为本地 workflow；只迁移流程逻辑和质量门控，不复制大段原文。</p>
+          <a href="about:blank">about:blank</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>本地 Sportpark 写作与图件记忆</h3>
+          <p>体育地理顶刊写作全流程、角色任务规范、claim-evidence、图件构图与地图合规经验；已整合为本仓库 reference，不移动源项目文件。</p>
+          <a href="about:blank">about:blank</a>
+        </article>
+        
+        <article class="source-card">
+          <h3>darwin-skill 本地评估经验</h3>
+          <p>将 Darwin 式 rubric、test prompts、human-in-the-loop 和 ratchet 思路作为 skill 进化质量门控；作为可选评估方法而非必需运行依赖。</p>
+          <a href="about:blank">about:blank</a>
+        </article>
+        </div>
+    </section>
+
+    <section>
+      <h2>Skills 总览</h2>
+      <div class="skills">
+      <a class="skill-card skill-card-link" href="skill_pages/agent-auto-sci.html" aria-label="查看 agent-auto-sci 详情">
+        <div class="card-head">
+          <h3>agent-auto-sci</h3>
+          <b>总领</b>
+        </div>
+        <p>统筹科研自动化、长期记忆、子 skill 路由和进化档案更新。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>跨多个研究阶段、需要更新 skill、需要沉淀流程或查看总体系时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci</dd>
+        </dl>
+        <div class="tags"><span>总控</span><span>记忆</span><span>路由</span><span>进化档案</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/agent-auto-sci-automation.html" aria-label="查看 agent-auto-sci-automation 详情">
+        <div class="card-head">
+          <h3>agent-auto-sci-automation</h3>
+          <b>子 Skill</b>
+        </div>
+        <p>把 AutoSci/OmegaWiki 的科研生命周期、wiki式记忆和 checkpoint 思路转为本地工作流。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>文献/数据源进入项目、需要 source manifest、需要记录失败经验或搭建自动化流程时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-automation</dd>
+        </dl>
+        <div class="tags"><span>AutoSci</span><span>workflow</span><span>checkpoint</span><span>memory</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/agent-auto-sci-ai-ml.html" aria-label="查看 agent-auto-sci-ai-ml 详情">
+        <div class="card-head">
+          <h3>agent-auto-sci-ai-ml</h3>
+          <b>子 Skill</b>
+        </div>
+        <p>机器学习、深度学习、SHAP、模型评估、空间/时间建模和可复现性检查。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>研究需要预测、分类、解释、模型比较、XAI 或空间机器学习时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-ai-ml</dd>
+        </dl>
+        <div class="tags"><span>ML</span><span>AI</span><span>SHAP</span><span>validation</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/agent-auto-sci-data-viz.html" aria-label="查看 agent-auto-sci-data-viz 详情">
+        <div class="card-head">
+          <h3>agent-auto-sci-data-viz</h3>
+          <b>子 Skill</b>
+        </div>
+        <p>EDA、统计分析、论文级图表、表格设计、文献计量图和 HTML 仪表盘。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要数据质量审计、统计检验、图表体系、结果可视化或可读性优化时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-data-viz</dd>
+        </dl>
+        <div class="tags"><span>EDA</span><span>statistics</span><span>figures</span><span>dashboard</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/agent-auto-sci-geospatial.html" aria-label="查看 agent-auto-sci-geospatial 详情">
+        <div class="card-head">
+          <h3>agent-auto-sci-geospatial</h3>
+          <b>子 Skill</b>
+        </div>
+        <p>GIS、遥感、空间可达性、绿色/热暴露、空间公平和地图合规。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>涉及 GeoPandas、raster、network accessibility、遥感指数、LCZ、地图设计时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-geospatial</dd>
+        </dl>
+        <div class="tags"><span>GIS</span><span>remote sensing</span><span>accessibility</span><span>maps</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/agent-auto-sci-scicomm.html" aria-label="查看 agent-auto-sci-scicomm 详情">
+        <div class="card-head">
+          <h3>agent-auto-sci-scicomm</h3>
+          <b>子 Skill</b>
+        </div>
+        <p>科学写作、论文结构、审稿回复、海报、PPT、引用与图文叙事。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>输出是论文、摘要、投稿信、rebuttal、poster、slides 或学术汇报时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-scicomm</dd>
+        </dl>
+        <div class="tags"><span>writing</span><span>rebuttal</span><span>slides</span><span>poster</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/agent-auto-sci-methodology.html" aria-label="查看 agent-auto-sci-methodology 详情">
+        <div class="card-head">
+          <h3>agent-auto-sci-methodology</h3>
+          <b>子 Skill</b>
+        </div>
+        <p>研究问题、假设生成、研究设计、偏倚审计、证据质量和空间正义框架。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>选题还不清楚、研究设计需加强、证据质量或因果边界需要审计时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-methodology</dd>
+        </dl>
+        <div class="tags"><span>hypothesis</span><span>design</span><span>bias</span><span>evidence</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/sport-geography-review-bibliometric.html" aria-label="查看 sport-geography-review-bibliometric 详情">
+        <div class="card-head">
+          <h3>sport-geography-review-bibliometric</h3>
+          <b>既有子 Skill</b>
+        </div>
+        <p>体育地理综述、系统综述、scoping review、文献计量、批判性编码和政策议程。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>写 Cities/SCS/LUP/UFUG/Environment International 等目标期刊的综述或文献计量稿时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/sport-geography-review-bibliometric</dd>
+        </dl>
+        <div class="tags"><span>review</span><span>bibliometric</span><span>PRISMA</span><span>policy</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/sport-geography-sci-writing.html" aria-label="查看 sport-geography-sci-writing 详情">
+        <div class="card-head">
+          <h3>sport-geography-sci-writing</h3>
+          <b>既有子 Skill</b>
+        </div>
+        <p>体育设施、公园绿地、绿色/热暴露、空间公平和健康机制的实证 SCI 写作。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>写实证论文、方法结果讨论、图表、期刊适配和投稿前质量检查时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/sport-geography-sci-writing</dd>
+        </dl>
+        <div class="tags"><span>sport geography</span><span>SCI writing</span><span>equity</span><span>SCS</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/gpt-researcher.html" aria-label="查看 gpt-researcher 详情">
+        <div class="card-head">
+          <h3>gpt-researcher</h3>
+          <b>新增外部 Skill</b>
+        </div>
+        <p>GPT Researcher 的 Codex/MCP 深度研究入口，用于自治式 web research 和多来源证据收集。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要当前网络资料、政策报告、机构网页、跨来源 deep research 或事实核查时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/gpt-researcher</dd>
+        </dl>
+        <div class="tags"><span>web research</span><span>MCP</span><span>deep research</span><span>source verification</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/huashu-nuwa.html" aria-label="查看 huashu-nuwa 详情">
+        <div class="card-head">
+          <h3>huashu-nuwa</h3>
+          <b>新增外部 Skill</b>
+        </div>
+        <p>女娲式 skill 造人术，用于从人物、主题或模糊需求中蒸馏可运行的思维框架 skill。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要创建人物视角、方法论导师、期刊审稿人视角或研究顾问型 skill 时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/huashu-nuwa</dd>
+        </dl>
+        <div class="tags"><span>skill distillation</span><span>persona</span><span>thinking framework</span><span>multi-source research</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/academic-research-suite.html" aria-label="查看 academic-research-suite 详情">
+        <div class="card-head">
+          <h3>academic-research-suite</h3>
+          <b>新增外部 Skill</b>
+        </div>
+        <p>Codex-native Academic Research Suite，覆盖 deep research、论文写作、审稿模拟、完整科研管线和实验规划。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要综合科研、文献综述、系统综述、meta-analysis、论文草稿、revision、peer review 或研究到论文全流程时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/academic-research-suite</dd>
+        </dl>
+        <div class="tags"><span>ARS</span><span>deep research</span><span>paper writing</span><span>peer review</span><span>pipeline</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/codex-autoresearch.html" aria-label="查看 codex-autoresearch 详情">
+        <div class="card-head">
+          <h3>codex-autoresearch</h3>
+          <b>新增外部 Skill</b>
+        </div>
+        <p>长时段自治式 improve-verify loop，用于可机械验证的调试、优化、安全审计和发版准备。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要无人值守或多轮迭代改进，并且有明确目标、范围、指标、验证命令和停止条件时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/codex-autoresearch</dd>
+        </dl>
+        <div class="tags"><span>autonomous loop</span><span>verification</span><span>long-running</span><span>debug</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/codex-paper-reader.html" aria-label="查看 codex-paper-reader 详情">
+        <div class="card-head">
+          <h3>codex-paper-reader</h3>
+          <b>新增外部 Skill</b>
+        </div>
+        <p>本地文献文件夹与 PDF 阅读工作流，用于索引、查找、readpack、source registry、页面渲染和 HTML 笔记。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要整理本地 PDF、读取 non-OA 文献、建立文献索引、生成阅读包或 HTML 读书笔记时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/codex-paper-reader</dd>
+        </dl>
+        <div class="tags"><span>paper reader</span><span>PDF</span><span>local library</span><span>HTML notes</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/codex-academic-skills-index.html" aria-label="查看 codex-academic-skills-index 详情">
+        <div class="card-head">
+          <h3>codex-academic-skills-index</h3>
+          <b>新增包装 Skill</b>
+        </div>
+        <p>科研 Codex skills 索引与选型 skill，用于选择、比较和安装学术研究相关 skills，避免 skill 列表膨胀。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要判断哪些学术 skill 值得安装、如何组合、是否与本地体系重复时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/codex-academic-skills-index</dd>
+        </dl>
+        <div class="tags"><span>skill index</span><span>selection</span><span>Codex skills</span><span>academic tools</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/awesome-ai-research-writing.html" aria-label="查看 awesome-ai-research-writing 详情">
+        <div class="card-head">
+          <h3>awesome-ai-research-writing</h3>
+          <b>新增包装 Skill</b>
+        </div>
+        <p>学术论文写作 prompt 与写作 skill 参考库，覆盖翻译、润色、缩写扩写、逻辑检查、图表标题、实验分析和 reviewer 视角审稿。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>需要高质量可复用写作 prompt、中文/英文论文片段处理、图表 caption 或 reviewer critique 时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/awesome-ai-research-writing</dd>
+        </dl>
+        <div class="tags"><span>prompt library</span><span>academic writing</span><span>translation</span><span>reviewer critique</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    
+      <a class="skill-card skill-card-link" href="skill_pages/urban-exposure-review-radar-workflow.html" aria-label="查看 urban-exposure-review-radar-workflow 详情">
+        <div class="card-head">
+          <h3>urban-exposure-review-radar-workflow</h3>
+          <b>本地封装 Skill</b>
+        </div>
+        <p>城市暴露、体育地理、遥感热环境、绿色暴露、健康数据库连接方向的综述写作与前沿雷达全流程 skill。</p>
+        <dl>
+          <dt>使用场景</dt>
+          <dd>当任务涉及系统综述、范围综述、文献计量+批判性综述、遥感前沿扫描、CV-to-RS 方法迁移或城市暴露与健康研究设计时使用。</dd>
+          <dt>路径</dt>
+          <dd>C:/Users/LI ZEYANG/.codex/skills/urban-exposure-review-radar-workflow</dd>
+        </dl>
+        <div class="tags"><span>review workflow</span><span>frontier radar</span><span>urban exposure</span><span>remote sensing</span><span>health geography</span><span>sport geography</span></div>
+        <strong class="detail-link">进入详情页</strong>
+      </a>
+    </div>
+    </section>
+
+    <section>
+      <h2>进化时间线</h2>
+      <div class="timeline">
+        <div class="event">
+          <time>2026-05-26</time>
+          <section>
+            <h3>体育地理实证写作 skill 成型</h3>
+            <p>基于 A_sportpark 项目的 PDF 语料与期刊写法扫描，形成 sport-geography-sci-writing。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-05-28</time>
+          <section>
+            <h3>综述与文献计量 skill 建立</h3>
+            <p>形成 sport-geography-review-bibliometric，覆盖 PRISMA、文献计量、批判性编码和政策议程。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-05-29</time>
+          <section>
+            <h3>Prompt 库与顶刊综述模式扩展</h3>
+            <p>把学术写作 prompt 手册、GitHub 写作仓库和目标期刊综述/文献计量偏好写入综述 skill。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-05-29</time>
+          <section>
+            <h3>Agent Auto Sci 总体系升级</h3>
+            <p>学习 AutoSci 与 K-Dense Scientific Agent Skills，建立 agent-auto-sci 总领 skill 和 6 个子 skill，并生成 HTML 进化档案。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-05-29</time>
+          <section>
+            <h3>九个本地科研 skill 统一校验</h3>
+            <p>7 个 agent-auto-sci 新 skill、sport-geography-review-bibliometric 与 sport-geography-sci-writing 均通过 quick_validate.py；同步规范化旧 sport-geography-sci-writing 的 UTF-8 BOM。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-05-29</time>
+          <section>
+            <h3>子 skill 深层封装与详情页升级</h3>
+            <p>按 AutoSci 与 K-Dense 当前仓库内容完成覆盖审计，为 6 个 agent-auto-sci 子 skill 增加深层映射和体育地理 playbook，并把 HTML 总览升级为可点击的 9 个 skill 详情页。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-06-01</time>
+          <section>
+            <h3>外部科研 skills 本地部署与详情页扩展</h3>
+            <p>本地部署 gpt-researcher、nuwa-skill、academic-research-suite、codex-autoresearch、codex-paper-reader，并将 Codex-Academic-Skills 与 awesome-ai-research-writing 包装为本地 skill；HTML 详情页扩展到 16 个。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-06-06</time>
+          <section>
+            <h3>综述全流程与遥感前沿雷达本地封装</h3>
+            <p>蒸馏 bionoob7/nlr-workflow 与 limi124/remote-sensing-research-radar，形成 urban-exposure-review-radar-workflow；完成本地安装、quick_validate 校验、脚手架脚本验证和 Darwin dry-run 评分。</p>
+          </section>
+        </div>
+        
+        <div class="event">
+          <time>2026-06-08</time>
+          <section>
+            <h3>从选题到完稿的全流程科研写作管线封装</h3>
+            <p>以 agent-auto-sci-skills 为主体，整合 A_sportpark 写作/图件经验、本地学术 prompt PDF 的七阶段结构和 Darwin 式质量门控，新增完整 pipeline、子智能体组合矩阵、PDF workflow 提炼和去重整合说明。</p>
+          </section>
+        </div>
+        </div>
+    </section>
+
+    <section class="future">
+      <h2>下一步进化方向</h2>
+      <div class="panel"><ul><li>把 08_full_research_to_manuscript_pipeline.md 继续压测到真实论文项目中。</li><li>为 agent-auto-sci 建立项目级 source manifest 模板。</li><li>把文献库、PDF 文本索引、WoS 数据和编码表接入统一研究记忆。</li><li>为体育设施可达性与空间正义综述建立半自动编码脚本。</li><li>为 GIS/ML/图表分析增加可重跑 Notebook 模板。</li><li>把每次审稿意见、失败路线和修稿策略写入可检索的经验库。</li><li>为每个详情页继续补充真实案例、示例输入和示例输出。</li><li>为新增外部 skill 增加真实体育地理案例和调用示例。</li><li>按项目需要继续筛选 Codex Academic Skills 中的候选 skill，避免无差别安装。</li><li>把子智能体 handoff schema 固化为可复制模板。</li></ul></div>
+    </section>
+
+    <section>
+      <h2>验证与安全</h2>
+      <div class="panel"><ul><li>当前总体系 9 个本地科研 skill 使用 quick_validate.py 校验。</li><li>HTML 由 evolution_data.json 自动生成，避免手动维护多个版本；v0.2 同时生成 9 个 skill 详情页。</li><li>AutoSci 与 K-Dense 本地副本在本次审计时均已 fetch，local HEAD 与 origin/main 一致。</li><li>API 配置只记录变量名和用途，不保存真实密钥。</li><li>2026-06-01 新增 7 个外部部署或包装 skill，并生成对应详情页。</li><li>新增 skill 部署时排除了 .git/.github，未写入任何 API key 或私有全文。</li><li>2026-06-08 更新采用归并复制和目标包去重原则，未移动或删除 Sportpark 源文件。</li><li>本地学术 prompt PDF 仅用于流程结构提炼，公开 skill 文件不包含大段 PDF 原文。</li></ul></div>
+    </section>
+
+    <footer>
+      本页面由 evolution_data.json 自动生成。更新 skills 后请重跑 update_evolution_html.py。
+    </footer>
+  </main>
+</body>
+</html>

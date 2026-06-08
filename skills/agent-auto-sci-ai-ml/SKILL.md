@@ -20,6 +20,8 @@ Use this subskill when the project needs modeling rather than only descriptive a
 
 Read `references/ml_ai_workflows.md`.
 
+For full paper projects, this skill owns baseline design, model/method selection, leakage checks, train/test split logic, hyperparameter search, ablation, robustness, error-case analysis, XAI, and methods/results reporting boundaries. It must work with `agent-auto-sci-methodology` before turning feature importance into mechanism language.
+
 For deeper K-Dense-style encapsulation:
 
 - `references/k_dense_ml_ai_mapping.md`: how scikit-learn, PyTorch Lightning, transformers, SHAP, time-series, and XAI skills are adapted.

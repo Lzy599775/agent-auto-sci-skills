@@ -60,18 +60,35 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 ## 6. Routing Rules
 
 1. If the task asks to update the system, start with `auto-sci-research`.
-2. If the task is a concrete empirical sport-geography manuscript, use `sport-geography-sci-writing`.
-3. If the task asks to decide among review types, add `urban-exposure-review-radar-workflow` before detailed review planning.
-4. If the task is a focused sport-geography review or bibliometric paper, use `sport-geography-review-bibliometric`.
-5. If the task asks for recent remote-sensing, Geospatial AI, CV-to-RS, heat/green exposure radar, use `urban-exposure-review-radar-workflow` plus `agent-auto-sci-geospatial`.
-6. If the task involves spatial data or maps, add `agent-auto-sci-geospatial`.
-7. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`.
-8. If the task ends in figures/tables/statistics, add `agent-auto-sci-data-viz`.
-9. If the task ends in text, slides, poster, or rebuttal, add `agent-auto-sci-scicomm`.
-10. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
-11. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
-12. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
-13. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
-14. If the task asks to create a new thinking/persona skill, use `huashu-nuwa` and keep local evidence boundaries.
-15. If the task asks for writing prompts, use `awesome-ai-research-writing` plus local sport-geography writing rules.
+2. If the task is a full research-to-manuscript workflow, read `08_full_research_to_manuscript_pipeline.md` and assign phase owners.
+3. If the task is large enough for multiple role-specific agents, read `09_subagent_composition_matrix.md`.
+4. If the task asks to reuse prompt-library logic or the local academic prompt PDF, read `10_prompt_workflow_from_academic_pdf.md` and avoid copying long text.
+5. If the task asks to integrate the user's local Sportpark writing/figure memories, read `11_sportpark_skill_integration_notes.md` and keep source files untouched unless the user explicitly asks otherwise.
+6. If the task is a concrete empirical sport-geography manuscript, use `sport-geography-sci-writing`.
+7. If the task asks to decide among review types, add `urban-exposure-review-radar-workflow` before detailed review planning.
+8. If the task is a focused sport-geography review or bibliometric paper, use `sport-geography-review-bibliometric`.
+9. If the task asks for recent remote-sensing, Geospatial AI, CV-to-RS, heat/green exposure radar, use `urban-exposure-review-radar-workflow` plus `agent-auto-sci-geospatial`.
+10. If the task involves spatial data or maps, add `agent-auto-sci-geospatial`.
+11. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`.
+12. If the task ends in figures/tables/statistics, add `agent-auto-sci-data-viz`.
+13. If the task ends in text, slides, poster, or rebuttal, add `agent-auto-sci-scicomm`.
+14. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
+15. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
+16. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
+17. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
+18. If the task asks to create a new thinking/persona skill, use `huashu-nuwa` and keep local evidence boundaries.
+19. If the task asks for writing prompts, use `awesome-ai-research-writing` plus local sport-geography writing rules.
+
+## 7. Full Pipeline Ownership
+
+| Stage | Owner skills |
+|---|---|
+| Topic and feasibility | `agent-auto-sci-methodology`, `agent-auto-sci-automation` |
+| Literature and corpus | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
+| Data and spatial processing | `agent-auto-sci-automation`, `agent-auto-sci-geospatial` |
+| Modeling and analysis | `agent-auto-sci-ai-ml`, `agent-auto-sci-data-viz`, `agent-auto-sci-methodology` |
+| Publication figures | `agent-auto-sci-data-viz`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` |
+| Draft and revision | `sport-geography-sci-writing`, `agent-auto-sci-scicomm` |
+| Reviewer risk and rebuttal | `agent-auto-sci-methodology`, `agent-auto-sci-scicomm` |
+| Skill evolution and release | `auto-sci-research`, `agent-auto-sci-automation` |
 

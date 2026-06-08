@@ -67,6 +67,8 @@ Default argument chain:
    - Make sure the final narrative does not overclaim health benefit from exposure or accessibility.
    - Read `references/07_quality_checks.md`.
 
+For end-to-end projects, this skill owns literature-search reproducibility, screening, high-impact paper classification, paper-level extraction, literature matrix, evidence gap taxonomy, PRISMA records, bibliometric figures, and critical coding. Handoff stable gaps and evidence maps to `agent-auto-sci-methodology` and `agent-auto-sci-scicomm`.
+
 ## Local Corpus
 
 When available, use the user's curated local corpus as evidence:

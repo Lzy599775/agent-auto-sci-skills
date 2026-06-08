@@ -1,6 +1,6 @@
 # Auto-sci-research
 
-[中文](README.md) | [English](README_EN.md) | [🌐 展示页](site/index.html)
+[中文](README.md) | [English](README_EN.md) | [🌐 展示页](site/index.html) | [进化档案](site/agent-auto-sci-evolution.html)
 
 > 面向 **Codex** 的地理学 + 体育学 + 城市健康科研 Skill 套件。  
 > From literature review to bibliometrics, geospatial exposure assessment, machine learning, SCI writing, peer review, and policy agenda.
@@ -9,7 +9,7 @@
 
 它不是“自动生成论文”的快捷方式，而是一个 **可复用、可审计、可进化的科研工作台**：帮助研究者把选题、检索、阅读、编码、分析、图表、写作、审稿回复和政策议程组织成稳定流程。
 
-当前版本新增 `urban-exposure-review-radar-workflow`：把医学叙事综述 workflow 的阶段化写作纪律，与遥感/Geospatial AI 前沿雷达的选题发现能力结合起来，专门服务城市暴露、体育地理、热-绿复合暴露、公共健康数据库连接和高水平综述写作。
+当前版本把 `auto-sci-research` 升级为完整科研管线总控：从选题、文献检索、数据下载、代码处理、统计/机器学习分析、论文级图件、初稿写作、投稿排版到审稿回复，都有对应子 skill 和子智能体组合。`urban-exposure-review-radar-workflow` 继续负责城市暴露、体育地理、热-绿复合暴露、公共健康数据库连接和高水平综述/前沿雷达路线。
 
 ---
 
@@ -354,6 +354,37 @@ urban-exposure-review-radar-workflow
 ---
 
 ## 🧪 全流程写作 Pipeline
+
+### 0. 从选题到完稿总流程
+
+```text
+auto-sci-research
+-> agent-auto-sci-methodology
+-> sport-geography-review-bibliometric / urban-exposure-review-radar-workflow
+-> agent-auto-sci-automation
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-ai-ml / agent-auto-sci-data-viz
+-> sport-geography-sci-writing
+-> agent-auto-sci-scicomm
+-> reviewer-risk scan / rebuttal / evolution archive
+```
+
+阶段产物：
+
+1. 选题矩阵、SMART 研究问题、创新性和可行性评估；
+2. 中英文关键词体系、检索式、筛选标准、文献矩阵和 evidence map；
+3. 数据源清单、下载/清洗记录、空间单位、变量和指标定义；
+4. 可复现代码或 notebook、统计/机器学习方案、稳健性和泄露检查；
+5. 主图/补充图/表格/caption 计划，确保每张图服务一个 claim；
+6. 标题、摘要、引言、方法、结果、讨论和结论初稿；
+7. 参考文献、格式、投稿信、审稿意见拆解和逐条回复。
+
+详细执行说明见：
+
+- `skills/auto-sci-research/references/08_full_research_to_manuscript_pipeline.md`
+- `skills/auto-sci-research/references/09_subagent_composition_matrix.md`
+- `skills/auto-sci-research/references/10_prompt_workflow_from_academic_pdf.md`
+- `skills/auto-sci-research/references/11_sportpark_skill_integration_notes.md`
 
 ### A. 综述 / 文献计量 / 政策议程
 

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>codex-academic-skills-index · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>codex-academic-skills-index</h1>
+      <p class="meta">新增包装 Skill · 科研 Codex skills 索引与选型 skill，用于选择、比较和安装学术研究相关 skills，避免 skill 列表膨胀。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/codex-academic-skills-index</p>
+      <div class="tags"><span>skill index</span><span>selection</span><span>Codex skills</span><span>academic tools</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>把 Codex-Academic-Skills 的索引能力包装成本地 skill，服务于外部 skill 选型和去重。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>用户想继续安装更多科研 skills</li><li>需要比较多个 skill 的适用场景</li><li>需要判断是否已被本地体系覆盖</li><li>需要规划 skill 生态而不是盲目扩容</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>先明确任务类型</li><li>读取 local_selection_policy</li><li>在上游索引中查找候选</li><li>优先复用已安装本地 skill</li><li>只推荐最小必要集合</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>upstream README 中文索引</li><li>upstream README 英文索引</li><li>local selection policy</li><li>Core Picks 与分类选型逻辑</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>以体育地理、城市健康、综述/文献计量、GIS、ML、写作为优先筛选维度</li><li>防止安装大量与研究方向无关的 skill</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>索引不是安全背书</li><li>安装前仍需看上游 SKILL.md</li><li>避免重复安装同质功能</li><li>记录安装和纳入原因</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>Epsilon617/Codex-Academic-Skills</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>upstream_README.zh-CN.md</li><li>upstream_README.md</li><li>local_selection_policy.md</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

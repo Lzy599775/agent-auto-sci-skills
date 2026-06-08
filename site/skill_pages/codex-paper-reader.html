@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>codex-paper-reader · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>codex-paper-reader</h1>
+      <p class="meta">新增外部 Skill · 本地文献文件夹与 PDF 阅读工作流，用于索引、查找、readpack、source registry、页面渲染和 HTML 笔记。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/codex-paper-reader</p>
+      <div class="tags"><span>paper reader</span><span>PDF</span><span>local library</span><span>HTML notes</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>用于把本地 PDF 文件夹变成可检索、可追踪、可生成阅读包和 HTML 笔记的文献工作区。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>手动下载的 non-OA PDF 需要整理和索引</li><li>需要按标题或别名找到本地文献</li><li>需要提取摘要、方法、工作流或系统段落</li><li>需要生成论文阅读笔记和页面截图</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>在目标文献文件夹运行 setup 和 doctor</li><li>新增 PDF 后运行 refresh</li><li>用 find/readpack 定位和读取论文</li><li>生成 HTML notes 时先确认用户明确触发</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>paper_workflow.py</li><li>setup/doctor/add/refresh/find/readpack/render-page/note-name 命令</li><li>source registry</li><li>workspace setup rules</li><li>HTML notes workflow</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>直接服务本地综述文献库和手动下载 PDF 清单</li><li>适合和系统综述筛选、批判性编码、文献计量补全文献阅读联用</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>不擅自移动、重命名、删除文件</li><li>非 OA 全文保持本地</li><li>截图只使用原始页面渲染，不改写图片内容</li><li>中文路径优先做工具可用性 doctor</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>hwang847/codex-paper-reader</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>上游来源: local external_repos/codex-paper-reader</li><li>本地路径: C:/Users/LI ZEYANG/.codex/skills/codex-paper-reader</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

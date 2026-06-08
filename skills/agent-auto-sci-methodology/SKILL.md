@@ -18,6 +18,8 @@ Use this subskill when the research logic itself is uncertain or needs strengthe
 
 Read `references/research_methodology_workflows.md`.
 
+For full paper projects, this skill owns topic selection, SMART research questions, hypothesis design, innovation diagnosis, feasibility, scope boundaries, conceptual framework, and reviewer-risk logic. When the task spans the whole manuscript lifecycle, coordinate through `auto-sci-research/references/08_full_research_to_manuscript_pipeline.md`.
+
 For deeper K-Dense-style encapsulation:
 
 - `references/k_dense_methodology_mapping.md`: how hypothesis generation, critical thinking, scholar evaluation, and peer-review logic are adapted.

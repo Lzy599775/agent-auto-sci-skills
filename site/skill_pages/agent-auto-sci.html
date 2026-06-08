@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>agent-auto-sci · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>agent-auto-sci</h1>
+      <p class="meta">总领 · 统筹科研自动化、长期记忆、子 skill 路由和进化档案更新。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci</p>
+      <div class="tags"><span>总控</span><span>记忆</span><span>路由</span><span>进化档案</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>agent-auto-sci 是总领型科研 Agent skill，用来把文献、数据、方法、写作、审稿、失败经验和 skill 进化统一到一个长期可维护体系中。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>跨多个研究阶段的任务</li><li>需要判断应该调用哪个子 skill</li><li>需要更新本地科研 skill 或进化档案</li><li>需要把外部 GitHub skill 转化为本地流程</li><li>需要从选题到完稿组织完整论文管线</li><li>需要把多个子 skill 组合成分工明确的子智能体</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>先用它确定任务属于文献、方法、空间、模型、写作还是系统进化</li><li>再读取对应子 skill 的 SKILL.md 与 references</li><li>重大能力变化后更新 evolution_data.json 并重建 HTML</li><li>完整论文任务优先读取 08_full_research_to_manuscript_pipeline.md</li><li>多人/多阶段任务按 09_subagent_composition_matrix.md 分工</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>子 skill 路由表</li><li>AutoSci 与 K-Dense 学习记录</li><li>API 与安全原则</li><li>进化档案更新协议</li><li>体育地理项目路线</li><li>从选题到完稿的全流程 pipeline</li><li>子智能体组合矩阵</li><li>PDF prompt workflow 的本地化提炼</li><li>Sportpark 写作与图件经验整合规则</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>把通用科研自动化转成体育地理、城市健康、绿地/热暴露、体育设施公平和综述/文献计量写作流程</li><li>强调长期记忆、证据边界、政策议程和目标期刊适配</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>不复制外部仓库的无关学科技能</li><li>不保存任何 API key 或私有 PDF 内容到 HTML</li><li>每次重要变动都留下可追踪进化记录</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>skyllwt/AutoSci</li><li>K-Dense-AI/scientific-agent-skills</li><li>AI 进化可视化 HTML 页面制作指南</li><li>本地 sport-geography 系列 skill</li><li>本地 GPT 学术高级 Prompt PDF</li><li>本地 Sportpark 写作与图件记忆</li><li>darwin-skill 评估经验</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>00_system_architecture.md</li><li>01_source_learning_notes.md</li><li>02_subskill_registry.md</li><li>03_api_config_and_security.md</li><li>04_evolution_archive_protocol.md</li><li>05_project_routes.md</li><li>06_external_skill_coverage_audit.md</li><li>07_external_skills_deployment_20260601.md</li><li>08_full_research_to_manuscript_pipeline.md</li><li>09_subagent_composition_matrix.md</li><li>10_prompt_workflow_from_academic_pdf.md</li><li>11_sportpark_skill_integration_notes.md</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

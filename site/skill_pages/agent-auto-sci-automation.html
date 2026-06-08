@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>agent-auto-sci-automation · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>agent-auto-sci-automation</h1>
+      <p class="meta">子 Skill · 把 AutoSci/OmegaWiki 的科研生命周期、wiki式记忆和 checkpoint 思路转为本地工作流。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-automation</p>
+      <div class="tags"><span>AutoSci</span><span>workflow</span><span>checkpoint</span><span>memory</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>把 AutoSci/OmegaWiki 的科研生命周期、wiki 式记忆和 checkpoint 机制转化为本地 Codex 可执行的科研流程。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>文献、数据、脚本、图件需要进入统一项目记忆</li><li>需要 source manifest、checkpoint 或失败经验记录</li><li>需要把 idea、实验、论文、review/rebuttal 串成长期流程</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>先明确项目根目录与源文件边界</li><li>建立或更新 manifest</li><li>把来源转成 papers/concepts/methods/ideas/outputs/reviews/evolution 等实体</li><li>长流程按 checkpoint 推进</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>source manifest 模板</li><li>checkpoint manifest 模板</li><li>失败经验模板</li><li>AutoSci 命令到本地流程的映射</li><li>API 角色与安全边界</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>把 AutoSci 的实验语言改写为体育地理中的空间分析、文献筛选、GIS/ML、综述编码和论文修稿</li><li>把失败路线和审稿风险作为可复用经验保存</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>不覆盖用户手动整理的文献边界</li><li>不把 non-OA PDF 上传或公开</li><li>每个自动化流程都要有验证方式和退出条件</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>AutoSci init/ingest/discover/ideate/novelty/exp-design/paper-plan/review/rebuttal/visualize 思路</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>autosci_workflow_and_memory.md</li><li>autosci_command_mapping.md</li><li>api_and_checkpoint_templates.md</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

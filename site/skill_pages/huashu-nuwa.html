@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>huashu-nuwa · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>huashu-nuwa</h1>
+      <p class="meta">新增外部 Skill · 女娲式 skill 造人术，用于从人物、主题或模糊需求中蒸馏可运行的思维框架 skill。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/huashu-nuwa</p>
+      <div class="tags"><span>skill distillation</span><span>persona</span><span>thinking framework</span><span>multi-source research</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>用于把人物或主题的思维方式蒸馏成本地 skill，强调 how they think，而不是复制语录。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>想创建某位学者、编辑、规划师或方法论专家的思维视角</li><li>想从模糊需求反推适合的思维框架</li><li>想更新已有 persona/thinking skill</li><li>想把本地书籍、访谈、讲座、博客转成结构化 skill</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>明确对象或需求</li><li>优先提供本地一手资料</li><li>按著作、对话、表达、他者评价、决策、时间线分维度采集</li><li>生成 skill 前区分事实、二手评价和推断</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>入口分流</li><li>直接路径和诊断路径</li><li>多源资料采集框架</li><li>research 文件沉淀结构</li><li>反模式和能力边界</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>可为体育地理研究创建目标期刊审稿人、城市规划理论、健康地理、空间公平或文献计量方法顾问 skill</li><li>用于形成批判性视角，不把 persona 当事实来源</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>必须标注来源可信度</li><li>不能把风格模仿当学术证据</li><li>不能侵犯隐私或杜撰人物观点</li><li>生成 skill 要自包含并保留边界</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>alchaincyf/nuwa-skill</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>上游来源: local external_repos/nuwa-skill</li><li>本地路径: C:/Users/LI ZEYANG/.codex/skills/huashu-nuwa</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

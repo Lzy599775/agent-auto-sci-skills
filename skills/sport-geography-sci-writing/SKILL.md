@@ -47,6 +47,8 @@ Every section must close one part of that chain. Every main claim must point to 
    - Make Discussion explain mechanisms, compare literature, translate to planning, and state boundaries.
    - Read `references/workflow-checklists.md` for pre-submission checks.
 
+For end-to-end projects, this skill enters after the topic, literature, data, analysis, and figure plan have stable outputs. If the user asks to start from zero, route first through `auto-sci-research/references/08_full_research_to_manuscript_pipeline.md`, then return here for the empirical manuscript.
+
 ## Journal Routing
 
 | If the main contribution is... | Prefer journal playbook |
@@ -94,7 +96,9 @@ Every section must close one part of that chain. Every main claim must point to 
 
 When the user asks "where did this come from" or wants deeper paper-level evidence, read:
 
-- `<your-sport-geography-project>/writing`
-- `<your-sport-geography-project>/writing`
-- `<your-sport-geography-project>/writing`
+- the user's local Sportpark writing playbook when available.
+- the user's local Sportpark role/protocol notes when available.
+- the user's local Sportpark figure-system memories when the task is specifically about paper figures.
+
+Do not copy private paper full text from those folders into public outputs.
 

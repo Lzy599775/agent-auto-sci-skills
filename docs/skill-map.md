@@ -70,3 +70,25 @@
 | `academic-paper-reviewer` | Peer-review simulation, editor-in-chief screening, domain review, methodology review, and revision-response planning. |
 | `academic-pipeline` | Full research-to-paper pipeline, state tracking, integrity verification, claim-reference alignment, and finalization gates. |
 | `experiment-agent` | Experiment planning, code-run planning, human study protocol support, statistical interpretation, and reproducibility validation. |
+
+## 11. Full Research-To-Manuscript Pipeline
+
+Use `auto-sci-research` as the controller when the user asks for a full workflow from topic selection to final manuscript.
+
+| Stage | Owner skills | Output |
+|---|---|---|
+| Intake and boundary | `auto-sci-research`, `agent-auto-sci-automation` | project brief, source manifest, privacy boundary |
+| Topic and SMART question | `agent-auto-sci-methodology` | topic matrix, hypotheses, feasibility and scope |
+| Literature search and synthesis | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` | keyword system, screening protocol, literature matrix, evidence map |
+| Data and spatial processing | `agent-auto-sci-geospatial`, `agent-auto-sci-automation` | data inventory, download/cleaning plan, CRS and exposure/accessibility audit |
+| Modeling and analysis | `agent-auto-sci-ai-ml`, `agent-auto-sci-data-viz`, `agent-auto-sci-methodology` | baselines, statistical tests, robustness, XAI boundary |
+| Publication figures | `agent-auto-sci-data-viz`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` | main/supplementary figure plan, captions, map compliance |
+| Manuscript draft | `sport-geography-sci-writing`, `agent-auto-sci-scicomm` | title, abstract, IMRAD draft, claim-evidence map |
+| Review, formatting, rebuttal | `agent-auto-sci-methodology`, `agent-auto-sci-scicomm`, `agent-auto-sci-automation` | reviewer-risk scan, formatted package, response matrix |
+
+Detailed references:
+
+- `skills/auto-sci-research/references/08_full_research_to_manuscript_pipeline.md`
+- `skills/auto-sci-research/references/09_subagent_composition_matrix.md`
+- `skills/auto-sci-research/references/10_prompt_workflow_from_academic_pdf.md`
+- `skills/auto-sci-research/references/11_sportpark_skill_integration_notes.md`

@@ -19,6 +19,8 @@ Use this subskill for spatial data, maps, and exposure/accessibility workflows.
 
 Read `references/geospatial_remote_sensing_workflows.md`.
 
+For full paper projects, this skill owns spatial data discovery, download planning, CRS/geometry audit, OSM/network accessibility, green/heat exposure indicators, LCZ/remote-sensing preprocessing, spatial equity metrics, map compliance, and handoff to analysis and figure-writing agents. It should produce explicit data paths, assumptions, and sensitivity checks.
+
 For deeper K-Dense-style encapsulation:
 
 - `references/k_dense_geospatial_mapping.md`: how GeoPandas, geomaster, raster/vector, remote sensing, and spatial workflow skills are adapted.

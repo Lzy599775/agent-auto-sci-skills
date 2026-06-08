@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>gpt-researcher · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>gpt-researcher</h1>
+      <p class="meta">新增外部 Skill · GPT Researcher 的 Codex/MCP 深度研究入口，用于自治式 web research 和多来源证据收集。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/gpt-researcher</p>
+      <div class="tags"><span>web research</span><span>MCP</span><span>deep research</span><span>source verification</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>用于把 GPT Researcher 的自治式 web deep research 能力接入本地科研 Agent 体系，适合处理需要当前网络证据和多来源交叉验证的问题。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>搜索最新文献、政策报告、机构数据或公开网页</li><li>为综述和政策议程补充非数据库来源</li><li>需要跨来源事实核查和 source verification</li><li>需要与本地文献计量或系统综述形成互补</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>先确认是否需要联网和当前资料</li><li>限定检索主题、时间范围、来源类型和输出格式</li><li>避免上传 private PDF 或 unpublished manuscript</li><li>把结果回写到 source manifest 或综述证据表</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>上游 gpt-researcher Codex skill</li><li>MCP/deep research 接入提示</li><li>本地外部仓库副本</li><li>在 agent-auto-sci 中的安全边界说明</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>优先服务 sport park、sport facility、green/heat exposure、urban health、planning policy 等主题</li><li>用于补充 WoS/Scopus 之外的政策、规划和机构资料</li><li>与 sport-geography-review-bibliometric 联用时只作为 evidence source，不替代 PRISMA</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>必须保留来源链接和检索日期</li><li>网络资料不能替代同行评议证据</li><li>对政策网页、机构报告和新闻材料分级处理</li><li>不要把搜索摘要当作最终文献综述</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>assafelovic/gpt-researcher</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>上游来源: local external_repos/gpt-researcher</li><li>本地路径: C:/Users/LI ZEYANG/.codex/skills/gpt-researcher</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

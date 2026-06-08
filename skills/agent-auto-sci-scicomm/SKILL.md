@@ -19,6 +19,8 @@ Use this subskill when the output is a manuscript, response, slide deck, poster,
 
 Read `references/scientific_communication_workflows.md`.
 
+For full paper projects, this skill owns title, abstract, highlights, IMRAD structure, paragraph logic, figure-text narrative, journal matching, cover letter, reference/citation checks, response-to-reviewers, and final submission readiness. Use `sport-geography-sci-writing` for field-specific empirical manuscript logic.
+
 For deeper K-Dense-style encapsulation:
 
 - `references/k_dense_scicomm_mapping.md`: how scientific writing, peer review, slides, schematics, and citation-management skills are adapted.

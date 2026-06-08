@@ -19,6 +19,8 @@ Use this subskill whenever data, tables, or figures are central to the output.
 
 Read `references/data_analysis_visualization_workflows.md`.
 
+For full paper projects, this skill owns EDA, statistical-test reporting, robustness visualization, table shells, publication figure planning, figure-title/caption checks, and final visual evidence audits. It should work with `agent-auto-sci-geospatial` for maps and with `agent-auto-sci-scicomm` for figure narrative.
+
 For deeper K-Dense-style encapsulation:
 
 - `references/k_dense_data_viz_mapping.md`: how EDA, statistics, scientific visualization, matplotlib, seaborn, and network analysis are adapted.

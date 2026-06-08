@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>codex-autoresearch · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>codex-autoresearch</h1>
+      <p class="meta">新增外部 Skill · 长时段自治式 improve-verify loop，用于可机械验证的调试、优化、安全审计和发版准备。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/codex-autoresearch</p>
+      <div class="tags"><span>autonomous loop</span><span>verification</span><span>long-running</span><span>debug</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>用于把可验证任务变成长时段自动迭代流程，核心是 modify -&gt; verify -&gt; keep/discard -&gt; repeat。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>代码或数据处理脚本需要持续修复</li><li>需要优化可量化指标</li><li>需要安全审计或 ship-readiness gate</li><li>需要前台或后台长期运行</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>只有在目标和验证方式明确时启用</li><li>先扫描仓库并确认 run mode</li><li>每轮只做一个聚焦改变</li><li>每轮必须机械验证并记录结果</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>loop/plan/debug/fix/security/ship/exec 模式</li><li>runtime invariants</li><li>结果日志</li><li>session resume</li><li>foreground/background 运行协议</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>适合用于文献库索引脚本、GIS/ML 分析脚本、图件生成脚本和数据清洗流程的长期修复</li><li>不适合开放式论文润色，除非存在可验证指标</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>不能用于普通问答</li><li>不能覆盖用户未授权修改</li><li>run artifacts 不应提交</li><li>连续失败时要 pivot 而不是硬跑</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>leo-lilinxiao/codex-autoresearch</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>上游来源: local external_repos/codex-autoresearch</li><li>本地路径: C:/Users/LI ZEYANG/.codex/skills/codex-autoresearch</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

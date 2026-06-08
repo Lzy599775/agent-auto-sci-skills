@@ -11,12 +11,20 @@ Core idea:
 
 `sources -> structured memory -> idea and method design -> data/geo/ML analysis -> manuscript or review -> critique/rebuttal -> evolution archive`
 
+For full paper projects, use the expanded route:
+
+`intake -> topic -> SMART question -> literature search -> literature matrix -> data plan -> processing/code -> analysis -> figures/tables -> draft -> internal review -> formatting/submission -> rebuttal -> evolution record`
+
 ## Routing
 
 Use this skill first when the task spans multiple research stages or asks to improve the user's local skills.
 
 | Task | Use |
 |---|---|
+| Full workflow from topic selection to final manuscript | Start here, then read `references/08_full_research_to_manuscript_pipeline.md` |
+| Large task that should be split into role-specific agents | Read `references/09_subagent_composition_matrix.md` |
+| Reusing academic prompt libraries without copying copyrighted text | Read `references/10_prompt_workflow_from_academic_pdf.md` |
+| Integrating Sportpark writing/figure memories or deduplicating local skills | Read `references/11_sportpark_skill_integration_notes.md` |
 | Build or update the overall research-agent workflow | `agent-auto-sci-automation` |
 | Machine learning, AI model design, SHAP, model evaluation | `agent-auto-sci-ai-ml` |
 | EDA, statistics, publication figures, tables, dashboards | `agent-auto-sci-data-viz` |
@@ -60,6 +68,8 @@ Read `references/02_subskill_registry.md` when choosing among skills.
    - Prefer reproducible scripts and structured tables when the task repeats.
    - Prefer clear markdown references when the task is judgment-heavy.
    - Use external APIs only when their value justifies setup and security cost.
+   - For full manuscript projects, progress phase by phase and keep handoffs explicit.
+   - For large tasks, compose subagents instead of creating new standalone skills by default.
 
 4. **Gate quality**
    - Verify files, scripts, outputs, citations, figures, and assumptions.
@@ -82,6 +92,10 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 - `references/05_project_routes.md`: current sport-geography review and empirical-manuscript routes.
 - `references/06_external_skill_coverage_audit.md`: coverage matrix for AutoSci and K-Dense skills, including what is preserved, adapted, and intentionally excluded.
 - `references/07_external_skills_deployment_20260601.md`: 2026-06-01 deployment record for gpt-researcher, nuwa-skill, ARS, autoresearch, paper reader, Codex Academic Skills, and AI writing prompts.
+- `references/08_full_research_to_manuscript_pipeline.md`: end-to-end research pipeline from topic selection, literature, data/code, analysis, figures, drafting, review, formatting, and rebuttal.
+- `references/09_subagent_composition_matrix.md`: role-specific subagent combinations and handoff schema.
+- `references/10_prompt_workflow_from_academic_pdf.md`: private PDF-derived prompt workflow structure, adapted without copying long text.
+- `references/11_sportpark_skill_integration_notes.md`: Sportpark writing/figure lessons, duplicate handling, and Darwin-style evaluation boundary.
 - `../urban-exposure-review-radar-workflow/references/workflow_playbook.md`: route-specific workflow for reviews, bibliometrics, urban exposure, remote sensing radar, and health database linkage.
 
 ## Local Project Files
@@ -104,6 +118,7 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 - Do not install all third-party skills blindly.
 - Do not copy external workflows that require unavailable infrastructure without marking them as optional.
 - Do not expose API keys, tokens, private PDFs, unpublished data, or reviewer-sensitive material in HTML.
+- Do not copy long text from private prompt PDFs into public skill files.
 - Do not create a new subskill when an existing subskill can be extended cleanly.
 - Do not skip the HTML evolution archive after a meaningful skill change.
 

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>awesome-ai-research-writing · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>awesome-ai-research-writing</h1>
+      <p class="meta">新增包装 Skill · 学术论文写作 prompt 与写作 skill 参考库，覆盖翻译、润色、缩写扩写、逻辑检查、图表标题、实验分析和 reviewer 视角审稿。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/awesome-ai-research-writing</p>
+      <div class="tags"><span>prompt library</span><span>academic writing</span><span>translation</span><span>reviewer critique</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>把 STRYXTN/awesome-ai-research-writing 的 prompt 库包装为本地可触发 skill，并对体育地理目标期刊做领域化约束。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>中文草稿转英文 SCI 段落</li><li>英文论文段落转中文理解</li><li>中文 Word 论文重写</li><li>缩写、扩写、逻辑检查、去 AI 味</li><li>图表标题和实验分析</li><li>以 reviewer 视角审稿</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>先确定写作任务和目标格式</li><li>在 upstream_prompt_library 中找最接近 prompt</li><li>按 local_prompt_adaptation 调整到体育地理和目标期刊</li><li>输出时保留证据边界和引用边界</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>上游 prompt library</li><li>local prompt adaptation</li><li>期刊路线适配</li><li>claim boundary rules</li><li>prompt selection map</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>把 CS/AI 写作 prompt 改造为地理、规划、公共健康、体育科学语境</li><li>适配 Cities/SCS/UFUG/EI/Nature-family 的叙事要求</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>不能改变原意或增强因果语气</li><li>不能虚构引用、结果、期刊要求</li><li>不能用 prompt 替代证据审计</li><li>LaTeX/Word 输出格式要按场景保持干净</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>STRYXTN/awesome-ai-research-writing</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>upstream_prompt_library.md</li><li>local_prompt_adaptation.md</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

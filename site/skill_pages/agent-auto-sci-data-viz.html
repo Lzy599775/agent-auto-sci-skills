@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>agent-auto-sci-data-viz · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>agent-auto-sci-data-viz</h1>
+      <p class="meta">子 Skill · EDA、统计分析、论文级图表、表格设计、文献计量图和 HTML 仪表盘。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-data-viz</p>
+      <div class="tags"><span>EDA</span><span>statistics</span><span>figures</span><span>dashboard</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>用于数据质量审计、统计分析、论文级图表、文献计量图、政策矩阵和可视化档案页面。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>需要 EDA、缺失值/异常值审计或统计检验</li><li>需要设计综述、文献计量或实证论文图表</li><li>需要把结果转为期刊可读的 figure/table/caption</li><li>需要生成 HTML 仪表盘或进化档案</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>先审计数据结构和单位</li><li>每张图先定义要支撑的 claim</li><li>统计结果报告效应量和不确定性</li><li>图件导出时记录脚本、路径、尺寸和数据来源</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>EDA 最小清单</li><li>统计检验和效应量规则</li><li>出版图件质量规则</li><li>review/bibliometric 图件体系</li><li>政策矩阵和 caption 公式</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>把 K-Dense EDA/statistics/scientific visualization 转成体育地理综述、文献计量、GIS 和政策议程图件体系</li><li>突出地图、共词网络、证据图和政策矩阵的边界</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>不要做不能支持论点的装饰图</li><li>不要只报 p 值</li><li>地图配色和图例不能误导变量含义</li><li>文献计量图不能被解释为因果证据</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>K-Dense exploratory-data-analysis</li><li>K-Dense statistical-analysis</li><li>K-Dense scientific-visualization</li><li>matplotlib/seaborn/networkx skills</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>data_analysis_visualization_workflows.md</li><li>k_dense_data_viz_mapping.md</li><li>review_bibliometric_figure_system.md</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>

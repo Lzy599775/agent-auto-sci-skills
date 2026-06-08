@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>agent-auto-sci-geospatial · Skill 详情</title>
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #171d22;
+      --text: #eef3f0;
+      --muted: #a9b6b0;
+      --line: #2f3b42;
+      --teal: #34d399;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background: #101418;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 56px; }
+    a { color: #93c5fd; }
+    .back { display: inline-block; margin-bottom: 22px; color: #bbf7d0; text-decoration: none; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); letter-spacing: 0; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tags span {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.12);
+      border: 1px solid rgba(96,165,250,.18);
+      color: #bfdbfe;
+      font-size: 12px;
+    }
+    section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; }
+    p { color: var(--muted); margin: 0; }
+    ul { margin: 0; padding-left: 22px; }
+    li { margin: 4px 0; color: #d6e4dc; }
+    code {
+      background: rgba(255,255,255,.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d9f99d;
+    }
+    .path { overflow-wrap: anywhere; color: #d9f99d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 980px); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../agent-auto-sci-evolution.html">返回总览</a>
+    <header>
+      <h1>agent-auto-sci-geospatial</h1>
+      <p class="meta">子 Skill · GIS、遥感、空间可达性、绿色/热暴露、空间公平和地图合规。</p>
+      <p class="meta path">C:/Users/LI ZEYANG/.codex/skills/agent-auto-sci-geospatial</p>
+      <div class="tags"><span>GIS</span><span>remote sensing</span><span>accessibility</span><span>maps</span></div>
+    </header>
+
+    <section>
+      <h2>技能定位</h2>
+      <p>用于 GIS、遥感、空间可达性、绿地/热暴露、体育设施公平、空间机器学习和论文地图合规。</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>适用场景</h2>
+        <ul><li>处理 GeoPandas、raster、OSM/network、LCZ、NDVI、LST 等数据</li><li>计算体育公园或体育设施可达性</li><li>做绿色暴露、热暴露和空间公平评价</li><li>制作论文研究区图或结果地图</li></ul>
+      </section>
+      <section>
+        <h2>使用方法</h2>
+        <ul><li>先盘点图层、CRS、时间和来源</li><li>在投影 CRS 下做距离/面积/网络计算</li><li>明确 availability/accessibility/exposure/quality/use/equity 的概念边界</li><li>做半径、阈值、出行方式和空间单元敏感性分析</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>包含内容</h2>
+      <ul><li>CRS 与几何审计</li><li>栅格/矢量/网络流程</li><li>遥感与 zonal statistics 规则</li><li>可达性指标定义</li><li>中国地图合规要求</li><li>体育地理空间 playbook</li></ul>
+    </section>
+
+    <section>
+      <h2>领域化优化</h2>
+      <ul><li>把 K-Dense GeoPandas/geomaster/remote-sensing 流程转成 sport park/facility、green/heat exposure、active-living opportunity 和 China map compliance 场景</li><li>强调潜在可达性不等于实际使用</li></ul>
+    </section>
+
+    <section>
+      <h2>质量检查</h2>
+      <ul><li>不能在经纬度 CRS 中算距离面积</li><li>不能把 NDVI、LCZ、公园面积和体育机会混为一谈</li><li>不能用非合规中国底图发表</li><li>空间 ML 必须检查空间泄露</li></ul>
+    </section>
+
+    <div class="grid">
+      <section>
+        <h2>学习来源</h2>
+        <ul><li>K-Dense geomaster</li><li>K-Dense geopandas</li><li>raster/vector/network spatial workflow patterns</li></ul>
+      </section>
+      <section>
+        <h2>本地参考文件</h2>
+        <ul><li>geospatial_remote_sensing_workflows.md</li><li>k_dense_geospatial_mapping.md</li><li>sport_geography_spatial_playbook.md</li></ul>
+      </section>
+    </div>
+
+    <section>
+      <h2>更新说明</h2>
+      <p>本页由 <code>evolution_data.json</code> 自动生成。每次 skill 结构或内容发生实质变化，应同步更新进化档案。</p>
+    </section>
+  </main>
+</body>
+</html>
