@@ -1,0 +1,5 @@
+interface:
+  display_name: "SciPilot Figure Skill"
+  short_description: "Scientific figure advisor: profile data, choose charts, render publication-grade figures, and run visual QA."
+  default_prompt: "Use scipilot-figure-skill to profile the data, choose a chart based on the claim, render a publication-ready figure, and run visual quality checks."
+

@@ -1,6 +1,15 @@
 # External Skills And References
 
-This repository does not vendor third-party repositories. Use the projects below as optional extensions or design references.
+This repository primarily contains self-developed and domain-adapted skills. Some upstream skills are included as selected, attributed wrappers when they directly strengthen the Auto-sci-research workflow.
+
+Current vendored/wrapped upstream additions:
+
+| Upstream project | Local wrapper | Scope |
+|---|---|---|
+| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | Only four selected areas are packaged: ML/AI, data analysis and visualization, geospatial/remote sensing, and scientific communication. The full upstream repository is not installed wholesale. |
+| [Haojae/scipilot-figure-skill](https://github.com/Haojae/scipilot-figure-skill) | `scipilot-figure-skill` | Publication-figure design, chart choice, visual QA, CJK-safe labels, and figure-story alignment. |
+
+The projects below remain optional references or extension sources.
 
 | Project | Use |
 |---|---|
@@ -11,7 +20,8 @@ This repository does not vendor third-party repositories. Use the projects below
 | [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | academic research suite for Codex |
 | [leo-lilinxiao/codex-autoresearch](https://github.com/leo-lilinxiao/codex-autoresearch) | long-running improve-verify loops |
 | [hwang847/codex-paper-reader](https://github.com/hwang847/codex-paper-reader) | local PDF reading workflow |
-| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | broad scientific agent skill organization |
+| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | broad scientific agent skill organization; partially wrapped in selected local modules |
+| [Haojae/scipilot-figure-skill](https://github.com/Haojae/scipilot-figure-skill) | scientific figure design and visual QA; wrapped as a local figure companion skill |
 | [skyllwt/AutoSci](https://github.com/skyllwt/AutoSci) | long-horizon research-agent memory and workflow ideas |
 | [bionoob7/nlr-workflow](https://github.com/bionoob7/nlr-workflow) | narrative literature review workflow discipline: search, screening, extraction, synthesis, drafting, audit, citation export, and submission gates |
 | [limi124/remote-sensing-research-radar](https://github.com/limi124/remote-sensing-research-radar) | remote-sensing and Geospatial AI frontier radar, CV-to-RS transfer analysis, candidate ranking, and research idea generation |
@@ -21,5 +31,5 @@ Before adapting a third-party project:
 1. Check the license.
 2. Keep attribution.
 3. Do not copy private examples or keys.
-4. Avoid installing overlapping skills without a clear use case.
+4. Avoid installing overlapping skills without a clear use case; prefer selected wrappers over wholesale copying.
 5. Treat external APIs and cloud tools as optional.

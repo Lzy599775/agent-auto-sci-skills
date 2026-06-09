@@ -14,9 +14,14 @@ Use this file to choose the right local skill.
 |---|---|---|
 | `agent-auto-sci-automation` | Long-horizon research workflow, source ingestion, memory, checkpoints, automation, API setup | workflow plan, source manifest, memory schema, update protocol |
 | `agent-auto-sci-ai-ml` | ML/AI modeling, baselines, XAI, model validation | model plan, leakage checklist, SHAP plan, experiment matrix |
+| `kdense-ml-ai-selected` | Selected upstream K-Dense ML/AI subskills | scikit-learn, PyTorch Lightning, Transformers, SHAP, time-series ML, GNN, UMAP technical playbooks |
 | `agent-auto-sci-data-viz` | EDA, statistics, tables, figures, dashboards | EDA report, statistical plan, publication figure plan |
+| `kdense-data-viz-selected` | Selected upstream K-Dense data/viz subskills | EDA, statistical analysis, matplotlib, seaborn, scientific visualization, NetworkX, Polars, Dask |
+| `scipilot-figure-skill` | Scientific figure advisor and plotter | data profiling, chart selection, publication export, CJK font setup, visual QA loop |
 | `agent-auto-sci-geospatial` | GIS, remote sensing, spatial accessibility, spatial ML | spatial workflow, CRS audit, map plan, accessibility pipeline |
+| `kdense-geospatial-rs-selected` | Selected upstream K-Dense geospatial and remote-sensing subskills | geomaster and GeoPandas technical workflows |
 | `agent-auto-sci-scicomm` | Manuscript writing, slides, posters, peer review, rebuttal | manuscript plan, section draft, response letter, presentation plan |
+| `kdense-scicomm-selected` | Selected upstream K-Dense scientific communication subskills | scientific writing, peer review, citations, literature review, slides, posters, schematics |
 | `agent-auto-sci-methodology` | Hypothesis, research design, critical appraisal, evidence grading | hypothesis matrix, method critique, risk-of-bias table |
 | `urban-exposure-review-radar-workflow` | Urban exposure review workflow, remote-sensing frontier radar, CV-to-RS idea generation, formal corpus/radar handoff | route decision, search/radar protocol, extraction/coding framework, journal evidence gate, project scaffold |
 
@@ -37,10 +42,11 @@ Each `agent-auto-sci-*` subskill now has two layers of references:
 
 These are not subskills of this project, but they can be invoked as technical helpers when already installed:
 
-- `scikit-learn`, `pytorch-lightning`, `transformers`, `shap`, `aeon`, `timesfm-forecasting`
-- `exploratory-data-analysis`, `statistical-analysis`, `matplotlib`, `seaborn`, `scientific-visualization`, `networkx`
-- `geomaster`, `geopandas`
-- `scientific-writing`, `peer-review`, `scientific-slides`, `scientific-schematics`, `citation-management`
+- `kdense-ml-ai-selected`: selected K-Dense ML/AI bundle.
+- `kdense-data-viz-selected`: selected K-Dense data analysis and visualization bundle.
+- `kdense-geospatial-rs-selected`: selected K-Dense geospatial and remote-sensing bundle.
+- `kdense-scicomm-selected`: selected K-Dense scientific communication bundle.
+- `scipilot-figure-skill`: SciPilot figure advisor for chart selection, plotting, and visual QA.
 - `hypothesis-generation`, `scientific-critical-thinking`, `scholar-evaluation`
 
 ## 5. Newly Deployed External Research Skills
@@ -69,9 +75,9 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 8. If the task is a focused sport-geography review or bibliometric paper, use `sport-geography-review-bibliometric`.
 9. If the task asks for recent remote-sensing, Geospatial AI, CV-to-RS, heat/green exposure radar, use `urban-exposure-review-radar-workflow` plus `agent-auto-sci-geospatial`.
 10. If the task involves spatial data or maps, add `agent-auto-sci-geospatial`.
-11. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`.
-12. If the task ends in figures/tables/statistics, add `agent-auto-sci-data-viz`.
-13. If the task ends in text, slides, poster, or rebuttal, add `agent-auto-sci-scicomm`.
+11. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`; add `kdense-ml-ai-selected` when upstream package-level technical playbooks are needed.
+12. If the task ends in figures/tables/statistics, add `agent-auto-sci-data-viz`; add `kdense-data-viz-selected` for upstream EDA/statistics/visualization playbooks and `scipilot-figure-skill` for chart selection or publication-grade data figures.
+13. If the task ends in text, slides, poster, or rebuttal, add `agent-auto-sci-scicomm`; add `kdense-scicomm-selected` for upstream writing, citation, peer-review, slide, poster, or schematic workflows.
 14. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
 15. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
 16. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
@@ -86,9 +92,8 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 | Topic and feasibility | `agent-auto-sci-methodology`, `agent-auto-sci-automation` |
 | Literature and corpus | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
 | Data and spatial processing | `agent-auto-sci-automation`, `agent-auto-sci-geospatial` |
-| Modeling and analysis | `agent-auto-sci-ai-ml`, `agent-auto-sci-data-viz`, `agent-auto-sci-methodology` |
-| Publication figures | `agent-auto-sci-data-viz`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` |
-| Draft and revision | `sport-geography-sci-writing`, `agent-auto-sci-scicomm` |
+| Modeling and analysis | `agent-auto-sci-ai-ml`, `kdense-ml-ai-selected`, `agent-auto-sci-data-viz`, `kdense-data-viz-selected`, `agent-auto-sci-methodology` |
+| Publication figures | `agent-auto-sci-data-viz`, `scipilot-figure-skill`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` |
+| Draft and revision | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `kdense-scicomm-selected` |
 | Reviewer risk and rebuttal | `agent-auto-sci-methodology`, `agent-auto-sci-scicomm` |
 | Skill evolution and release | `auto-sci-research`, `agent-auto-sci-automation` |
-

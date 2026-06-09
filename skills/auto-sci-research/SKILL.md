@@ -27,9 +27,14 @@ Use this skill first when the task spans multiple research stages or asks to imp
 | Integrating Sportpark writing/figure memories or deduplicating local skills | Read `references/11_sportpark_skill_integration_notes.md` |
 | Build or update the overall research-agent workflow | `agent-auto-sci-automation` |
 | Machine learning, AI model design, SHAP, model evaluation | `agent-auto-sci-ai-ml` |
+| Upstream K-Dense ML/AI technical playbooks: scikit-learn, PyTorch Lightning, Transformers, SHAP, time-series ML, GNN, UMAP | `kdense-ml-ai-selected` |
 | EDA, statistics, publication figures, tables, dashboards | `agent-auto-sci-data-viz` |
+| Upstream K-Dense EDA/statistics/visualization playbooks: matplotlib, seaborn, scientific visualization, NetworkX, Polars, Dask | `kdense-data-viz-selected` |
+| Data figure advisor, chart selection, journal-ready plotting, CJK font setup, visual QA | `scipilot-figure-skill` |
 | GIS, spatial accessibility, remote sensing, spatial ML | `agent-auto-sci-geospatial` |
+| Upstream K-Dense geospatial and remote-sensing playbooks: geomaster, GeoPandas | `kdense-geospatial-rs-selected` |
 | Manuscript writing, slides, posters, peer review, rebuttal | `agent-auto-sci-scicomm` |
+| Upstream K-Dense scientific communication playbooks: writing, peer review, citations, literature review, slides, posters, schematics | `kdense-scicomm-selected` |
 | Hypothesis, research design, critical appraisal, evidence grading | `agent-auto-sci-methodology` |
 | Urban exposure review workflow, systematic/scoping review, bibliometric + critical review, remote-sensing frontier radar, CV-to-RS idea generation, public health database linkage | `urban-exposure-review-radar-workflow` |
 | Sport geography empirical SCI manuscript writing | `sport-geography-sci-writing` |
@@ -97,6 +102,11 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 - `references/10_prompt_workflow_from_academic_pdf.md`: private PDF-derived prompt workflow structure, adapted without copying long text.
 - `references/11_sportpark_skill_integration_notes.md`: Sportpark writing/figure lessons, duplicate handling, and Darwin-style evaluation boundary.
 - `../urban-exposure-review-radar-workflow/references/workflow_playbook.md`: route-specific workflow for reviews, bibliometrics, urban exposure, remote sensing radar, and health database linkage.
+- `../kdense-ml-ai-selected/SKILL.md`: selected K-Dense ML/AI package and upstream subskills.
+- `../kdense-data-viz-selected/SKILL.md`: selected K-Dense data analysis and visualization package.
+- `../kdense-geospatial-rs-selected/SKILL.md`: selected K-Dense geospatial and remote-sensing package.
+- `../kdense-scicomm-selected/SKILL.md`: selected K-Dense scientific communication package.
+- `../scipilot-figure-skill/SKILL.md`: SciPilot scientific figure advisor and visual QA workflow.
 
 ## Local Project Files
 
@@ -121,4 +131,3 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 - Do not copy long text from private prompt PDFs into public skill files.
 - Do not create a new subskill when an existing subskill can be extended cleanly.
 - Do not skip the HTML evolution archive after a meaningful skill change.
-

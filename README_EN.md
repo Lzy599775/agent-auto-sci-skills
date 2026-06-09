@@ -10,6 +10,8 @@ It is not a paper generator. It is a maintainable research workbench that helps 
 
 This release upgrades `urban-exposure-review-radar-workflow` into a domain router plus research-pipeline adapter. It combines review-project discipline with remote-sensing / Geospatial AI frontier radar, and now vendors an isolated `academic-research-suite` subskill for deep research, paper writing, reviewer simulation, citation checks, full research-to-paper pipelines, and experiment planning.
 
+The suite also packages the latest selected upstream skills from `K-Dense-AI/scientific-agent-skills` and `Haojae/scipilot-figure-skill`. K-Dense is not installed wholesale: only Machine Learning & AI, Data Analysis & Visualization, Geospatial Science & Remote Sensing, and Scientific Communication are wrapped as installable domain modules. `scipilot-figure-skill` is included as a publication-figure and visual-QA companion.
+
 ## Core Workflow
 
 ```text
@@ -56,6 +58,11 @@ Custom target:
 | `agent-auto-sci-data-viz` | Stable | EDA, statistics, publication figures, bibliometric visuals | “Design figures and captions.” |
 | `agent-auto-sci-ai-ml` | Stable | ML, SHAP/XAI, leakage checks, spatial validation | “Audit model validation and interpretation.” |
 | `agent-auto-sci-scicomm` | Stable | Manuscript structure, journal fit, rebuttal, slides | “Rebuild the manuscript argument.” |
+| `kdense-ml-ai-selected` | New | Selected K-Dense ML/AI tools: scikit-learn, PyTorch Lightning, Transformers, SHAP, time series, GNN, UMAP | “Use the selected K-Dense ML toolkit for this modeling task.” |
+| `kdense-data-viz-selected` | New | Selected K-Dense EDA, statistics, plotting, visualization, NetworkX, Polars, Dask tools | “Use the selected K-Dense data-viz toolkit to analyze and plot this dataset.” |
+| `kdense-geospatial-rs-selected` | New | Selected K-Dense geospatial and remote-sensing helpers: GeoMaster and GeoPandas | “Use the selected K-Dense geospatial toolkit for this GIS workflow.” |
+| `kdense-scicomm-selected` | New | Selected K-Dense writing, review, slides, schematics, citation and literature-review helpers | “Use the selected K-Dense scicomm toolkit to polish this manuscript package.” |
+| `scipilot-figure-skill` | New | Scientific figure design, chart selection, visual QA, CJK-compatible publication figures | “Use SciPilot Figure Skill to design and audit my figures.” |
 | `urban-exposure-review-radar-workflow` | Stable | Review-route decision, bibliometric + critical review, systematic/scoping review, remote-sensing radar, CV-to-RS, medical database linkage | “Decide which route this review/radar/study should take.” |
 | `sport-geography-review-bibliometric` | Stable | Systematic/scoping reviews, bibliometrics, critical coding, policy agenda | “Design a review + bibliometrics manuscript.” |
 | `sport-geography-sci-writing` | Stable | Empirical SCI writing for sport geography, exposure, equity, urban health | “Turn my results into an SCI manuscript.” |
@@ -119,12 +126,25 @@ Outputs: research questions, mechanism pathway, spatial data audit, accessibilit
 ```text
 auto-sci-research
 -> agent-auto-sci-ai-ml
+-> kdense-ml-ai-selected
 -> agent-auto-sci-geospatial
 -> agent-auto-sci-methodology
 -> agent-auto-sci-scicomm
 ```
 
 Outputs: baselines, spatial/temporal splits, leakage checks, SHAP/XAI interpretation boundaries, and manuscript-ready explanation.
+
+### Publication figures and visual QA
+
+```text
+auto-sci-research
+-> agent-auto-sci-data-viz
+-> kdense-data-viz-selected
+-> scipilot-figure-skill
+-> agent-auto-sci-scicomm
+```
+
+Outputs: figure argument, chart selection, statistics and plotting route, visual QA checklist, CJK font / label checks, caption-to-claim alignment, and journal-ready figure package.
 
 ## Example Prompts
 

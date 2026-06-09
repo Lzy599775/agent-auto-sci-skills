@@ -1,0 +1,5 @@
+interface:
+  display_name: "K-Dense SciComm Selected"
+  short_description: "Selected K-Dense scientific communication skills adapted for Auto-sci-research."
+  default_prompt: "Use the selected K-Dense scientific communication subskills to plan writing, peer review, citations, slides, posters, or schematics."
+

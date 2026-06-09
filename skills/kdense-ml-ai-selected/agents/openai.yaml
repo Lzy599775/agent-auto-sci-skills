@@ -1,0 +1,5 @@
+interface:
+  display_name: "K-Dense ML/AI Selected"
+  short_description: "Selected K-Dense machine learning and AI skills adapted for Auto-sci-research."
+  default_prompt: "Use the selected K-Dense ML/AI subskills to design a reproducible model workflow with baselines, validation, interpretability, and manuscript reporting boundaries."
+

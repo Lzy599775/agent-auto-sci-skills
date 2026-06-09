@@ -11,6 +11,8 @@
 
 当前版本把 `auto-sci-research` 升级为完整科研管线总控：从选题、文献检索、数据下载、代码处理、统计/机器学习分析、论文级图件、初稿写作、投稿排版到审稿回复，都有对应子 skill 和子智能体组合。`urban-exposure-review-radar-workflow` 继续负责城市暴露、体育地理、热-绿复合暴露、公共健康数据库连接和高水平综述/前沿雷达路线。
 
+本次新增 5 个可安装入口：4 个 `K-Dense-AI/scientific-agent-skills` 精选封装包（机器学习与人工智能、数据分析与可视化、地理空间科学与遥感、科学交流），以及 `Haojae/scipilot-figure-skill` 科研图件顾问。K-Dense 不做全量安装，只纳入用户当前科研方向需要的 4 类技能，并在 wrapper 中保留上游来源与版本记录。
+
 ---
 
 ## ✨ 一句话定位
@@ -93,6 +95,11 @@ $env:USERPROFILE\.codex\skills
 | `agent-auto-sci-data-viz` | Stable | EDA、统计分析、论文图表、文献计量图 | “设计主图、补充图和 caption” |
 | `agent-auto-sci-ai-ml` | Stable | 机器学习、SHAP/XAI、泄露检查、空间验证 | “检查模型验证和解释边界” |
 | `agent-auto-sci-scicomm` | Stable | SCI 写作、图文叙事、投稿、审稿回复 | “重构论文 argument 和回复审稿人” |
+| `kdense-ml-ai-selected` | Stable | K-Dense 精选机器学习与人工智能上游技能 | “调用 K-Dense 的 scikit-learn/SHAP/Transformers 技术 playbook” |
+| `kdense-data-viz-selected` | Stable | K-Dense 精选 EDA、统计、科学可视化、Polars/Dask/NetworkX | “调用 K-Dense 数据分析和可视化工具链” |
+| `kdense-geospatial-rs-selected` | Stable | K-Dense 精选 geomaster、GeoPandas、GIS 与遥感技能 | “调用 K-Dense 地理空间与遥感技术 playbook” |
+| `kdense-scicomm-selected` | Stable | K-Dense 精选科学写作、审稿、引用、slides、posters、schematics | “调用 K-Dense 科学交流技能包” |
+| `scipilot-figure-skill` | Stable | 科研数据图顾问、选图、期刊级绘图、中文字体和视觉自检 | “这份数据应该用什么图？帮我画成投稿图” |
 | `urban-exposure-review-radar-workflow` | Stable | 综述类型判别、文献计量+批判性综述、系统/范围综述、遥感前沿雷达、CV-to-RS、医学数据库连接 | “先判断这篇综述/雷达/实证设计该走什么路线” |
 | `sport-geography-review-bibliometric` | Stable | 系统综述、scoping review、文献计量、批判性编码 | “设计综述 + 文献计量 + 政策议程” |
 | `sport-geography-sci-writing` | Stable | 体育地理实证论文、目标期刊适配、讨论写作 | “把可达性/暴露结果写成 SCI 论文” |
@@ -234,7 +241,67 @@ $env:USERPROFILE\.codex\skills
 - cover letter；
 - response-to-reviewers。
 
-### 8. `urban-exposure-review-radar-workflow`
+### 8. `kdense-ml-ai-selected`
+
+**What it does**
+
+精选 K-Dense 的机器学习与人工智能上游技能，包含 `scikit-learn`、`pytorch-lightning`、`transformers`、`shap`、`aeon`、`timesfm-forecasting`、`torch-geometric`、`umap-learn`。用于需要直接参考上游技术 playbook 的建模任务。
+
+**Key rules**
+
+- 先 baseline，再复杂模型。
+- 空间/时间/分组数据优先使用对应切分，不默认随机切分。
+- SHAP、embedding、特征重要性是解释工具，不是因果证据。
+
+### 9. `kdense-data-viz-selected`
+
+**What it does**
+
+精选 K-Dense 的数据分析与可视化技能，包含 EDA、统计分析、matplotlib、seaborn、scientific visualization、NetworkX、Polars、Dask。用于数据剖析、统计选择、文献计量图、论文图件和大规模表格处理。
+
+**Key rules**
+
+- 每张图必须服务一个 claim。
+- 统计结果要报告效应量与不确定性。
+- 文献计量图必须连接主题演化、证据空白和政策意义。
+
+### 10. `kdense-geospatial-rs-selected`
+
+**What it does**
+
+精选 K-Dense 的地理空间与遥感技能，包含 `geomaster` 和 `geopandas`。用于 GIS、遥感、矢量/栅格处理、空间分析、空间机器学习和地球观测技术路线。
+
+**Key rules**
+
+- 做距离、面积、缓冲和网络前先审计 CRS。
+- 暴露、可达性、可用性、质量和实际使用必须分开。
+- 遥感数据必须记录日期、分辨率、云/缺失、重采样和空间聚合规则。
+
+### 11. `kdense-scicomm-selected`
+
+**What it does**
+
+精选 K-Dense 的科学交流技能，包含 scientific-writing、peer-review、scientific-slides、scientific-schematics、citation-management、literature-review、markdown-mermaid-writing、latex-posters、pptx-posters。用于论文写作、审稿风险、引用、幻灯片、海报和示意图。
+
+**Key rules**
+
+- 写作前先做 claim-evidence map。
+- 引用核验与语言润色必须分开。
+- slides/posters 每个视觉单元只表达一个核心信息。
+
+### 12. `scipilot-figure-skill`
+
+**What it does**
+
+科研数据可视化顾问。它不是直接画图工具，而是先剖析数据、判断论证目标、推荐图型、拦截错误图型，再输出期刊级图件并进行视觉自检。适合论文数据图、中文图件、Nature/Science/Elsevier/IEEE/PNAS 等投稿图。
+
+**Key rules**
+
+- 用户只说“帮我画图”时，也要先问或推断这张图要证明什么。
+- 小样本均值柱、双 Y 轴、饼图、rainbow 色图、Y 轴不当截断等要主动拦截。
+- 出图后要做缺字、裁切、重叠、灰度和子图标签检查。
+
+### 13. `urban-exposure-review-radar-workflow`
 
 **What it does**
 
@@ -311,7 +378,7 @@ urban-exposure-review-radar-workflow
 - 详细记录见 `skills/urban-exposure-review-radar-workflow/references/darwin_ars_subskill_evaluation.md`。
 - 上游 ARS 许可证为 CC BY-NC 4.0；复制和二次封装必须保留署名、许可证和非商业限制。
 
-### 9. `sport-geography-review-bibliometric`
+### 14. `sport-geography-review-bibliometric`
 
 **What it does**  
 体育地理综述与文献计量专用 skill。适合 systematic review、scoping review、bibliometric analysis，以及“综述 + 批判性框架 + 政策议程”路线。
@@ -331,7 +398,7 @@ urban-exposure-review-radar-workflow
 - CiteSpace / VOSviewer / R bibliometrix figure plan；
 - policy agenda。
 
-### 10. `sport-geography-sci-writing`
+### 15. `sport-geography-sci-writing`
 
 **What it does**  
 体育地理实证 SCI 写作 skill。适合体育设施可达性、体育公园暴露、绿地/热暴露、空间公平、城市健康和身体活动机制研究。
@@ -516,7 +583,7 @@ auto-sci-research
 
 ```text
 agent-auto-sci-skills/
-├─ skills/                 # 10 个可安装的 Codex skills
+├─ skills/                 # 15 个可安装的 Codex skills
 ├─ docs/                   # skill map、使用场景、第三方参考和发布说明
 ├─ scripts/                # 安装脚本和公开安全扫描脚本
 ├─ site/                   # GitHub Pages 展示页和子 skill 详情页

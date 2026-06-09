@@ -1,0 +1,5 @@
+interface:
+  display_name: "K-Dense Geospatial/RS Selected"
+  short_description: "Selected K-Dense geospatial and remote-sensing skills adapted for sport geography and urban exposure research."
+  default_prompt: "Use the selected K-Dense geospatial/RS subskills to design a GIS, remote-sensing, exposure, or spatial-accessibility workflow with CRS and evidence checks."
+

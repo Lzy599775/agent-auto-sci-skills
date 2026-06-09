@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0
+
+- Added selected wrappers from `K-Dense-AI/scientific-agent-skills` instead of installing the full upstream repository.
+- Added `kdense-ml-ai-selected` for scikit-learn, PyTorch Lightning, Transformers, SHAP, time-series ML, TimesFM, PyTorch Geometric, and UMAP.
+- Added `kdense-data-viz-selected` for EDA, statistics, Matplotlib, Seaborn, scientific visualization, NetworkX, Polars, and Dask.
+- Added `kdense-geospatial-rs-selected` for GeoMaster and GeoPandas geospatial/remote-sensing workflows.
+- Added `kdense-scicomm-selected` for scientific writing, peer review, slides, schematics, citation management, literature review, Mermaid, and posters.
+- Added `scipilot-figure-skill` from `Haojae/scipilot-figure-skill` for publication-figure planning, chart selection, visual QA, CJK label checks, and figure-story alignment.
+- Updated README, README_EN, skill map, use cases, external references, router registry, and site pages for the expanded 15-skill suite.
+
 ## 0.3.0
 
 - Added an end-to-end research-to-manuscript pipeline for topic selection, literature search, data/code, analysis, publication figures, drafting, internal review, formatting, and rebuttal.
