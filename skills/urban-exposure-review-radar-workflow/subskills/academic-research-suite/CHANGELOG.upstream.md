@@ -4,6 +4,28 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.1.12] - 2026-06-11
+
+### What's Changed
+- Updated the vendored ARS runtime from
+  `2560a072386d4b1a035e5a40ed24ce1edbc0a356` (`v3.11.1`) to
+  `529c6d25a3778843fb94edf9f03eda4cd7e0f416` (`v3.12.0-19-g529c6d2`,
+  ARS main after the submission-package verifier slices).
+- Added upstream ARS v3.12 and post-tag mainline content, including
+  sub-claim decomposition, cross-paper contradiction inventory, figure/table
+  fidelity, experiment provenance intake, field-norm severity calibration,
+  surface-form parity checks, repository hygiene config, and the submission
+  package verifier.
+- Added Codex alias coverage for `ars-cache-invalidate`.
+- Preserved Codex packaging behavior: one root router skill, vendored workflow
+  entry files named `WORKFLOW.md`, Codex setup/architecture overlays, excluded
+  Claude/plugin loader files, nested-path lint adaptations, macOS Bash 3.2
+  audit wrapper compatibility, and explicit cross-model consent boundaries.
+
+### Notes
+- This sync pins ARS `main`, not an exact upstream tag. The nearest upstream tag
+  is `v3.12.0`.
+
 ## [0.1.11] - 2026-06-06
 
 ### What's Changed

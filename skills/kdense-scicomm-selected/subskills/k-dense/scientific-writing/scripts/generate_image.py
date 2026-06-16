@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Generate and edit images using OpenRouter API with various image generation models.
 
@@ -100,15 +100,14 @@ def generate_image(
 
     # Check for API key
     if not api_key:
-        found_key = check_env_file()
-        api_key = found_key
+        api_key = check_env_file()
 
     if not api_key:
         print("❌ Error: OPENROUTER_API_KEY not found!")
         print("\nPlease create a .env file in your project directory with:")
-        print("OPENROUTER_API_KEY=<your-api-key-here>")
+        print("OPENROUTER_API_KEY=your-api-key-here")
         print("\nOr set the environment variable:")
-        print("export OPENROUTER_API_KEY=<your-api-key-here>")
+        print("export OPENROUTER_API_KEY=your-api-key-here")
         print("\nGet your API key from: https://openrouter.ai/keys")
         sys.exit(1)
 
@@ -280,4 +279,3 @@ Popular image models:
 
 if __name__ == "__main__":
     main()
-

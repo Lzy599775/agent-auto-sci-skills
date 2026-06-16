@@ -32,6 +32,17 @@ def test_vague_paper_topic_routes_to_deep_research_socratic() -> None:
     assert plan["route_reason"] == "paper_topic_scoping_override"
 
 
+def test_vague_topic_with_unclear_research_question_still_routes_to_socratic() -> None:
+    planner = _load_planner()
+    plan = planner.plan_request(
+        "Use $academic-research-suite. I want to write a paper on AI governance in universities, but my research question is still unclear.",
+        env={},
+    )
+    assert plan["workflow"] == "deep-research"
+    assert plan["mode"] == "socratic"
+    assert plan["route_reason"] == "paper_topic_scoping_override"
+
+
 def test_ars_plan_routes_to_academic_paper_plan_when_rq_exists() -> None:
     planner = _load_planner()
     plan = planner.plan_request(
@@ -52,6 +63,15 @@ def test_ars_lit_review_alias_routes_to_lit_review_mode() -> None:
     )
     assert plan["workflow"] == "academic-paper"
     assert plan["mode"] == "lit-review"
+
+
+def test_ars_cache_invalidate_alias_routes_to_pipeline_cache_mode() -> None:
+    planner = _load_planner()
+    plan = planner.plan_request("ars-cache-invalidate smith2024", env={})
+    assert plan["command_alias"] == "ars-cache-invalidate"
+    assert plan["workflow"] == "academic-pipeline"
+    assert plan["mode"] == "cache-invalidate"
+    assert plan["command_recipe"] == "ars/commands/ars-cache-invalidate.md"
 
 
 def test_ars_full_starts_pipeline_and_stops_at_dashboard_checkpoint() -> None:

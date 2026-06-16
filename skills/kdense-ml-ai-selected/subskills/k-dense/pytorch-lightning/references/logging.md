@@ -1,4 +1,4 @@
-﻿# Logging - Comprehensive Guide
+# Logging - Comprehensive Guide
 
 ## Overview
 
@@ -100,7 +100,7 @@ uv pip install comet-ml
 from lightning.pytorch import loggers as pl_loggers
 
 comet_logger = pl_loggers.CometLogger(
-    api_key="<YOUR_API_KEY>",
+    api_key="YOUR_API_KEY",
     project_name="my-project",
     experiment_name="experiment-1"
 )
@@ -634,4 +634,3 @@ trainer = L.Trainer(
     default_root_dir="outputs/"  # Ensure directory exists and is writable
 )
 ```
-

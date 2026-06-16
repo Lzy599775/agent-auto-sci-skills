@@ -1,7 +1,6 @@
 """Tests for sync_adapter_docs.py: schema → overview.md drift detector."""
 from pathlib import Path
 import subprocess
-import sys
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = REPO_ROOT / "scripts/sync_adapter_docs.py"
@@ -10,7 +9,7 @@ OVERVIEW = REPO_ROOT / "academic-pipeline/references/adapters/overview.md"
 
 def _run(*args):
     return subprocess.run(
-        [sys.executable, str(SCRIPT)] + list(args),
+        ["python", str(SCRIPT)] + list(args),
         capture_output=True,
         text=True,
         cwd=REPO_ROOT,

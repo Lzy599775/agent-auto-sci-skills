@@ -7,7 +7,7 @@ applies_to: "shared/agents/compliance_agent.md"
 
 Defines how `compliance_agent` participates in Stage 2.5 and Stage 4.5 Integrity Gates, how its decision interacts with the existing FAIL loop, and how user overrides are processed.
 
-**Used by**: `compliance_agent` (Task 8), `academic-pipeline/WORKFLOW.md` Stage 2.5 / 4.5.
+**Used by**: `compliance_agent` (Task 8), `academic-pipeline/SKILL.md` Stage 2.5 / 4.5.
 
 ## Dual-gate summary
 
@@ -76,6 +76,8 @@ Compliance reports and fixture templates use these canonical tags in `gaps[].rea
 | `[GAP]` | `roles[].evidence_synthesists` narrative and similar role-level fields | Short form for a role-level gap carried forward from item-level fails. Permitted only in the 8-role matrix narrative; item-level reasons MUST use the long `[MATERIAL GAP]` form. |
 
 Casing is significant — uppercase square-bracketed. Lowercase or missing brackets are treated as plain prose and will not be recognised as gap signals.
+
+<!-- harness-retirement 2026-06-10 (F-008): the "do not hallucinate" tail on the [MATERIAL GAP] row is kept as known debt — high-stakes academic compliance surface with a silent failure mode; delete only with calibration evidence that the tail is inert. -->
 
 ## Override Ladder (3-round friction)
 

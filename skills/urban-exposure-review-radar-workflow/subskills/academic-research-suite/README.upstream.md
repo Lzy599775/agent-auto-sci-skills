@@ -1,6 +1,6 @@
 # Academic Research Skills for Codex
 
-[![Version](https://img.shields.io/badge/version-v0.1.11-blue)](VERSION)
+[![Version](https://img.shields.io/badge/version-v0.1.12-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
@@ -49,7 +49,7 @@ Use this repo when you want the Codex-native single-suite skill.
 
 ## Versioning
 
-This Codex package is version `0.1.11`. The repo-root `VERSION` file,
+This Codex package is version `0.1.12`. The repo-root `VERSION` file,
 `skills/academic-research-suite/SKILL.md` metadata version, and
 `skills/academic-research-suite/manifest.json` `adapter_version` track the
 Codex package version independently of the vendored ARS suite. Vendored upstream
@@ -58,10 +58,11 @@ versions are recorded by commit in `manifest.source_repositories[]`.
 Package-level changes are summarized in [`CHANGELOG.md`](CHANGELOG.md).
 
 The vendored ARS source currently tracks
-`Imbad0202/academic-research-skills@2560a072386d4b1a035e5a40ed24ce1edbc0a356`
-(`v3.11.1`). Vendored runtime content includes the ARS v3.11 citation
-verification gate plus the v3.11.1 post-ship correctness, hardening, eval-gate,
-domain-profile, and provenance fixes; Claude/plugin loader files under
+`Imbad0202/academic-research-skills@529c6d25a3778843fb94edf9f03eda4cd7e0f416`
+(`v3.12.0-19-g529c6d2`). Vendored runtime content includes the ARS v3.12
+Kong auto-research feature track, sub-claim and cross-paper verification
+updates, repository hygiene config, and post-tag submission-package verifier
+slices through ARS main; Claude/plugin loader files under
 `.claude/`, `.claude-plugin/`, and `.github/` remain intentionally excluded.
 
 ## Install Or Update
@@ -101,6 +102,23 @@ or `Academic Research ...`. You should **not** see separate `academic-paper`,
 `academic-pipeline`, `deep-research`, or `academic-paper-reviewer` skills from
 this package. If you do, reinstall with the update command above and open a new
 Codex conversation.
+
+## Codex Desktop Plugin Install
+
+Codex Desktop can also install this repository as a custom plugin marketplace.
+Add this repository as the marketplace source and install the `Academic Research
+Skills` plugin:
+
+```text
+Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
+Branch/ref: main
+Plugin: academic-research-skills
+```
+
+The plugin root lives at `plugins/academic-research-skills/`. Its `skills/`
+entry links back to the repository's existing `skills/` tree, so the plugin
+install and the direct skill install share the same ARS source files instead of
+maintaining a duplicated `plugin/` copy.
 
 ## Codex Docs
 
@@ -170,6 +188,7 @@ ars-plan my paper on AI governance in universities.
 | `/ars-reviewer` | `ars-reviewer` | `academic-paper-reviewer` full mode |
 | `/ars-mark-read` | `ars-mark-read` | Human-read signal for citation keys in the active Material Passport |
 | `/ars-unmark-read` | `ars-unmark-read` | Rescind a prior human-read signal |
+| `/ars-cache-invalidate` | `ars-cache-invalidate` | Invalidate cached verification entries for one citation key |
 | `/ars-full` | `ars-full` | `academic-pipeline` full workflow |
 
 ### Working Pattern
@@ -274,8 +293,8 @@ ARS was originally written for Claude Code. In this Codex package:
 - Web/source verification uses Codex browsing and must cite sources when current
   or external facts matter.
 - Cross-model verification is disabled by default. When explicitly requested in
-  this Codex package, configure `ARS_CROSS_MODEL=claude-opus-4.7` and
-  `ANTHROPIC_API_KEY`; the external reviewer uses Anthropic Claude Opus 4.7 API,
+  this Codex package, configure `ARS_CROSS_MODEL=claude-opus-4.8` and
+  `ANTHROPIC_API_KEY`; the external reviewer uses Anthropic Claude Opus 4.8 API,
   not Codex/OpenAI API. Upstream GPT/Gemini secondary-dispatch instructions are
   ignored unless this explicit Anthropic configuration is present.
 - Upstream references to a "fresh Claude Code session" mean a new Codex
@@ -283,10 +302,10 @@ ARS was originally written for Claude Code. In this Codex package:
 - If a citation, source, statistic, or journal policy cannot be verified, Codex
   should mark it as unverified rather than invent support.
 
-### ARS v3.10.0 Parity
+### ARS v3.12 Mainline Parity
 
 This package aims for the same user-facing workflow content as upstream ARS
-v3.10.0 where Codex has an equivalent concept.
+`v3.12.0-19-g529c6d2` where Codex has an equivalent concept.
 
 | Upstream ARS feature | Codex package behavior |
 |---|---|
@@ -299,20 +318,20 @@ v3.10.0 where Codex has an equivalent concept.
 | SessionStart and SubagentStop hooks | Vendored for traceability only; Codex does not install or execute Claude hooks |
 | Plugin marketplace update / auto-update | Not available here; update by reinstalling or pulling this Codex repo |
 | Claude Code Agent Team | Not automatic; Codex subagents require an explicit user request for delegation or parallel agents |
-| Cross-model GPT/Gemini dispatch from upstream docs | Disabled; Codex package only supports optional Anthropic Claude Opus 4.7 review when explicitly configured |
+| Cross-model GPT/Gemini dispatch from upstream docs | Disabled; Codex package only supports optional Anthropic Claude Opus 4.8 review when explicitly configured |
 
-### Optional Claude Opus 4.7 Reviewer API
+### Optional Claude Opus 4.8 Reviewer API
 
 For reviewer calibration or cross-model devil's advocate checks:
 
 ```bash
 export ANTHROPIC_API_KEY="<your-anthropic-api-key>"
-export ARS_CROSS_MODEL="claude-opus-4.7"
+export ARS_CROSS_MODEL="claude-opus-4.8"
 ```
 
 Then ask for cross-model verification explicitly in the prompt. Without both
 environment variables, ARS Codex falls back to single-runtime review and should
-report that the Claude Opus 4.7 verifier was unavailable.
+report that the Claude Opus 4.8 verifier was unavailable.
 
 ## Support And Sponsorship
 

@@ -1,6 +1,6 @@
 # ARS Codex Compatibility Matrix
 
-Audit date: 2026-06-06
+Audit date: 2026-06-11
 
 ## Provenance
 
@@ -8,10 +8,10 @@ Audit date: 2026-06-06
 |---|---|
 | Codex package repo | `academic-research-skills-codex` current working tree before release commit |
 | Upstream Claude Code repo | Tracked in `skills/academic-research-suite/manifest.json` |
-| Upstream suite version | `v3.11.1` |
-| Codex package version | `0.1.11` |
+| Upstream suite version | `v3.12.0-19-g529c6d2` |
+| Codex package version | `0.1.12` |
 | License | CC BY-NC 4.0 in upstream and Codex package |
-| Upstream sync status | Vendored `ars/` content synced to ARS `v3.11.1`; Codex adapter profile retained |
+| Upstream sync status | Vendored `ars/` content synced to ARS main `529c6d25`; Codex adapter profile retained |
 | Codex-only adapter location | `skills/academic-research-suite/codex/` |
 
 ## Matrix

@@ -4,14 +4,14 @@
 
 This protocol enables optional cross-model verification for high-stakes AI judgments. When enabled, a second AI model independently reviews outputs from the primary model, reducing shared-bias blind spots.
 
-**This is entirely optional.** All ARS skills work with Claude Opus 4.7 alone. Cross-model verification is an additional layer for users who want higher confidence in integrity checks, devil's advocate challenges, and review judgments.
+**This is entirely optional.** All ARS skills work with the primary Claude model alone. Cross-model verification is an additional layer for users who want higher confidence in integrity checks, devil's advocate challenges, and review judgments.
 
-**Codex adapter safety note:** In the Codex package, upstream secondary-model
-dispatch is a no-op unless the user explicitly asks for cross-model review.
-Before any unpublished manuscript, private note, corpus text, or review material
-is sent to an external provider, the agent must confirm the provider, model, and
-content class with the user. An environment variable alone is not consent to
-upload user content.
+**Consent boundary:** Before unpublished manuscripts, private notes, corpus text,
+reviewer comments, decision letters, response letters, or other review material
+is sent to an external provider, the agent must identify the provider, model,
+and content class that would be sent, then obtain explicit user consent. An
+environment variable alone is not consent to upload user content. If consent is
+not granted, continue with single-model verification.
 
 ## Why Cross-Model Verification
 
@@ -25,12 +25,14 @@ A stress test of 68 AI-generated citations found 31% had problems — and all pa
 
 | Model | API ID | Provider | Best For |
 |-------|--------|----------|----------|
-| Claude Opus 4.7 | `claude-opus-4-7` | Anthropic | Primary model (default for all ARS skills) |
-| GPT-5.4 Pro | `gpt-5.4-pro` | OpenAI | Cross-verification — strongest reasoning |
-| GPT-5.4 | `gpt-5.4` | OpenAI | Cross-verification — balanced cost/performance |
+| Claude (session model) | _(inherited Claude Code session model — e.g., Fable 5)_ | Anthropic | Primary model (default for all ARS skills) |
+| GPT-5.5 | `gpt-5.5` | OpenAI | Cross-verification — recommended balance (supports `xhigh` reasoning) |
+| GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI | Cross-verification — strongest reasoning (premium pricing: ~6× GPT-5.5) |
 | Gemini 3.1 Pro | `gemini-3.1-pro-preview` | Google | Cross-verification — strong at factual verification |
 
-**Recommended cross-verification pair:** Claude Opus 4.7 (primary) + GPT-5.4 Pro or Gemini 3.1 Pro (verifier).
+**Recommended cross-verification pair:** the inherited Claude session model (primary) + GPT-5.5 or Gemini 3.1 Pro (verifier).
+
+> The primary row deliberately names no version: the primary is always the session model, so the row cannot go stale on the next Anthropic release. Verifier IDs stay concrete because they are literal API strings the user must export. (`gpt-5.4` / `gpt-5.4-pro` remain accepted for existing setups.)
 
 Using two non-Anthropic models as primary+verifier is possible but not tested with ARS prompts.
 
@@ -42,7 +44,7 @@ You need API keys from at least one additional provider. ARS itself runs inside 
 
 ### Step 1: Get API Keys
 
-**OpenAI (GPT-5.4):**
+**OpenAI (GPT-5.5):**
 1. Go to [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 2. Create a new API key
 3. Copy the key (starts with `sk-`)
@@ -62,8 +64,8 @@ export OPENAI_API_KEY="<your-openai-api-key>"
 export GOOGLE_AI_API_KEY="<your-google-ai-api-key>"
 
 # Choose your preferred cross-verification model
-# Options: gpt-5.4-pro, gpt-5.4, gemini-3.1-pro-preview
-export ARS_CROSS_MODEL="gpt-5.4-pro"
+# Options: gpt-5.5, gpt-5.5-pro, gemini-3.1-pro-preview (gpt-5.4 / gpt-5.4-pro still accepted)
+export ARS_CROSS_MODEL="gpt-5.5"
 ```
 
 Then reload: `source ~/.zshrc`
@@ -83,7 +85,7 @@ If you don't want cross-model verification running all the time, you can enable 
 
 ```bash
 # Enable for this session only
-export ARS_CROSS_MODEL="gpt-5.4-pro"
+export ARS_CROSS_MODEL="gpt-5.5"
 
 # Disable for this session
 unset ARS_CROSS_MODEL
@@ -108,30 +110,35 @@ When the integrity_verification_agent detects `ARS_CROSS_MODEL` in the environme
 
 1. Complete Phase A verification normally
 2. Select 30% of references randomly (minimum 5, maximum 15). If total references < 5, sample all of them.
-3. Batch up to 5 references per API call to reduce latency (e.g., 15 sampled refs = 3 API calls). For each batch, construct a verification prompt:
+3. Issue **one API call per reference** — not a batch. (Batching hides which reference the model actually grounded: a single grounding-metadata trace on a 5-reference response proves *something* was searched, not that *each* reference was. One reference per call makes the grounding evidence 1:1 with the verdict.) For each reference, construct a verification prompt:
    ```
-   Verify each of these academic references independently. For each,
-   check: Does it exist? Are the author names, year, title, journal,
-   and DOI correct? Search the web to confirm.
+   Verify this academic reference. Check: Does it exist? Are the author
+   names, year, title, journal, and DOI correct? Search the web to
+   confirm — do not answer from memory.
 
-   For each reference, respond with: VERIFIED / NOT_FOUND / MISMATCH (with details)
+   Respond with exactly one verdict:
+   - VERIFIED  — found online; include at least one source URL or DOI you found
+   - MISMATCH  — found, but a field is wrong (state which); include the source
+   - NOT_FOUND — searched, no matching record exists
+   - NOT_SEARCHED — you could not actually search the web for this reference
 
-   Reference 1: [full reference text] — Context: [sentence where cited]
-   Reference 2: [full reference text] — Context: [sentence where cited]
-   ... (up to 5 per batch)
+   Reference: [full reference text] — Context: [sentence where cited]
    ```
-4. Send to the cross-model via the appropriate API (see API Call Patterns below)
-5. Compare results: if Claude said VERIFIED but cross-model said NOT_FOUND or MISMATCH, flag as `[CROSS-MODEL-DISAGREEMENT]`
+   A `VERIFIED` verdict with no accompanying source URL/DOI is treated as `NOT_SEARCHED` (the model claimed a result it cannot evidence).
+4. Send to the cross-model via the appropriate API (see API Call Patterns below). **The call patterns enable the provider's web-search/grounding tool and reject the response as `NOT_SEARCHED` when the API returns no grounding evidence** — a model that ignores the "search the web" instruction cannot fake an absent grounding trace, so this is the real safety boundary, not the prompt wording.
+5. Compare results: if Claude said VERIFIED but cross-model said NOT_FOUND or MISMATCH, flag as `[CROSS-MODEL-DISAGREEMENT]`. Treat `NOT_SEARCHED` / ungrounded exactly as **not verified** — it never counts as agreement with a Claude `VERIFIED`, and a sample that returns `NOT_SEARCHED` is surfaced for re-run or human review, never silently passed.
 6. Include disagreements in the integrity report under a new section:
    ```markdown
    ### Cross-Model Verification Results
    - References sampled: X/Y (Z%)
    - Agreements: N
    - Disagreements: M (listed below, prioritized for human review)
+   - Ungrounded (NOT_SEARCHED): U (the cross-model could not actually search — these are NOT confirmations; re-run or human-review)
 
-   | # | Reference | Claude | Cross-Model | Status |
-   |---|-----------|--------|-------------|--------|
+   | # | Reference | Claude | Cross-Model | Source (URL/DOI) | Status |
+   |---|-----------|--------|-------------|------------------|--------|
    ```
+   The `Source` column carries the URL/DOI the cross-model returned for a `VERIFIED` row; a blank source on a `VERIFIED` verdict downgrades it to `NOT_SEARCHED`.
 
 ### Devil's Advocate (deep-research + academic-paper-reviewer)
 
@@ -172,36 +179,88 @@ The DA agent, after completing its checkpoint report, should:
 
 ## API Call Patterns
 
-### OpenAI (GPT-5.4 / GPT-5.4 Pro)
+Both patterns below share the same contract: enable the provider's hosted web-search tool, and **gate the model's text on proof that a search actually happened**. If the API returns no grounding evidence (an OpenAI `web_search_call` item / a Gemini `groundingMetadata` block), the call emits `NOT_SEARCHED` and the text is discarded — a model that ignored "search the web" cannot fake an absent grounding trace, so this guard, not the prompt wording, is what prevents a from-memory guess being laundered into `VERIFIED`. Both web-search tools are hosted/server-side: one request, no client-side tool-call round-trip. `PROMPT` holds the single-reference verification prompt from step 3.
 
-In Claude Code, the agent can use the Bash tool to make API calls:
+### OpenAI (GPT-5.5 / GPT-5.5 Pro)
+
+Use the **Responses API** (`/v1/responses`) — the hosted `web_search` tool lives there. (Chat Completions does not take `tools: [{type: "web_search"}]`; web search on that endpoint requires the separate `gpt-5-search-api` model, so this example targets Responses to stay model-agnostic across `gpt-5.5` / `gpt-5.5-pro` / the legacy `gpt-5.4*` ids.)
 
 ```bash
-curl -s https://api.openai.com/v1/chat/completions \
+# PROMPT holds the single-reference verification prompt (step 3). One reference per call.
+resp="$(curl -sS -w '\n%{http_code}' https://api.openai.com/v1/responses \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{
-    "model": "'"$ARS_CROSS_MODEL"'",
-    "messages": [
-      {"role": "system", "content": "You are a verification assistant."},
-      {"role": "user", "content": "'"$(echo "$PROMPT" | jq -Rs .)"'"}
-    ],
-    "temperature": 0.1,
-    "max_tokens": 2000
-  }' | jq -r '.choices[0].message.content'
+  -d "$(jq -n --arg model "$ARS_CROSS_MODEL" --arg prompt "$PROMPT" '{
+    model: $model,
+    instructions: "You are a citation-verification assistant. Search the web before every verdict; never answer from memory. If you could not search, respond NOT_SEARCHED.",
+    input: $prompt,
+    tools: [{type: "web_search"}],
+    temperature: 0.1
+  }')")"
+
+http="${resp##*$'\n'}"; body="${resp%$'\n'*}"
+# The grounding guard and source extraction are kept as canonical jq filters under
+# scripts/cross_model_verification/ so they are behavior-tested in CI (a from-memory verdict, a
+# malformed grounding index, etc.) and cannot silently stop failing closed. Reference them via
+# `jq -f` rather than inlining, so the doc and the test share one definition.
+GUARD=scripts/cross_model_verification
+if [ "$http" -lt 200 ] || [ "$http" -ge 300 ]; then
+  # Transport/API failure (401/429/5xx, or curl's 000 on a network error) — NOT the same as
+  # "searched but found nothing". Surface as a transport error so the consumer falls back to
+  # single-model (see § Graceful Degradation); never relabel it NOT_SEARCHED, which would
+  # imply a completed-but-ungrounded lookup.
+  echo "CROSS-MODEL-ERROR: openai_http_$http"
+elif ! jq -e -f "$GUARD/openai_has_completed_web_search.jq" <<<"$body" >/dev/null; then
+  echo "NOT_SEARCHED: no_web_search_call"           # no search happened at all — discard the text
+else
+  # A completed web_search_call proves *a* search ran, not that THIS reference's verdict
+  # is supported by it. Emit the verdict text together with the url_citation annotations the
+  # model attached; step 5 downgrades a VERIFIED with no citation to NOT_SEARCHED.
+  text="$(jq -r -f "$GUARD/openai_text.jq" <<<"$body")"
+  cites="$(jq -r -f "$GUARD/openai_sources.jq" <<<"$body")"
+  printf '%s\nSOURCES: %s\n' "$text" "${cites:-(none)}"
+fi
 ```
 
 ### Google Gemini (Gemini 3.1 Pro)
 
+The hosted grounding tool is `google_search` (REST uses snake_case; the JS SDK's `googleSearch` is the same tool). A grounded response carries `candidates[].groundingMetadata`; its absence means the model did not search.
+
 ```bash
-# PROMPT must be set before calling. Use jq to JSON-escape it.
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/${ARS_CROSS_MODEL}:generateContent?key=$GOOGLE_AI_API_KEY" \
+# PROMPT holds the single-reference verification prompt (step 3). One reference per call.
+resp="$(curl -sS -w '\n%{http_code}' \
+  "https://generativelanguage.googleapis.com/v1beta/models/${ARS_CROSS_MODEL}:generateContent?key=$GOOGLE_AI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{
-    "contents": [{"parts": [{"text": "'"$(echo "$PROMPT" | jq -Rs .)"'"}]}],
-    "generationConfig": {"temperature": 0.1, "maxOutputTokens": 2000}
-  }' | jq -r '.candidates[0].content.parts[0].text'
+  -d "$(jq -n --arg prompt "$PROMPT" '{
+    contents: [{parts: [{text: $prompt}]}],
+    tools: [{google_search: {}}],
+    generationConfig: {temperature: 0.1}
+  }')")"
+
+http="${resp##*$'\n'}"; body="${resp%$'\n'*}"
+# Grounding guard + source extraction are canonical jq filters under scripts/cross_model_verification/
+# (same rationale as the OpenAI block: behavior-tested, referenced via `jq -f`). The guard is
+# rederived from the source extractor: it passes iff the SAME extraction the source filter performs
+# yields at least one url AND the model issued a search (a non-empty webSearchQueries). So
+# guard-pass ⟹ a source is extractable — a groundingSupports linking to no valid chunk
+# (empty/negative/string/out-of-range/fractional index), the wrong candidate, or a non-string uri
+# all leave the extraction blank and fail the guard closed. See the .jq file headers for the full
+# contract.
+GUARD=scripts/cross_model_verification
+if [ "$http" -lt 200 ] || [ "$http" -ge 300 ]; then
+  # Transport/API failure (401/429/5xx, or curl's 000) — surface as a transport error so the
+  # consumer falls back to single-model (see § Graceful Degradation), not NOT_SEARCHED.
+  echo "CROSS-MODEL-ERROR: gemini_http_$http"
+elif ! jq -e -f "$GUARD/gemini_is_grounded.jq" <<<"$body" >/dev/null; then
+  echo "NOT_SEARCHED: no_grounding_support"           # no search, or text not supported by it — discard
+else
+  text="$(jq -r '.candidates[0].content.parts[]?.text // empty' <<<"$body")"
+  cites="$(jq -r -f "$GUARD/gemini_sources.jq" <<<"$body")"
+  printf '%s\nSOURCES: %s\n' "$text" "${cites:-(none)}"
+fi
 ```
+
+> **Why `temperature: 0.1`:** reference existence/metadata checking is a deterministic factual task, so low temperature reduces run-to-run variance in the verdict. It is not a grounding control — the grounding guard above is what enforces an actual lookup.
 
 ### Detecting Available Models
 
@@ -216,13 +275,13 @@ fi
 
 if [ -n "$ARS_CROSS_MODEL" ]; then
   case "$ARS_CROSS_MODEL" in
-    gpt-5.4*) 
+    gpt-5.5*|gpt-5.4*)
       [ -n "$OPENAI_API_KEY" ] && echo "CROSS_MODEL_AVAILABLE=openai" \
         || echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but OPENAI_API_KEY is not set" ;;
-    gemini*) 
+    gemini*)
       [ -n "$GOOGLE_AI_API_KEY" ] && echo "CROSS_MODEL_AVAILABLE=google" \
         || echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but GOOGLE_AI_API_KEY is not set" ;;
-    *) echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL is not a supported model. Supported: gpt-5.4, gpt-5.4-pro, gemini-3.1-pro-preview"
+    *) echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL is not a supported model. Supported: gpt-5.5, gpt-5.5-pro, gemini-3.1-pro-preview (legacy gpt-5.4* accepted)"
        echo "CROSS_MODEL_AVAILABLE=none" ;;
   esac
 else
@@ -238,23 +297,25 @@ Cross-model verification adds API costs from the second provider:
 
 | Scenario | Additional Calls | Estimated Additional Cost |
 |----------|-----------------|--------------------------|
-| Integrity verification (30% of 60 refs, batched 5/call) | ~4 calls | ~$0.30-0.60 |
-| DA cross-check (1 per checkpoint, 3 checkpoints) | 3 calls | ~$0.30-0.50 |
+| Integrity verification (60 refs → 30% = 18, capped at max 15; **one call per reference**) | ~15 calls | ~$1.20-2.60 |
+| DA cross-check (1 per checkpoint, 3 checkpoints) | 3 calls | ~$0.30-0.55 |
 | Peer review (planned, not yet implemented) | — | — |
-| **Full pipeline** | **~7 calls** | **~$0.60-1.10** |
+| **Full pipeline** | **~18 calls** | **~$1.50-3.15** |
 
-These are rough estimates based on GPT-5.4 Pro pricing ($5/1M input, $20/1M output) and typical prompt sizes.
+These are rough estimates based on GPT-5.5 pricing ($5/1M input, $30/1M output) and typical prompt sizes; GPT-5.5 Pro runs ~6× higher ($30/1M input, $180/1M output). One-call-per-reference (rather than batching) is a deliberate cost-for-provenance trade: it is the only way the grounding-evidence check maps 1:1 to each verdict. Web-search-tool calls also cost more than plain completions.
 
 ## Limitations
 
 1. **Does not solve frame-lock fully.** All major LLMs share substantial training data. Cross-model catches different surface errors but may share deep structural biases.
-2. **API latency.** Cross-model calls add 2-5 seconds per call. For integrity verification of 18 references, this adds ~1-2 minutes.
+2. **API latency.** Cross-model calls add 2-5 seconds per call, plus web-search round-trip time. With one call per reference (no batching) and a web-search tool, integrity verification of up to 15 sampled references (the sample cap) adds several minutes; the calls can be issued concurrently to bound wall-clock time.
 3. **Response format differences.** Different models structure responses differently. The agent must parse varied formats — keep verification prompts simple and structured to minimize parsing issues.
 4. **Cost scales with paper size.** Longer papers with more references = more cross-model calls.
 
 ## Graceful Degradation
 
-If cross-model verification fails (API error, rate limit, key expired):
+If cross-model verification fails **at the transport level** (API error, rate limit, key expired):
 - Log the failure: `[CROSS-MODEL-ERROR: reason]`
 - Continue with single-model verification — never block the pipeline on cross-model failure
 - Include a note in the report: "Cross-model verification was configured but unavailable for this run. Results are single-model only."
+
+A `NOT_SEARCHED` result is **not** a transport failure and is handled differently. It means the call succeeded but the model could not (or did not) ground the lookup, so its verdict carries no evidence. Do not fall back to single-model and do not treat it as agreement: record the reference as `NOT_SEARCHED` in the results table, count it separately from agreements/disagreements, and surface it for re-run or human review. The distinction matters — a transport failure means "we have no cross-model opinion"; a `NOT_SEARCHED` means "the cross-model gave an opinion we have decided not to trust as a confirmation."

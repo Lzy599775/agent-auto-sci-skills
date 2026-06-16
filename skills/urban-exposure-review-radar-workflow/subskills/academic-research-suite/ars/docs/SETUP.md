@@ -251,7 +251,7 @@ All flags are opt-in.
 | `ARS_SOCRATIC_READING_PROBE=1` | Enables the Socratic reading-check probe in `socratic_mentor_agent` when the workflow reaches that prompt. |
 | `ARS_PASSPORT_RESET=1` | Promotes FULL checkpoints to Material Passport reset boundaries. A "fresh Claude Code session" in upstream wording means a new Codex conversation here. |
 | `ARS_CLAIM_AUDIT=1` | Enables the optional v3.8 claim-reference alignment audit gate when the workflow reaches that upstream path. |
-| `ARS_CROSS_MODEL=claude-opus-4.7` + `ANTHROPIC_API_KEY` | Enables the optional external Claude Opus reviewer when explicitly requested by the user. |
+| `ARS_CROSS_MODEL=claude-opus-4.8` + `ANTHROPIC_API_KEY` | Enables the optional external Claude Opus reviewer when explicitly requested by the user. |
 | `ARS_CROSS_MODEL_SAMPLE_INTERVAL` | Advisory sampling interval for cross-model checks when cross-model review is explicitly enabled. |
 | `S2_API_KEY` | Optional Semantic Scholar key for faster reference lookups and contamination-signal migration. |
 | `OPENALEX_POLITE_EMAIL`, `CROSSREF_POLITE_EMAIL` | Optional polite-pool identifiers for ARS v3.9.0 OpenAlex / Crossref triangulation clients. |

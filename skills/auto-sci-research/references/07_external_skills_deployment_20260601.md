@@ -6,13 +6,13 @@ Use this file to understand what was locally deployed on 2026-06-01 and how each
 
 | Source repo | Local source path | Installed skill | Deployment mode |
 |---|---|---|---|
-| `assafelovic/gpt-researcher` | `<project-root>/agent_auto_sci/external_repos/gpt-researcher` | `gpt-researcher` | direct install from `skills/gpt-researcher` |
-| `alchaincyf/nuwa-skill` | `<project-root>/agent_auto_sci/external_repos/nuwa-skill` | `huashu-nuwa` | direct install, excluding `.git` and `.github` |
-| `Imbad0202/academic-research-skills-codex` | `<project-root>/agent_auto_sci/external_repos/academic-research-skills-codex` | `academic-research-suite` | direct install from `skills/academic-research-suite` |
-| `leo-lilinxiao/codex-autoresearch` | `<project-root>/agent_auto_sci/external_repos/codex-autoresearch` | `codex-autoresearch` | direct install |
-| `hwang847/codex-paper-reader` | `<project-root>/agent_auto_sci/external_repos/codex-paper-reader` | `codex-paper-reader` | direct install with local frontmatter name adapted |
-| `Epsilon617/Codex-Academic-Skills` | `<project-root>/agent_auto_sci/external_repos/Codex-Academic-Skills` | `codex-academic-skills-index` | local wrapper skill around upstream index |
-| `STRYXTN/awesome-ai-research-writing` | `<project-root>/agent_auto_sci/external_repos/awesome-ai-research-writing-STRYXTN` | `awesome-ai-research-writing` | local wrapper skill around upstream prompt library |
+| `assafelovic/gpt-researcher` | `<local-skill-workspace>/external_repos/latest/gpt-researcher` | `gpt-researcher` | direct install from `skills/gpt-researcher` |
+| `alchaincyf/nuwa-skill` | `<local-skill-workspace>/external_repos/latest/nuwa-skill` | `huashu-nuwa` | direct install, excluding `.git` and `.github` |
+| `Imbad0202/academic-research-skills-codex` | `<local-skill-workspace>/external_repos/latest/academic-research-skills-codex` | `academic-research-suite` | direct install from `skills/academic-research-suite` |
+| `leo-lilinxiao/codex-autoresearch` | `<local-skill-workspace>/external_repos/latest/codex-autoresearch` | `codex-autoresearch` | direct install |
+| `hwang847/codex-paper-reader` | `<local-skill-workspace>/external_repos/latest/codex-paper-reader` | `codex-paper-reader` | direct install with local frontmatter name adapted |
+| `Epsilon617/Codex-Academic-Skills` | `<local-skill-workspace>/external_repos/latest/Codex-Academic-Skills` | `codex-academic-skills-index` | local wrapper skill around upstream index |
+| `STRYXTN/awesome-ai-research-writing` | `<local-skill-workspace>/external_repos/latest/awesome-ai-research-writing-STRYXTN` | `awesome-ai-research-writing` | local wrapper skill around upstream prompt library |
 
 ## 2. Capability Mapping
 
@@ -54,4 +54,3 @@ For automated research runs:
 For web research:
 
 `gpt-researcher` only when current web evidence is needed and privacy is clear.
-

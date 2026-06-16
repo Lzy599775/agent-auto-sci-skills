@@ -53,7 +53,7 @@ This terminology mapping is **load-bearing** for the test design: ARS lint valid
 | Path | Change |
 |---|---|
 | `academic-paper/references/disclosure_mode_protocol.md` | Phase 1 intake branches on `--venue` vs `--policy-anchor` selectors; Phase 3+4 delegates to `policy_anchor_disclosure_protocol.md` when anchor mode; venue+anchor conflict → reject (§4.4 #7); v3.2 venue lookup path unchanged |
-| `academic-paper/WORKFLOW.md` | `## v3.7.3 …` and `## v3.7.0 …` style block added: `## #108 Policy-Anchor Disclosure Renderer Protocol` describing protocol doc cross-reference + new lints + new test counts |
+| `academic-paper/SKILL.md` | `## v3.7.3 …` and `## v3.7.0 …` style block added: `## #108 Policy-Anchor Disclosure Renderer Protocol` describing protocol doc cross-reference + new lints + new test counts |
 | `.github/workflows/spec-consistency.yml` | New steps invoking 3 new validators + 3 new test files |
 | `.claude/CLAUDE.md` | Add #108 entry under existing "v3.7.3 / v3.7.0" block in the suite-level section: "AI-disclosure renderer protocol (no schema change; renderer is LLM-prose; 4 policy anchors)" |
 | `CHANGELOG.md` | New `[Unreleased]` bullet documenting (a) no migration needed (G1+G6), (b) added files list, (c) cross-ref Decision Doc + this spec |

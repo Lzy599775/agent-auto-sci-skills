@@ -2,7 +2,7 @@
 
 [中文](README.md) | [English](README_EN.md) | [🌐 展示页](site/index.html) | [进化档案](site/agent-auto-sci-evolution.html)
 
-> 面向 **Codex** 的地理学 + 体育学 + 城市健康科研 Skill 套件。  
+> 面向 **Codex** 的地理学 + 体育学 + 城市健康科研 Skill 套件。
 > From literature review to bibliometrics, geospatial exposure assessment, machine learning, SCI writing, peer review, and policy agenda.
 
 `Auto-sci-research` 是一套面向科研写作与科研自动化的 Codex Skills。它服务于体育公园、体育设施、绿地暴露、热暴露、空间公平、城市健康、GIS/遥感、文献计量、系统综述、scoping review、机器学习、科学可视化与 SCI 论文写作。
@@ -106,6 +106,8 @@ $env:USERPROFILE\.codex\skills
 
 完整模块关系见 [docs/skill-map.md](docs/skill-map.md)。
 
+本轮 F 盘 skill 整合、上游更新检查和最新版封装记录见 [docs/upstream-update-20260616.md](docs/upstream-update-20260616.md)。
+
 ---
 
 ## 🧠 每个子 skill 做什么
@@ -130,7 +132,7 @@ $env:USERPROFILE\.codex\skills
 
 ### 2. `agent-auto-sci-automation`
 
-**What it does**  
+**What it does**
 把科研自动化拆成安全、可恢复、可审计的流程，适合长期文献库、自动阅读、知识库、checkpoint 和失败复盘。
 
 **Key rules**
@@ -148,7 +150,7 @@ $env:USERPROFILE\.codex\skills
 
 ### 3. `agent-auto-sci-methodology`
 
-**What it does**  
+**What it does**
 把宽泛选题转成研究问题、机制路径、假设矩阵、证据分级和偏倚审计。
 
 **Key rules**
@@ -167,7 +169,7 @@ $env:USERPROFILE\.codex\skills
 
 ### 4. `agent-auto-sci-geospatial`
 
-**What it does**  
+**What it does**
 处理 GIS、遥感、可达性、暴露评估、空间公平和地图合规。
 
 **Key rules**
@@ -186,7 +188,7 @@ $env:USERPROFILE\.codex\skills
 
 ### 5. `agent-auto-sci-data-viz`
 
-**What it does**  
+**What it does**
 把 EDA、统计分析、文献计量图、论文图表和 policy matrix 组织成支撑论文 claim 的视觉证据。
 
 **Key rules**
@@ -205,7 +207,7 @@ $env:USERPROFILE\.codex\skills
 
 ### 6. `agent-auto-sci-ai-ml`
 
-**What it does**  
+**What it does**
 服务于地理学和体育学研究中的机器学习、SHAP/XAI、模型比较、泄露检查和可复现性。
 
 **Key rules**
@@ -224,7 +226,7 @@ $env:USERPROFILE\.codex\skills
 
 ### 7. `agent-auto-sci-scicomm`
 
-**What it does**  
+**What it does**
 用于 SCI 论文结构、段落功能、图文叙事、投稿信、审稿回复、PPT 和海报。
 
 **Key rules**
@@ -307,7 +309,7 @@ $env:USERPROFILE\.codex\skills
 
 城市暴露、体育地理、遥感热环境、绿色暴露、体育设施可达性与公共健康连接的高级综述/前沿雷达工作流。它不是单一综述模板，而是一个 **domain router + evidence gate + research pipeline adapter**：先判断任务应该走 narrative review、systematic review、scoping review、bibliometric + critical review、frontier radar 还是 review-informed empirical design，再把检索、筛选、提取、编码、图表、写作、审稿和期刊门控组织成稳定流程。
 
-新版已封装独立子 skill：`subskills/academic-research-suite`。该子 skill 来自 `Imbad0202/academic-research-skills-codex` v0.1.11，是 `Imbad0202/academic-research-skills` 的 Codex 原生分发版。它负责通用科研生产链条：深度研究、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划、引用核查和完整性验证。父 skill 仍保留城市暴露和体育地理领域判断权，避免 ARS 的通用写作流程覆盖 exposure validity、accessibility/use 区分、因果语言和正式语料库边界。
+新版已封装独立子 skill：`subskills/academic-research-suite`。该子 skill 来自 `Imbad0202/academic-research-skills-codex` v0.1.12，是 `Imbad0202/academic-research-skills` 的 Codex 原生分发版。它负责通用科研生产链条：深度研究、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划、引用核查和完整性验证。父 skill 仍保留城市暴露和体育地理领域判断权，避免 ARS 的通用写作流程覆盖 exposure validity、accessibility/use 区分、因果语言和正式语料库边界。
 
 **Internal architecture**
 
@@ -380,7 +382,7 @@ urban-exposure-review-radar-workflow
 
 ### 14. `sport-geography-review-bibliometric`
 
-**What it does**  
+**What it does**
 体育地理综述与文献计量专用 skill。适合 systematic review、scoping review、bibliometric analysis，以及“综述 + 批判性框架 + 政策议程”路线。
 
 **Key rules**
@@ -400,7 +402,7 @@ urban-exposure-review-radar-workflow
 
 ### 15. `sport-geography-sci-writing`
 
-**What it does**  
+**What it does**
 体育地理实证 SCI 写作 skill。适合体育设施可达性、体育公园暴露、绿地/热暴露、空间公平、城市健康和身体活动机制研究。
 
 **Key rules**

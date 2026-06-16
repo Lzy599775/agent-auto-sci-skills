@@ -6,8 +6,8 @@ Use this file when checking whether the local `auto-sci-research` system has pre
 
 | Source | Local copy | Current checked status | Local adaptation |
 |---|---|---|---|
-| `skyllwt/AutoSci` | `<project-root>/agent_auto_sci/external_repos/AutoSci` | local `HEAD` matched `origin/main` at audit time | converted from command-centered autonomous research into Codex-readable workflows, memory schemas, checkpoints, and evolution records |
-| `K-Dense-AI/scientific-agent-skills` | `<project-root>/agent_auto_sci/external_repos/scientific-agent-skills` | local `HEAD` matched `origin/main` at audit time | selected only ML/AI, data/viz, geospatial/remote sensing, scientific communication, and methodology families |
+| `skyllwt/AutoSci` | `<local-skill-workspace>/external_repos/latest/AutoSci` | local `HEAD` matched `origin/main` at audit time | converted from command-centered autonomous research into Codex-readable workflows, memory schemas, checkpoints, and evolution records |
+| `K-Dense-AI/scientific-agent-skills` | `<local-skill-workspace>/external_repos/latest/scientific-agent-skills` | local `HEAD` matched `origin/main` at audit time | selected only ML/AI, data/viz, geospatial/remote sensing, scientific communication, and methodology families |
 | AI evolution HTML guide | `<project-root>/agent_auto_sci/external_notes/AI进化可视化HTML页面制作指南.txt` | downloaded reference | adapted into a local research-agent evolution archive rather than a generic promotional page |
 
 ## 2. AutoSci Coverage
@@ -61,4 +61,3 @@ Additional research skills deployed after the initial AutoSci/K-Dense audit:
 | `hwang847/codex-paper-reader` | `codex-paper-reader` | installed with local frontmatter name adapted for discoverability |
 | `Epsilon617/Codex-Academic-Skills` | `codex-academic-skills-index` | wrapped as a local skill because upstream is an index, not a direct skill |
 | `STRYXTN/awesome-ai-research-writing` | `awesome-ai-research-writing` | wrapped as a local skill because upstream is a prompt library, not a direct skill |
-

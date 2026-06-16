@@ -186,7 +186,7 @@ python scripts/check_figure.py figs/*.pdf --min-dpi 300 --strict
 |---|---|---|
 | scipilot-cite-skill | [v1.0.0](https://github.com/Haojae/scipilot-cite-skill) | 文献检索与引用插入 |
 | **scipilot-figure-skill** | **v2.1.0 (本仓库)** | **可视化顾问 + 绘制 + 视觉自检闭环** |
-| scipilot-polish-skill | 规划中 | 学术论文润色 |
+| scipilot-writing-skill | [v1.0.0](https://github.com/Haojae/scipilot-writing-skill) | 学术写作与润色 |
 | scipilot-review-skill | 规划中 | AI 模拟审稿 |
 | scipilot-submit-skill | 规划中 | 投稿格式适配 |
 | scipilot-read-skill | 规划中 | 论文阅读与翻译 |
@@ -329,7 +329,7 @@ Nature double column.
 |---|---|---|
 | scipilot-cite-skill | [v1.0.0](https://github.com/Haojae/scipilot-cite-skill) | Reference discovery & insertion |
 | **scipilot-figure-skill** | **v2.1.0 (this repo)** | **Advisor + renderer + visual self-check loop** |
-| scipilot-polish-skill | Planned | Academic prose polishing |
+| scipilot-writing-skill | [v1.0.0](https://github.com/Haojae/scipilot-writing-skill) | Writing & polishing |
 | scipilot-review-skill | Planned | AI peer-review simulation |
 | scipilot-submit-skill | Planned | Submission formatting |
 | scipilot-read-skill | Planned | Paper reading & translation |

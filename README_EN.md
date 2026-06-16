@@ -47,6 +47,8 @@ Custom target:
 .\scripts\install.ps1 -Target "$env:USERPROFILE\.agents\skills"
 ```
 
+The 2026-06-16 F-drive skill consolidation and upstream refresh report is available at [docs/upstream-update-20260616.md](docs/upstream-update-20260616.md).
+
 ## Skill Index
 
 | Skill | Status | Purpose | Typical trigger |

@@ -78,7 +78,15 @@ def check_manifest() -> list[str]:
             aliases.add(alias)
         recipe = SUITE_ROOT / command["recipe"]
         _require(recipe.exists(), f"command recipe missing: {command['recipe']}")
-    for required in ("ars-reviewer", "ars-mark-read", "ars-unmark-read", "ars-full", "ars-plan", "ars-lit-review"):
+    for required in (
+        "ars-reviewer",
+        "ars-mark-read",
+        "ars-unmark-read",
+        "ars-cache-invalidate",
+        "ars-full",
+        "ars-plan",
+        "ars-lit-review",
+    ):
         _require(required in aliases, f"required alias absent: {required}")
     messages.append(f"{len(manifest['commands'])} command routes have recipes")
 

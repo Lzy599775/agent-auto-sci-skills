@@ -1,4 +1,4 @@
-﻿# PubMed Search Guide
+# PubMed Search Guide
 
 Comprehensive guide to searching PubMed for biomedical and life sciences literature, including MeSH terms, field tags, advanced search strategies, and E-utilities API usage.
 
@@ -382,7 +382,7 @@ https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?
   term=diabetes+AND+treatment&
   retmax=100&
   retmode=json&
-  api_key=<YOUR_API_KEY>
+  api_key=YOUR_API_KEY
 ```
 
 **Response**:
@@ -415,7 +415,7 @@ https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?
   db=pubmed&
   id=12345678,12345679&
   retmode=xml&
-  api_key=<YOUR_API_KEY>
+  api_key=YOUR_API_KEY
 ```
 
 **Response**: XML with complete metadata including:
@@ -439,7 +439,7 @@ https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?
   db=pubmed&
   id=12345678&
   retmode=json&
-  api_key=<YOUR_API_KEY>
+  api_key=YOUR_API_KEY
 ```
 
 **Returns**: Key metadata without full abstract and details.
@@ -491,13 +491,13 @@ time.sleep(0.11)  # ~10 requests/second with API key
 
 **Use in requests**:
 ```
-&api_key=<YOUR_API_KEY_HERE>
+&api_key=YOUR_API_KEY_HERE
 ```
 
 **Store securely**:
 ```bash
 # In environment variable
-export NCBI_API_KEY="<your_key_here>"
+export NCBI_API_KEY="your_key_here"
 
 # In script
 import os
@@ -836,5 +836,4 @@ Key strategies:
 - Document search strategy for reproducibility
 
 For broader coverage across disciplines, complement with Google Scholar.
-
 

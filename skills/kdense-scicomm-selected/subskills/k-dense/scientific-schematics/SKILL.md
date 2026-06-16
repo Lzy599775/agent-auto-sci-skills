@@ -1,11 +1,10 @@
-﻿---
+---
 name: scientific-schematics
 description: Create publication-quality scientific diagrams using Nano Banana 2 AI with smart iterative refinement. Uses Gemini 3.1 Pro Preview for quality review. Only regenerates if quality is below threshold for your document type. Specialized in neural network architectures, system diagrams, flowcharts, biological pathways, and complex scientific visualizations.
 allowed-tools: Read Write Edit Bash
 license: MIT license
-metadata:
-  version: "1.0"
-  skill-author: K-Dense Inc.
+required_environment_variables: [{"name": "OPENROUTER_API_KEY", "prompt": "OpenRouter API key for the skill's LLM-powered steps.", "required_for": "optional features"}]
+metadata: {"version": "1.1", "skill-author": "K-Dense Inc.", "openclaw": {"primaryEnv": "OPENROUTER_API_KEY", "envVars": [{"name": "OPENROUTER_API_KEY", "required": false, "description": "OpenRouter API key for the skill's LLM-powered steps."}]}}
 ---
 
 # Scientific Schematics and Diagrams
@@ -74,7 +73,7 @@ python scripts/generate_schematic.py "Complex circuit diagram with op-amp, resis
 
 Set your OpenRouter API key:
 ```bash
-export OPENROUTER_API_KEY='<your_api_key_here>'
+export OPENROUTER_API_KEY='your_api_key_here'
 ```
 
 Get an API key at: https://openrouter.ai/keys
@@ -259,7 +258,7 @@ from scripts.generate_schematic_ai import ScientificSchematicGenerator
 
 # Initialize generator
 generator = ScientificSchematicGenerator(
-    api_key="<your_openrouter_key>",
+    api_key="your_openrouter_key",
     verbose=True
 )
 
@@ -600,7 +599,7 @@ Before submitting diagrams, verify:
 
 ```bash
 # Required
-export OPENROUTER_API_KEY='<your_api_key_here>'
+export OPENROUTER_API_KEY='your_api_key_here'
 
 # Get key at: https://openrouter.ai/keys
 ```
@@ -615,6 +614,5 @@ python scripts/generate_schematic.py "your diagram description" -o output.png
 ---
 
 Use this skill to create clear, accessible, publication-quality diagrams that effectively communicate complex scientific concepts. The AI-powered workflow with iterative refinement ensures diagrams meet professional standards.
-
 
 

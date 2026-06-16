@@ -8,7 +8,7 @@ Source inspected: `https://github.com/skyllwt/AutoSci`.
 
 Important local clone:
 
-`<project-root>/agent_auto_sci/external_repos/AutoSci`
+`<local-skill-workspace>/external_repos/latest/AutoSci`
 
 ### What to Learn
 
@@ -45,7 +45,7 @@ Source inspected: `https://github.com/K-Dense-AI/scientific-agent-skills`.
 
 Important local clone:
 
-`<project-root>/agent_auto_sci/external_repos/scientific-agent-skills`
+`<local-skill-workspace>/external_repos/latest/scientific-agent-skills`
 
 ### What to Learn
 
@@ -87,5 +87,3 @@ Local adjustment:
 - Use a restrained research dashboard style rather than a decorative page.
 - Do not include secrets or private full-text content.
 - Maintain the page through JSON + generator script so future updates are repeatable.
-
-

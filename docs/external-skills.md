@@ -6,8 +6,9 @@ Current vendored/wrapped upstream additions:
 
 | Upstream project | Local wrapper | Scope |
 |---|---|---|
-| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | Only four selected areas are packaged: ML/AI, data analysis and visualization, geospatial/remote sensing, and scientific communication. The full upstream repository is not installed wholesale. |
-| [Haojae/scipilot-figure-skill](https://github.com/Haojae/scipilot-figure-skill) | `scipilot-figure-skill` | Publication-figure design, chart choice, visual QA, CJK-safe labels, and figure-story alignment. |
+| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | Only four selected areas are packaged: ML/AI, data analysis and visualization, geospatial/remote sensing, and scientific communication. The full upstream repository is not installed wholesale. Current packaged upstream snapshot: `2093901` (`v2.52.0-3-g2093901`). |
+| [Haojae/scipilot-figure-skill](https://github.com/Haojae/scipilot-figure-skill) | `scipilot-figure-skill` | Publication-figure design, chart choice, visual QA, CJK-safe labels, and figure-story alignment. Current packaged upstream snapshot: `43098dd` (`v2.1.0-1-g43098dd`). |
+| [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | Codex-native Academic Research Suite vendored as an isolated subskill inside the urban exposure workflow. Current packaged adapter version: `0.1.12`; upstream ARS commit is recorded in the subskill manifest. |
 
 The projects below remain optional references or extension sources.
 
@@ -17,7 +18,7 @@ The projects below remain optional references or extension sources.
 | [STRYXTN/awesome-ai-research-writing](https://github.com/STRYXTN/awesome-ai-research-writing) | academic writing prompt templates |
 | [assafelovic/gpt-researcher](https://github.com/assafelovic/gpt-researcher) | autonomous web deep research |
 | [alchaincyf/nuwa-skill](https://github.com/alchaincyf/nuwa-skill) | persona/thinking-framework skill distillation |
-| [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | academic research suite for Codex |
+| [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | academic research suite for Codex; currently wrapped inside `urban-exposure-review-radar-workflow` |
 | [leo-lilinxiao/codex-autoresearch](https://github.com/leo-lilinxiao/codex-autoresearch) | long-running improve-verify loops |
 | [hwang847/codex-paper-reader](https://github.com/hwang847/codex-paper-reader) | local PDF reading workflow |
 | [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | broad scientific agent skill organization; partially wrapped in selected local modules |

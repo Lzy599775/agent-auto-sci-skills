@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Scientific schematic generation using Nano Banana 2.
 
@@ -96,7 +96,7 @@ Environment Variables:
         print("\nFor AI generation, you need an OpenRouter API key.")
         print("Get one at: https://openrouter.ai/keys")
         print("\nSet it with:")
-        print("  export OPENROUTER_API_KEY='<your_api_key>'")
+        print("  export OPENROUTER_API_KEY='your_api_key'")
         print("\nOr use --api-key flag")
         sys.exit(1)
     
@@ -136,5 +136,4 @@ Environment Variables:
 
 if __name__ == "__main__":
     main()
-
 

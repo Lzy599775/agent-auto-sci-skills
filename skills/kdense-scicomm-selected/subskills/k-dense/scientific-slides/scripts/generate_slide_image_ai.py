@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 AI-powered slide image generation using Nano Banana Pro.
 
@@ -701,7 +701,7 @@ Environment:
     if not api_key:
         print("Error: OPENROUTER_API_KEY environment variable not set")
         print("\nSet it with:")
-        print("  export OPENROUTER_API_KEY='<your_api_key>'")
+        print("  export OPENROUTER_API_KEY='your_api_key'")
         sys.exit(1)
     
     if args.iterations < 1 or args.iterations > 2:
@@ -738,4 +738,3 @@ Environment:
 
 if __name__ == "__main__":
     main()
-

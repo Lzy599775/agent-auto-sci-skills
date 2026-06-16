@@ -95,15 +95,6 @@ BUCKET_BCD_AGENT_FILES = [
     "academic-paper-reviewer/agents/field_analyst_agent.md",
 ]
 
-# ars-codex carries experiment-agent as a Codex-only auxiliary workflow outside
-# the ARS pipeline write-scope hook. It is deliberately excluded from the
-# upstream Bucket A/B/C/D roster and phase-scope manifest, but it must not make
-# the filesystem exhaustiveness guard fail open on the packaged repo.
-CODEX_AUXILIARY_AGENT_FILES = [
-    "experiment-agent/agents/code_runner_agent.md",
-    "experiment-agent/agents/study_manager_agent.md",
-]
-
 _NAME_RE = re.compile(r"^name:\s*(.+?)\s*$", re.MULTILINE)
 # Line-anchored fence so a literal `---` inside a description value can't split the
 # block early (^---$ on its own line, tolerating trailing whitespace).
@@ -174,21 +165,17 @@ def run_checks() -> list[str]:
     #   * Comparing resolved paths also means a genuinely NEW standalone .md (not a symlink)
     #     at any depth is still flagged, because it resolves to itself and is absent from the
     #     roster. That is exactly the fail-open case we want to catch.
-    declared_auxiliary = {
-        rel for rel in CODEX_AUXILIARY_AGENT_FILES
-        if (REPO_ROOT / rel).exists()
-    }
-    declared = (
-        set(BUCKET_A_AGENT_FILES)
-        | set(BUCKET_BCD_AGENT_FILES)
-        | declared_auxiliary
-    )
+    declared = set(BUCKET_A_AGENT_FILES) | set(BUCKET_BCD_AGENT_FILES)
     undeclared = []
     for md in REPO_ROOT.glob("**/agents/*.md"):
         if ".git" in md.parts:
             continue
         # .as_posix() so the comparison uses `/` on every OS (the rosters use `/`).
         rel = md.relative_to(REPO_ROOT).as_posix()
+        # ARS Codex vendors experiment-agent from a second source repository.
+        # It is not part of the upstream ARS #134 Bucket A/B/C/D roster.
+        if rel.startswith("experiment-agent/agents/"):
+            continue
         if rel in declared:
             continue  # directly rostered — skip the symlink resolve (the common case)
         # Not directly rostered: it may be a symlink to a rostered file (the plugin-root

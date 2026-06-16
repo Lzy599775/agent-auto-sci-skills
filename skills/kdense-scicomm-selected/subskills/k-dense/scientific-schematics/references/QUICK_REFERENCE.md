@@ -1,4 +1,4 @@
-﻿# Scientific Schematics - Quick Reference
+# Scientific Schematics - Quick Reference
 
 **How it works:** Describe your diagram → Nano Banana 2 generates it automatically
 
@@ -6,10 +6,10 @@
 
 ```bash
 # Get API key from https://openrouter.ai/keys
-export OPENROUTER_API_KEY='<sk-or-v1-your_key_here>'
+export OPENROUTER_API_KEY='sk-or-v1-your_key_here'
 
 # Add to shell profile for persistence
-echo 'export OPENROUTER_API_KEY="<sk-or-v1-your_key>"' >> ~/.bashrc  # or ~/.zshrc
+echo 'export OPENROUTER_API_KEY="sk-or-v1-your_key"' >> ~/.bashrc  # or ~/.zshrc
 ```
 
 ## Basic Usage
@@ -204,5 +204,4 @@ python scripts/generate_schematic.py "diagram" -o out.png -v
 - Implementation details: `IMPLEMENTATION_SUMMARY.md`
 - Example script: `example_usage.sh`
 - Get API key: https://openrouter.ai/keys
-
 

@@ -1,8 +1,8 @@
 [
   {
     "id": "bibliometric_critical_review",
-    "prompt": "为 SCS/Cities 设计体育公园、绿地可达性与城市健康的文献计量+批判性综述路线。",
-    "expected": "明确贡献边界、WoS/Scopus 检索、计量分析、手工编码、政策议程和投稿门控。"
+    "prompt": "为 SSCI/Cities 设计体育公园、绿地可达性与城市健康的文献计量和批判性综述路线。",
+    "expected": "明确贡献边界、WoS/Scopus 检索、计量分析、手工编码、政策议程和投稿门槛。"
   },
   {
     "id": "systematic_exposure_health",
@@ -16,7 +16,7 @@
   },
   {
     "id": "medical_database_linkage",
-    "prompt": "把城市绿地/热暴露/体育设施可达性与公共医学数据库结合，研究不同年龄和性别人群健康影响。",
+    "prompt": "把城市绿地、热暴露、体育设施可达性与公共医学数据库结合，研究不同年龄和性别人群健康影响。",
     "expected": "覆盖健康数据、空间连接、暴露窗口、分层、混杂、隐私伦理、空间偏差和期刊路线。"
   },
   {

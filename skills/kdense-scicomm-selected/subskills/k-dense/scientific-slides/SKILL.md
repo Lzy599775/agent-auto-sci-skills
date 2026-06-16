@@ -1,11 +1,10 @@
-﻿---
+---
 name: scientific-slides
 description: Build slide decks and presentations for research talks. Use this for making PowerPoint slides, conference presentations, seminar talks, research presentations, thesis defense slides, or any scientific talk. Provides slide structure, design templates, timing guidance, and visual validation. Works with PowerPoint and LaTeX Beamer.
 allowed-tools: Read Write Edit Bash
 license: MIT license
-metadata:
-  version: "1.0"
-  skill-author: K-Dense Inc.
+required_environment_variables: [{"name": "OPENROUTER_API_KEY", "prompt": "OpenRouter API key for the skill's LLM-powered steps.", "required_for": "optional features"}]
+metadata: {"version": "1.1", "skill-author": "K-Dense Inc.", "openclaw": {"primaryEnv": "OPENROUTER_API_KEY", "envVars": [{"name": "OPENROUTER_API_KEY", "required": false, "description": "OpenRouter API key for the skill's LLM-powered steps."}]}}
 ---
 
 # Scientific Slides
@@ -234,7 +233,7 @@ Use `--attach` when you want Nano Banana Pro to see existing images as context:
 
 **Environment Setup:**
 ```bash
-export OPENROUTER_API_KEY='<your_api_key_here>'
+export OPENROUTER_API_KEY='your_api_key_here'
 # Get key at: https://openrouter.ai/keys
 ```
 
@@ -1152,5 +1151,4 @@ See `skills/pptx/SKILL.md` for complete PowerPoint workflow.
 - **Boring = Forgotten**: Dry, text-heavy slides fail to communicate your science
 - **Visual + Research = Impact**: Combine compelling visuals with research-backed context
 - **You are the presentation, slides are visual support**: They should enhance, not replace your talk
-
 

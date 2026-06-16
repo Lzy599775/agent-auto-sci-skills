@@ -52,6 +52,12 @@ def is_intentionally_excluded(rel_path: str) -> bool:
     return False
 
 
+def entry_path(rel_path: str) -> str:
+    if is_codex_distribution():
+        return rel_path.replace("/SKILL.md", "/WORKFLOW.md")
+    return rel_path
+
+
 def read(rel_path: str) -> str:
     return (ROOT / rel_path).read_text(encoding="utf-8")
 
@@ -107,7 +113,7 @@ def check_relative_markdown_links(rel_path: str) -> None:
 def check_mode_registry() -> None:
     rel_path = "MODE_REGISTRY.md"
     text = read(rel_path)
-    expect_contains(rel_path, "Last updated: v3.11.1 (2026-06-06)")
+    expect_contains(rel_path, "Last updated: v3.12.0 (2026-06-08)")
     for heading in (
         "## deep-research (7 modes)",
         "## academic-paper (10 modes)",
@@ -122,10 +128,9 @@ def check_claude_md() -> None:
     if not (ROOT / rel_path).is_file():
         print(f"Skipping {rel_path} checks: file not present in this distribution.")
         return
-
     expect_contains(rel_path, "integrity check (Stage 2.5)")
     expect_contains(rel_path, "final integrity check (Stage 4.5)")
-    expect_contains(rel_path, "**Suite version**: 3.11.1")
+    expect_contains(rel_path, "**Suite version**: 3.12.0")
     for forbidden in (
         "6th independent reviewer",
         "Peer review gains 6th independent reviewer",
@@ -133,8 +138,23 @@ def check_claude_md() -> None:
         expect_absent(rel_path, forbidden)
 
 
-def check_reviewer_version_block() -> None:
-    rel_path = "academic-paper-reviewer/WORKFLOW.md"
+# All four skills carry the same frontmatter (`version` / `last_updated`) + Version-Info-table
+# (`| Skill Version |` / `| Last Updated |`) pair. Pre-#377 only the reviewer was policed.
+_SKILL_VERSION_PATHS = (
+    "academic-pipeline/SKILL.md",
+    "academic-paper/SKILL.md",
+    "academic-paper-reviewer/SKILL.md",
+    "deep-research/SKILL.md",
+)
+
+# The single skill whose `version` tracks the suite version. The other three move independently,
+# so only this one's date is sanity-checked against the release (CHANGELOG) in #377(b).
+_SUITE_SKILL_PATH = "academic-pipeline/SKILL.md"
+
+
+def _parse_skill_version_block(rel_path: str) -> tuple[str, str, str, str] | None:
+    """Return (frontmatter_version, frontmatter_last_updated, table_version, table_last_updated)
+    for a SKILL.md, or None (after recording an error) if any surface is unparseable."""
     text = read(rel_path)
     frontmatter_match = re.search(
         r'metadata:\s*[\s\S]*?\n\s+version:\s"([^"]+)"\n\s+last_updated:\s"([^"]+)"',
@@ -142,33 +162,90 @@ def check_reviewer_version_block() -> None:
     )
     if not frontmatter_match:
         fail(f"{rel_path}: could not parse frontmatter version/last_updated")
-        return
-    version, last_updated = frontmatter_match.groups()
+        return None
 
     version_block_match = re.search(r"\| Skill Version \| ([^|]+) \|", text)
     updated_block_match = re.search(r"\| Last Updated \| ([^|]+) \|", text)
     if not version_block_match or not updated_block_match:
         fail(f"{rel_path}: missing Version Info table rows")
+        return None
+
+    version, last_updated = frontmatter_match.groups()
+    return (
+        version,
+        last_updated,
+        version_block_match.group(1).strip(),
+        updated_block_match.group(1).strip(),
+    )
+
+
+def check_skill_version_blocks() -> None:
+    """#377(a): for ALL FOUR SKILL.md, the frontmatter version/last_updated must match the
+    Version-Info-table rows (an internal per-file consistency check)."""
+    for rel_path in _SKILL_VERSION_PATHS:
+        parsed = _parse_skill_version_block(entry_path(rel_path))
+        if parsed is None:
+            continue
+        version, last_updated, version_block, updated_block = parsed
+        if version != version_block:
+            fail(
+                f"{rel_path}: frontmatter version {version!r} does not match Version Info block {version_block!r}"
+            )
+        if last_updated != updated_block:
+            fail(
+                f"{rel_path}: frontmatter last_updated {last_updated!r} does not match Version Info block {updated_block!r}"
+            )
+
+
+def _latest_changelog_date() -> str | None:
+    """Parse the date of the latest release entry in CHANGELOG.md. The file follows
+    Keep-a-Changelog convention — entries are reverse-chronological under a leading
+    dateless `## [Unreleased]` header — so the FIRST date-bearing
+    `## [X.Y.Z] - YYYY-MM-DD` header is the latest release. `## [Unreleased]` carries no
+    `- YYYY-MM-DD` suffix and so never matches this date-bearing pattern."""
+    match = re.search(rf"^## \[{_VERSION}\] - (\d{{4}}-\d{{2}}-\d{{2}})", read("CHANGELOG.md"), re.M)
+    return match.group(1) if match else None
+
+
+def check_suite_skill_date_sanity() -> None:
+    """#377(b): the suite-tracking skill's `last_updated` must NOT predate the latest CHANGELOG
+    entry date — a release that bumps the suite version but forgets the date fails here.
+
+    Scope is deliberately narrow: only `academic-pipeline/SKILL.md` (the suite-tracking skill) is
+    date-checked. `academic-paper` / `academic-paper-reviewer` / `deep-research` version
+    independently and legitimately keep their own earlier last-change dates, so forcing
+    release-date alignment on them would be wrong (#377 out-of-scope)."""
+    # check_skill_version_blocks() runs first and already parses the suite SKILL. If it recorded
+    # an error for that file (unparseable frontmatter/table), skip rather than re-report the same
+    # root cause from a second re-parse here.
+    suite_skill_path = entry_path(_SUITE_SKILL_PATH)
+    if any(e.startswith(f"{suite_skill_path}:") for e in ERRORS):
         return
 
-    version_block = version_block_match.group(1).strip()
-    updated_block = updated_block_match.group(1).strip()
+    changelog_date = _latest_changelog_date()
+    if changelog_date is None:
+        fail("CHANGELOG.md: could not parse latest release entry date")
+        return
 
-    if version != version_block:
+    parsed = _parse_skill_version_block(suite_skill_path)
+    if parsed is None:
+        return
+    last_updated = parsed[1]
+
+    # ISO-8601 dates compare correctly as strings (zero-padded, fixed-width).
+    if last_updated < changelog_date:
         fail(
-            f"{rel_path}: frontmatter version {version!r} does not match Version Info block {version_block!r}"
-        )
-    if last_updated != updated_block:
-        fail(
-            f"{rel_path}: frontmatter last_updated {last_updated!r} does not match Version Info block {updated_block!r}"
+            f"{suite_skill_path}: last_updated {last_updated!r} predates latest CHANGELOG entry "
+            f"date {changelog_date!r} — the suite version bumped but the skill date is stale"
         )
 
 
 def check_pipeline_docs() -> None:
     for rel_path in (
-        "academic-pipeline/WORKFLOW.md",
+        "academic-pipeline/SKILL.md",
         "academic-pipeline/agents/pipeline_orchestrator_agent.md",
     ):
+        rel_path = entry_path(rel_path)
         expect_absent(rel_path, "auto-continue in 5 seconds")
         expect_contains(rel_path, "One-line status + explicit continue/pause prompt")
 
@@ -182,12 +259,93 @@ def check_pipeline_docs() -> None:
     )
 
 
+# A version token is a dot-separated run of ≥3 numeric components. The repo's own grammar
+# already ships 4-component versions (v3.9.4.2), so a fixed `\d+\.\d+\.\d+` would capture only
+# the first three components of `3.9.4.2` and silently compare a truncated `3.9.4` — making a
+# genuinely-stale 4-component marker pass. `(?:\.\d+)*` is greedy, so it captures the FULL token;
+# the trailing `(?!\.?\d)` is a hard right boundary so a longer numeric run can never tail-match a
+# shorter capture (e.g. `3.9.4` must not partial-match inside `3.9.4.2`).
+_VERSION = r"\d+\.\d+\.\d+(?:\.\d+)*(?!\.?\d)"
+
+
+def _suite_version() -> str | None:
+    """Parse the canonical suite version from `.claude/CLAUDE.md` (`**Suite version**: X.Y.Z[.W]`)."""
+    if not (ROOT / ".claude/CLAUDE.md").is_file():
+        return None
+    match = re.search(rf"\*\*Suite version\*\*:\s*({_VERSION})", read(".claude/CLAUDE.md"))
+    return match.group(1) if match else None
+
+
+def check_architecture_component_version() -> None:
+    """Invariant-4 (#345): the *current-component* `academic-pipeline` version markers in
+    docs/ARCHITECTURE.md must equal the suite version.
+
+    docs/ARCHITECTURE.md carries two kinds of version string and only the first must track the
+    suite version:
+      - current-component markers — the mermaid orchestrator node + the component table row + the
+        four stage-table `(gate)` / stage-6 rows — describe what the *current* pipeline is.
+      - feature-history markers — the `timeline` block (`vX.Y.Z : <feature>`) and inline
+        "introduced in vX.Y.Z" provenance — record which version first shipped a gate/feature and
+        must NOT be bumped on a release that adds no new gate.
+
+    This check anchors on the `academic-pipeline <ver>` component pattern specifically (mermaid
+    `<br/>vX.Y.Z` node + ` academic-pipeline vX.Y.Z` table/stage rows) and never inspects the
+    timeline block, so a stale current-component marker fails while a feature-history marker is
+    left alone. (Surfaced during the v3.11.1 release: six component markers were missed by the
+    bump and only caught by a manual sweep — #343/#344.)
+    """
+    rel_path = "docs/ARCHITECTURE.md"
+    version = _suite_version()
+    if version is None:
+        if is_codex_distribution():
+            print(
+                "Skipping docs/ARCHITECTURE.md component-version checks: "
+                ".claude/CLAUDE.md is not present in this distribution."
+            )
+            return
+        fail(".claude/CLAUDE.md: could not parse '**Suite version**: X.Y.Z' for ARCHITECTURE check")
+        return
+    text = read(rel_path)
+
+    # 1. Mermaid orchestrator node: `academic-pipeline<br/>orchestrator<br/>vX.Y.Z`.
+    node_versions = re.findall(
+        rf"academic-pipeline<br/>orchestrator<br/>v({_VERSION})", text
+    )
+    if not node_versions:
+        fail(f"{rel_path}: no mermaid `academic-pipeline<br/>orchestrator<br/>vX.Y.Z` node found")
+    for found in node_versions:
+        if found != version:
+            fail(
+                f"{rel_path}: mermaid orchestrator node version v{found} != suite v{version} "
+                f"(invariant-4: current-component marker must equal the suite version)"
+            )
+
+    # 2. Component table + stage rows: ` academic-pipeline vX.Y.Z` (table cell / `(gate)` rows).
+    #    Anchored to markdown table rows (`^\s*\|` … on the same line) so the scan only ever sees
+    #    component/stage cells — never prose like `` `academic-pipeline` v3.9.4 introduced … ``,
+    #    which is feature-history provenance and must NOT be policed against the suite version.
+    #    The timeline `vX.Y.Z :` form never carries the `academic-pipeline` token, so it is already
+    #    out of scope; the table-row anchor additionally excludes any narrative mention.
+    row_versions = re.findall(
+        rf"(?m)^\s*\|.*?`?academic-pipeline`?\s+v({_VERSION})", text
+    )
+    if not row_versions:
+        fail(f"{rel_path}: no `academic-pipeline vX.Y.Z` component/stage row found")
+    for found in row_versions:
+        if found != version:
+            fail(
+                f"{rel_path}: `academic-pipeline v{found}` component/stage row != suite v{version} "
+                f"(invariant-4: current-component marker must equal the suite version)"
+            )
+
+
 def check_readme_sections() -> None:
     rel_path = "README.md"
     text = read(rel_path)
 
-    expect_contains(rel_path, "version-v3.11.1-blue")
-    expect_contains(rel_path, "releases/tag/v3.11.1")
+    expect_contains(rel_path, "version-v3.12.0-blue")
+    expect_contains(rel_path, "releases/tag/v3.12.0")
+    expect_contains(rel_path, "### v3.12.0 (2026-06-08)")
     expect_contains(rel_path, "### v3.11.1 (2026-06-06)")
     expect_contains(rel_path, "### v3.11.0 (2026-06-04)")
     expect_contains(rel_path, "### v3.10.0 (2026-06-01)")
@@ -219,7 +377,7 @@ def check_readme_sections() -> None:
         "### Deep Research (v2.9.4)",
         "### Academic Paper (v3.2.0)",
         "### Academic Paper Reviewer (v1.10.0)",
-        "### Academic Pipeline (v3.11.1)",
+        "### Academic Pipeline (v3.12.0)",
     ):
         if heading not in text:
             fail(f"{rel_path}: missing heading {heading!r}")
@@ -268,8 +426,9 @@ def check_readme_ja_sections() -> None:
     rel_path = "README.ja-JP.md"
     text = read(rel_path)
 
-    expect_contains(rel_path, "version-v3.11.1-blue")
-    expect_contains(rel_path, "releases/tag/v3.11.1")
+    expect_contains(rel_path, "version-v3.12.0-blue")
+    expect_contains(rel_path, "releases/tag/v3.12.0")
+    expect_contains(rel_path, "### v3.12.0 (2026-06-08)")
     expect_contains(rel_path, "### v3.11.1 (2026-06-06)")
     expect_contains(rel_path, "### v3.11.0 (2026-06-04)")
     expect_contains(rel_path, "### v3.10.0 (2026-06-01)")
@@ -302,7 +461,7 @@ def check_readme_ja_sections() -> None:
         "### Deep Research（v2.9.4）",
         "### Academic Paper（v3.2.0）",
         "### Academic Paper Reviewer（v1.10.0）",
-        "### Academic Pipeline（v3.11.1）",
+        "### Academic Pipeline（v3.12.0）",
     ):
         if heading not in text:
             fail(f"{rel_path}: missing heading {heading!r}")
@@ -332,7 +491,7 @@ ZH_README_CONFIGS = (
             "### Deep Research (v2.9.4)",
             "### Academic Paper (v3.2.0)",
             "### Academic Paper Reviewer (v1.10.0)",
-            "### Academic Pipeline (v3.11.1)",
+            "### Academic Pipeline (v3.12.0)",
         ),
         "paper_start": "#### Academic Paper（學術論文撰寫，10 種模式）",
         "reviewer_start": "#### Academic Paper Reviewer（論文審查，6 種模式）",
@@ -349,7 +508,7 @@ ZH_README_CONFIGS = (
             "### Deep Research (v2.9.4)",
             "### Academic Paper (v3.2.0)",
             "### Academic Paper Reviewer (v1.10.0)",
-            "### Academic Pipeline (v3.11.1)",
+            "### Academic Pipeline (v3.12.0)",
         ),
         "paper_start": "#### Academic Paper（学术论文撰写，10 种模式）",
         "reviewer_start": "#### Academic Paper Reviewer（论文审查，6 种模式）",
@@ -365,8 +524,9 @@ def check_readme_zh_sections() -> None:
         rel_path = config["rel_path"]
         text = read(rel_path)
 
-        expect_contains(rel_path, "version-v3.11.1-blue")
-        expect_contains(rel_path, "releases/tag/v3.11.1")
+        expect_contains(rel_path, "version-v3.12.0-blue")
+        expect_contains(rel_path, "releases/tag/v3.12.0")
+        expect_contains(rel_path, "### v3.12.0（2026-06-08）")
         expect_contains(rel_path, "### v3.11.1（2026-06-06）")
         expect_contains(rel_path, "### v3.11.0（2026-06-04）")
         expect_contains(rel_path, "### v3.10.0（2026-06-01）")
@@ -464,7 +624,7 @@ def check_setup_docs() -> None:
 
 def check_docx_contract() -> None:
     expect_contains(
-        "academic-paper/WORKFLOW.md",
+        entry_path("academic-paper/SKILL.md"),
         "LaTeX/DOCX-via-Pandoc/PDF output",
     )
     expect_contains(
@@ -476,7 +636,7 @@ def check_docx_contract() -> None:
         "If Pandoc is unavailable, provide complete markdown + DOCX conversion instructions",
     )
     expect_contains(
-        "academic-pipeline/WORKFLOW.md",
+        entry_path("academic-pipeline/SKILL.md"),
         "DOCX via Pandoc when available, otherwise conversion instructions",
     )
     expect_contains(
@@ -484,9 +644,10 @@ def check_docx_contract() -> None:
         "DOCX via Pandoc when available (otherwise instructions)",
     )
     for rel_path in (
-        "academic-pipeline/WORKFLOW.md",
+        "academic-pipeline/SKILL.md",
         "academic-pipeline/agents/pipeline_orchestrator_agent.md",
     ):
+        rel_path = entry_path(rel_path)
         expect_absent(rel_path, "Auto-produce MD + DOCX")
 
 
@@ -519,8 +680,10 @@ def check_reference_docs() -> None:
 def main() -> int:
     check_mode_registry()
     check_claude_md()
-    check_reviewer_version_block()
+    check_skill_version_blocks()
+    check_suite_skill_date_sanity()
     check_pipeline_docs()
+    check_architecture_component_version()
     check_readme_sections()
     check_readme_zh_sections()
     check_readme_ja_sections()

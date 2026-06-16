@@ -33,7 +33,8 @@
     {"aliases": ["/ars-full", "ars-full"], "recipe": "ars/commands/ars-full.md", "workflow": "academic-pipeline", "mode": "pipeline", "model_hint": "opus"},
     {"aliases": ["/ars-reviewer", "ars-reviewer"], "recipe": "ars/commands/ars-reviewer.md", "workflow": "academic-paper-reviewer", "mode": "full", "model_hint": "opus"},
     {"aliases": ["/ars-mark-read", "ars-mark-read"], "recipe": "ars/commands/ars-mark-read.md", "workflow": "academic-pipeline", "mode": "mark-read", "model_hint": "sonnet"},
-    {"aliases": ["/ars-unmark-read", "ars-unmark-read"], "recipe": "ars/commands/ars-unmark-read.md", "workflow": "academic-pipeline", "mode": "unmark-read", "model_hint": "sonnet"}
+    {"aliases": ["/ars-unmark-read", "ars-unmark-read"], "recipe": "ars/commands/ars-unmark-read.md", "workflow": "academic-pipeline", "mode": "unmark-read", "model_hint": "sonnet"},
+    {"aliases": ["/ars-cache-invalidate", "ars-cache-invalidate"], "recipe": "ars/commands/ars-cache-invalidate.md", "workflow": "academic-pipeline", "mode": "cache-invalidate", "model_hint": "sonnet"}
   ],
   "workflows": {
     "deep-research": {

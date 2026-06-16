@@ -1,4 +1,4 @@
-﻿# Scientific Schematics - Nano Banana 2
+# Scientific Schematics - Nano Banana 2
 
 **Generate any scientific diagram by describing it in natural language.**
 
@@ -10,7 +10,7 @@ Nano Banana 2 creates publication-quality diagrams automatically - no coding, no
 
 ```bash
 # Set your OpenRouter API key
-export OPENROUTER_API_KEY='<your_api_key_here>'
+export OPENROUTER_API_KEY='your_api_key_here'
 
 # Generate any scientific diagram
 python scripts/generate_schematic.py "CONSORT participant flow diagram" -o figures/consort.png
@@ -324,5 +324,4 @@ For issues or questions:
 ## License
 
 Part of the scientific-writer package. See main repository for license information.
-
 

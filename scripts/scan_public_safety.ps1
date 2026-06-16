@@ -13,13 +13,47 @@ $patterns = @(
 
 $hits = @()
 $allowedFalsePositiveText = @(
+  'api_key="YOUR_API_KEY",',
+  'api_key=YOUR_API_KEY',
+  '&api_key=YOUR_API_KEY_HERE',
+  'export NCBI_API_KEY="your_key_here"',
+  'print("  export OPENROUTER_API_KEY=''your_api_key''")',
+  "print(""  export OPENROUTER_API_KEY='your_api_key'"")",
+  "export OPENROUTER_API_KEY='your_api_key_here'",
+  'api_key="your_openrouter_key",',
+  "export OPENROUTER_API_KEY='sk-or-v1-your_key_here'",
+  'echo ''export OPENROUTER_API_KEY="sk-or-v1-your_key"'' >> ~/.bashrc  # or ~/.zshrc',
+  "export OPENROUTER_API_KEY='your_api_key_here'",
+  'api_key = check_env_file()',
+  'print("OPENROUTER_API_KEY=your-api-key-here")',
+  'print("export OPENROUTER_API_KEY=your-api-key-here")',
   'FLAG_TOKEN = "ARS_PASSPORT_RESET"',
   'PROTOCOL_TOKEN = "passport_as_reset_boundary"',
   'token = _annotation_match_token(literal)',
   'suite_version, invalid_suite_token = _parse_suite_version(claude_text)'
 )
-$files = Get-ChildItem -Path $Root -Recurse -File | Where-Object {
-  $_.FullName -notmatch "\\.git\\" -and
+$gitFiles = git -C $Root ls-files --cached --others --exclude-standard 2>$null
+if ($LASTEXITCODE -eq 0 -and $gitFiles) {
+  $files = foreach ($relativePath in $gitFiles) {
+    $fullPath = Join-Path $Root $relativePath
+    if (Test-Path -LiteralPath $fullPath -PathType Leaf) {
+      Get-Item -LiteralPath $fullPath
+    }
+  }
+}
+else {
+  $files = Get-ChildItem -Path $Root -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
+    $_.FullName -notmatch "\\.git\\" -and
+    $_.FullName -notmatch "\\_local\\" -and
+    $_.FullName -notmatch "\\archives\\" -and
+    $_.FullName -notmatch "\\external_repos\\" -and
+    $_.FullName -notmatch "\\incoming\\" -and
+    $_.FullName -notmatch "\\inventory\\" -and
+    $_.FullName -notmatch "\\unpackaged\\"
+  }
+}
+
+$files = $files | Where-Object {
   $_.FullName -ne $PSCommandPath -and
   $_.Extension -notin @(".png", ".jpg", ".jpeg", ".gif", ".ico")
 }

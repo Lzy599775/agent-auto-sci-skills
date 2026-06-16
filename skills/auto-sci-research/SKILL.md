@@ -113,15 +113,15 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 - `<project-root>/agent_auto_sci/00_AGENT_AUTO_SCI_总览与变更记录.md`
 - `<project-root>/agent_auto_sci/evolution_archive/agent-auto-sci-evolution.html`
 - `<project-root>/agent_auto_sci/evolution_archive/evolution_data.json`
-- `<project-root>/agent_auto_sci/external_repos/AutoSci`
-- `<project-root>/agent_auto_sci/external_repos/scientific-agent-skills`
-- `<project-root>/agent_auto_sci/external_repos/gpt-researcher`
-- `<project-root>/agent_auto_sci/external_repos/nuwa-skill`
-- `<project-root>/agent_auto_sci/external_repos/academic-research-skills-codex`
-- `<project-root>/agent_auto_sci/external_repos/codex-autoresearch`
-- `<project-root>/agent_auto_sci/external_repos/Codex-Academic-Skills`
-- `<project-root>/agent_auto_sci/external_repos/codex-paper-reader`
-- `<project-root>/agent_auto_sci/external_repos/awesome-ai-research-writing-STRYXTN`
+- `<local-skill-workspace>/external_repos/latest/AutoSci`
+- `<local-skill-workspace>/external_repos/latest/scientific-agent-skills`
+- `<local-skill-workspace>/external_repos/latest/gpt-researcher`
+- `<local-skill-workspace>/external_repos/latest/nuwa-skill`
+- `<local-skill-workspace>/external_repos/latest/academic-research-skills-codex`
+- `<local-skill-workspace>/external_repos/latest/codex-autoresearch`
+- `<local-skill-workspace>/external_repos/latest/Codex-Academic-Skills`
+- `<local-skill-workspace>/external_repos/latest/codex-paper-reader`
+- `<local-skill-workspace>/external_repos/latest/awesome-ai-research-writing-STRYXTN`
 
 ## Must Not Do
 

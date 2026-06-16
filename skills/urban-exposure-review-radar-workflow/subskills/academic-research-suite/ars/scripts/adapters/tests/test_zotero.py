@@ -1,7 +1,6 @@
 """Tests for scripts/adapters/zotero.py."""
 from pathlib import Path
 import subprocess
-import sys
 import json
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -13,7 +12,7 @@ EXPECTED_REJECTION = REPO_ROOT / "scripts/adapters/examples/zotero/expected_reje
 
 def _run(*args):
     return subprocess.run(
-        [sys.executable, str(ADAPTER)] + list(args),
+        ["python", str(ADAPTER)] + list(args),
         capture_output=True,
         text=True,
         cwd=REPO_ROOT,

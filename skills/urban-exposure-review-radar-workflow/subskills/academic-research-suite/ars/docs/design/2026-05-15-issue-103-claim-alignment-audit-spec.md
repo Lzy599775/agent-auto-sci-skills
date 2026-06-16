@@ -619,7 +619,7 @@ Existing v3.7.3 5-cell matrix (anchor presence + 4-cell trust state) gains a new
 
 **`/ars-mark-read` behavior:** Does NOT acknowledge HIGH-WARN-CLAIM-NOT-SUPPORTED or HIGH-WARN-NEGATIVE-CONSTRAINT-VIOLATION. Remediation: user fixes the prose (re-cites, drops claim, revises). Mirrors v3.7.3 R-L3-1-A asymmetry (locator is structural, not evidence-state).
 
-**Mode flag:** Audit agent dispatch is **opt-in** per pipeline run, configurable in `academic-pipeline/WORKFLOW.md` mode flags. Default OFF for v3.8.0; ramp-on plan deferred to post-calibration calibration evidence.
+**Mode flag:** Audit agent dispatch is **opt-in** per pipeline run, configurable in `academic-pipeline/SKILL.md` mode flags. Default OFF for v3.8.0; ramp-on plan deferred to post-calibration calibration evidence.
 
 ## 6. Lint: `scripts/check_claim_audit_consistency.py`
 

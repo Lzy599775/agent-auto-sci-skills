@@ -95,7 +95,7 @@ transfer; its "all candidates visible" transfer conditions point here), and
 
 Verified against the codebase 2026-06-02. "The human decides at every gate" is
 present in `POSITIONING.md`; the 10-stage pipeline and mandatory user confirmation
-are real (`academic-pipeline/WORKFLOW.md`). No Elo, tournament, top-K, or
+are real (`academic-pipeline/SKILL.md`). No Elo, tournament, top-K, or
 candidate-ranking mechanism exists in ARS today — so the claim "ARS has no hidden
 ranking" is a verified fact, not merely an aspiration. This doc therefore records a
 boundary for *future* work, not a description of an existing component.

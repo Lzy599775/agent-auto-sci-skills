@@ -1,7 +1,6 @@
 """Tests for scripts/adapters/folder_scan.py."""
 from pathlib import Path
 import subprocess
-import sys
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 ADAPTER = REPO_ROOT / "scripts/adapters/folder_scan.py"
@@ -18,7 +17,7 @@ _FOLDER_SCAN_EXTRA = {"source_pointer", "input_source"}
 
 def _run(*args, cwd=None):
     return subprocess.run(
-        [sys.executable, str(ADAPTER)] + list(args),
+        ["python", str(ADAPTER)] + list(args),
         capture_output=True,
         text=True,
         cwd=cwd or REPO_ROOT,
