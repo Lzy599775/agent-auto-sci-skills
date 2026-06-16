@@ -13,6 +13,8 @@
 
 本次新增 5 个可安装入口：4 个 `K-Dense-AI/scientific-agent-skills` 精选封装包（机器学习与人工智能、数据分析与可视化、地理空间科学与遥感、科学交流），以及 `Haojae/scipilot-figure-skill` 科研图件顾问。K-Dense 不做全量安装，只纳入用户当前科研方向需要的 4 类技能，并在 wrapper 中保留上游来源与版本记录。
 
+当前仓库共提供 **15 个可安装 Codex skill**：1 个总控 skill、6 个 Auto-sci 核心科研子 skill、2 个体育地理专用 skill、1 个城市暴露综述/前沿雷达 workflow、4 个 K-Dense 精选上游封装包，以及 1 个 SciPilot 科研图件顾问。它们共同构成从“研究问题”到“可投稿成果”的本地科研工作流。
+
 ---
 
 ## ✨ 一句话定位
@@ -103,6 +105,26 @@ $env:USERPROFILE\.codex\skills
 | `urban-exposure-review-radar-workflow` | Stable | 综述类型判别、文献计量+批判性综述、系统/范围综述、遥感前沿雷达、CV-to-RS、医学数据库连接 | “先判断这篇综述/雷达/实证设计该走什么路线” |
 | `sport-geography-review-bibliometric` | Stable | 系统综述、scoping review、文献计量、批判性编码 | “设计综述 + 文献计量 + 政策议程” |
 | `sport-geography-sci-writing` | Stable | 体育地理实证论文、目标期刊适配、讨论写作 | “把可达性/暴露结果写成 SCI 论文” |
+
+## 🧷 完整子 Skill 场景矩阵
+
+| Skill | 类型 | 最适用场景 | 典型产出 | 调用边界 |
+|---|---|---|---|---|
+| `auto-sci-research` | 总控 / router | 一个任务跨越选题、文献、数据、分析、绘图、写作和投稿多个阶段时 | 总路线图、子 skill 调用顺序、质量门控、进化记录 | 不替代具体子 skill；先路由，再进入专项模块 |
+| `agent-auto-sci-automation` | 自动化 / 记忆 | 长期项目、文献库、source manifest、checkpoint、失败复盘、API 边界 | source manifest、目录规范、状态表、失败日志、自动化边界 | 不提交密钥、私有 PDF、付费数据库导出或未发表材料 |
+| `agent-auto-sci-methodology` | 方法论 / 批判性思维 | 选题还不清楚、机制链条薄弱、因果语言或证据等级需要审计 | SMART 问题、机制图、假设矩阵、偏倚审计、证据分级 | 不把相关性、空间描述或横断面结果写成强因果 |
+| `agent-auto-sci-geospatial` | GIS / 遥感 | 可达性、绿色暴露、热暴露、LCZ、空间公平、地图和空间连接 | CRS 审计、暴露窗口、可达性算法、空间公平指标、地图检查表 | 不混用 exposure、accessibility、availability、quality 和 use |
+| `agent-auto-sci-data-viz` | 数据分析 / 科学可视化 | EDA、统计检验、文献计量图、论文主图/补图、政策矩阵 | 数据质量审计、统计路线、figure plan、caption、table shell | 图表必须服务 claim；不做只好看但无证据功能的图 |
+| `agent-auto-sci-ai-ml` | ML / XAI | 机器学习、SHAP、空间/时间验证、模型解释、泄露检查 | baseline、特征/标签审计、验证切分、指标表、解释边界 | SHAP 和特征重要性不是因果证据 |
+| `agent-auto-sci-scicomm` | 写作 / 投稿 | 论文结构、argument、cover letter、rebuttal、PPT、poster | claim-evidence map、IMRAD 大纲、审稿风险、回复矩阵、展示材料 | 不为了语言润色扩张证据或改变结论强度 |
+| `sport-geography-review-bibliometric` | 体育地理综述 / 文献计量 | 体育公园、体育设施、绿地暴露、空间公平、城市健康综述 | 检索式、PRISMA、编码表、CiteSpace/VOSviewer/bibliometrix 图、政策议程 | 文献计量不是贡献本身，必须上升到机制框架或议程 |
+| `sport-geography-sci-writing` | 体育地理 SCI 写作 | 可达性、暴露、公平、健康影响、空间机制类实证论文 | 期刊定位、引言 gap chain、方法叙事、结果段落、讨论和政策启示 | 不从技术指标开篇；先建立公共问题和学术缺口 |
+| `urban-exposure-review-radar-workflow` | 城市暴露 workflow | 系统综述、范围综述、文献计量+批判性综述、前沿雷达、医学数据库连接 | route decision、formal corpus/radar handoff、journal evidence gate、ARS 管线 | 正式综述语料和前沿雷达候选必须分开 |
+| `kdense-ml-ai-selected` | 上游精选 / ML 技术 playbook | 需要 scikit-learn、PyTorch Lightning、Transformers、SHAP、TimesFM、GNN、UMAP 的技术路线 | 技术路线、模型选择、训练/评估注意点、解释方法 | 作为技术参考使用，结论边界仍由 methodology/scicomm 把关 |
+| `kdense-data-viz-selected` | 上游精选 / 数据与可视化 | 需要 EDA、统计、Matplotlib、Seaborn、NetworkX、Polars、Dask 的技术细节 | 分析路径、绘图路线、统计/网络/大表处理建议 | 不替代论文 claim 设计；图表论证由 data-viz/scicomm 控制 |
+| `kdense-geospatial-rs-selected` | 上游精选 / GIS 遥感 | 需要 GeoPandas、GeoMaster、矢量/栅格、遥感和空间处理参考 | GIS 技术路线、空间处理步骤、遥感数据注意点 | 不绕过 CRS、尺度、暴露定义和地图合规审计 |
+| `kdense-scicomm-selected` | 上游精选 / 科学交流 | 需要写作、审稿、引用、slides、posters、schematics、Mermaid 技术模板 | 写作框架、引用检查、slides/posters/schematics 结构 | 不替代领域贡献判断和期刊证据门槛 |
+| `scipilot-figure-skill` | 图件顾问 / 视觉 QA | 用户问“这个数据怎么画”、投稿图、中文图件、多面板、视觉自检 | 图型选择、绘图代码方向、色盲安全、字体/裁切/重叠检查 | 先判断图要证明什么，再画图；主动拦截错误图型 |
 
 完整模块关系见 [docs/skill-map.md](docs/skill-map.md)。
 

@@ -32,7 +32,7 @@ $allowedFalsePositiveText = @(
   'token = _annotation_match_token(literal)',
   'suite_version, invalid_suite_token = _parse_suite_version(claude_text)'
 )
-$gitFiles = git -C $Root ls-files --cached --others --exclude-standard 2>$null
+$gitFiles = git -C $Root -c core.quotePath=false ls-files --cached --others --exclude-standard 2>$null
 if ($LASTEXITCODE -eq 0 -and $gitFiles) {
   $files = foreach ($relativePath in $gitFiles) {
     $fullPath = Join-Path $Root $relativePath

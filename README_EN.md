@@ -12,6 +12,8 @@ This release upgrades `urban-exposure-review-radar-workflow` into a domain route
 
 The suite also packages the latest selected upstream skills from `K-Dense-AI/scientific-agent-skills` and `Haojae/scipilot-figure-skill`. K-Dense is not installed wholesale: only Machine Learning & AI, Data Analysis & Visualization, Geospatial Science & Remote Sensing, and Scientific Communication are wrapped as installable domain modules. `scipilot-figure-skill` is included as a publication-figure and visual-QA companion.
 
+The repository now contains **15 installable Codex skills**: one umbrella router, six Auto-sci core research modules, two sport-geography specialist modules, one urban-exposure review/radar workflow, four selected K-Dense upstream wrappers, and one SciPilot figure advisor.
+
 ## Core Workflow
 
 ```text
@@ -68,6 +70,26 @@ The 2026-06-16 F-drive skill consolidation and upstream refresh report is availa
 | `urban-exposure-review-radar-workflow` | Stable | Review-route decision, bibliometric + critical review, systematic/scoping review, remote-sensing radar, CV-to-RS, medical database linkage | “Decide which route this review/radar/study should take.” |
 | `sport-geography-review-bibliometric` | Stable | Systematic/scoping reviews, bibliometrics, critical coding, policy agenda | “Design a review + bibliometrics manuscript.” |
 | `sport-geography-sci-writing` | Stable | Empirical SCI writing for sport geography, exposure, equity, urban health | “Turn my results into an SCI manuscript.” |
+
+## Complete Skill Matrix
+
+| Skill | Type | Best-fit scenario | Typical outputs | Boundary |
+|---|---|---|---|---|
+| `auto-sci-research` | Umbrella router | Multi-stage research tasks spanning topic, literature, data, analysis, figures, writing, and submission | Route plan, skill sequence, quality gates, evolution record | Routes to specialist skills; does not replace them |
+| `agent-auto-sci-automation` | Automation / memory | Long-lived projects, source manifests, checkpoints, API boundaries, failure logs | Source manifest, status tables, recovery points | Never publish secrets, private PDFs, paid exports, or unpublished material |
+| `agent-auto-sci-methodology` | Methodology | Weak research logic, unclear mechanisms, causal-language risk, evidence grading | SMART questions, mechanism map, hypotheses, bias audit | Does not turn correlations into causal claims |
+| `agent-auto-sci-geospatial` | GIS / remote sensing | Accessibility, green/heat exposure, LCZ, spatial equity, maps, spatial joins | CRS audit, exposure windows, accessibility workflow, map checklist | Keeps exposure, accessibility, availability, quality, and use separate |
+| `agent-auto-sci-data-viz` | Data / visualization | EDA, statistics, bibliometric figures, manuscript figures, policy matrices | Data audit, statistical route, figure plan, captions | Figures must support claims, not only decorate |
+| `agent-auto-sci-ai-ml` | ML / XAI | Machine learning, SHAP, spatial/temporal validation, leakage checks | Baselines, validation split, metrics, interpretation boundary | Feature importance is not causal evidence |
+| `agent-auto-sci-scicomm` | Writing / publication | Manuscript structure, argument, cover letter, rebuttal, slides, posters | Claim-evidence map, IMRAD outline, reviewer-risk scan, response matrix | Polishing must not inflate evidence strength |
+| `sport-geography-review-bibliometric` | Review / bibliometrics | Sport parks, sport facilities, green exposure, spatial equity, urban health reviews | Search strategy, PRISMA, coding table, bibliometric figures, policy agenda | Bibliometrics must lead to a framework or agenda |
+| `sport-geography-sci-writing` | SCI writing | Empirical sport geography, exposure, accessibility, equity, health mechanism papers | Journal positioning, introduction chain, methods narrative, discussion | Start from public problem and research gap, not only metrics |
+| `urban-exposure-review-radar-workflow` | Domain workflow | Reviews, frontier radar, urban exposure, public-health database linkage | Route decision, evidence gate, formal-corpus/radar handoff, ARS pipeline | Formal review evidence and frontier radar candidates stay separate |
+| `kdense-ml-ai-selected` | Upstream wrapper | Technical ML/AI playbooks for scikit-learn, Lightning, Transformers, SHAP, TimesFM, GNN, UMAP | Technical route, model notes, evaluation guidance | Domain interpretation remains with methodology/scicomm skills |
+| `kdense-data-viz-selected` | Upstream wrapper | EDA, statistics, Matplotlib, Seaborn, NetworkX, Polars, Dask | Technical analysis and plotting guidance | Claim design remains with data-viz/scicomm skills |
+| `kdense-geospatial-rs-selected` | Upstream wrapper | GeoPandas, GeoMaster, vector/raster and remote-sensing workflows | GIS and RS technical route | Does not bypass CRS, scale, exposure-definition, or map-compliance audits |
+| `kdense-scicomm-selected` | Upstream wrapper | Writing, review, citation, slides, posters, schematics, Mermaid | Writing and presentation templates | Does not replace field contribution and journal evidence gates |
+| `scipilot-figure-skill` | Figure advisor | “What chart should I use?”, publication figures, CJK labels, multi-panel visual QA | Chart choice, visual QA, font/cropping/overlap checks | Decide what the figure proves before plotting |
 
 ## Full Research Pipelines
 
