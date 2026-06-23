@@ -1,6 +1,7 @@
 # Academic Research Skills for Claude Code
 
-[![Version](https://img.shields.io/badge/version-v3.12.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.12.0)
+[![Version](https://img.shields.io/badge/version-v3.13.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.13.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20696614.svg)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
@@ -64,7 +65,7 @@ v3.3 的灵感来自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 
 ## 性能与费用
 
-**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — 各模式 token 预算、完整 pipeline 估算（一篇 15k 字论文约 ~$4–6），以及建议的 Claude Code 设置（Skip Permissions；Agent Team 选用）。
+**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — 各模式 token 预算、完整 pipeline 估算（一篇 15k 字论文约 ~$4–6），以及建议的 Claude Code 设置（Auto 模式；Agent Team 选用）。
 
 ## 使用指南与文章
 
@@ -148,7 +149,7 @@ ARS Stage 2 写作      →  用验证过的实验结果撰写论文
 
 ### 个别 Skill 使用
 
-#### Deep Research（深度研究，7 种模式）
+#### Deep Research（深度研究，8 种模式）
 
 ```
 "研究 AI 对高等教育的影响"                    → full mode（完整研究）
@@ -160,7 +161,7 @@ ARS Stage 2 写作      →  用验证过的实验结果撰写论文
 "审查这篇论文的研究质量"                      → review mode（论文审查）
 ```
 
-#### Academic Paper（学术论文撰写，10 种模式）
+#### Academic Paper（学术论文撰写，11 种模式）
 
 ```
 "帮我写一篇论文"                              → full mode（完整撰写）
@@ -229,19 +230,19 @@ ARS Stage 2 写作      →  用验证过的实验结果撰写论文
 
 各 agent 的职责与各阶段产出物现已移至 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。版本号保留在此以维持 release metadata 集中管理。
 
-### Deep Research (v2.9.4)
+### Deep Research (v2.11.0)
 
-13 个 Agent 的研究团队。模式：full、quick、review、lit-review、fact-check、socratic、systematic-review。完整 agent 名单与产出物：见 ARCHITECTURE.md §3。
+13 个 Agent 的研究团队。模式：full、quick、review、lit-review、three-way-scan、fact-check、socratic、systematic-review。完整 agent 名单与产出物：见 ARCHITECTURE.md §3。
 
 ### Academic Paper (v3.2.0)
 
-12 个 Agent 的论文撰写 pipeline。模式：full、plan、outline-only、revision、revision-coach、abstract-only、lit-review、format-convert、citation-check、disclosure。输出：MD + DOCX（Pandoc 可用时）+ LaTeX（APA 7.0 `apa7` class / IEEE / Chicago）→ tectonic 编译 PDF。完整 agent 名单与各 phase 职责：见 ARCHITECTURE.md §3。
+12 个 Agent 的论文撰写 pipeline。模式：full、plan、outline-only、revision、revision-coach、abstract-only、lit-review、format-convert、citation-check、disclosure、rebuttal-audit。输出：MD + DOCX（Pandoc 可用时）+ LaTeX（APA 7.0 `apa7` class / IEEE / Chicago）→ tectonic 编译 PDF。完整 agent 名单与各 phase 职责：见 ARCHITECTURE.md §3。
 
 ### Academic Paper Reviewer (v1.10.0)
 
 7 个 Agent 的多视角审查，搭配 **0-100 质量量表**。模式：full、re-review、quick、methodology-focus、guided、calibration。**决策对照：** ≥80 接受、65-79 小修、50-64 大修、<50 退稿。第一轮审查团队 vs. 精简再审团队的分界：见 ARCHITECTURE.md §3 Stage 3 / Stage 3'。
 
-### Academic Pipeline (v3.12.0)
+### Academic Pipeline (v3.13.0)
 
 10 阶段调度器，含学术诚信验证、两阶段审查、苏格拉底指导、协作质量评估。Pipeline 保证：每个阶段都需用户确认 checkpoint；学术诚信验证（Stage 2.5 + 4.5）不可跳过；R&R 追溯矩阵（Schema 11）独立验证作者修订主张。v3.4 添加 Compliance Agent（PRISMA-trAIce + RAISE）于 Stage 2.5 / 4.5。v3.5 添加 **协作深度观察员**（`collaboration_depth_agent`，仅咨询性质、永不阻挡流程）于每一次 FULL/SLIM checkpoint 与 pipeline 完成时。MANDATORY 学术诚信闸门（2.5 / 4.5）明确跳过观察员，避免稀释合规检查。理论基础：Wang & Zhang (2026), IJETHE 23:11。逐阶段矩阵（agent、产出物、闸门）：见 ARCHITECTURE.md §3。
 
@@ -304,6 +305,14 @@ https://github.com/Imbad0202/academic-research-skills
 ---
 
 ## 更新纪录
+
+### v3.13.0（2026-06-18）— Hook 可移植性、provider-agnostic 验证、guard 正确性
+
+> 一个 minor release，强化安装／执行面并扩展跨模型范围。**修正：** 写入范围 guard 在 git-clone + symlink 安装布局下不再误挡使用者自己的 `CLAUDE.md`（#459，收掉 #448/#449 的残余一半——`CLAUDE.md` 是文档而非承载 enforcement 的档案，故移出 infra 保护清单，所有承载档案仍受保护）；Windows Python hook 可移植性 + 无 Python 时优雅降级，改由跨平台 `hooks/run_guard.sh` launcher 启动，会拒绝 0-byte 的 Microsoft Store `python3` stub 且不再洗 hook log（#454）；`draft_writer` dual-phase static union 文档化 + Windows POSIX-safe 路径匹配（#451）。**新增：** provider-agnostic 跨模型验证，接受 OpenAI 相容端点（MiMo、DeepSeek、自架）与 grounded first-party OpenAI 并存，且后者绝不被静默降级（#455）；opt-in 的 Socratic 邻近 framing probe（借自 STORM 的视角扩展，`ARS_SOCRATIC_ADJACENT_PROBE=1`，预设 OFF，纯 prose-layer——`deep-research` 2.10.0 → 2.11.0）（#461）。`academic-pipeline` 随 suite 至 v3.13.0；`academic-paper` 与 `academic-paper-reviewer` 不变。逐 issue 细节见 `CHANGELOG.md`。
+
+### v3.12.1（2026-06-15）— 审稿回复分流模式（PR #433 整合）
+
+> 一个 patch release，依 ARS 的模式化架构，把一份外部贡献中真正具新意的部分收进既有 skill 成为模式。**新模式：** `deep-research` `three-way-scan` —— 介于 `quick` 与 `lit-review` 之间的轻量 WHY/HOW/WHAT 论文比较分流，产出逐论文短清单加跨论文统合（`deep-research` 2.9.4 → 2.10.0）；`academic-paper` `rebuttal-audit` —— 对作者既有的 rebuttal／回复草稿，比对审稿意见做独立的咨询式 QA（逐条覆盖表 + 缺口清单 + 语气／证据／误读风险旗标），它不产生任何内容，且独立调用时明确抑制 Schema 11／Material Passport 写入／`ready_to_submit`（由带 mutation 覆盖的 `check_rebuttal_audit_guard()` lint 强制）；另含 `revision-coach` 范围扩展到反驳／不同意姿态与非期刊情境，以及 `/ars-3w` + `/ars-rebuttal-audit` 斜线指令。依输入形状路由：审稿意见加草稿 → `rebuttal-audit`；仅意见 → `revision-coach`。整合自 [@Yaobin29](https://github.com/Yaobin29) 的 [PR #433](https://github.com/Imbad0202/academic-research-skills/pull/433)。Suite 模式数 25 → 27（仍 4 个 skill）。逐 issue 细节见 `CHANGELOG.md`。
 
 ### v3.12.0（2026-06-08）— Kong 自动研究功能线：实验来源、图表保真、跨论文矛盾、部分证据拆解
 

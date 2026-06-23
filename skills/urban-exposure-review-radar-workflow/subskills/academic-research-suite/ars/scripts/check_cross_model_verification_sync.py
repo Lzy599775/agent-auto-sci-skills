@@ -65,6 +65,39 @@ def _strip_trailing_comment(line: str) -> str:
     return line
 
 
+def _bash_blocks(text: str) -> list[list[str]]:
+    """Return per-fence lists of executable bash lines (comments removed).
+
+    Each element is one ```bash … ``` fence's executable lines, with comment-only lines dropped
+    and trailing comments stripped (see `_strip_trailing_comment`). Keeping fences separate lets a
+    check scope itself to a single block (e.g. the compatible-provider block) instead of the whole
+    doc — necessary when a token (`NOT_SEARCHED`) legitimately appears in several blocks but a
+    given contract only binds one of them.
+    """
+    blocks: list[list[str]] = []
+    current: list[str] | None = None
+    for raw in text.splitlines():
+        stripped = raw.strip()
+        if current is None and stripped.startswith("```bash"):
+            current = []
+            continue
+        if current is not None and stripped == "```":
+            blocks.append(current)
+            current = None
+            continue
+        if current is not None and not stripped.startswith("#"):
+            code = _strip_trailing_comment(raw)
+            if code.strip():
+                current.append(code)
+    # An unterminated trailing ```bash block (no closing fence at EOF) must still be scanned —
+    # otherwise its lines silently drop, which is fail-OPEN for checks 4/6/7/8 (a re-inlined guard,
+    # a passive OPENAI_BASE_URL, or a missing normalizer invocation in the final block would escape
+    # the lint). Flush it here.
+    if current is not None:
+        blocks.append(current)
+    return blocks
+
+
 def _bash_code_lines(text: str) -> list[str]:
     """Return the executable lines inside ```bash fenced blocks, comments removed.
 
@@ -74,19 +107,8 @@ def _bash_code_lines(text: str) -> list[str]:
     doc loading that filter via `jq -f`.
     """
     lines: list[str] = []
-    in_block = False
-    for raw in text.splitlines():
-        stripped = raw.strip()
-        if not in_block and stripped.startswith("```bash"):
-            in_block = True
-            continue
-        if in_block and stripped == "```":
-            in_block = False
-            continue
-        if in_block and not stripped.startswith("#"):
-            code = _strip_trailing_comment(raw)
-            if code.strip():
-                lines.append(code)
+    for block in _bash_blocks(text):
+        lines.extend(block)
     return lines
 
 
@@ -152,6 +174,75 @@ def main() -> int:
                 f"doc inlines a jq program referencing {hit!r}; load the canonical .jq via "
                 f"`jq -f` instead so the guard stays behavior-tested"
             )
+
+    # 5. (#453) REMOVED. The compatible block no longer re-implements verdict precedence /
+    #    fail-closed defaulting inline — it INVOKES the canonical normalize_compat_verdict.py
+    #    (check 8 below pins the wiring; the unit's behavioral tests pin the fail-closed contract).
+    #    The old check 5 pinned an inline `*) status="NOT_SEARCHED"` case that no longer exists, so
+    #    keeping it would either fail-vacuously or false-fail. Its intent now lives in check 8.
+
+    # 6. (#453) No passive OPENAI_BASE_URL assignment/expansion in executable bash (prose is fine).
+    #    Target assignment (`OPENAI_BASE_URL=`) and expansion (`${OPENAI_BASE_URL`/`$OPENAI_BASE_URL`),
+    #    NOT a raw substring, so an explanatory comment/prose mention doesn't false-fail and a
+    #    `${OPENAI_BASE_URL:-…}` variant doesn't false-pass.
+    if re.search(r"(?<![A-Z_])OPENAI_BASE_URL=", bash_code) or re.search(
+        r"\$\{?OPENAI_BASE_URL\b", bash_code
+    ):
+        failures.append(
+            "executable bash reads/sets OPENAI_BASE_URL; the compatible path must use "
+            "ARS_OPENAI_COMPAT_BASE_URL (reading the standard SDK var silently downgrades "
+            "existing first-party users — the #453 passive-downgrade regression)"
+        )
+
+    # 7. (#453) Endpoint construction never builds a double /v1 or falls back to api.openai.com.
+    if "/v1/v1" in bash_code:
+        failures.append("executable bash contains a literal '/v1/v1' (double-/v1 endpoint bug)")
+    if re.search(r"api\.openai\.com[^\n]*chat/completions", bash_code):
+        failures.append(
+            "compatible endpoint must not fall back to api.openai.com/chat/completions; "
+            "require ARS_OPENAI_COMPAT_BASE_URL"
+        )
+
+    # 8. (#453) The compatible block must INVOKE the canonical normalizer via a PIPE, not
+    #    re-implement verdict logic in bash. Scope to the compatible block (located by its
+    #    endpoint identifier) and require `| python3 ... normalize_compat_verdict.py` so a bare
+    #    comment mention or an unpiped/dead reference can't satisfy the check. Anti-vacuity:
+    #    if the compatible path is present but its block can't be located, fail loud.
+    #    (Earlier inline bash re-implemented leftmost-of-four precedence and risked a head->tail
+    #    regression + a raw-text injection of a second STATUS line; calling the behavior-tested
+    #    Python unit, which emits single-line JSON, removes both. _bash_blocks already strips
+    #    comment-only and trailing comments, so a `# ... normalize_compat_verdict.py` comment is
+    #    gone before this check sees it — the pipe requirement is belt-and-braces on top.)
+    if "openai_compatible" in bash_code:
+        compat_blocks = [
+            "\n".join(b) for b in _bash_blocks(text)
+            if "ARS_OPENAI_COMPAT_BASE_URL%/}/chat/completions" in "\n".join(b)
+        ]
+        if not compat_blocks:
+            failures.append(
+                "compatible path is present (openai_compatible) but the lint could not locate "
+                "the compatible call block by its endpoint identifier — keep the "
+                "`ARS_OPENAI_COMPAT_BASE_URL%/}/chat/completions` endpoint line so the wiring "
+                "check stays live"
+            )
+        else:
+            compat_code = "\n".join(compat_blocks)
+            # Require a PIPE into the canonical normalizer. `(?:-\S+\s+)*` allows interpreter
+            # flags (e.g. `python3 -u .../normalize_compat_verdict.py`). This wiring check proves
+            # the canonical unit is invoked-by-pipe; it does NOT parse bash control flow, so it
+            # cannot catch a contrived block that pipes to the normalizer, discards its output,
+            # and re-derives status in bash. That residual is out of scope by design — the real
+            # output contract is carried by the behavioral tests on the JSON-emitting unit; a
+            # determined wrong rewrite is a code-review concern, not a static-lint one.
+            if not re.search(
+                r"\|\s*python3?\s+(?:-\S+\s+)*\S*normalize_compat_verdict\.py", compat_code
+            ):
+                failures.append(
+                    "the compatible block must pipe the model text into "
+                    "normalize_compat_verdict.py (`... | python3 .../normalize_compat_verdict.py`); "
+                    "a comment mention or unpiped reference does not count — verdict normalization "
+                    "must call the canonical, behavior-tested unit, not re-implement it in bash"
+                )
 
     if failures:
         print(f"[cross-model-sync] FAIL: {len(failures)} issue(s):")

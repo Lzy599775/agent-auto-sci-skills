@@ -6,7 +6,6 @@ These are file-content lints (grep / regex / structure assertions) against:
 - deep-research/agents/socratic_mentor_agent.md §"Optional Reading Probe Layer"
 - deep-research/references/socratic_mode_protocol.md §"Reading Probe"
 - deep-research/SKILL.md §"Opt-in Reading Probe (v3.5.1)"
-  (vendored as WORKFLOW.md in the Codex distribution)
 - academic-pipeline/references/process_summary_protocol.md §"Reading Probe Outcomes"
 
 Pattern matches test_check_compliance_report.py — no LLM runtime, no subprocess fork,
@@ -28,9 +27,11 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 MENTOR_AGENT = REPO_ROOT / "deep-research" / "agents" / "socratic_mentor_agent.md"
 SOCRATIC_PROTOCOL = REPO_ROOT / "deep-research" / "references" / "socratic_mode_protocol.md"
-DEEP_RESEARCH_SKILL = REPO_ROOT / "deep-research" / "SKILL.md"
-if not DEEP_RESEARCH_SKILL.is_file():
-    DEEP_RESEARCH_SKILL = REPO_ROOT / "deep-research" / "WORKFLOW.md"
+DEEP_RESEARCH_SKILL = (
+    REPO_ROOT / "deep-research" / "WORKFLOW.md"
+    if (REPO_ROOT / "deep-research" / "WORKFLOW.md").is_file()
+    else REPO_ROOT / "deep-research" / "SKILL.md"
+)
 README_EN = REPO_ROOT / "README.md"
 README_ZH = REPO_ROOT / "README.zh-TW.md"
 PIPELINE_PROCESS_SUMMARY = REPO_ROOT / "academic-pipeline" / "references" / "process_summary_protocol.md"
@@ -93,7 +94,10 @@ class ReadingProbeLintTests(unittest.TestCase):
             text = f.read_text(encoding="utf-8")
             self.assertIn(expected, text,
                           f"{f.relative_to(REPO_ROOT)} missing env var {expected!r}")
-            wrong_cases = re.findall(r"\bARS_SOCRATIC[_A-Z]*\b", text)
+            # Police ONLY the READING-probe var's own casing/typos. Sibling
+            # socratic env vars (e.g. ARS_SOCRATIC_ADJACENT_PROBE) are legitimate
+            # and must not be mis-flagged as drift — match the READING stem only.
+            wrong_cases = re.findall(r"\bARS_SOCRATIC_READING[_A-Z]*\b", text)
             for hit in wrong_cases:
                 self.assertEqual(hit, expected,
                                  f"{f.relative_to(REPO_ROOT)} has case-drifted "

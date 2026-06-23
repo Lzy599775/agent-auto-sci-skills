@@ -25,11 +25,13 @@
     {"aliases": ["/ars-outline", "ars-outline"], "recipe": "ars/commands/ars-outline.md", "workflow": "academic-paper", "mode": "outline-only", "model_hint": "sonnet"},
     {"aliases": ["/ars-abstract", "ars-abstract"], "recipe": "ars/commands/ars-abstract.md", "workflow": "academic-paper", "mode": "abstract-only", "model_hint": "sonnet"},
     {"aliases": ["/ars-lit-review", "ars-lit-review"], "recipe": "ars/commands/ars-lit-review.md", "workflow": "academic-paper", "mode": "lit-review", "model_hint": "sonnet"},
+    {"aliases": ["/ars-3w", "ars-3w"], "recipe": "ars/commands/ars-3w.md", "workflow": "deep-research", "mode": "three-way-scan", "model_hint": "sonnet"},
     {"aliases": ["/ars-citation-check", "ars-citation-check"], "recipe": "ars/commands/ars-citation-check.md", "workflow": "academic-paper", "mode": "citation-check", "model_hint": "sonnet"},
     {"aliases": ["/ars-disclosure", "ars-disclosure"], "recipe": "ars/commands/ars-disclosure.md", "workflow": "academic-paper", "mode": "disclosure", "model_hint": "sonnet"},
     {"aliases": ["/ars-format-convert", "ars-format-convert"], "recipe": "ars/commands/ars-format-convert.md", "workflow": "academic-paper", "mode": "format-convert", "model_hint": "sonnet"},
     {"aliases": ["/ars-revision-coach", "ars-revision-coach"], "recipe": "ars/commands/ars-revision-coach.md", "workflow": "academic-paper", "mode": "revision-coach", "model_hint": "opus"},
     {"aliases": ["/ars-revision", "ars-revision"], "recipe": "ars/commands/ars-revision.md", "workflow": "academic-paper", "mode": "revision", "model_hint": "sonnet"},
+    {"aliases": ["/ars-rebuttal-audit", "ars-rebuttal-audit"], "recipe": "ars/commands/ars-rebuttal-audit.md", "workflow": "academic-paper", "mode": "rebuttal-audit", "model_hint": "sonnet"},
     {"aliases": ["/ars-full", "ars-full"], "recipe": "ars/commands/ars-full.md", "workflow": "academic-pipeline", "mode": "pipeline", "model_hint": "opus"},
     {"aliases": ["/ars-reviewer", "ars-reviewer"], "recipe": "ars/commands/ars-reviewer.md", "workflow": "academic-paper-reviewer", "mode": "full", "model_hint": "opus"},
     {"aliases": ["/ars-mark-read", "ars-mark-read"], "recipe": "ars/commands/ars-mark-read.md", "workflow": "academic-pipeline", "mode": "mark-read", "model_hint": "sonnet"},
@@ -39,7 +41,7 @@
   "workflows": {
     "deep-research": {
       "workflow_path": "ars/deep-research/WORKFLOW.md",
-      "modes": ["full", "quick", "socratic", "review", "lit-review", "fact-check", "systematic-review"],
+      "modes": ["full", "quick", "socratic", "review", "lit-review", "three-way-scan", "fact-check", "systematic-review"],
       "agent_template": "codex/agents/deep-research-team.md",
       "agent_prompts": [
         "research_question_agent.md",
@@ -60,7 +62,7 @@
     },
     "academic-paper": {
       "workflow_path": "ars/academic-paper/WORKFLOW.md",
-      "modes": ["full", "plan", "outline-only", "revision", "revision-coach", "abstract-only", "lit-review", "format-convert", "citation-check", "disclosure"],
+      "modes": ["full", "plan", "outline-only", "revision", "revision-coach", "abstract-only", "lit-review", "format-convert", "citation-check", "disclosure", "rebuttal-audit"],
       "agent_template": "codex/agents/academic-paper-team.md",
       "agent_prompts": [
         "intake_agent.md",

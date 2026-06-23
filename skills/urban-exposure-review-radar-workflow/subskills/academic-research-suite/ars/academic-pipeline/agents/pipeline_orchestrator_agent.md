@@ -362,9 +362,9 @@ When a sub-skill stage fails or produces unacceptable output:
 |-------|-------------|-------------------|
 | Stage 1: deep-research | Insufficient sources found | Retry with expanded keywords; if still insufficient, allow user to provide manual sources; downgrade to `quick` mode with explicit quality note |
 | Stage 2: academic-paper | Draft quality below `adequate` threshold | Return to argument_builder for strengthening; if 2nd attempt fails, pause pipeline and request user input |
-| Stage 2.5: integrity (mid) | FAIL verdict | Mandatory: return to Stage 2 with integrity issues as revision requirements. Cannot skip or override |
+| Stage 2.5: integrity (mid) | FAIL verdict | Mandatory: return to Stage 2 with integrity issues as revision requirements. The correction round dispatches `academic-paper` **revision mode** under § Revision-Round Patch Sequencing — never full-mode re-drafting; reference-level fixes are the most block-local edit class in the pipeline, and full re-emission is reachable only via the §3.6 escalation checkpoint. Cannot skip or override |
 | Stage 3: reviewer | All reviewers reject | Pause pipeline; present rejection reasons; offer: (a) major revision and re-review, (b) pivot the paper's angle, (c) abort |
-| Stage 4.5: integrity (final) | FAIL verdict | Return to Stage 5 (revision) with final integrity issues. If 2nd integrity check also fails -> abort pipeline with detailed report |
+| Stage 4.5: integrity (final) | FAIL verdict | Return to Stage 5 (revision) with final integrity issues. The correction round dispatches `academic-paper` **revision mode** under § Revision-Round Patch Sequencing (same routing as the Stage 2.5 row). If 2nd integrity check also fails -> abort pipeline with detailed report |
 | Stage 5: revision | Author cannot address a must_fix item | Escalate to user; options: (a) provide additional data/evidence, (b) reframe the claim, (c) remove the problematic section |
 | Any stage | Agent timeout or crash | Save current state via state_tracker; allow manual resume from last checkpoint |
 
@@ -827,7 +827,7 @@ v3.10 adds an **opt-in terminal policy layer** on top of the v3.9.0 advisory cha
 
 ### policy_hash stamp (added ONLY under a non-advisory policy)
 
-When — and ONLY when — the passport's `terminal_policies` carries at least one non-advisory key value, the finalizer appends `policy_hash=<slug>` to every marker it finalizes (so the formatter can detect a draft finalized under a stale policy). The slug is a **fully-encoded, human-readable canonical token** of the passport's `terminal_policies` state — NOT a computed digest (the finalizer is an LLM agent; it cannot reliably compute sha256 by hand). The slug encodes EVERY non-advisory policy key so two distinct policy configurations can never collide on one slug:
+When — and ONLY when — the passport's `terminal_policies` carries at least one non-advisory CITATION-TIME key value, the finalizer appends `policy_hash=<slug>` to every marker it finalizes (so the formatter can detect a draft finalized under a stale policy). The citation-time keys are `contamination_triangulation`, `citation_existence`, and (forward) `temporal_integrity` — the marker-carrier policies; the package-level `submission_package` key (#394) NEVER participates in marker stamping and is OMITTED from the slug regardless of its value — its carrier is the #394 verifier's report file (`policy_slug` + `package_fingerprint`, the package-level analog of this stamp), so a `submission_package: strict`-only passport stamps nothing here. The slug is a **fully-encoded, human-readable canonical token** of the passport's citation-time `terminal_policies` state — NOT a computed digest (the finalizer is an LLM agent; it cannot reliably compute sha256 by hand). The slug encodes EVERY non-advisory citation-time policy key so two distinct policy configurations can never collide on one slug:
 
 - **All-advisory** (absent `terminal_policies`, or every key explicitly `advisory`): NO stamp is emitted — the marker is the bare v3.9.0 shape (Invariant 7 byte-equivalence). There is no `policy_hash=advisory` sentinel; the *absence* of a stamp IS the advisory signal.
 - **Any non-advisory key present:** stamp `policy_hash=<slug>`, where `<slug>` joins each NON-ADVISORY policy key with its value as `key.value`, sorted by key name, separated by `+`. Examples:
@@ -900,6 +900,74 @@ Manual entries (`obtained_via: manual`) carry no `*_unmatched` fields (v3.9.0 §
 The per-pass resolution counts gain a `terminal_blocked[]` bucket recording each ref slug promoted to a terminal block, with its `policy` / `reason` / `mode`. **Non-additive (R2-P2):** a single strict k=3 ref increments BOTH its advisory-signal count (e.g. CONTAMINATED-TRIANGULATION-UNMATCHED) AND the `terminal_blocked[]` bucket, but it remains ONE unique affected ref — any downstream aggregate "total affected refs" MUST dedupe by ref slug across the advisory and terminal buckets, NEVER sum them.
 
 **Multiple terminal policies co-emit independently (C-V6(g)).** A single ref that violates BOTH `contamination_triangulation == strict` (k=3) AND `citation_existence == strict` (`lookup_verified == false`) carries **two** `TERMINAL-BLOCK` tokens in its marker — one per `policy=` value (`policy=contamination_triangulation` and `policy=citation_existence`) — alongside the shared advisory slot. The two tokens are additive at the marker, but the ref is counted ONCE in any "total affected refs" aggregate: dedupe by ref slug across BOTH policy buckets (the same non-additive rule as above, now spanning policies). The `policy_hash` slug encodes both non-advisory keys, sorted by key name: `policy_hash=citation_existence.strict+contamination_triangulation.strict`. The formatter's generic "refuse on any unresolved `severity=HIGH-BLOCK`" rule already handles N tokens without per-policy enumeration — no per-policy refusal rule is added.
+
+---
+
+## Revision-Round Patch Sequencing (#390)
+
+When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 / 3' → 4'; "Resolved next stage: 4 (mode: revision)" — and equally the integrity-FAIL correction rounds, Stage 2.5 FAIL → 2 and Stage 4.5 FAIL → 5 (revision), where the integrity correction list serves as the round's revision requirements; #89 Item 8, destination differences in the integrity-correction variant below — note the FAIL arrow lands on Stage 5's **revision** sub-step, not the PASS-path Stage 4.5 → 5 finalization handoff, and re-verification by the issuing gate is mandatory before finalization), the writer's deliverable is a **patch document**, not a re-emitted draft, and the orchestrator owns the deterministic steps around it. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.3–§3.6. Protocol + exact commands: `academic-paper/references/revision_patch_protocol.md`. The toolchain is Slice A (#423): `scripts/ars_anchorize_draft.py` + `scripts/ars_apply_revision_patch.py`.
+
+**Normative order per revision round — nothing may rewrite the draft between steps 1 and 3:**
+
+1. **Anchorize (manifest refresh):** `python scripts/ars_anchorize_draft.py <draft.md>` — idempotent, content-neutral; stamps any unlabeled blocks and regenerates `<draft>.block-manifest.json`. Run it at every round entry (including legacy pre-anchor drafts at revision-mode intake) so the manifest matches the exact text the writer is about to see.
+2. **Dispatch the writer** with the anchored draft + the block manifest + the round's Revision Roadmap in context. The writer emits the patch as `phase6_*/revision_patch_round<N>.json` plus provisional Schema 8 response items (see `draft_writer_agent.md` § Patch-Document Revision Emission).
+3. **Apply:** `python scripts/ars_apply_revision_patch.py <draft.md> <patch.json> --output <draft.rev<N>.md>` — two-phase fail-closed; the output is a NEW versioned artifact (supersession convention above) and the apply report lands beside it. The touched-ratio trigger defaults to the #424 ship decision (0.6, strict `>`); do not pass a different threshold without a recorded user decision.
+4. **Finalizer pass:** the Cite-Time Provenance Finalizer runs on the apply OUTPUT, resolving any newly inserted bare `<!--ref:-->` markers per its shipped contract. A finalizer pass between steps 1 and 3 would legitimately mutate `<!--ref:-->` status tokens and produce spurious hash mismatches at apply — the sequencing exists to make every hash mismatch MEAN staleness, not pipeline noise.
+5. **Complete Schema 8 mechanical fields** from the apply report (§3.5 role split): `change_block_ids` per response item (including fresh insert IDs from `ops_applied[].new_block_ids` / `fresh_block_ids`), `word_count_delta`, counters. The writer's provisional items carry the judgment content; the orchestrator fills in the post-apply facts. Then the response moves to re-review with the **apply report named as a required input** alongside it.
+6. **Surface `preserved_ratio`** from the apply report's counters next to the accumulated round-trip count in the stage checkpoint line (the #389 interaction-count budget surface; advisory, one line — e.g. `round-trips: 3/9 · preserved_ratio: 0.91`).
+
+**Integrity-correction variant (Stage 2.5 / 4.5 FAIL rounds, #89 Item 8).** A correction round follows steps 1–4 and 6 unchanged, with two destination differences. (a) **No Schema 8 response items in this round** — response items are review-round artifacts and no review round occurred; the writer maps each patch op's `roadmap_item_ids` to the integrity report's stable correction IDs instead (the `IL-<SEVERITY>-<n>` Issue List IDs, or a finding's native `EA-NNN`; see `integrity_verification_agent.md` § Issue List and `draft_writer_agent.md` § Patch-Document Revision Emission), and step 5's mechanical completion is skipped. (b) **The applied output returns to the SAME integrity gate that issued the FAIL** (Stage 2.5 or 4.5) for re-verification — never forward to review or finalization on the strength of the apply report alone; the apply report is a required input to that re-verification, not a substitute for it. The integrity gate's own caps are unchanged (max 3 correction rounds; abort after the 2nd Stage 4.5 FAIL).
+
+**Escalation gate (§3.6) — the only road to full re-emission, and it runs through the user.** Two trigger layers:
+
+- **Layer 1 (pre-drafting):** the writer returns `[PATCH-ESCALATION-REQUIRED: layer=pre_drafting, ...]` instead of a patch — a roadmap item demands restructuring.
+- **Layer 2 (apply-time):** the apply script exits 3 (`refused_structural`) — heading-block ops, section-count change, or touched-ratio above threshold on an emitted patch (the writer misclassified a structural change as local). Note the heading-anchor exemption (#424): an `insert_after` merely anchored on a heading does not flag; rewriting/deleting a heading or inserting heading-bearing text does.
+
+On either trigger, STOP and present the MANDATORY checkpoint:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ MANDATORY CHECKPOINT — Structural revision detected (#390)
+
+Trigger: [pre-drafting classification: items REV-00X (reason) |
+          apply-time shape flags: heading ops at indexes [...], section_count_delta=N, touched_ratio=0.NN > 0.6]
+
+Proceeding by full re-emission exposes the ENTIRE document to the
+silent-distortion risk patch mode exists to remove (DELEGATE-52) —
+for this round, every untouched paragraph is regenerated by the model.
+
+Your options:
+  (a) narrow — drop/defer the structural items, re-dispatch the writer
+      on the remaining local items as a normal patch round
+  (b) [layer 2 only] acknowledge — apply this patch as-is; the flags are
+      recorded in the apply report (--acknowledge-structural)
+  (c) re-emit in full — this round runs as legacy full re-emission,
+      provenance-stamped mode: full_reemission_escalated
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Only on explicit user choice (c) does a round run as full re-emission; afterwards **re-anchorize from scratch** (new ID generation — old patches never apply across a re-emission boundary) and record `mode: full_reemission_escalated` in the round's report so provenance never pretends a patch round happened. NEVER auto-fallback to full re-emission — not on structural flags, not on apply failure. MVP granularity is per-round, binary (one confirmed restructure item ⇒ the whole round re-emits; mixed rounds are deferred forward-scope, spec §9.3).
+
+**Apply-failure path (distinct from escalation):** a Phase 1 rejection (exit 2 — stale hash, unknown target, schema failure) feeds the structured failure report back to the writer for ONE patch re-emission against the current base (retry-once, v3.6.6 convention). Second failure → escalate to the user with three options: re-anchorize + retry the round / escalated full re-emission (checkpoint above) / abort. The base draft is byte-untouched on every rejection — there is no partial apply to clean up.
+
+---
+
+## Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)
+
+A **package-level** gate, explicitly NOT the ref-marker stamp path above: the v3.10/v3.11 terminality machinery is finalizer-stamped ref markers + the formatter's stamp-only rules, but this verifier runs AFTER the formatter has produced the whole output package, so that carrier cannot serve it (spec `docs/design/2026-06-10-394-submission-package-verifier-spec.md` §5 seam 2). The evaluated carrier is the verifier's report file itself (`header.package_fingerprint` + `header.policy_slug`) plus the `provenance_summary.md` `Submission Package Advisories` section (see `formatter_agent.md`). No ref-marker grammar change — markers are untouched by this gate. **Token disambiguation:** the literal `TERMINAL-BLOCK` is REUSED from the v3.10 marker grammar but lives in a different channel here — in the sections above it is an in-marker token carrying `severity=HIGH-BLOCK` + `policy_hash`, refused by the formatter's rule 11; here it is a **stdout line** carrying `policy=submission_package` with NO `severity=` and NO `policy_hash`, evaluated by THIS agent. The `policy=` value is the discriminator; rule 11 never fires on it (it is not inside a `<!--ref:...-->`).
+
+**Policy reading stays single-homed (§5.3).** The orchestrator is the SOLE reader of `terminal_policies.submission_package` and sole selector of the policy in force. `scripts/verify_submission_package.py` NEVER reads `terminal_policies` — the orchestrator hands the already-resolved value down via the `--policy` CLI argument, and the script applies it mechanically (deterministic evaluation tooling, not a second policy reader).
+
+### Procedure (after the formatter emits the output package)
+
+1. **Resolve the policy.** Read `terminal_policies.submission_package` from the Material Passport. Key absence — or absence of the whole `terminal_policies` object — resolves to `advisory` (the same per-key runtime convention as the existing keys). ALWAYS pass the resolved value explicitly: the CLI is never run policy-less in the pipeline (an unflagged run stamps `policy_slug: null` = a standalone unevaluated report, which can never satisfy the freshness guard below).
+2. **Run the verifier** on the package directory: `python scripts/verify_submission_package.py <package_dir> --policy <resolved>` plus `--passport` / `--venue-profile` / `--join-map` when the run has them — the SAME input set the freshness invocation (step 5) will carry, or the inputs fingerprint can never match.
+3. **Gate on stdout tokens, NEVER on exit codes.** Exit 1 also covers nonterminal advisory/heuristic fails (a strict-mode heuristic fail exits 1 with NO terminal token and must not block — heuristic findings never promote, structurally). Match each token as a line PREFIX, not full-line equality — the emitted lines carry a `strict_eligible_fails=<ids>` / `strict_eligible_not_checked=<ids>` suffix. The terminal signals are exactly:
+   - `TERMINAL-BLOCK policy=submission_package` (a strict-eligible check FAILED under `strict`) → return the package to the formatter fix loop, **bounded: 2 fix rounds**, then surface to the scholar (mirrors the revision-loop cap philosophy). One round = dispatch the formatter to remediate the named findings, then re-run the verifier; if the 2nd round still emits the token, STOP and surface — never a 3rd. Never carry a verdict across rounds.
+   - `VERIFICATION-INCOMPLETE` (a strict-eligible check is NOT-CHECKED under `strict`) → blocks emission like a fail DOES (fail-closed §5.2: a missing parser or input must not waive the one check class the scholar opted into blocking on) — but its remediation is NOT the formatter fix loop: a missing venue profile or parser is not a formatter-fixable defect. Remediation, stated plainly to the scholar: declare a venue profile (under `strict`, Family B checks without one are strict-eligible NOT-CHECKED), or — the other way out — flip `submission_package` back to `advisory` and re-finalize.
+4. **Advisory path:** after the verifier writes its report, dispatch the formatter ONCE MORE in append-only mode to write the `Submission Package Advisories` section into `provenance_summary.md` from the report's findings (any fail / warn / NOT-CHECKED — see `formatter_agent.md`); then the pipeline completes. This re-entry is advisory transcription, not a content revision (no manuscript bytes change; Invariant 13 preserved). Byte-equivalence holds for non-opting users: no manuscript, ref-marker, or formatted-artifact bytes change — the report file and the advisories section are the only additions.
+5. **Report reuse REQUIRES the freshness guard.** Before ever reusing an existing report (resume, re-entry, second finalization pass), run `--check-freshness --policy <resolved>` first, WITH the same `--venue-profile` / `--passport` / `--join-map` arguments the reuse context carries (the guard compares an inputs fingerprint too — a report produced under a different venue profile is stale). `STALE-REPORT` (fingerprint, inputs, or policy mismatch; null-stamped; missing/unreadable) → re-run the verifier; NEVER evaluate a stale report (§5.2 — the package-level analog of the `policy_hash` stamp). A FRESH report re-emits its verdict (token + exit semantics identical to a live run) — gate on that re-emitted token exactly as in step 3; "fresh" alone is never a pass.
+6. **Recompute each pass; nothing cached.** The gate verdict is a pure function of the CURRENT passport policy and the CURRENT package bytes — recomputed at every finalization pass and across every `resume_from_passport` re-entry (the C-V6(h) mirror). A previously-granted emission never survives a policy flip or a package edit without re-passing the gate.
 
 ---
 

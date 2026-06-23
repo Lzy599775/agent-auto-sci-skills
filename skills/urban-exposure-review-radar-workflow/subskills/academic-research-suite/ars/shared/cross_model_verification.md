@@ -30,6 +30,16 @@ A stress test of 68 AI-generated citations found 31% had problems — and all pa
 | GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI | Cross-verification — strongest reasoning (premium pricing: ~6× GPT-5.5) |
 | Gemini 3.1 Pro | `gemini-3.1-pro-preview` | Google | Cross-verification — strong at factual verification |
 
+### OpenAI-compatible providers (Chat Completions API — UNGROUNDED, opt-in)
+
+| Provider | Example API ID(s) | Endpoint (`ARS_OPENAI_COMPAT_BASE_URL`) | Notes |
+|----------|-------------------|------------------------------------------|-------|
+| Xiaomi MiMo | `mimo-v2.5-pro` | `https://token-plan-cn.xiaomimimo.com/v1` | Set `ARS_OPENAI_COMPAT_API_KEY` + `ARS_CROSS_MODEL`. Ungrounded: positive verdicts never count as citation agreement. |
+| DeepSeek | `deepseek-v4-pro` | `https://api.deepseek.com/v1` | Set `ARS_OPENAI_COMPAT_API_KEY` + `ARS_CROSS_MODEL`. Ungrounded. |
+| Any OpenAI-compatible | any non-`gpt-*`/`gemini-*` id | any `/v1/chat/completions` endpoint | Routing is governed solely by `ARS_OPENAI_COMPAT_BASE_URL`; the model id must NOT match a first-party prefix or it takes the grounded first-party route instead. |
+
+> **Compatible providers are ungrounded.** They expose no hosted web-search tool, so there is no grounding evidence behind a verdict. A positive `VERIFIED` is downgraded to `NOT_SEARCHED` and never counts as agreement in citation verification; a `NOT_FOUND`/`MISMATCH` survives as a disagreement. They ARE first-class for Devil's Advocate critique (which needs no grounding) — but a DA finding from any provider is an adversarial hypothesis, not standalone evidence, unless independently sourced.
+
 **Recommended cross-verification pair:** the inherited Claude session model (primary) + GPT-5.5 or Gemini 3.1 Pro (verifier).
 
 > The primary row deliberately names no version: the primary is always the session model, so the row cannot go stale on the next Anthropic release. Verifier IDs stay concrete because they are literal API strings the user must export. (`gpt-5.4` / `gpt-5.4-pro` remain accepted for existing setups.)
@@ -54,18 +64,32 @@ You need API keys from at least one additional provider. ARS itself runs inside 
 2. Create a new API key
 3. Copy the key (starts with `AIza`)
 
+**OpenAI-compatible providers (MiMo / DeepSeek / self-hosted):**
+1. Get an API key from your provider (e.g. [platform.deepseek.com](https://platform.deepseek.com) or the Xiaomi MiMo platform)
+2. Note the provider's API root including `/v1` (e.g. `https://api.deepseek.com/v1`)
+3. The key goes in `ARS_OPENAI_COMPAT_API_KEY` and the endpoint in `ARS_OPENAI_COMPAT_BASE_URL` — NOT in `OPENAI_API_KEY`/`OPENAI_BASE_URL` (your real OpenAI key is never sent to a third-party endpoint)
+4. The compatible model id (`ARS_CROSS_MODEL`) must NOT begin with a `gpt-` or `gemini-` prefix. Any such id is claimed by the first-party grounded route, so a self-hosted compatible model named that way would be routed to the (unavailable) first-party path instead of your compatible endpoint.
+
 ### Step 2: Set Environment Variables
 
 Add to your shell profile (`~/.zshrc` or `~/.bashrc`):
 
 ```bash
-# Optional: Cross-model verification for ARS
-export OPENAI_API_KEY="<your-openai-api-key>"
-export GOOGLE_AI_API_KEY="<your-google-ai-api-key>"
+# Cross-model verification for ARS — pick exactly ONE provider tuple.
 
-# Choose your preferred cross-verification model
-# Options: gpt-5.5, gpt-5.5-pro, gemini-3.1-pro-preview (gpt-5.4 / gpt-5.4-pro still accepted)
+# --- Option A: OpenAI (first-party, grounded) ---
+export OPENAI_API_KEY="<your-openai-api-key>"
 export ARS_CROSS_MODEL="gpt-5.5"
+
+# --- Option B: Google Gemini (first-party, grounded) ---
+export GOOGLE_AI_API_KEY="<your-google-ai-api-key>"
+export ARS_CROSS_MODEL="gemini-3.1-pro-preview"
+
+# --- Option C: OpenAI-compatible provider (MiMo / DeepSeek / self-hosted) — UNGROUNDED ---
+# Uses a DEDICATED key; your real OPENAI_API_KEY is never sent to a third-party endpoint.
+export ARS_OPENAI_COMPAT_BASE_URL="https://api.deepseek.com/v1"   # API root incl. /v1
+export ARS_OPENAI_COMPAT_API_KEY="<your-provider-api-key>"
+export ARS_CROSS_MODEL="deepseek-v4-pro"                          # provider id, NOT gpt-*/gemini-*
 ```
 
 Then reload: `source ~/.zshrc`
@@ -125,7 +149,7 @@ When the integrity_verification_agent detects `ARS_CROSS_MODEL` in the environme
    Reference: [full reference text] — Context: [sentence where cited]
    ```
    A `VERIFIED` verdict with no accompanying source URL/DOI is treated as `NOT_SEARCHED` (the model claimed a result it cannot evidence).
-4. Send to the cross-model via the appropriate API (see API Call Patterns below). **The call patterns enable the provider's web-search/grounding tool and reject the response as `NOT_SEARCHED` when the API returns no grounding evidence** — a model that ignores the "search the web" instruction cannot fake an absent grounding trace, so this is the real safety boundary, not the prompt wording.
+4. Send to the cross-model via the appropriate API (see API Call Patterns below). **For first-party providers the call patterns enable the hosted web-search/grounding tool and reject the response as `NOT_SEARCHED` when the API returns no grounding evidence** — a model that ignores the "search the web" instruction cannot fake an absent grounding trace, so this is the real safety boundary, not the prompt wording. **An OpenAI-compatible provider has no grounding tool, so its positive verdicts are downgraded to `NOT_SEARCHED` by the handler (rejections pass through); a compatible provider therefore never contributes a grounded agreement.**
 5. Compare results: if Claude said VERIFIED but cross-model said NOT_FOUND or MISMATCH, flag as `[CROSS-MODEL-DISAGREEMENT]`. Treat `NOT_SEARCHED` / ungrounded exactly as **not verified** — it never counts as agreement with a Claude `VERIFIED`, and a sample that returns `NOT_SEARCHED` is surfaced for re-run or human review, never silently passed.
 6. Include disagreements in the integrity report under a new section:
    ```markdown
@@ -146,6 +170,8 @@ When the integrity_verification_agent detects `ARS_CROSS_MODEL` in the environme
 - After the DA completes its standard review/checkpoint, the cross-model receives the same material and generates an independent critique
 - The DA then compares: any CRITICAL or MAJOR issues found by the cross-model but not by the DA are added as `[CROSS-MODEL-FINDING]`
 - This directly addresses frame-lock — a different model may attack from a different angle
+
+> A compatible (ungrounded) provider is first-class for DA critique — surfacing weaknesses and attack angles needs no web grounding. But "first-class" is scoped to critique, not factual adjudication: a DA finding from any provider is an adversarial hypothesis, never standalone evidence, unless it carries an independently-checkable source. Do not treat a compatible-provider DA "finding" as a verified defect.
 
 **When `ARS_CROSS_MODEL` is not set:**
 - Standard single-model DA (unchanged)
@@ -179,7 +205,7 @@ The DA agent, after completing its checkpoint report, should:
 
 ## API Call Patterns
 
-Both patterns below share the same contract: enable the provider's hosted web-search tool, and **gate the model's text on proof that a search actually happened**. If the API returns no grounding evidence (an OpenAI `web_search_call` item / a Gemini `groundingMetadata` block), the call emits `NOT_SEARCHED` and the text is discarded — a model that ignored "search the web" cannot fake an absent grounding trace, so this guard, not the prompt wording, is what prevents a from-memory guess being laundered into `VERIFIED`. Both web-search tools are hosted/server-side: one request, no client-side tool-call round-trip. `PROMPT` holds the single-reference verification prompt from step 3.
+Three patterns are documented below. The first two (OpenAI and Gemini) are first-party and share the same contract: enable the provider's hosted web-search tool, and **gate the model's text on proof that a search actually happened** — no grounding evidence (an OpenAI `web_search_call` item / a Gemini `groundingMetadata` block) emits `NOT_SEARCHED` and the text is discarded, so this guard, not the prompt wording, is what prevents a from-memory guess being laundered into `VERIFIED`. Both first-party web-search tools are hosted/server-side: one request, no client-side tool-call round-trip. The third (OpenAI-compatible) is ungrounded by construction: it has no web-search tool, so the handler downgrades positive verdicts to `NOT_SEARCHED` and lets rejections through, and a compatible verdict never counts as a grounded agreement. `PROMPT` holds the single-reference verification prompt from step 3.
 
 ### OpenAI (GPT-5.5 / GPT-5.5 Pro)
 
@@ -262,6 +288,75 @@ fi
 
 > **Why `temperature: 0.1`:** reference existence/metadata checking is a deterministic factual task, so low temperature reduces run-to-run variance in the verdict. It is not a grounding control — the grounding guard above is what enforces an actual lookup.
 
+### OpenAI-Compatible API (MiMo, DeepSeek, self-hosted) — ungrounded
+
+When `CROSS_MODEL_AVAILABLE=openai_compatible`, use the **Chat Completions API** at
+`ARS_OPENAI_COMPAT_BASE_URL`, authenticated with the dedicated `ARS_OPENAI_COMPAT_API_KEY`.
+These providers expose no hosted web-search tool, so there is **no grounding guard**. The
+handler therefore normalizes the verdict by invoking the canonical
+`normalize_compat_verdict.py` unit, which emits a single-line JSON object
+(`{"status","provider","context"}`): a positive `VERIFIED` is downgraded to `NOT_SEARCHED` (an
+ungrounded confirmation can never count as a grounded agreement), while a genuine rejection
+(`NOT_FOUND` / `MISMATCH`) passes through as a useful disagreement. The consumer reads `.status`
+only; the raw model text is JSON-escaped into `.context` as human-readable context and is
+**never** placed in a verdict slot the agreement counter parses — embedded newlines become
+literal `\n` inside the string, so a model response cannot inject a second status line. `PROMPT`
+holds the single-reference verification prompt from step 3.
+
+```bash
+# ARS_OPENAI_COMPAT_BASE_URL is the API root INCLUDING /v1 (e.g. https://api.deepseek.com/v1).
+# Trailing slash is normalized so the endpoint is built exactly once — no double /v1.
+endpoint="${ARS_OPENAI_COMPAT_BASE_URL%/}/chat/completions"
+GUARD=scripts/cross_model_verification
+
+resp="$(curl -sS -w '\n%{http_code}' "$endpoint" \
+  -H "Authorization: Bearer $ARS_OPENAI_COMPAT_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "$(jq -n --arg model "$ARS_CROSS_MODEL" --arg prompt "$PROMPT" '{
+    model: $model,
+    messages: [
+      {role: "system", content: "You are a citation-verification assistant. If you did not actually perform an external lookup, respond NOT_SEARCHED. Use NOT_FOUND only if you are confident no such record exists; MISMATCH if a field is wrong; VERIFIED only with a source URL/DOI."},
+      {role: "user", content: $prompt}
+    ],
+    temperature: 0.1
+  }')")"
+
+http="${resp##*$'\n'}"; body="${resp%$'\n'*}"
+if [ "$http" -lt 200 ] || [ "$http" -ge 300 ]; then
+  # Transport/API failure (401/429/5xx, or curl's 000) — distinct from NOT_SEARCHED, so the
+  # consumer falls back to single-model (see § Graceful Degradation), never an ungrounded verdict.
+  echo "CROSS-MODEL-ERROR: openai_compatible_http_$http"
+else
+  text="$(jq -r '.choices[0].message.content // empty' <<<"$body")"
+  if [ -z "$text" ]; then
+    echo "CROSS-MODEL-ERROR: openai_compatible_empty_response"
+  else
+    # Canonical normalization lives in scripts/cross_model_verification/normalize_compat_verdict.py
+    # (behavior-tested in scripts/test_normalize_compat_verdict.py) and is INVOKED here rather than
+    # re-implemented in bash — the same canonical-and-referenced pattern the first-party blocks use
+    # with `jq -f`. It emits ONE line of JSON: {"status","provider","context"}. The consumer reads
+    # .status only; raw model text is JSON-escaped in .context so it can never inject a second
+    # status line (the producer/consumer anti-laundering contract holds at the output-format level).
+    #   VERIFIED            -> status NOT_SEARCHED  (ungrounded positive can never agree)
+    #   NOT_FOUND/MISMATCH  -> status passes through (useful disagreement)
+    #   anything else/empty -> status NOT_SEARCHED  (fail closed)
+    printf '%s' "$text" | python3 "$GUARD/normalize_compat_verdict.py"
+  fi
+fi
+```
+
+> **No grounding guard for compatible providers.** The grounding guard (an API-level
+> `web_search_call` / `groundingMetadata` trace) exists only for first-party OpenAI and
+> Gemini. A compatible provider cannot evidence a lookup, so its positive verdicts are
+> downgraded to `NOT_SEARCHED` and never count as agreement. Its rejections survive as
+> disagreements. The block emits a single-line JSON object (`{"status","provider","context"}`)
+> from `normalize_compat_verdict.py`, and the grounded-agreement count is computed solely from
+> its `.status` field — never from the raw text, which lives JSON-escaped in `.context`.
+> For the OpenAI-compatible block, read the verdict from the JSON `.status` field only
+> (e.g. `jq -r .status`); never grep the emitted line or `.context` for a verdict token — the
+> raw model text is preserved JSON-escaped in `.context` precisely so it cannot be mistaken for
+> a verdict.
+
 ### Detecting Available Models
 
 Agents should check at the start of a verification/review session:
@@ -274,15 +369,34 @@ if ! command -v jq &>/dev/null; then
 fi
 
 if [ -n "$ARS_CROSS_MODEL" ]; then
+  # PRECEDENCE: a first-party model id ALWAYS takes the grounded route, even if
+  # ARS_OPENAI_COMPAT_BASE_URL is set. This prevents a grounded->ungrounded downgrade. ANY gpt-*
+  # id (not just today's gpt-5.5/gpt-5.4) and any gemini-* id route grounded, so a future
+  # first-party release keeps the grounded path instead of silently falling through to the
+  # ungrounded compatible branch. The compatible path is reachable only for a model id that
+  # matches no first-party prefix, and only when its dedicated opt-in env vars are both present.
+  # OPENAI_BASE_URL is never read.
   case "$ARS_CROSS_MODEL" in
-    gpt-5.5*|gpt-5.4*)
+    gpt-*)
       [ -n "$OPENAI_API_KEY" ] && echo "CROSS_MODEL_AVAILABLE=openai" \
         || echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but OPENAI_API_KEY is not set" ;;
     gemini*)
       [ -n "$GOOGLE_AI_API_KEY" ] && echo "CROSS_MODEL_AVAILABLE=google" \
         || echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but GOOGLE_AI_API_KEY is not set" ;;
-    *) echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL is not a supported model. Supported: gpt-5.5, gpt-5.5-pro, gemini-3.1-pro-preview (legacy gpt-5.4* accepted)"
-       echo "CROSS_MODEL_AVAILABLE=none" ;;
+    *)
+      # Unrecognized id: only an explicit, credential-isolated opt-in enables the ungrounded
+      # OpenAI-compatible path. Both the base URL AND the dedicated key are required; the
+      # standard OPENAI_API_KEY is NEVER sent to a third-party endpoint (see Credential
+      # isolation in the API Call Patterns section).
+      if [ -n "$ARS_OPENAI_COMPAT_BASE_URL" ] && [ -n "$ARS_OPENAI_COMPAT_API_KEY" ]; then
+        echo "CROSS_MODEL_AVAILABLE=openai_compatible"
+      elif [ -n "$ARS_OPENAI_COMPAT_BASE_URL" ]; then
+        echo "WARNING: ARS_OPENAI_COMPAT_BASE_URL is set but ARS_OPENAI_COMPAT_API_KEY is not — refusing to send another provider's key. Set ARS_OPENAI_COMPAT_API_KEY."
+        echo "CROSS_MODEL_AVAILABLE=none"
+      else
+        echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL is not a recognized model. First-party grounded route: any gpt-* id (e.g. gpt-5.5, gpt-5.5-pro, legacy gpt-5.4*) or gemini-* id (e.g. gemini-3.1-pro-preview). For an OpenAI-compatible provider set ARS_OPENAI_COMPAT_BASE_URL + ARS_OPENAI_COMPAT_API_KEY and use that provider's model id (must not match a gpt-*/gemini-* prefix, or it takes the grounded first-party route instead)."
+        echo "CROSS_MODEL_AVAILABLE=none"
+      fi ;;
   esac
 else
   echo "CROSS_MODEL_AVAILABLE=none"

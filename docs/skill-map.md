@@ -66,7 +66,7 @@
 
 | Subskill | Role |
 |---|---|
-| `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | Codex-native Academic Research Suite v0.1.12 vendored as an isolated subskill. Use only after the parent urban-exposure route and evidence gate are set. |
+| `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | Codex-native Academic Research Suite v0.1.14 vendored as an isolated subskill. Use only after the parent urban-exposure route and evidence gate are set. |
 
 | Internal workflow | Role |
 |---|---|

@@ -33,8 +33,8 @@ The following are in scope for security reports:
   bypass ARS integrity gates, Socratic scoping, ethics protocols, or other
   blocking constraints.
 - **Credential leakage** - configurations, scripts, or prompts that expose API
-  keys or tokens, including optional `ANTHROPIC_API_KEY` and cross-model
-  reviewer configuration.
+  keys or tokens, including optional external cross-model reviewer credentials
+  and provider configuration.
 - **Data exfiltration** - adapter behavior that sends manuscripts, research
   data, citations, or user-provided files to unintended external services.
 - **Vendoring or sync integrity failures** - issues that make this package

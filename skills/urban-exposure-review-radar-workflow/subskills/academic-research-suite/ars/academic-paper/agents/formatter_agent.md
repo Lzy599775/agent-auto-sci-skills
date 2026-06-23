@@ -100,6 +100,63 @@ Common journal requirements to check:
 - Add required sections (COI, data availability, etc.)
 - Ensure word count compliance
 
+## Format Profile (#439) — declared layout, NOT-DECLARED → current default
+
+**Guard (FIRST — load-bearing for byte-equivalence, design §5a):** if the Paper
+Configuration Record has **no `Format Profile` row**, **skip this entire section** — do not
+read, mention, or branch on any format profile, and render exactly as a pre-#439 run for
+that output. **Row absence is the ONE not-declared signal** (intake writes no row when the
+follow-up is declined, never an empty/`absent` row); a present-but-empty or no-path row is
+therefore **malformed**, not a second "not declared" state — treat it as the fail-closed
+"path present, file missing" case below (STOP), not as a silent skip. A run with no declared
+profile is byte-identical to before this feature existed.
+
+When the PCR **does** carry a `Format Profile` path, the profile is a scholar-declared
+layout the renderer follows. It validates against
+`shared/contracts/submission/format_profile.schema.json`.
+
+### Read it — fail closed BEFORE formatting (design §5b)
+
+Resolve the path and load the profile *before* producing any output. Do not half-format
+then discover the profile is broken. For each bad-path case, **STOP and ask the scholar to
+fix the profile** rather than rendering under an ambiguous contract:
+
+| Case | Behavior |
+|---|---|
+| PCR row absent / no path | NOT-DECLARED — use current defaults (the guard above). |
+| Path present, file missing / unreadable | STOP; report the missing path. Do NOT silently fall back to defaults (a declared-then-vanished profile is a scholar error worth surfacing). |
+| File present, invalid YAML | STOP; report the parse error + path. |
+| YAML valid, schema-INVALID | STOP; report the schema violation (same contract CI enforces). |
+| Path escaping the run workspace | STOP; reject — a format-profile path must resolve inside the run workspace. |
+
+### Apply it — declared fields only, best-effort per target (design §5c)
+
+- Apply each declared field; for any field **not** declared, keep the formatter's current
+  prose default for that aspect (NOT-DECLARED ≠ "reset to some baseline").
+- **Never infer a missing layout field** from the venue name, the institution, the
+  language/locale, or the filename (declared-only, design §3 — for reproducibility, not
+  integrity).
+- Each field is **best-effort per output target** (DOCX / PDF / LaTeX). When the chosen
+  target cannot faithfully honor a declared field, **say so in the Final Quality Checklist**
+  (field + target + reason) rather than silently dropping it.
+- Field map: `body_font` → body text family/size; `caption` → figure/table caption
+  font/size/placement/alignment, with `latin_font_family` applied to Latin-script tokens
+  (e.g. "Fig.") inside an otherwise-CJK caption; `line_spacing` → single/onehalf/double, or
+  a fixed point value when `mode == fixed_pt`; `margins_cm` → page margins (centimeters);
+  `table_border_style` → `three_line` (booktabs-style) / `full_grid` / `none`.
+
+### Conflict precedence — venue compliance wins (design §3a)
+
+The layout profile is a **rendering preference** — the same class as any user preference
+under the existing "journal requirement > user preference" rule (see Template conflict
+handling below); this is that one principle applied to layout. Where a declared layout field
+would push the manuscript past a declared `venue_profile` limit (e.g. larger font / wider
+spacing / bigger margins inflating page count past a page limit), apply the
+**venue-compliant** value,
+not the format_profile value, and emit a **loud note in the Final Quality Checklist** naming
+the field, the venue constraint it would have violated, and the overridden format_profile
+value. NEVER silently produce a noncompliant package to honor a layout preference.
+
 ## Cover Letter Generation
 
 When the user is submitting to a journal, generate a cover letter:
@@ -266,6 +323,9 @@ Before delivering the output, verify:
 - [ ] Font/spacing/margin specifications (if applicable)
 - [ ] Page numbers (if applicable)
 - [ ] Journal-specific requirements (if applicable)
+- [ ] Format profile applied (if declared): declared fields reflected; any field the target
+      could not honor noted (field + target + reason); any venue-compliance override noted
+      (field + violated venue constraint + overridden value) — #439 §3a/§5c
 
 ### Required Elements
 - [ ] Title page with all required information
@@ -315,17 +375,23 @@ When refusing, surface the unresolved markers to the user with their per-section
 
 Per spec §3 PR-B item 10 (R1 P0-C + R2-P0). The finalizer is the SOLE policy evaluator; the formatter is a **dumb stamp-checking gate** — it MUST NOT re-evaluate `strict_articles_only` DOI/venue/provenance logic (that would duplicate the finalizer and invite drift, Invariant 13). It only (1) recomputes the passport's current `terminal_policies` slug and compares stamps, and (2) refuses on `severity=HIGH-BLOCK` tokens.
 
-First determine whether the passport's CURRENT `terminal_policies` is all-advisory (absent block, or every key `advisory`) or non-advisory. If non-advisory, compute the current `policy_hash` slug using the SAME rule the finalizer uses (see `pipeline_orchestrator_agent.md` § Cite-Time Provenance Finalizer — v3.10 extension, "policy_hash stamp"): the sorted `key.value` join of the non-advisory keys. **Under an all-advisory passport there is NO slug — the expected state is a stampless marker (byte-equivalent v3.9.0), so there is nothing to compare and gate 1 passes any stampless marker.**
+First determine whether the passport's CURRENT `terminal_policies` is all-advisory ON THE CITATION-TIME KEYS (`contamination_triangulation`, `citation_existence`, `temporal_integrity` — absent block, or every citation-time key `advisory`; the package-level `submission_package` key NEVER participates in marker stamps and is ignored by this gate, #394) or non-advisory. If non-advisory, compute the current `policy_hash` slug using the SAME rule the finalizer uses (see `pipeline_orchestrator_agent.md` § Cite-Time Provenance Finalizer — v3.10 extension, "policy_hash stamp"): the sorted `key.value` join of the non-advisory citation-time keys. **Under an all-advisory passport there is NO slug — the expected state is a stampless marker (byte-equivalent v3.9.0), so there is nothing to compare and gate 1 passes any stampless marker.**
 
 **Two independent gates, evaluated in order, NEVER short-circuited (R4-P1 — passing gate 1 is NOT passing the formatter):**
 
 - **Gate 1 — freshness guard** (decides only whether the marker's policy evaluation is fresh):
   - **Stamp present + MISMATCH** ⇒ REFUSE `[STALE-POLICY-EVALUATION: re-run finalizer under current terminal_policies]`. The draft was finalized under a different policy.
-  - **Stamp missing (legacy v3.9.0 marker, no `policy_hash`):** REFUSE `[STALE-POLICY-EVALUATION]` when the passport's current policy requests a non-advisory mode (ANY `terminal_policies` key carries a non-`advisory` value — in v3.10 that is `contamination_triangulation ∈ {strict, strict_articles_only}`; a future temporal-strict key would be covered by the same generic condition without re-touching this rule) — the user opted into hard-block, so the legacy draft must be re-finalized. **PASS-GATE-1** when the passport has NO `terminal_policies` OR all keys are `advisory` (legacy/default state — Invariant 7 byte-equivalence; a v3.9.0 draft under an advisory passport behaves exactly as in v3.9.0).
+  - **Stamp missing (legacy v3.9.0 marker, no `policy_hash`):** REFUSE `[STALE-POLICY-EVALUATION]` when the passport's current policy requests a non-advisory CITATION-TIME mode (ANY citation-time `terminal_policies` key carries a non-`advisory` value — in v3.10/v3.11 that is `contamination_triangulation ∈ {strict, strict_articles_only}` or `citation_existence: strict`; a future temporal-strict key would be covered by the same condition without re-touching this rule; the package-level `submission_package` key does NOT trigger this refusal — its strictness is evaluated at the orchestrator's package gate, not on markers, #394) — the user opted into hard-block, so the legacy draft must be re-finalized. **PASS-GATE-1** when the passport has NO `terminal_policies` OR all citation-time keys are `advisory` (legacy/default state — Invariant 7 byte-equivalence; a v3.9.0 draft under a citation-time-advisory passport behaves exactly as in v3.9.0, regardless of `submission_package`).
   - **Stamp present + MATCH** ⇒ PASS-GATE-1.
 - **Gate 2 — HIGH-BLOCK refusal (rule 11), applied to EVERY marker that passes gate 1 — including legacy missing-stamp-under-advisory markers (R4-P1 bypass fix):** refuse iff a `severity=HIGH-BLOCK` token is present inside the `<!--ref:...-->`. A stale or hand-edited marker that had its `policy_hash` STRIPPED but still carries a literal `TERMINAL-BLOCK severity=HIGH-BLOCK` token is STILL refused here — passing gate 1 (legacy-under-advisory) does NOT exempt it from gate 2. Only a marker that passes gate 1 AND carries no `severity=HIGH-BLOCK` token emits.
 
 When refusing under rule 11, the formatter echoes the `reason` token (e.g. `reason=k3_all_indexes_unmatched` for contamination, `reason=lookup_verified_false` for citation_existence) plus any co-emitted advisory suffix when one is present (contamination co-emits a `CONTAMINATED-*` suffix; `citation_existence` co-emits none — its "why" is the `reason` token + the `citation_verification_summary[]` aggregate; note this is the `strict` refusal path — a default-`advisory` `false` does not refuse, it lists in the `provenance_summary.md` `Citation Existence Advisories` section per the subsection above) so the user gets remediation context (R1 P1). Remediation for a HIGH-BLOCK: resolve the underlying signal (verify the source against the original, replace the citation with a matched reference, or — if the user accepts the risk — switch the firing policy (`policy=<...>`) back to `advisory` and re-finalize). `/ars-mark-read` does NOT clear it.
+
+## ARS Marker Stripping (#390)
+
+When emitting converted **final outputs** (LaTeX / DOCX / PDF / clean-markdown deliverables), strip every ARS HTML-comment marker — `<!--ref:...-->`, `<!--anchor:...-->`, `<!--block:...-->` — from the converted artifact. One rule for all marker kinds: markers are audit metadata, not manuscript content, and must not leak into a submission (do not rely on Pandoc happening to drop raw HTML comments — strip explicitly so the rule holds across all five output formats).
+
+Ordering is load-bearing: stripping happens ONLY AFTER every marker-dependent gate above has run against the working draft — the Cite-Time Provenance Hard Gate, the v3.10 stamp gates, and (in patch-mode revision rounds, `references/revision_patch_protocol.md`) the apply script's own self-checks. The **working draft and the `phase6_*/` provenance artifacts keep their markers untouched** — `<!--block:-->` markers are the anchor layer the next revision round's manifest is generated from; stripping them there would destroy patch mode. Word counts already exclude markers regardless (`shared/references/word_count_conventions.md` § HTML-comment markers), so stripping does not change any reported count.
 
 ## Citation Version-Family Advisory (Kong #258)
 
@@ -366,6 +432,21 @@ Like the Kong #258 and contamination advisories: do NOT auto-correct the citatio
 
 This advisory is the default-mode complement to the `strict`-mode terminal block: detection is unconditional (C-V6(e)), only terminality is policy-gated. The visibility of an advisory `false` is carried by this `provenance_summary.md` section, NOT by a marker suffix.
 
+## Submission Package Advisories (#394 slice 4)
+
+The #394 submission-package verifier (`scripts/verify_submission_package.py`, dispatched by the orchestrator AFTER this agent produces the output package — see `pipeline_orchestrator_agent.md` Submission-Package Terminal Gate) reports per-check package findings: blind-review residue, venue limits, reference integrity. Under `terminal_policies.submission_package == advisory` (the absent-key default), those findings are NOT a refusal and nothing about the formatted artifacts changes; their deliverable-visible carrier is a **`Submission Package Advisories` section** in `provenance_summary.md` (the same advisory-carrier shape as the `Citation Existence Advisories` section above — the #333 precedent: an advisory needs a home and the marker slot is taken; here the findings are package-level, so a marker could not carry them anyway).
+
+The section is **mandatory and non-empty iff** the verification report carries any check with status `fail`, `warn`, or `not_checked` under advisory policy; absent any such finding, the section is omitted (or rendered empty — "No submission-package advisories"). `not_applicable` rows (untriggered families) are never listed. For each listed finding, surface one entry with:
+
+- the check `id` and `family` (e.g. `A2`, `blind_review_residue`)
+- `status` (`fail` / `warn` / `not_checked`) and `signal_class` (`deterministic` / `heuristic`)
+- the report's `detail` line (it names the evidence or the reason a check could not run)
+- `location` when the report carries one (the file the finding points at)
+
+NOT a refusal rule: this agent stays stamp-only (Invariant 13) — it never re-runs the verifier, never re-evaluates policy, never edits manuscript content in response to a finding (the verifier is read-only with respect to manuscripts, #134 write-scope). Report and let the scholar decide. Blocking is the orchestrator's call under the `submission_package == strict` opt-in (TERMINAL-BLOCK / VERIFICATION-INCOMPLETE stdout tokens at the orchestrator's gate), not this advisory.
+
+**When this section gets written (the one sanctioned post-Phase-7 action):** the verifier runs AFTER this agent's main Phase-7 pass, so the section is appended in a SECOND, append-only dispatch — the orchestrator re-invokes this agent once the verifier has written its report (with `policy_slug` populated), and this agent transcribes the findings into `provenance_summary.md`. This re-entry is NOT a content revision (no manuscript bytes change — the format-only boundary holds) and NOT policy evaluation (the orchestrator already decided terminality); it is advisory transcription from the report. The append cannot stale the report it feeds on: `provenance_summary.md` is excluded from the report's `package_fingerprint` precisely for this reason.
+
 ## Output Format
 
 ```markdown
@@ -405,7 +486,9 @@ INPUT: Final Reviewed Draft + Paper Configuration Record + Citation Audit Report
 OUTPUT: Output Package (multi-format)
 
 Step 1: Confirm Output Requirements
-  1.1 Read from Paper Configuration Record: output_format, target_journal, language
+  1.1 Read from Paper Configuration Record: output_format, target_journal, language,
+      and the Format Profile row IF PRESENT (absent row = no profile, render as pre-#439;
+      present = load + fail-closed validate per the Format Profile section before formatting)
   1.2 Determine which files to generate:
       ├── Markdown -> always generated (as base format)
       ├── LaTeX -> if output_format includes LaTeX or Combined

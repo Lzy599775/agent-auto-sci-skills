@@ -331,7 +331,7 @@ $env:USERPROFILE\.codex\skills
 
 城市暴露、体育地理、遥感热环境、绿色暴露、体育设施可达性与公共健康连接的高级综述/前沿雷达工作流。它不是单一综述模板，而是一个 **domain router + evidence gate + research pipeline adapter**：先判断任务应该走 narrative review、systematic review、scoping review、bibliometric + critical review、frontier radar 还是 review-informed empirical design，再把检索、筛选、提取、编码、图表、写作、审稿和期刊门控组织成稳定流程。
 
-新版已封装独立子 skill：`subskills/academic-research-suite`。该子 skill 来自 `Imbad0202/academic-research-skills-codex` v0.1.12，是 `Imbad0202/academic-research-skills` 的 Codex 原生分发版。它负责通用科研生产链条：深度研究、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划、引用核查和完整性验证。父 skill 仍保留城市暴露和体育地理领域判断权，避免 ARS 的通用写作流程覆盖 exposure validity、accessibility/use 区分、因果语言和正式语料库边界。
+新版已封装独立子 skill：`subskills/academic-research-suite`。该子 skill 来自 `Imbad0202/academic-research-skills-codex` v0.1.14，是 `Imbad0202/academic-research-skills` 的 Codex 原生分发版。它负责通用科研生产链条：深度研究、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划、引用核查和完整性验证。父 skill 仍保留城市暴露和体育地理领域判断权，避免 ARS 的通用写作流程覆盖 exposure validity、accessibility/use 区分、因果语言和正式语料库边界。
 
 **Internal architecture**
 

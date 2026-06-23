@@ -1,6 +1,7 @@
 """Tests for scripts/adapters/obsidian.py."""
 from pathlib import Path
 import subprocess
+import sys
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -12,7 +13,7 @@ EXPECTED_REJECTION = REPO_ROOT / "scripts/adapters/examples/obsidian/expected_re
 
 def _run(*args):
     return subprocess.run(
-        ["python", str(ADAPTER)] + list(args),
+        [sys.executable, str(ADAPTER)] + list(args),
         capture_output=True,
         text=True,
         cwd=REPO_ROOT,

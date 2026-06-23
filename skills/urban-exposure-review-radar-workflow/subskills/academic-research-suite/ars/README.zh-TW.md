@@ -1,6 +1,7 @@
 # Academic Research Skills for Claude Code
 
-[![Version](https://img.shields.io/badge/version-v3.12.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.12.0)
+[![Version](https://img.shields.io/badge/version-v3.13.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.13.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20696614.svg)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
@@ -64,7 +65,7 @@ v3.3 的靈感來自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 
 ## 效能與費用
 
-**👉 [docs/PERFORMANCE.zh-TW.md](docs/PERFORMANCE.zh-TW.md)** — 各模式 token 預算、完整 pipeline 估算（一篇 15k 字論文約 ~$4–6），以及建議的 Claude Code 設定（Skip Permissions；Agent Team 選用）。
+**👉 [docs/PERFORMANCE.zh-TW.md](docs/PERFORMANCE.zh-TW.md)** — 各模式 token 預算、完整 pipeline 估算（一篇 15k 字論文約 ~$4–6），以及建議的 Claude Code 設定（Auto 模式；Agent Team 選用）。
 
 ## 使用指南與文章
 
@@ -148,7 +149,7 @@ ARS Stage 2 寫作      →  用驗證過的實驗結果撰寫論文
 
 ### 個別 Skill 使用
 
-#### Deep Research（深度研究，7 種模式）
+#### Deep Research（深度研究，8 種模式）
 
 ```
 "研究 AI 對高等教育的影響"                    → full mode（完整研究）
@@ -160,7 +161,7 @@ ARS Stage 2 寫作      →  用驗證過的實驗結果撰寫論文
 "審查這篇論文的研究品質"                      → review mode（論文審查）
 ```
 
-#### Academic Paper（學術論文撰寫，10 種模式）
+#### Academic Paper（學術論文撰寫，11 種模式）
 
 ```
 "幫我寫一篇論文"                              → full mode（完整撰寫）
@@ -229,19 +230,19 @@ ARS Stage 2 寫作      →  用驗證過的實驗結果撰寫論文
 
 各 agent 的職責與各階段產出物現已移至 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。版本號保留在此以維持 release metadata 集中管理。
 
-### Deep Research (v2.9.4)
+### Deep Research (v2.11.0)
 
-13 個 Agent 的研究團隊。模式：full、quick、review、lit-review、fact-check、socratic、systematic-review。完整 agent 名單與產出物：見 ARCHITECTURE.md §3。
+13 個 Agent 的研究團隊。模式：full、quick、review、lit-review、three-way-scan、fact-check、socratic、systematic-review。完整 agent 名單與產出物：見 ARCHITECTURE.md §3。
 
 ### Academic Paper (v3.2.0)
 
-12 個 Agent 的論文撰寫 pipeline。模式：full、plan、outline-only、revision、revision-coach、abstract-only、lit-review、format-convert、citation-check、disclosure。輸出：MD + DOCX（Pandoc 可用時）+ LaTeX（APA 7.0 `apa7` class / IEEE / Chicago）→ tectonic 編譯 PDF。完整 agent 名單與各 phase 職責：見 ARCHITECTURE.md §3。
+12 個 Agent 的論文撰寫 pipeline。模式：full、plan、outline-only、revision、revision-coach、abstract-only、lit-review、format-convert、citation-check、disclosure、rebuttal-audit。輸出：MD + DOCX（Pandoc 可用時）+ LaTeX（APA 7.0 `apa7` class / IEEE / Chicago）→ tectonic 編譯 PDF。完整 agent 名單與各 phase 職責：見 ARCHITECTURE.md §3。
 
 ### Academic Paper Reviewer (v1.10.0)
 
 7 個 Agent 的多視角審查，搭配 **0-100 品質量表**。模式：full、re-review、quick、methodology-focus、guided、calibration。**決策對照：** ≥80 接受、65-79 小修、50-64 大修、<50 退稿。第一輪審查團隊 vs. 精簡再審團隊的分界：見 ARCHITECTURE.md §3 Stage 3 / Stage 3'。
 
-### Academic Pipeline (v3.12.0)
+### Academic Pipeline (v3.13.0)
 
 10 階段調度器，含誠信驗證、兩階段審查、蘇格拉底指導、協作品質評估。Pipeline 保證：每個階段都需使用者確認 checkpoint；誠信驗證（Stage 2.5 + 4.5）不可跳過；R&R 追溯矩陣（Schema 11）獨立驗證作者修訂宣稱。v3.4 新增 Compliance Agent（PRISMA-trAIce + RAISE）於 Stage 2.5 / 4.5。v3.5 新增 **協作深度觀察員**（`collaboration_depth_agent`，僅諮詢性質、永不阻擋流程）於每一次 FULL/SLIM checkpoint 與 pipeline 完成時。MANDATORY 誠信閘門（2.5 / 4.5）明確跳過觀察員，避免稀釋合規檢查。理論基礎：Wang & Zhang (2026), IJETHE 23:11。逐階段矩陣（agent、產出物、閘門）：見 ARCHITECTURE.md §3。
 
@@ -304,6 +305,14 @@ https://github.com/Imbad0202/academic-research-skills
 ---
 
 ## 更新紀錄
+
+### v3.13.0（2026-06-18）— Hook 可移植性、provider-agnostic 驗證、guard 正確性
+
+> 一個 minor release，強化安裝／執行面並擴展跨模型範圍。**修正：** 寫入範圍 guard 在 git-clone + symlink 安裝佈局下不再誤擋使用者自己的 `CLAUDE.md`（#459，收掉 #448/#449 的殘餘一半——`CLAUDE.md` 是文件而非承載 enforcement 的檔案，故移出 infra 保護清單，所有承載檔案仍受保護）；Windows Python hook 可移植性 + 無 Python 時優雅降級，改由跨平台 `hooks/run_guard.sh` launcher 啟動，會拒絕 0-byte 的 Microsoft Store `python3` stub 且不再洗 hook log（#454）；`draft_writer` dual-phase static union 文件化 + Windows POSIX-safe 路徑匹配（#451）。**新增：** provider-agnostic 跨模型驗證，接受 OpenAI 相容端點（MiMo、DeepSeek、自架）與 grounded first-party OpenAI 並存，且後者絕不被靜默降級（#455）；opt-in 的 Socratic 鄰近 framing probe（借自 STORM 的視角擴展，`ARS_SOCRATIC_ADJACENT_PROBE=1`，預設 OFF，純 prose-layer——`deep-research` 2.10.0 → 2.11.0）（#461）。`academic-pipeline` 隨 suite 至 v3.13.0；`academic-paper` 與 `academic-paper-reviewer` 不變。逐 issue 細節見 `CHANGELOG.md`。
+
+### v3.12.1（2026-06-15）— 審稿回覆分流模式（PR #433 整合）
+
+> 一個 patch release，依 ARS 的模式化架構，把一份外部貢獻中真正具新意的部分收進既有 skill 成為模式。**新模式：** `deep-research` `three-way-scan` —— 介於 `quick` 與 `lit-review` 之間的輕量 WHY/HOW/WHAT 論文比較分流，產出逐論文短清單加跨論文統合（`deep-research` 2.9.4 → 2.10.0）；`academic-paper` `rebuttal-audit` —— 對作者既有的 rebuttal／回覆草稿，比對審稿意見做獨立的諮詢式 QA（逐條覆蓋表 + 缺口清單 + 語氣／證據／誤讀風險旗標），它不產生任何內容，且獨立呼叫時明確抑制 Schema 11／Material Passport 寫入／`ready_to_submit`（由帶 mutation 覆蓋的 `check_rebuttal_audit_guard()` lint 強制）；另含 `revision-coach` 範圍擴展到反駁／不同意姿態與非期刊情境，以及 `/ars-3w` + `/ars-rebuttal-audit` 斜線指令。依輸入形狀路由：審稿意見加草稿 → `rebuttal-audit`；僅意見 → `revision-coach`。整合自 [@Yaobin29](https://github.com/Yaobin29) 的 [PR #433](https://github.com/Imbad0202/academic-research-skills/pull/433)。Suite 模式數 25 → 27（仍 4 個 skill）。逐 issue 細節見 `CHANGELOG.md`。
 
 ### v3.12.0（2026-06-08）— Kong 自動研究功能線：實驗來源、圖表保真、跨論文矛盾、部分證據拆解
 
@@ -380,7 +389,7 @@ https://github.com/Imbad0202/academic-research-skills
 
 - **Plugin manifest 與 marketplace metadata**（Phase 1，PR #68）：`.claude-plugin/plugin.json` 宣告整個 suite（4 個 skill 透過 `skills/` 目錄相對 symlink 自動探索）；`.claude-plugin/marketplace.json` 註冊 plugin，使單一 GitHub-hosted endpoint 同時提供 marketplace listing 與 plugin 來源。README、`README.zh-TW.md`、`docs/SETUP.md` 都加入雙軌安裝指引。
 - **10 個 slash command** 在 `commands/ars-*.md`（Phase 2.1，PR #69）將 `MODE_REGISTRY.md` 的條目對映到 `/ars-<mode>` 觸發。每個 command frontmatter 釘住模型路由：`opus` 給 `full` 與 `revision-coach`（架構與審稿解讀深度），`sonnet` 給其他 8 個。任何情境不用 Haiku。
-- **3 個 plugin-shipped agent** 在 `agents/*_agent.md`（Phase 2.1，PR #69）以相對 symlink 指向 `deep-research/agents/` 內 v3.6.7 已 hardened 的下游 agent：`synthesis_agent`、`research_architect_agent`、`report_compiler_agent`。底線檔名保留以對齊 `scripts/check_v3_6_7_pattern_protection.py` hard-pin 路徑與 INV-3 manifest-confined Clause 1 不變式。Symlink（不複製）維持 single source of truth，避免 v3.6.7 §6 inversion sweep + INV-1/2/3 lint 已關閉的 Pattern C3 攻擊面再開。
+- **3 個 plugin-shipped agent** 在 `agents/*_agent.md`（Phase 2.1，PR #69）以相對 symlink 指向 `deep-research/agents/` 內 v3.6.7 已 hardened 的下游 agent：`synthesis_agent`、`research_architect_agent`、`report_compiler_agent`。底線檔名保留以對齊 `scripts/check_v3_6_7_pattern_protection.py` hard-pin 路徑與 INV-3 manifest-confined Clause 1 不變式。Symlink（不複製）維持 single source of truth，避免 v3.6.7 §6 inversion sweep + INV-1/2/3 lint 已關閉的 Pattern C3 攻擊面再開。（#413 起改為真實 byte-identical 複本：相對 symlink 在無 `core.symlinks` 的 Windows checkout 與 zip 下載安裝會壞；single-source 保證改由 `scripts/check_agents_mirror_sync.py` byte-equality CI lint 承接。）
 - **`model: inherit`** 加在這三個 source agent frontmatter 上。選 inherit 而非 pin `sonnet` 是為了讓 Opus session 跑 ARS full pipeline 時 agent 仍是 Opus（不被降）。使用者的 `~/.claude/hooks/warn-agent-no-model.sh` PreToolUse hook 在派工邊界已 gate Haiku，所以 inherit 解析到的是已經沒 Haiku 的模型。
 - **SessionStart announce hook** 在 `hooks/hooks.json` + `scripts/announce-ars-loaded.sh`（Phase 2.2，PR #70）。Plugin 載入時，hook 把 10 個 slash command、3 個 plugin agent、token 預算指引以 `additionalContext` 注入 LLM 第一輪。`startup` 與 `clear` 拿完整 announce；`resume` 與 `compact` 只拿一行確認，避免每次 resume 都燒 context。Bash 3.2 兼容 — macOS stock `/bin/bash` 直接跑，不需 `brew install bash`。
 - **Phase 2.2 範圍縮減**：原本規劃的 `SubagentStop → run_codex_audit.sh` codex audit hook 在 v3.7.0 被排除，因為 (a) contract gap：SubagentStop payload 沒帶 stage / deliverable，wrapper 必要參數無法從 hook 推出；(b) invoker 邊界：`run_codex_audit.sh` lines 4–7 明禁同 session in-LLM 呼叫，PostToolUse 在產出 deliverable 的 LLM session 內觸發。真正的 audit-hook 整合留到後續版本，等 ARS 有 stage / deliverable propagation contract 再做。詳見 `docs/design/2026-04-30-ars-v3.7.0-plugin-packaging-roadmap.md` Update note 2026-05-05（Phase 2.2 scope reduction）。

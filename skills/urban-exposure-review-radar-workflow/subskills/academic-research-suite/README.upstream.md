@@ -1,6 +1,6 @@
 # Academic Research Skills for Codex
 
-[![Version](https://img.shields.io/badge/version-v0.1.12-blue)](VERSION)
+[![Version](https://img.shields.io/badge/version-v0.1.14-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
@@ -49,7 +49,7 @@ Use this repo when you want the Codex-native single-suite skill.
 
 ## Versioning
 
-This Codex package is version `0.1.12`. The repo-root `VERSION` file,
+This Codex package is version `0.1.14`. The repo-root `VERSION` file,
 `skills/academic-research-suite/SKILL.md` metadata version, and
 `skills/academic-research-suite/manifest.json` `adapter_version` track the
 Codex package version independently of the vendored ARS suite. Vendored upstream
@@ -58,12 +58,14 @@ versions are recorded by commit in `manifest.source_repositories[]`.
 Package-level changes are summarized in [`CHANGELOG.md`](CHANGELOG.md).
 
 The vendored ARS source currently tracks
-`Imbad0202/academic-research-skills@529c6d25a3778843fb94edf9f03eda4cd7e0f416`
-(`v3.12.0-19-g529c6d2`). Vendored runtime content includes the ARS v3.12
-Kong auto-research feature track, sub-claim and cross-paper verification
-updates, repository hygiene config, and post-tag submission-package verifier
-slices through ARS main; Claude/plugin loader files under
-`.claude/`, `.claude-plugin/`, and `.github/` remain intentionally excluded.
+`Imbad0202/academic-research-skills@c22c17eed8a5753aa60681be9734919f2e2f5b42`
+(`v3.13.0-2-gc22c17e`). Vendored runtime content includes the ARS v3.13
+hook portability, provider-agnostic verification, guard-correctness updates,
+v3.12.1 reviewer-response triage modes, format-profile support, and diff/patch
+revision tooling through ARS main. Nested upstream `.github/` workflows and
+root `agents/` mirrors are preserved for traceability and self-tests, but are
+not repo-level CI or Codex entrypoints; Claude/plugin loader files under
+`.claude/` and `.claude-plugin/` remain intentionally excluded.
 
 ## Install Or Update
 
@@ -116,9 +118,10 @@ Plugin: academic-research-skills
 ```
 
 The plugin root lives at `plugins/academic-research-skills/`. Its `skills/`
-entry links back to the repository's existing `skills/` tree, so the plugin
-install and the direct skill install share the same ARS source files instead of
-maintaining a duplicated `plugin/` copy.
+directory contains a materialized copy of `academic-research-suite`, not a
+symlink. This keeps Codex Desktop installs portable on Windows, where plugin
+caches may materialize symlinks as plain text files and skip bundled skill
+registration.
 
 ## Codex Docs
 
@@ -293,19 +296,20 @@ ARS was originally written for Claude Code. In this Codex package:
 - Web/source verification uses Codex browsing and must cite sources when current
   or external facts matter.
 - Cross-model verification is disabled by default. When explicitly requested in
-  this Codex package, configure `ARS_CROSS_MODEL=claude-opus-4.8` and
-  `ANTHROPIC_API_KEY`; the external reviewer uses Anthropic Claude Opus 4.8 API,
-  not Codex/OpenAI API. Upstream GPT/Gemini secondary-dispatch instructions are
-  ignored unless this explicit Anthropic configuration is present.
+  this Codex package, follow the vendored provider setup in
+  `ars/shared/cross_model_verification.md`, identify the provider/model/content
+  class first, and obtain explicit user consent before any external upload.
+  External reviewers are called through configured provider APIs, not simulated
+  through the active Codex model.
 - Upstream references to a "fresh Claude Code session" mean a new Codex
   conversation in this package; Material Passport reset semantics still apply.
 - If a citation, source, statistic, or journal policy cannot be verified, Codex
   should mark it as unverified rather than invent support.
 
-### ARS v3.12 Mainline Parity
+### ARS v3.13 Mainline Parity
 
 This package aims for the same user-facing workflow content as upstream ARS
-`v3.12.0-19-g529c6d2` where Codex has an equivalent concept.
+`v3.13.0-2-gc22c17e` where Codex has an equivalent concept.
 
 | Upstream ARS feature | Codex package behavior |
 |---|---|
@@ -318,20 +322,23 @@ This package aims for the same user-facing workflow content as upstream ARS
 | SessionStart and SubagentStop hooks | Vendored for traceability only; Codex does not install or execute Claude hooks |
 | Plugin marketplace update / auto-update | Not available here; update by reinstalling or pulling this Codex repo |
 | Claude Code Agent Team | Not automatic; Codex subagents require an explicit user request for delegation or parallel agents |
-| Cross-model GPT/Gemini dispatch from upstream docs | Disabled; Codex package only supports optional Anthropic Claude Opus 4.8 review when explicitly configured |
+| Cross-model provider dispatch from upstream docs | Disabled by default; available only with explicit provider configuration and explicit user consent |
 
-### Optional Claude Opus 4.8 Reviewer API
+### Optional External Cross-Model Reviewer API
 
-For reviewer calibration or cross-model devil's advocate checks:
+For reviewer calibration or cross-model devil's advocate checks, configure one
+of the provider tuples documented in
+`ars/shared/cross_model_verification.md`, then ask for cross-model verification
+explicitly in the prompt. For example:
 
 ```bash
-export ANTHROPIC_API_KEY="<your-anthropic-api-key>"
-export ARS_CROSS_MODEL="claude-opus-4.8"
+export OPENAI_API_KEY="<your-openai-api-key>"
+export ARS_CROSS_MODEL="gpt-5.5"
 ```
 
-Then ask for cross-model verification explicitly in the prompt. Without both
-environment variables, ARS Codex falls back to single-runtime review and should
-report that the Claude Opus 4.8 verifier was unavailable.
+Without both a configured provider and explicit user consent for the content
+class being sent, ARS Codex falls back to single-runtime review and reports that
+cross-model verification was unavailable.
 
 ## Support And Sponsorship
 
@@ -373,8 +380,9 @@ directories.
 
 Updates sync selected upstream ARS content into `skills/academic-research-suite/ars/`.
 Do not mirror the Claude Code repo blindly; exclude Claude/plugin loader files
-such as `.claude/`, `.claude-plugin/`, `.github/`, source `.gitignore`, and
-symlink-only alias directories that are not needed in Codex.
+such as `.claude/`, `.claude-plugin/`, source `.gitignore`, and symlink-only
+alias directories that are not needed in Codex. Nested upstream `.github/`
+workflows may be retained as inactive traceability and self-test fixtures.
 
 ### Inactive Upstream Scripts
 

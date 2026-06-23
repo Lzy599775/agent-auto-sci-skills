@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import copy
 import json
-import os
 import re
 import subprocess
 import sys
@@ -1942,11 +1941,8 @@ class TestCLI:
         # and confirm it produces the documented harness exit code. Belt
         # and braces against future `chmod 644` regressions.
         script_path = REPO / "scripts/check_audit_artifact_consistency.py"
-        env = os.environ.copy()
-        env["PATH"] = f"{Path(sys.executable).parent}{os.pathsep}{env.get('PATH', '')}"
         result = subprocess.run(
             [str(script_path), "--example-validation-harness"],
-            env=env,
             capture_output=True, text=True,
         )
         assert result.returncode == 0, (

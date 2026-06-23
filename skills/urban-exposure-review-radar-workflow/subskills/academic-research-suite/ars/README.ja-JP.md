@@ -1,6 +1,7 @@
 # Claude Code 向け Academic Research Skills
 
-[![Version](https://img.shields.io/badge/version-v3.12.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.12.0)
+[![Version](https://img.shields.io/badge/version-v3.13.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.13.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20696614.svg)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
@@ -64,7 +65,7 @@ v3.3 は [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（Song, Song, Pf
 
 ## パフォーマンス＆コスト
 
-**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — モードごとのトークン予算、フルパイプライン見積り（15k 語の論文で約 $4-6）、推奨 Claude Code 設定（Skip Permissions; Agent Team オプション）。
+**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — モードごとのトークン予算、フルパイプライン見積り（15k 語の論文で約 $4-6）、推奨 Claude Code 設定（Auto モード; Agent Team オプション）。
 
 ## ガイド＆記事
 
@@ -148,7 +149,7 @@ You: "status"
 
 ### 個別スキル
 
-#### Deep Research（7 モード）
+#### Deep Research（8 モード）
 
 ```
 "Research the impact of AI on higher education"       → full モード
@@ -160,7 +161,7 @@ You: "status"
 "Review this paper's research quality"                → review モード
 ```
 
-#### Academic Paper（10 モード）
+#### Academic Paper（11 モード）
 
 ```
 "Write a paper on X"                                  → full モード
@@ -229,19 +230,19 @@ You: "status"
 
 エージェントごとの責務とステージごとの成果物は [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) に集約されました。リリースメタデータを一箇所にまとめるため、バージョン番号はここにアンカーされています。
 
-### Deep Research（v2.9.4）
+### Deep Research（v2.11.0）
 
-13 エージェントの研究チーム。モード: full、quick、review、lit-review、fact-check、socratic、systematic-review。完全なエージェント名簿と成果物: ARCHITECTURE.md §3 を参照。
+13 エージェントの研究チーム。モード: full、quick、review、lit-review、three-way-scan、fact-check、socratic、systematic-review。完全なエージェント名簿と成果物: ARCHITECTURE.md §3 を参照。
 
 ### Academic Paper（v3.2.0）
 
-12 エージェントの論文執筆パイプライン。モード: full、plan、outline-only、revision、revision-coach、abstract-only、lit-review、format-convert、citation-check、disclosure。出力: MD + DOCX（利用可能な場合 Pandoc 経由）+ LaTeX（APA 7.0 `apa7` クラス / IEEE / Chicago）→ tectonic 経由 PDF。完全なエージェント名簿とフェーズごとの責務: ARCHITECTURE.md §3 を参照。
+12 エージェントの論文執筆パイプライン。モード: full、plan、outline-only、revision、revision-coach、abstract-only、lit-review、format-convert、citation-check、disclosure、rebuttal-audit。出力: MD + DOCX（利用可能な場合 Pandoc 経由）+ LaTeX（APA 7.0 `apa7` クラス / IEEE / Chicago）→ tectonic 経由 PDF。完全なエージェント名簿とフェーズごとの責務: ARCHITECTURE.md §3 を参照。
 
 ### Academic Paper Reviewer（v1.10.0）
 
 **0-100 品質ルーブリック** を持つ 7 エージェントの多視点レビュー。モード: full、re-review、quick、methodology-focus、guided、calibration。**決定マッピング:** ≥80 Accept、65-79 Minor Revision、50-64 Major Revision、<50 Reject。初回レビューチーム vs. 限定的な再レビューチームの境界: ARCHITECTURE.md §3 Stage 3 / Stage 3' を参照。
 
-### Academic Pipeline（v3.12.0）
+### Academic Pipeline（v3.13.0）
 
 整合性検証、二段階レビュー、ソクラテス式コーチング、コラボレーション評価を持つ 10 ステージのオーケストレーター。パイプライン保証: 各ステージにユーザー確認チェックポイントが必要。整合性検証（Stage 2.5 + 4.5）はスキップできない。R&R Traceability Matrix（Schema 11）は著者の改訂主張を独立に検証する。v3.4 は Stage 2.5 / 4.5 に Compliance Agent（PRISMA-trAIce + RAISE）を追加した。v3.5 はすべての FULL/SLIM チェックポイントとパイプライン完了時に **Collaboration Depth Observer**（`collaboration_depth_agent`、advisory のみ — 決してブロックしない）を追加する。MANDATORY 整合性ゲート（2.5 / 4.5）は、コンプライアンスチェックが希薄化されないよう observer を明示的にスキップする。Wang & Zhang（2026）, IJETHE 23:11 に基づく。エージェント、成果物、ゲートを含むステージごとのマトリクス: ARCHITECTURE.md §3 を参照。
 
@@ -321,6 +322,14 @@ https://github.com/Imbad0202/academic-research-skills
 ---
 
 ## Changelog
+
+### v3.13.0 (2026-06-18) — フック移植性、プロバイダ非依存の検証、ガード正確性
+
+> インストール／実行面を堅牢化し、クロスモデルの到達範囲を広げた minor release。**修正：** git-clone + symlink インストール構成でも write-scope ガードがユーザー自身の `CLAUDE.md` を誤って拒否しなくなった（#459、#448/#449 の残り半分を解消——`CLAUDE.md` は enforcement を担うファイルではなくドキュメントなので infra 保護リストから外し、担保ファイルはすべて保護を維持）。Windows の Python フック移植性 + Python 非在時の graceful degradation を、0-byte の Microsoft Store `python3` スタブを拒否しフックログを汚さないクロスプラットフォーム `hooks/run_guard.sh` launcher で実現（#454）。`draft_writer` の dual-phase static union を文書化 + Windows POSIX-safe なパスマッチング（#451）。**追加：** grounded first-party OpenAI と並んで OpenAI 互換エンドポイント（MiMo、DeepSeek、セルフホスト）を受け付けるプロバイダ非依存のクロスモデル検証（first-party は決して暗黙的にダウングレードしない）（#455）。opt-in の Socratic 隣接フレーミング probe（STORM 由来の視点拡張、`ARS_SOCRATIC_ADJACENT_PROBE=1`、デフォルト OFF、prose-layer のみ——`deep-research` 2.10.0 → 2.11.0）（#461）。`academic-pipeline` はスイートに合わせて v3.13.0、`academic-paper` と `academic-paper-reviewer` は変更なし。issue ごとの詳細は `CHANGELOG.md` を参照。
+
+### v3.12.1 (2026-06-15) — 査読応答トリアージモード（PR #433 統合）
+
+> ARS のモードベース・アーキテクチャに従い、外部コントリビューションの真に新規な部分を既存スキルのモードとして取り込んだ patch release。**新モード：** `deep-research` `three-way-scan` —— `quick` と `lit-review` の中間に位置する軽量な WHY/HOW/WHAT 論文比較トリアージ。論文ごとのショートリストと論文間の統合を生成（`deep-research` 2.9.4 → 2.10.0）。`academic-paper` `rebuttal-audit` —— 著者の既存リバッタル／応答ドラフトを査読コメントと突き合わせる独立アドバイザリ QA（コメントごとのカバレッジ表 + ギャップリスト + トーン／根拠／誤読のリスクフラグ）。何も生成せず、スタンドアロン実行時は Schema 11／Material Passport 書き込み／`ready_to_submit` を明示的に抑制（mutation カバレッジ付きの `check_rebuttal_audit_guard()` lint で強制）。加えて `revision-coach` のスコープを反論／不同意の姿勢と非ジャーナル文脈に拡張、`/ars-3w` + `/ars-rebuttal-audit` スラッシュコマンドを追加。入力形状でルーティング：査読コメント AND ドラフト → `rebuttal-audit`、コメントのみ → `revision-coach`。[@Yaobin29](https://github.com/Yaobin29) の [PR #433](https://github.com/Imbad0202/academic-research-skills/pull/433) から統合。スイートのモード数 25 → 27（スキルは 4 つのまま）。issue ごとの詳細は `CHANGELOG.md` を参照。
 
 ### v3.12.0 (2026-06-08) — Kong 自動研究フィーチャートラック：実験来歴・図表フィデリティ・論文間矛盾・部分証拠の分解
 

@@ -10,12 +10,12 @@ description: >
   workflows, experiment execution planning, statistical interpretation, or human
   study protocol support. Also use for Claude-style ARS command aliases such as
   /ars-plan, ars-plan, /ars-outline, /ars-abstract, /ars-lit-review,
-  /ars-citation-check, /ars-disclosure, /ars-format-convert,
+  /ars-citation-check, /ars-disclosure, /ars-format-convert, /ars-3w,
   /ars-revision-coach, /ars-revision, /ars-reviewer, /ars-mark-read,
-  /ars-unmark-read, /ars-cache-invalidate, and /ars-full. This skill vendors ARS role prompts,
+  /ars-unmark-read, /ars-cache-invalidate, /ars-rebuttal-audit, and /ars-full. This skill vendors ARS role prompts,
   references, templates, and shared handoff schemas under ars/.
 metadata:
-  version: "0.1.12"
+  version: "0.1.14"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
@@ -28,7 +28,7 @@ This is a Codex adapter for the ARS suite. The vendored ARS content lives under
 
 ## Versioning
 
-This Codex package is version `0.1.12`. The repo-root `VERSION`, this
+This Codex package is version `0.1.14`. The repo-root `VERSION`, this
 `SKILL.md` metadata version, and `manifest.json` `adapter_version` must match.
 Vendored ARS suite versions are tracked separately by source repository commit
 in `manifest.json`.
@@ -113,11 +113,13 @@ uses the current model unless the user explicitly requests another model.
 | `/ars-outline`, `ars-outline` | `ars/commands/ars-outline.md` | `ars/academic-paper/WORKFLOW.md` in `outline-only` mode |
 | `/ars-abstract`, `ars-abstract` | `ars/commands/ars-abstract.md` | `ars/academic-paper/WORKFLOW.md` in `abstract-only` mode |
 | `/ars-lit-review`, `ars-lit-review` | `ars/commands/ars-lit-review.md` | `ars/academic-paper/WORKFLOW.md` in `lit-review` mode; if the user wants source discovery and synthesis instead, route to `ars/deep-research/WORKFLOW.md` in `lit-review` mode |
+| `/ars-3w`, `ars-3w` | `ars/commands/ars-3w.md` | `ars/deep-research/WORKFLOW.md` in `three-way-scan` mode |
 | `/ars-citation-check`, `ars-citation-check` | `ars/commands/ars-citation-check.md` | `ars/academic-paper/WORKFLOW.md` in `citation-check` mode |
 | `/ars-disclosure`, `ars-disclosure` | `ars/commands/ars-disclosure.md` | `ars/academic-paper/WORKFLOW.md` in `disclosure` mode |
 | `/ars-format-convert`, `ars-format-convert` | `ars/commands/ars-format-convert.md` | `ars/academic-paper/WORKFLOW.md` in `format-convert` mode |
 | `/ars-revision-coach`, `ars-revision-coach` | `ars/commands/ars-revision-coach.md` | `ars/academic-paper/WORKFLOW.md` in `revision-coach` mode |
 | `/ars-revision`, `ars-revision` | `ars/commands/ars-revision.md` | `ars/academic-paper/WORKFLOW.md` in `revision` mode |
+| `/ars-rebuttal-audit`, `ars-rebuttal-audit` | `ars/commands/ars-rebuttal-audit.md` | `ars/academic-paper/WORKFLOW.md` in `rebuttal-audit` mode; requires both reviewer comments and an existing response draft |
 | `/ars-reviewer`, `ars-reviewer` | `ars/commands/ars-reviewer.md` | `ars/academic-paper-reviewer/WORKFLOW.md` in `full` mode unless another reviewer mode is explicit |
 | `/ars-mark-read`, `ars-mark-read` | `ars/commands/ars-mark-read.md` | Mark one or more citation keys as human-read against the active Material Passport |
 | `/ars-unmark-read`, `ars-unmark-read` | `ars/commands/ars-unmark-read.md` | Rescind a prior human-read mark against the active Material Passport |
@@ -145,7 +147,7 @@ using them in Codex:
 | WebSearch | Use Codex web browsing for current facts, source verification, citation checks, and external evidence. Provide source links. |
 | Bash, Write, Edit | Treat as capability descriptions, not required tool names. Follow Codex safety rules and the user's filesystem constraints. |
 | Claude, Claude Code, model-specific wording | Interpret as "the current Codex agent" unless the text is part of a disclosure template or historical example. |
-| `ARS_CROSS_MODEL`, `ARS_CROSS_MODEL_SAMPLE_INTERVAL` | Treat upstream secondary-model dispatch instructions as no-op unless the user explicitly asks for cross-model review. When explicitly enabled in this Codex package, use Anthropic Claude Opus 4.8 via API (`ARS_CROSS_MODEL=claude-opus-4.8`, `ANTHROPIC_API_KEY`); do not route this reviewer through Codex/OpenAI APIs. Skip unconfigured cross-model report sections instead of inventing results. |
+| `ARS_CROSS_MODEL`, `ARS_CROSS_MODEL_SAMPLE_INTERVAL`, `ARS_OPENAI_COMPAT_BASE_URL`, `ARS_OPENAI_COMPAT_API_KEY` | Treat upstream secondary-model dispatch instructions as no-op unless the user explicitly asks for cross-model review. When explicitly enabled in this Codex package, follow `ars/shared/cross_model_verification.md`: identify the provider/model/content class, obtain explicit user consent before any external upload, and call only the configured provider API. Do not route the reviewer through the active Codex model or invent unconfigured cross-model sections. |
 | `S2_API_KEY`, `OPENALEX_POLITE_EMAIL`, `CROSSREF_POLITE_EMAIL` | These are optional upstream bibliographic lookup settings. Use them only when the user explicitly runs contamination-signal migration or programmatic reference verification; normal Codex routing does not require them. |
 | `ARS_VERIFICATION_CACHE_PATH` | Optional local SQLite cache path for the v3.11 citation verification gate. Use the upstream default unless the user explicitly asks to inspect or relocate the verification cache. |
 | `fresh Claude Code session`, `Claude Code session` | Read as "a new Codex conversation". Material Passport reset semantics still apply; only the runtime changes. This rule covers `ars/academic-pipeline/WORKFLOW.md`, `ars/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `ars/academic-pipeline/references/passport_as_reset_boundary.md`, `ars/experiment-agent/README.md`, `ars/experiment-agent/README.zh-TW.md`, and `ars/docs/PERFORMANCE.md`. |

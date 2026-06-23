@@ -4,11 +4,13 @@ This repository primarily contains self-developed and domain-adapted skills. Som
 
 Current vendored/wrapped upstream additions:
 
+Latest upstream check: [`docs/upstream-update-20260623.md`](upstream-update-20260623.md).
+
 | Upstream project | Local wrapper | Scope |
 |---|---|---|
-| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | Only four selected areas are packaged: ML/AI, data analysis and visualization, geospatial/remote sensing, and scientific communication. The full upstream repository is not installed wholesale. Current packaged upstream snapshot: `2093901` (`v2.52.0-3-g2093901`). |
+| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | Only four selected areas are packaged: ML/AI, data analysis and visualization, geospatial/remote sensing, and scientific communication. The full upstream repository is not installed wholesale. Current checked upstream snapshot: `ddd2f7f` (`v2.52.0-4-gddd2f7f`); selected packaged subskill files were unchanged from the previous packaged snapshot. |
 | [Haojae/scipilot-figure-skill](https://github.com/Haojae/scipilot-figure-skill) | `scipilot-figure-skill` | Publication-figure design, chart choice, visual QA, CJK-safe labels, and figure-story alignment. Current packaged upstream snapshot: `43098dd` (`v2.1.0-1-g43098dd`). |
-| [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | Codex-native Academic Research Suite vendored as an isolated subskill inside the urban exposure workflow. Current packaged adapter version: `0.1.12`; upstream ARS commit is recorded in the subskill manifest. |
+| [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | Codex-native Academic Research Suite vendored as an isolated subskill inside the urban exposure workflow. Current packaged adapter version: `0.1.14`; upstream ARS commit is recorded in the subskill manifest. |
 
 The projects below remain optional references or extension sources.
 

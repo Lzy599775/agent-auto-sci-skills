@@ -1,6 +1,6 @@
 # ARS Codex Compatibility Matrix
 
-Audit date: 2026-06-11
+Audit date: 2026-06-20
 
 ## Provenance
 
@@ -8,10 +8,10 @@ Audit date: 2026-06-11
 |---|---|
 | Codex package repo | `academic-research-skills-codex` current working tree before release commit |
 | Upstream Claude Code repo | Tracked in `skills/academic-research-suite/manifest.json` |
-| Upstream suite version | `v3.12.0-19-g529c6d2` |
-| Codex package version | `0.1.12` |
+| Upstream suite version | `v3.13.0-2-gc22c17e` |
+| Codex package version | `0.1.13` |
 | License | CC BY-NC 4.0 in upstream and Codex package |
-| Upstream sync status | Vendored `ars/` content synced to ARS main `529c6d25`; Codex adapter profile retained |
+| Upstream sync status | Vendored `ars/` content synced to ARS main `c22c17e`; Codex adapter profile retained |
 | Codex-only adapter location | `skills/academic-research-suite/codex/` |
 
 ## Matrix
@@ -27,7 +27,7 @@ Audit date: 2026-06-11
 | Model routing | Claude `opus` / `sonnet` hints are metadata | Planner reports model hints without forcing model changes | partial | `codex/full-runtime-manifest.json`, `codex/scripts/ars_codex_full_runtime.py` | adapter pytest; plan inspection | Not equivalent to Claude Code model pinning |
 | Material Passport | Prompt/procedure plus vendored validators | Full-runtime manifest exposes passport reset as a quality gate | near | `ars/scripts/check_passport_reset_contract.py`, `codex/full-runtime-manifest.json` | upstream validator; adapter gate | Runtime context isolation is procedural, not a hard sandbox |
 | Citation / claim / temporal integrity | Vendored validators can be run when needed | Planner surfaces relevant gates in the route plan | partial | `ars/scripts/*claim*`, `ars/scripts/temporal_integrity_audit.py`, `codex/full-runtime-manifest.json` | upstream validators; adapter tests | External metadata/API checks require configuration |
-| Cross-model verification | Disabled by default; explicit configuration required | Same behavior; unavailable verifier must be reported rather than invented | partial | `README.md`, `SKILL.md`, `codex/full-runtime-manifest.json` | manual inspection | No guaranteed parity with upstream secondary-model dispatch |
+| Cross-model verification | Disabled by default; explicit provider configuration and user consent required | Same behavior; unavailable verifier must be reported rather than invented | partial | `README.md`, `SKILL.md`, `ars/shared/cross_model_verification.md`, `codex/full-runtime-manifest.json` | manual inspection | External-provider availability depends on user-supplied API credentials |
 | Upstream lock provenance | `manifest.json` pins upstream commits | Quality gate checks the package manifest has a full upstream SHA and required included paths | near | `manifest.json`, `codex/scripts/ars_codex_quality_gates.py` | `upstream-lock` gate | Future upstream syncs still require deliberate manifest updates |
 
 ## Exact Degradations Relative To Claude Code

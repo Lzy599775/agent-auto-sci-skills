@@ -80,13 +80,20 @@ def _write_changelog(
     )
 
 
-def _write_plugin_manifests(root: Path, version: str) -> None:
-    """Fixture .claude-plugin/{plugin,marketplace}.json at `version` (invariant 4)."""
+def _write_plugin_manifests(
+    root: Path, version: str, description: str | None = None
+) -> None:
+    """Fixture .claude-plugin/{plugin,marketplace}.json at `version` (invariant 4).
+    `description` (when given) lands in plugin.json for the invariant-8
+    "N-agent" claim tests."""
     import json
     plugin_dir = root / ".claude-plugin"
     plugin_dir.mkdir(parents=True, exist_ok=True)
+    plugin_obj: dict[str, str] = {"name": "fixture", "version": version}
+    if description is not None:
+        plugin_obj["description"] = description
     (plugin_dir / "plugin.json").write_text(
-        json.dumps({"name": "fixture", "version": version}), encoding="utf-8"
+        json.dumps(plugin_obj), encoding="utf-8"
     )
     (plugin_dir / "marketplace.json").write_text(
         json.dumps({"name": "fixture", "plugins": [{"name": "fixture", "version": version}]}),
@@ -592,6 +599,32 @@ class TestVersionConsistency(unittest.TestCase):
             result = _run(root)
             self.assertEqual(result.returncode, 0, msg=f"stdout={result.stdout!r}")
 
+    def test_docs_superpowers_future_version_exempt_inv6(self) -> None:
+        """docs/superpowers/ holds skill specs/plans that intentionally plan the
+        NEXT release; a future version there is exempt (must PASS). A non-aligned
+        future version anywhere ELSE in docs/ still fails — proves the carve-out
+        is scoped to superpowers/, not a blanket disable."""
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_aligned_fixture(root)  # suite 3.5.0
+            sp = root / "docs" / "superpowers" / "plans"
+            sp.mkdir(parents=True, exist_ok=True)
+            (sp / "next-release-plan.md").write_text(
+                "# Plan\n\nBump suite to v9.9.9 in this release.\n", encoding="utf-8"
+            )
+            result = _run(root)
+            self.assertEqual(
+                result.returncode, 0,
+                msg=f"superpowers/ future ref should be exempt; stdout={result.stdout!r}",
+            )
+            # control: same future token under a published doc path still fails
+            (root / "docs" / "OTHER.md").write_text(
+                "# Other\n\nSee v9.9.9 here.\n", encoding="utf-8"
+            )
+            result2 = _run(root)
+            self.assertEqual(result2.returncode, 1, msg=f"stdout={result2.stdout!r}")
+            self.assertIn("9.9.9", result2.stdout)
+
     # ── Invariant 7: en<->zh-TW version-bearing H2 + version-string parity ──
     def test_zhtw_version_bearing_heading_missing_fails(self) -> None:
         """en has '(v3.4.0+)' heading; zh-TW drops it — must fail."""
@@ -702,6 +735,109 @@ class TestVersionConsistency(unittest.TestCase):
             result = _run(root)
             self.assertEqual(result.returncode, 1, msg=f"stdout={result.stdout!r}")
             self.assertIn("3.4.0", result.stdout)
+
+
+class TestAgentCountClaim(unittest.TestCase):
+    """Invariant 8 (#414): plugin.json description "N-agent" claim equals the
+    tree's unique *_agent.md count (symlinks resolved, not double-counted)."""
+
+    @staticmethod
+    def _write_agents(root: Path, names: list[str]) -> None:
+        agents_dir = root / "deep-research" / "agents"
+        agents_dir.mkdir(parents=True, exist_ok=True)
+        for name in names:
+            (agents_dir / f"{name}_agent.md").write_text(
+                f"# {name}\n", encoding="utf-8"
+            )
+
+    def test_agent_claim_drift_fails(self) -> None:
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_aligned_fixture(root)
+            _write_plugin_manifests(
+                root, "3.5.0", description="fixture, 3-agent ensemble, more"
+            )
+            self._write_agents(root, ["alpha", "beta"])
+            result = _run(root)
+            self.assertEqual(result.returncode, 1, msg=f"stdout={result.stdout!r}")
+            self.assertIn("3-agent", result.stdout)
+            self.assertIn("2", result.stdout)
+
+    def test_agent_claim_matching_passes(self) -> None:
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_aligned_fixture(root)
+            _write_plugin_manifests(
+                root, "3.5.0", description="fixture, 2-agent ensemble, more"
+            )
+            self._write_agents(root, ["alpha", "beta"])
+            result = _run(root)
+            self.assertEqual(
+                result.returncode, 0,
+                msg=f"stdout={result.stdout!r} stderr={result.stderr!r}",
+            )
+
+    def test_agent_claim_symlink_alias_not_double_counted(self) -> None:
+        """Legacy/transition pin: a symlink alias in the plugin-root agents/
+        dir (the pre-#413 pattern) still counts once — the whole root
+        agents/ mirror is excluded from the count regardless of file kind."""
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_aligned_fixture(root)
+            _write_plugin_manifests(
+                root, "3.5.0", description="fixture, 2-agent ensemble, more"
+            )
+            self._write_agents(root, ["alpha", "beta"])
+            link_dir = root / "agents"
+            link_dir.mkdir()
+            (link_dir / "alpha_agent.md").symlink_to(
+                root / "deep-research" / "agents" / "alpha_agent.md"
+            )
+            result = _run(root)
+            self.assertEqual(
+                result.returncode, 0,
+                msg=f"stdout={result.stdout!r} stderr={result.stderr!r}",
+            )
+
+    def test_agent_claim_materialized_mirror_not_double_counted(self) -> None:
+        """#413: the plugin-root agents/ mirror holds REAL byte-identical
+        copies (symlinks broke Windows checkouts / zip installs), so resolve()
+        no longer dedups them. The mirror dir is excluded from the count —
+        it is an alias surface pinned byte-identical to its deep-research
+        sources by check_agents_mirror_sync.py, never a source of new
+        agents."""
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_aligned_fixture(root)
+            _write_plugin_manifests(
+                root, "3.5.0", description="fixture, 2-agent ensemble, more"
+            )
+            self._write_agents(root, ["alpha", "beta"])
+            mirror_dir = root / "agents"
+            mirror_dir.mkdir()
+            src = root / "deep-research" / "agents" / "alpha_agent.md"
+            (mirror_dir / "alpha_agent.md").write_bytes(src.read_bytes())
+            result = _run(root)
+            self.assertEqual(
+                result.returncode, 0,
+                msg=f"stdout={result.stdout!r} stderr={result.stderr!r}",
+            )
+
+    def test_no_agent_claim_skips(self) -> None:
+        """A description without an N-agent token is not gated (the claim is
+        optional; only a stated number must be true)."""
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_aligned_fixture(root)
+            _write_plugin_manifests(
+                root, "3.5.0", description="fixture without a count claim"
+            )
+            self._write_agents(root, ["alpha", "beta"])
+            result = _run(root)
+            self.assertEqual(
+                result.returncode, 0,
+                msg=f"stdout={result.stdout!r} stderr={result.stderr!r}",
+            )
 
 
 if __name__ == "__main__":

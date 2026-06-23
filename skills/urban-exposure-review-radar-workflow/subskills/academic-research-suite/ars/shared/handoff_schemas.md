@@ -450,6 +450,7 @@ score_trajectory: {
 | `reviewer_comment` | string | Original reviewer comment (quoted) |
 | `author_response` | string | Detailed response to the reviewer |
 | `change_location` | string | Where in the paper the change was made (section + paragraph) |
+| `change_block_ids` | list[string] | *(optional, #390 patch-mode rounds)* Block IDs the change landed in (`B0042`-form), the machine-checkable sibling of the free-text `change_location` — cross-checkable against the apply report's op list. **Populated by the orchestrator from the apply report, never by the writer** (spec §3.5 role split: inserted blocks get fresh IDs only at apply time, so the writer cannot know them; it emits provisional response items and the orchestrator completes the mechanical fields). Absent field = pre-patch-era or escalated full re-emission round (valid). |
 | `status` | enum | `"RESOLVED"` / `"DELIBERATE_LIMITATION"` / `"UNRESOLVABLE"` / `"REVIEWER_DISAGREE"` |
 | `decline_justification` | string | Required if status is `DELIBERATE_LIMITATION`, `UNRESOLVABLE`, or `REVIEWER_DISAGREE`; must cite evidence |
 

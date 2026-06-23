@@ -106,3 +106,96 @@ def test_lint_fails_on_double_quoted_inline_grounding_jq(tmp_path, monkeypatch):
         REINLINE_OLD,
         'cites="$(jq -r "[.candidates[0].groundingMetadata.groundingChunks[].web.uri]" <<<"$body")"',
     )
+
+
+# --- #453 narrowed regression checks (Task 5) ------------------------------------------------
+
+def test_lint_fails_if_compat_drops_normalizer_invocation(tmp_path, monkeypatch):
+    """(#453) The compatible block must INVOKE normalize_compat_verdict.py (check 8 wiring).
+    Mutate the canonical-unit invocation away — re-implementing verdict logic inline instead of
+    calling the behavior-tested unit must fail the lint. This single test replaces the three
+    removed check-5 tests (drops-NOT_SEARCHED / precedence-rejection-only / block-identifier-lost),
+    which all pinned the now-deleted inline `case`/`grep` precedence logic."""
+    _assert_lint_fails_on_mutation(
+        tmp_path, monkeypatch,
+        'printf \'%s\' "$text" | python3 "$GUARD/normalize_compat_verdict.py"',
+        'first="$(printf \'%s\' "$text" | grep -oiE \'(NOT_FOUND|MISMATCH)\' | head -1)"',
+    )
+
+
+def test_lint_fails_if_normalizer_only_in_comment(tmp_path, monkeypatch):
+    """A commented-out normalizer invocation (with inline logic restored) must NOT satisfy
+    check 8 — the pipe + comment-stripping require a real piped invocation."""
+    _assert_lint_fails_on_mutation(
+        tmp_path, monkeypatch,
+        'printf \'%s\' "$text" | python3 "$GUARD/normalize_compat_verdict.py"',
+        '# normalize via python3 "$GUARD/normalize_compat_verdict.py"\n    echo "STATUS: $text"',
+    )
+
+
+def test_lint_fails_if_compat_block_identifier_lost_v2(tmp_path, monkeypatch):
+    """(#453) Anti-vacuity: if the endpoint identifier that locates the compatible block is
+    lost, check 8 cannot scope itself and must fail loud (not silently pass). `openai_compatible`
+    still appears in the detection block (`echo "CROSS_MODEL_AVAILABLE=openai_compatible"`), so the
+    guard path runs but the block can no longer be located."""
+    _assert_lint_fails_on_mutation(
+        tmp_path, monkeypatch,
+        'endpoint="${ARS_OPENAI_COMPAT_BASE_URL%/}/chat/completions"',
+        'endpoint="$(build_endpoint)"',
+    )
+
+
+def test_lint_fails_if_openai_base_url_expansion_reintroduced(tmp_path, monkeypatch):
+    """A passive OPENAI_BASE_URL expansion in executable bash must fail (the passive-downgrade
+    regression). Reintroduce the PR's endpoint line."""
+    _assert_lint_fails_on_mutation(
+        tmp_path, monkeypatch,
+        'endpoint="${ARS_OPENAI_COMPAT_BASE_URL%/}/chat/completions"',
+        'endpoint="${OPENAI_BASE_URL:-https://api.openai.com}/v1/chat/completions"',
+    )
+
+
+def test_lint_fails_if_double_v1_reintroduced(tmp_path, monkeypatch):
+    """A literal /v1/v1 in executable bash must fail (the double-v1 endpoint bug)."""
+    _assert_lint_fails_on_mutation(
+        tmp_path, monkeypatch,
+        'endpoint="${ARS_OPENAI_COMPAT_BASE_URL%/}/chat/completions"',
+        'endpoint="${ARS_OPENAI_COMPAT_BASE_URL%/}/v1/v1/chat/completions"',
+    )
+
+
+def test_lint_allows_openai_base_url_in_prose(tmp_path, monkeypatch):
+    """A PROSE/comment mention of OPENAI_BASE_URL (explaining we don't read it) must NOT
+    false-fail — the check targets executable assignment/expansion only."""
+    mod = _load_lint()
+    text = DOC.read_text(encoding="utf-8")
+    injected = text.replace(
+        "## API Call Patterns",
+        "We deliberately never read `OPENAI_BASE_URL` here.\n\n## API Call Patterns",
+        1,
+    )
+    assert injected != text
+    fake = tmp_path / "cross_model_verification.md"
+    fake.write_text(injected, encoding="utf-8")
+    monkeypatch.setattr(mod, "DOC", fake)
+    assert mod.main() == 0
+
+
+# --- Defensive hardenings against future silent-vacuity (Task 5 follow-up) -------------------
+
+def test_bash_blocks_includes_unterminated_final_block():
+    """An unterminated trailing ```bash block must still be scanned (fail-closed parsing).
+
+    Directly exercises `_bash_blocks`: without the EOF flush, a final block with no closing fence
+    silently drops — fail-OPEN for the bash-scanning checks. We assert the OPENAI_BASE_URL
+    expansion inside the unterminated block is recovered, so a downstream check could see it.
+    (A whole-doc main()==1 assertion would be vacuously green here — a minimal synthetic doc fails
+    for unrelated reasons like missing filters — so we pin the parse contract, not the exit code.)"""
+    mod = _load_lint()
+    text = 'intro\n\n```bash\nendpoint="${OPENAI_BASE_URL:-x}/chat/completions"\n'  # no closing fence
+    blocks = mod._bash_blocks(text)
+    recovered = [ln for b in blocks for ln in b]
+    assert any("OPENAI_BASE_URL" in ln for ln in recovered), (
+        "unterminated final ```bash block was dropped — its OPENAI_BASE_URL expansion would "
+        f"escape the bash-scanning checks (fail-OPEN). Recovered lines: {recovered!r}"
+    )

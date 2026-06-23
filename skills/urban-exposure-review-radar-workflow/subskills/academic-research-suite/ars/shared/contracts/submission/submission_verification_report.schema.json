@@ -17,6 +17,7 @@
         "extraction_path",
         "not_checked_count",
         "package_fingerprint",
+        "inputs_fingerprint",
         "policy_slug"
       ],
       "properties": {
@@ -39,12 +40,18 @@
           "pattern": "^[0-9a-f]{64}$",
           "description": "SHA-256 over the package manifest, reusing the audit-snapshot hashing convention (scripts/audit_snapshot.py write_manifest, spec §10 open item 3 — adjudicated at slice 1): one line per file `<package-relative-path>:<sha256-hex>`, LC_ALL=C byte-sorted, newline-joined with a trailing newline; the fingerprint is the SHA-256 of that manifest text. The report file itself (submission_verification_report.json) is excluded from the manifest — the report cannot fingerprint its own bytes. Freshness-guard carrier (§5.2): the orchestrator MUST NOT reuse a report whose fingerprint no longer matches the package."
         },
+        "inputs_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 over the EXTERNAL-INPUTS manifest (slice-4 freshness amendment, gate-2 cross-model review P1): one line per input `<name>:<sha256-hex-of-file-bytes|absent>` for join_map, passport, venue_profile (sorted by name, newline-joined, trailing newline). Family B/C verdicts depend on these inputs, so a report produced under one venue profile (or passport / join map) must never be reused under another — the package_fingerprint alone cannot see that drift. The freshness guard compares this against the inputs the CURRENT invocation carries; mismatch (including a legacy report missing this field) is STALE-REPORT."
+        },
         "policy_slug": {
-          "type": [
-            "string",
-            "null"
+          "enum": [
+            null,
+            "advisory",
+            "strict"
           ],
-          "description": "The terminal_policies.submission_package value in force when the policy evaluator consumed this report (§5.2 freshness guard). Stamped by the slice-4 orchestrator hook, NEVER by the script (the script never reads terminal_policies, §5.3). Null until slice 4 lands the policy key — and always null in a standalone CLI run."
+          "description": "The terminal_policies.submission_package value the report was evaluated under (§5.2 freshness guard), as handed down via the --policy CLI argument by the policy evaluator — the orchestrator reads and resolves terminal_policies, the script never does (§5.3); it stamps the already-resolved value mechanically. null = standalone unevaluated run (no --policy flag; the argparse default is None, never 'advisory') — a null-stamped report NEVER satisfies the pipeline freshness guard. 'advisory' / 'strict' = evaluated under that resolved policy (the orchestrator resolves key absence to advisory and ALWAYS passes the flag, so a pipeline report is never null-stamped). Closed enum: exactly the values the CLI stamps (slice-4 lint invariant 5)."
         }
       }
     },

@@ -15,6 +15,12 @@ SCRIPT = Path(__file__).resolve()
 CODEX_ROOT = SCRIPT.parents[1]
 SUITE_ROOT = SCRIPT.parents[2]
 ARS_ROOT = SUITE_ROOT / "ars"
+PLUGIN_ROOT_CANDIDATE = SUITE_ROOT.parents[1]
+PLUGIN_ROOT = (
+    PLUGIN_ROOT_CANDIDATE
+    if (PLUGIN_ROOT_CANDIDATE / ".codex-plugin" / "plugin.json").is_file()
+    else SUITE_ROOT.parents[1] / "plugins" / "academic-research-skills"
+)
 FULL_RUNTIME_MANIFEST = CODEX_ROOT / "full-runtime-manifest.json"
 PACKAGE_MANIFEST = SUITE_ROOT / "manifest.json"
 HOOK_PACK = CODEX_ROOT / "hooks" / "hooks.json"
@@ -83,6 +89,8 @@ def check_manifest() -> list[str]:
         "ars-mark-read",
         "ars-unmark-read",
         "ars-cache-invalidate",
+        "ars-3w",
+        "ars-rebuttal-audit",
         "ars-full",
         "ars-plan",
         "ars-lit-review",
@@ -162,7 +170,40 @@ def check_upstream_lock() -> list[str]:
     return [f"upstream lock pins academic-research-skills@{commit[:7]}"]
 
 
+def check_desktop_plugin_bundle() -> list[str]:
+    plugin_manifest = PLUGIN_ROOT / ".codex-plugin" / "plugin.json"
+    plugin_skills = PLUGIN_ROOT / "skills"
+    suite_entry = plugin_skills / "academic-research-suite"
+    skill_md = suite_entry / "SKILL.md"
+    package_manifest = suite_entry / "manifest.json"
+
+    _require(plugin_manifest.is_file(), f"Desktop plugin manifest missing: {plugin_manifest}")
+    manifest = _json(plugin_manifest)
+    _require(manifest.get("skills") == "./skills/", "Desktop plugin manifest must point at ./skills/")
+    _require(plugin_skills.exists(), f"Desktop plugin skills path missing: {plugin_skills}")
+    _require(plugin_skills.is_dir(), "Desktop plugin skills path must be a directory")
+    _require(not plugin_skills.is_symlink(), "Desktop plugin skills path must not be a symlink")
+    _require(suite_entry.is_dir(), "Desktop plugin bundle must include academic-research-suite")
+    _require(skill_md.is_file(), "Desktop plugin bundle academic-research-suite is missing SKILL.md")
+    _require(package_manifest.is_file(), "Desktop plugin bundle academic-research-suite is missing manifest.json")
+
+    symlinks = sorted(
+        str(path.relative_to(PLUGIN_ROOT))
+        for path in plugin_skills.rglob("*")
+        if path.is_symlink()
+    )
+    _require(
+        not symlinks,
+        "Desktop plugin bundle must not contain symlinks: " + ", ".join(symlinks[:20]),
+    )
+    return [
+        "Desktop plugin bundle uses a materialized skills directory",
+        "academic-research-suite is bundled without symlinks",
+    ]
+
+
 GATES: dict[str, Callable[[], list[str]]] = {
+    "desktop-plugin-bundle": check_desktop_plugin_bundle,
     "manifest": check_manifest,
     "single-root-skill": check_single_root_skill,
     "hook-safety": check_hook_safety,

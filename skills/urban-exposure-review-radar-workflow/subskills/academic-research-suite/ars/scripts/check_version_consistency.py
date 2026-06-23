@@ -20,6 +20,12 @@ Invariants enforced:
   7. Every version-bearing H2 heading in docs/<name>.md has a matching
      version-bearing H2 (same version) in docs/<name>.zh-TW.md and vice versa.
      Plain headings may differ — only version TAGS must stay in lockstep.
+  8. The plugin.json description's "N-agent" claim (when present) equals the
+     number of unique *_agent.md files in the tree (#414: the advertised
+     number had silently drifted from the tree). The plugin-root agents/
+     mirror dir is excluded from the count — real byte-identical copies of
+     deep-research agents since #413 (symlinks before that), pinned as pure
+     aliases by check_agents_mirror_sync.py, never a source of new agents.
 
 Runs from repo root by default; `--path` lets tests point at a fake tree.
 """
@@ -72,6 +78,9 @@ H2_RE = re.compile(r"^##\s+(.*?)\s*$", re.MULTILINE)
 H2_VERSION_RE = re.compile(r"(?<![\w.])v" + _VSEG + r"(?![\d.\-A-Za-z])")
 
 NON_VERSION_CHANGELOG_TOKENS = frozenset({"Unreleased"})
+
+# Invariant 8: the outward-facing agent-count claim, e.g. "38-agent ensemble".
+AGENT_CLAIM_RE = re.compile(r"(\d+)-agent")
 
 PIPELINE_SKILL_NAME = "academic-pipeline"
 
@@ -251,6 +260,10 @@ def check(root: Path) -> list[str]:
     # suite version; pairs each docs/*.md with its docs/*.zh-TW.md sibling).
     errors.extend(_check_zhtw_heading_parity(root))
 
+    # Invariant 8: plugin.json "N-agent" description claim equals the tree's
+    # unique *_agent.md count (independent of suite version).
+    errors.extend(_check_agent_count_claim(root))
+
     return errors
 
 
@@ -343,6 +356,11 @@ def _check_docs_versions(root: Path, suite_version: str) -> list[str]:
     if not docs.is_dir():
         return errors  # docs/ optional; absence is not drift
     for md in sorted(docs.rglob("*.md")):
+        # docs/superpowers/ holds skill working files (specs/plans) that
+        # deliberately plan the NEXT release — forward references are their
+        # job, not a published-doc drift. Invariant 6 gates published docs.
+        if "superpowers" in md.relative_to(docs).parts:
+            continue
         text = md.read_text(encoding="utf-8")
         for raw in DOCS_VERSION_RE.findall(text):
             if not _is_strict_semver(raw):
@@ -405,6 +423,46 @@ def _check_zhtw_heading_parity(root: Path) -> list[str]:
                 f"{en.name} — version drift"
             )
     return errors
+
+
+def _check_agent_count_claim(root: Path) -> list[str]:
+    """Invariant 8 (#414): when plugin.json's description advertises an
+    "N-agent" count, N must equal the number of unique *_agent.md files in
+    the tree. The plugin-root agents/ mirror dir is excluded — its files are
+    byte-identical aliases of deep-research agents (real copies since #413,
+    symlinks before; check_agents_mirror_sync.py pins the byte-equality), so
+    counting them would double-count. resolve() additionally dedups any
+    remaining symlink alias. Missing/malformed manifest or a description
+    without a count claim is NOT an invariant-8 error — the manifest problems
+    are invariant 4's to report, and the claim is optional (only a stated
+    number must be true)."""
+    plugin_json = root / ".claude-plugin" / "plugin.json"
+    if not plugin_json.is_file():
+        return []
+    try:
+        data = json.loads(plugin_json.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, ValueError):
+        return []
+    description = data.get("description")
+    if not isinstance(description, str):
+        return []
+    m = AGENT_CLAIM_RE.search(description)
+    if m is None:
+        return []
+    claimed = int(m.group(1))
+    actual = len({
+        p.resolve()
+        for p in root.rglob("*_agent.md")
+        if ".git" not in p.parts
+        and p.relative_to(root).parts[0] != "agents"  # plugin-root mirror = aliases (#413)
+    })
+    if claimed != actual:
+        return [
+            f"{plugin_json}: description claims {claimed}-agent but the tree "
+            f"has {actual} unique *_agent.md files (agents/ mirror aliases "
+            f"excluded, symlinks deduplicated)"
+        ]
+    return []
 
 
 def main() -> int:

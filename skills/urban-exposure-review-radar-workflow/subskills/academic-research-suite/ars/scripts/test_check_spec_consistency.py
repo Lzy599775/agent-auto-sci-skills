@@ -8,7 +8,6 @@ manifest runner instead.
 """
 from __future__ import annotations
 
-import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -27,20 +26,20 @@ JA_README_TEMPLATE = """\
 
 ## クイックスタート
 
-#### Deep Research（7 モード）
+#### Deep Research（8 モード）
 - outline-only モード
 - abstract-only モード
 - disclosure モード
 - review モード
 
-#### Academic Paper（10 モード）
+#### Academic Paper（11 モード）
 
 #### Academic Paper Reviewer（6 モード）
 - calibration モード
 
 #### Academic Pipeline（オーケストレーター）
 
-### Deep Research（v2.9.4）
+### Deep Research（v2.11.0）
 ### Academic Paper（v3.2.0）
 ### Academic Paper Reviewer（v1.10.0）
 ### Academic Pipeline（v{ver}）
@@ -97,10 +96,10 @@ ZH_CN_README_TEMPLATE = """\
 
 [![Version](https://img.shields.io/badge/version-v{ver}-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v{ver})
 
-#### Deep Research（深度研究，7 种模式）
+#### Deep Research（深度研究，8 种模式）
 - review mode
 
-#### Academic Paper（学术论文撰写，10 种模式）
+#### Academic Paper（学术论文撰写，11 种模式）
 - outline-only mode
 - abstract-only mode
 - disclosure mode
@@ -110,7 +109,7 @@ ZH_CN_README_TEMPLATE = """\
 
 #### Academic Pipeline（全流程调度器）
 
-### Deep Research (v2.9.4)
+### Deep Research (v2.11.0)
 ### Academic Paper (v3.2.0)
 ### Academic Paper Reviewer (v1.10.0)
 ### Academic Pipeline (v{ver})
@@ -164,10 +163,10 @@ ZH_TW_README_TEMPLATE = """\
 
 [![Version](https://img.shields.io/badge/version-v{ver}-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v{ver})
 
-#### Deep Research（深度研究，7 種模式）
+#### Deep Research（深度研究，8 種模式）
 - review mode
 
-#### Academic Paper（學術論文撰寫，10 種模式）
+#### Academic Paper（學術論文撰寫，11 種模式）
 - outline-only mode
 - abstract-only mode
 - disclosure mode
@@ -177,7 +176,7 @@ ZH_TW_README_TEMPLATE = """\
 
 #### Academic Pipeline（全流程調度器）
 
-### Deep Research (v2.9.4)
+### Deep Research (v2.11.0)
 ### Academic Paper (v3.2.0)
 ### Academic Paper Reviewer (v1.10.0)
 ### Academic Pipeline (v{ver})
@@ -241,7 +240,7 @@ class TestReadmeJaSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            _write_ja_readme(root, version="3.12.0")
+            _write_ja_readme(root, version="3.13.0")
 
             csc.check_readme_ja_sections()
 
@@ -261,17 +260,17 @@ class TestReadmeJaSections(unittest.TestCase):
             # Write the "current" v3.9.4.2 release block but downgrade only
             # the badge and tag link to v3.9.4.0. This is the realistic shape
             # of drift when one place gets forgotten during a release.
-            stale = JA_README_TEMPLATE.format(ver="3.12.0").replace(
-                "version-v3.12.0-blue", "version-v3.9.4.0-blue"
+            stale = JA_README_TEMPLATE.format(ver="3.13.0").replace(
+                "version-v3.13.0-blue", "version-v3.9.4.0-blue"
             ).replace(
-                "releases/tag/v3.12.0", "releases/tag/v3.9.4.0"
+                "releases/tag/v3.13.0", "releases/tag/v3.9.4.0"
             )
             (root / "README.ja-JP.md").write_text(stale, encoding="utf-8")
 
             csc.check_readme_ja_sections()
 
             self.assertTrue(
-                any("README.ja-JP.md" in e and "v3.12.0" in e for e in csc.ERRORS),
+                any("README.ja-JP.md" in e and "v3.13.0" in e for e in csc.ERRORS),
                 msg=f"expected ja-JP drift error in: {csc.ERRORS!r}",
             )
 
@@ -297,8 +296,8 @@ class TestReadmeZhSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            _write_zh_tw_readme(root, version="3.12.0")
-            _write_zh_cn_readme(root, version="3.12.0")
+            _write_zh_tw_readme(root, version="3.13.0")
+            _write_zh_cn_readme(root, version="3.13.0")
 
             csc.check_readme_zh_sections()
 
@@ -314,18 +313,18 @@ class TestReadmeZhSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            _write_zh_tw_readme(root, version="3.12.0")
-            stale = ZH_CN_README_TEMPLATE.format(ver="3.12.0").replace(
-                "version-v3.12.0-blue", "version-v3.9.4.0-blue"
+            _write_zh_tw_readme(root, version="3.13.0")
+            stale = ZH_CN_README_TEMPLATE.format(ver="3.13.0").replace(
+                "version-v3.13.0-blue", "version-v3.9.4.0-blue"
             ).replace(
-                "releases/tag/v3.12.0", "releases/tag/v3.9.4.0"
+                "releases/tag/v3.13.0", "releases/tag/v3.9.4.0"
             )
             (root / "README.zh-CN.md").write_text(stale, encoding="utf-8")
 
             csc.check_readme_zh_sections()
 
             self.assertTrue(
-                any("README.zh-CN.md" in e and "v3.12.0" in e for e in csc.ERRORS),
+                any("README.zh-CN.md" in e and "v3.13.0" in e for e in csc.ERRORS),
                 msg=f"expected zh-CN drift error in: {csc.ERRORS!r}",
             )
 
@@ -827,115 +826,47 @@ class TestSuiteSkillDateSanity(unittest.TestCase):
             )
 
 
-def configure_codex_root(tmp_path: Path, monkeypatch) -> Path:
-    root = tmp_path / "suite" / "ars"
-    root.mkdir(parents=True)
-    (root.parent / "manifest.json").write_text(
-        json.dumps(
-            {
-                "generated_for": "codex",
-                "excluded_patterns": ["examples/showcase/*.pdf"],
-            }
-        ),
-        encoding="utf-8",
-    )
-    monkeypatch.setattr(csc, "ROOT", root)
-    csc.ERRORS.clear()
-    return root
+class RebuttalAuditGuardTest(unittest.TestCase):
+    """check_rebuttal_audit_guard() must enforce the integrity-boundary language
+    in the academic-paper Rebuttal-Audit Mode section. Mutation tests prove the
+    guard actually fails when the suppression language is dropped — otherwise the
+    check would be a vacuous pass that lets the false-certification risk back in."""
 
-
-def write_workflow_fixture(path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        "---\n"
-        "metadata:\n"
-        '  version: "3.12.0"\n'
-        '  last_updated: "2026-06-08"\n'
-        "---\n\n"
-        "| Skill Version | 3.12.0 |\n"
-        "| Last Updated | 2026-06-08 |\n",
-        encoding="utf-8",
+    _GOOD = (
+        "## Rebuttal-Audit Mode\n\n"
+        "Advisory QA of an existing rebuttal draft.\n\n"
+        "**IRON RULE:** standalone, so it MUST NOT emit a Schema 11 ledger, "
+        "MUST NOT write the Material Passport, and MUST NOT mark ready_to_submit.\n\n"
+        "## Next Section\n"
     )
 
+    def _run_guard_with(self, skill_text: str) -> list:
+        orig_read = csc.read
+        csc.ERRORS.clear()
+        try:
+            csc.read = lambda rel: skill_text if rel == "academic-paper/SKILL.md" else orig_read(rel)
+            csc.check_rebuttal_audit_guard()
+            return list(csc.ERRORS)
+        finally:
+            csc.read = orig_read
+            csc.ERRORS.clear()
 
-def test_check_claude_md_skips_when_file_missing(tmp_path, monkeypatch, capsys) -> None:
-    monkeypatch.setattr(csc, "ROOT", tmp_path)
-    csc.ERRORS.clear()
+    def test_guard_passes_with_full_suppression_language(self) -> None:
+        self.assertEqual(self._run_guard_with(self._GOOD), [])
 
-    csc.check_claude_md()
+    def test_guard_fails_when_section_missing(self) -> None:
+        errs = self._run_guard_with("## Some Other Mode\n\nno rebuttal section here\n")
+        self.assertTrue(any("missing" in e and "Rebuttal-Audit" in e for e in errs), errs)
 
-    assert csc.ERRORS == []
-    assert (
-        "Skipping .claude/CLAUDE.md checks: file not present in this distribution."
-        in capsys.readouterr().out
-    )
+    def test_guard_fails_when_schema11_suppression_dropped(self) -> None:
+        mutated = self._GOOD.replace("Schema 11", "the tracker")
+        errs = self._run_guard_with(mutated)
+        self.assertTrue(any("Schema 11" in e for e in errs), errs)
 
-
-def test_relative_markdown_links_skip_codex_excluded_patterns(
-    tmp_path, monkeypatch
-) -> None:
-    root = configure_codex_root(tmp_path, monkeypatch)
-    (root / "README.md").write_text(
-        "[Final Paper](examples/showcase/full_paper_apa7.pdf)\n",
-        encoding="utf-8",
-    )
-
-    csc.check_relative_markdown_links("README.md")
-
-    assert csc.ERRORS == []
-
-
-def test_relative_markdown_links_report_unexcluded_missing_targets(
-    tmp_path, monkeypatch
-) -> None:
-    root = configure_codex_root(tmp_path, monkeypatch)
-    (root / "README.md").write_text(
-        "[Missing](docs/missing.md)\n",
-        encoding="utf-8",
-    )
-
-    csc.check_relative_markdown_links("README.md")
-
-    assert csc.ERRORS == ["README.md: broken relative markdown link 'docs/missing.md'"]
-
-
-def test_check_setup_docs_accepts_codex_overlay_text(tmp_path, monkeypatch) -> None:
-    root = configure_codex_root(tmp_path, monkeypatch)
-    (root / "docs").mkdir()
-    (root / "docs" / "SETUP.md").write_text(
-        "Direct `.docx` generation uses Pandoc.\n"
-        "PDF output requires `tectonic` and the relevant fonts.\n",
-        encoding="utf-8",
-    )
-    (root / "docs" / "SETUP.zh-TW.md").write_text(
-        "直接產生 `.docx` 需要 Pandoc。\n"
-        "PDF 輸出需要 `tectonic` 與相關字型。\n",
-        encoding="utf-8",
-    )
-
-    csc.check_setup_docs()
-
-    assert csc.ERRORS == []
-
-
-def test_codex_distribution_checks_workflow_entry_files(tmp_path, monkeypatch) -> None:
-    root = configure_codex_root(tmp_path, monkeypatch)
-    for name in (
-        "academic-pipeline",
-        "academic-paper",
-        "academic-paper-reviewer",
-        "deep-research",
-    ):
-        write_workflow_fixture(root / name / "WORKFLOW.md")
-    (root / "CHANGELOG.md").write_text(
-        "## [3.12.0] - 2026-06-08\n",
-        encoding="utf-8",
-    )
-
-    csc.check_skill_version_blocks()
-    csc.check_suite_skill_date_sanity()
-
-    assert csc.ERRORS == []
+    def test_guard_fails_when_must_not_dropped(self) -> None:
+        mutated = self._GOOD.replace("MUST NOT", "should avoid")
+        errs = self._run_guard_with(mutated)
+        self.assertTrue(any("MUST NOT" in e for e in errs), errs)
 
 
 if __name__ == "__main__":

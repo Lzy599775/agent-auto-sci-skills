@@ -14,8 +14,6 @@ Invariants enforced:
   2. The weighted-dimension weights sum to exactly 100%.
   3. academic-paper/SKILL.md rule 14 ("Five dimensions — X (NN%), ...")
      states the same five weights as quality_rubrics.md.
-     In the Codex distribution, the same upstream entry file is vendored as
-     academic-paper/WORKFLOW.md so Codex does not register duplicate skills.
   4. review_criteria_framework.md does NOT restate any weight — no
      "Weight NN%" / "Weight: NN%" header suffix and no "(NN%)" formula
      term may reappear there (it defers to quality_rubrics.md by name).
@@ -37,7 +35,6 @@ from pathlib import Path
 RUBRICS_REL = Path("academic-paper-reviewer/references/quality_rubrics.md")
 FRAMEWORK_REL = Path("academic-paper-reviewer/references/review_criteria_framework.md")
 PAPER_SKILL_REL = Path("academic-paper/SKILL.md")
-PAPER_WORKFLOW_REL = Path("academic-paper/WORKFLOW.md")
 
 # The aggregation formula abbreviates dimension names; map the short formula
 # token to the canonical dimension-header name.
@@ -104,13 +101,6 @@ def _parse_skill_rule(text: str) -> dict[str, int]:
     return found
 
 
-def _paper_entry_rel(root: Path) -> Path:
-    skill_path = root / PAPER_SKILL_REL
-    if skill_path.is_file():
-        return PAPER_SKILL_REL
-    return PAPER_WORKFLOW_REL
-
-
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -122,10 +112,14 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        paper_skill_rel = (
+            Path("academic-paper/WORKFLOW.md")
+            if (args.root / "academic-paper/WORKFLOW.md").is_file()
+            else PAPER_SKILL_REL
+        )
         rubrics_text = (args.root / RUBRICS_REL).read_text(encoding="utf-8")
         framework_text = (args.root / FRAMEWORK_REL).read_text(encoding="utf-8")
-        paper_entry_rel = _paper_entry_rel(args.root)
-        skill_text = (args.root / paper_entry_rel).read_text(encoding="utf-8")
+        skill_text = (args.root / paper_skill_rel).read_text(encoding="utf-8")
         headers = _parse_rubrics_headers(rubrics_text)
         formula = _parse_rubrics_formula(rubrics_text)
         skill_weights = _parse_skill_rule(skill_text)
@@ -155,8 +149,8 @@ def main(argv: list[str] | None = None) -> int:
     # Invariant 3: academic-paper SKILL.md rule 14 agrees.
     if skill_weights != weighted_headers and skill_weights != formula:
         errors.append(
-            f"{paper_entry_rel.as_posix()} Five-dimensions rule disagrees with "
-            f"quality_rubrics.md: entry={skill_weights}, rubrics={formula}"
+            "academic-paper/SKILL.md Five-dimensions rule disagrees with "
+            f"quality_rubrics.md: SKILL.md={skill_weights}, rubrics={formula}"
         )
 
     # Invariant 4: framework doc restates no weights.

@@ -163,7 +163,7 @@ def dump_yaml_stable(data: Any) -> str:
 
 def now_iso() -> str:
     """ISO 8601 in UTC with trailing 'Z' (RFC 3339 compatible)."""
-    return datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def write_passport(path: Path, entries: list[dict[str, Any]]) -> None:

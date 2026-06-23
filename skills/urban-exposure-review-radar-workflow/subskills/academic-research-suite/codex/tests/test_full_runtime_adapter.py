@@ -74,6 +74,24 @@ def test_ars_cache_invalidate_alias_routes_to_pipeline_cache_mode() -> None:
     assert plan["command_recipe"] == "ars/commands/ars-cache-invalidate.md"
 
 
+def test_ars_3w_alias_routes_to_deep_research_three_way_scan() -> None:
+    planner = _load_planner()
+    plan = planner.plan_request("ars-3w compare these three papers", env={})
+    assert plan["command_alias"] == "ars-3w"
+    assert plan["workflow"] == "deep-research"
+    assert plan["mode"] == "three-way-scan"
+    assert plan["command_recipe"] == "ars/commands/ars-3w.md"
+
+
+def test_ars_rebuttal_audit_alias_routes_to_academic_paper() -> None:
+    planner = _load_planner()
+    plan = planner.plan_request("ars-rebuttal-audit check my response draft against these reviewer comments", env={})
+    assert plan["command_alias"] == "ars-rebuttal-audit"
+    assert plan["workflow"] == "academic-paper"
+    assert plan["mode"] == "rebuttal-audit"
+    assert plan["command_recipe"] == "ars/commands/ars-rebuttal-audit.md"
+
+
 def test_ars_full_starts_pipeline_and_stops_at_dashboard_checkpoint() -> None:
     planner = _load_planner()
     plan = planner.plan_request(

@@ -23,8 +23,12 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-import tomllib
 from pathlib import Path
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - Python < 3.11 compatibility
+    import tomli as tomllib
 
 
 # Drift guard regex: catches direct pytest invocations on `scripts/test_*.py`

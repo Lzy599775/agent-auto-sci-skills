@@ -203,45 +203,6 @@ def _safe_get(d: Any, *path: str) -> Any:
     return d
 
 
-def _git_root(path: Path) -> Path | None:
-    try:
-        result = subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "--show-toplevel"],
-            capture_output=True,
-            text=True,
-            timeout=10,
-        )
-    except (subprocess.SubprocessError, OSError):
-        return None
-    if result.returncode != 0:
-        return None
-    root = result.stdout.strip()
-    return Path(root) if root else None
-
-
-def _codex_vendored_ars_root(path: Path) -> bool:
-    manifest_path = path.parent / "manifest.json"
-    if not manifest_path.is_file():
-        return False
-    try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return False
-    return (
-        isinstance(manifest, dict)
-        and manifest.get("generated_for") == "codex"
-        and (path / "scripts/check_audit_artifact_consistency.py").is_file()
-    )
-
-
-def _b4_git_root(repo_root: Path) -> Path | None:
-    if (repo_root / ".git").exists():
-        return _git_root(repo_root)
-    if _codex_vendored_ars_root(repo_root):
-        return _git_root(repo_root)
-    return None
-
-
 def _load_yaml_or_json(path: Path) -> Any:
     """Parse YAML/JSON keeping RFC 3339 timestamps as strings.
 
@@ -763,15 +724,24 @@ def check_b4(sidecar: dict[str, Any] | None, repo_root: Path,
     git_sha = _safe_get(sidecar, "runner", "git_sha")
     if not isinstance(git_sha, str):
         return []
-    # Skip live-git check when not in a real git repo (allows synthetic fixtures
-    # with valid-looking but fictitious SHAs to pass B4 without false positive).
-    # Codex vendors ARS below the package root, so .git can live in an ancestor.
-    git_root = _b4_git_root(repo_root)
-    if git_root is None:
+    if not (
+        (repo_root / ".git").exists()
+        or (repo_root / "scripts" / "check_audit_artifact_consistency.py").is_file()
+    ):
+        return []
+    # Skip live-git check when not inside a real git worktree (allows
+    # synthetic fixtures with valid-looking but fictitious SHAs to pass B4
+    # without false positive). Use git itself instead of repo_root/.git so
+    # nested vendored roots inside a larger checkout are still checked.
+    inside = subprocess.run(
+        ["git", "-C", str(repo_root), "rev-parse", "--is-inside-work-tree"],
+        capture_output=True, text=True, timeout=10,
+    )
+    if inside.returncode != 0 or inside.stdout.strip() != "true":
         return []
     try:
         result = subprocess.run(
-            ["git", "-C", str(git_root), "cat-file", "-e", f"{git_sha}^{{commit}}"],
+            ["git", "-C", str(repo_root), "cat-file", "-e", f"{git_sha}^{{commit}}"],
             capture_output=True, text=True, timeout=10,
         )
         if result.returncode != 0:

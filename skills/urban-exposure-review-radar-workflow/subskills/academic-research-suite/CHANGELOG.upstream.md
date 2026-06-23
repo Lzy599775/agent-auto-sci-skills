@@ -4,6 +4,41 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.1.14] - 2026-06-21
+
+### Fixed
+- Replaced the Codex Desktop plugin's `skills` symlink with a materialized
+  bundled `skills/academic-research-suite` directory so Windows plugin caches
+  register the bundled skill reliably.
+- Added a package quality gate that fails if the Desktop plugin bundle reverts
+  to symlink-based skill packaging.
+
+## [0.1.13] - 2026-06-20
+
+### What's Changed
+- Updated the vendored ARS runtime from
+  `529c6d25a3778843fb94edf9f03eda4cd7e0f416` (`v3.12.0-19-g529c6d2`,
+  ARS main after the submission-package verifier slices) to
+  `c22c17eed8a5753aa60681be9734919f2e2f5b42` (`v3.13.0-2-gc22c17e`,
+  ARS main after the GitHub Copilot documentation updates).
+- Added upstream ARS v3.12.1 and v3.13 mainline content, including
+  reviewer-response triage modes, diff/patch revision mode adoption,
+  format-profile support, provider-agnostic cross-model verification,
+  Windows hook portability, Socratic adjacent-framing probe support,
+  CITATION metadata, and repository instruction docs.
+- Added Codex alias coverage for `ars-3w` and `ars-rebuttal-audit` in both
+  the root router and the optional full-runtime planner.
+- Preserved Codex packaging behavior: one root router skill, vendored workflow
+  entry files named `WORKFLOW.md`, excluded Claude/plugin loader files,
+  preserved nested upstream `.github` and root `agents` mirrors as inactive
+  traceability/self-test fixtures, Codex setup/architecture overlays at the
+  package root, nested-path lint adaptations, macOS Bash 3.2 audit wrapper
+  compatibility, and explicit cross-model consent boundaries.
+
+### Notes
+- This sync pins ARS `main`, not an exact upstream tag. The nearest upstream tag
+  is `v3.13.0`.
+
 ## [0.1.12] - 2026-06-11
 
 ### What's Changed

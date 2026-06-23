@@ -151,6 +151,10 @@ id = "v3.10-134-write-scope-guard"
 path = "scripts/test_ars_write_scope_guard.py"
 
 [[pytest]]
+id = "454-write-scope-guard-launcher"
+path = "scripts/test_run_guard_launcher.py"
+
+[[pytest]]
 id = "v3.10-134-write-scope-lint-mutation"
 path = "scripts/test_check_v3_10_134_write_scope.py"
 
@@ -189,6 +193,10 @@ id = "346-349-cross-model-sync-lint"
 path = "scripts/test_check_cross_model_verification_sync.py"
 
 [[pytest]]
+id = "453-compat-verdict-normalization"
+path = "scripts/test_normalize_compat_verdict.py"
+
+[[pytest]]
 id = "361-judge-prompt-version-drift"
 path = "scripts/test_check_judge_prompt_version.py"
 
@@ -201,6 +209,10 @@ id = "272-runtime-injection-boundary-pebble"
 path = "scripts/test_runtime_injection_boundary_xfail.py"
 
 [[pytest]]
+id = "250-title-fuzzy-false-positive-pin"
+path = "scripts/test_title_fuzzy_false_positive.py"
+
+[[pytest]]
 id = "396-rubric-weight-consistency"
 path = "scripts/test_check_rubric_weight_consistency.py"
 
@@ -211,3 +223,31 @@ path = "scripts/test_check_392_citation_verification_intake.py"
 [[pytest]]
 id = "394-submission-package-verifier"
 path = "scripts/test_verify_submission_package.py"
+
+[[pytest]]
+id = "394-submission-policy-lint"
+path = "scripts/test_check_394_submission_policy.py"
+
+[[pytest]]
+id = "439-format-profile-lint"
+path = "scripts/test_check_439_format_profile.py"
+
+[[pytest]]
+id = "413-agents-mirror-sync"
+path = "scripts/test_check_agents_mirror_sync.py"
+
+[[pytest]]
+id = "390-block-parser"
+path = "scripts/test_block_parser.py"
+
+[[pytest]]
+id = "390-anchorize-draft"
+path = "scripts/test_ars_anchorize_draft.py"
+
+[[pytest]]
+id = "390-apply-revision-patch"
+path = "scripts/test_ars_apply_revision_patch.py"
+
+[[pytest]]
+id = "390-revision-patch-discipline-lint"
+path = "scripts/test_check_390_revision_patch_discipline.py"

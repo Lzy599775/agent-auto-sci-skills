@@ -28,6 +28,7 @@ Unlike the Rejected mechanisms above — capabilities ARS refuses on principle �
 
 - **Post-publication lifecycle.** Tracking citation contexts of the scholar's own published papers, errata/corrigenda workflows, and OA self-archiving compliance are out of scope. ARS's front is research-to-publication; what happens to a paper after it ships belongs to the scholar and their institutional tooling. The existing `monitoring_agent` is unaffected — it alerts on developments in the *cited* literature (an input to current work), not on the scholar's own published output. Review criterion: a proposed feature whose value begins *after* the manuscript is accepted extends the front, and requires changing this recorded boundary first.
 - **Research-program-level state.** ARS keeps no memory across papers: no registry of the scholar's prior claims, no carried-forward limitations list, no reviewer-history profile. The per-paper Material Passport remains the only state carrier, and every run starts from what the scholar explicitly feeds it. This is a deliberate consequence of the anti-leakage philosophy — gates that trusted an ambient cross-paper memory would be evaluating state nobody declared this run. The supported way for a returning author to carry their own prior work forward without any new mechanism is the [Cross-paper workflow guide](docs/cross-paper-workflow.md). Review criterion: a proposed feature that reads or writes scholar state outside the current run's passport crosses this boundary.
+- **Institutional / journal format-profile content.** Unlike the two above, ARS *does* ship the mechanism — the scholar-declared layout `format_profile` (#439), so a user can bind a thesis or journal template without forking. What ARS deliberately does NOT ship is any *specific* institution's or journal's profile *content*: the repo carries the schema and a synthetic example only, never a real school's font/spacing/caption rules. Binding the suite to one institution's template is the boundary the [#439 design](docs/design/2026-06-15-439-format-profile-design.md) keeps out. Review criterion: a PR that adds a real institution's or journal's `format_profile.yaml` (or hardcodes its rules into an agent) to this repo crosses this boundary — profiles stay user-supplied and out-of-tree.
 
 ## Allowed uses
 
@@ -75,5 +76,5 @@ These reflect our policy intent. See the [CC BY-NC 4.0 license](https://creative
 If you use ARS in your research, please cite it:
 
 ```
-Wu, C.-I. (2026). Academic Research Skills for Claude Code (Version 3.8) [Computer software]. https://github.com/Imbad0202/academic-research-skills
+Wu, C.-I. (2026). Academic Research Skills for Claude Code (Version 3.13.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.20696614
 ```

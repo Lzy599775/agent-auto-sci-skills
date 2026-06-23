@@ -1,11 +1,14 @@
 # #394 Family D — `repro_lock` linkage assessment (slice 3 deliverable)
 
-**Status**: ASSESSMENT — PENDING MAINTAINER ADJUDICATION. Per the parent spec
-(`2026-06-10-394-submission-package-verifier-spec.md` §3.4), the assessment
-itself is the slice-3 deliverable and **Family D ships nothing** until
-adjudicated. The verifier's check registry reserves the `D` id prefix and the
-`repro_lock_linkage` family vocabulary in the report schema; no D check is
-registered or emitted.
+**Status**: ADJUDICATED — **Option 2** (maintainer, 2026-06-10, recorded on
+issue #394). Family D ships nothing, permanently; the `repro_lock`
+documentation-only boundary stands untouched, and the venue-facing need is
+covered by declaring the artifact in `venue_profile.required_sections`
+(enforced deterministically by B4). The verifier's check registry keeps the
+`D` id prefix and the `repro_lock_linkage` family vocabulary reserved in the
+report schema; no D check is registered or emitted. Should a concrete need
+for passport↔package cross-checking emerge later, it is a new issue, not a
+reopening of this assessment.
 
 ## The question (deliberately narrow)
 
@@ -59,5 +62,10 @@ deterministically without touching the `repro_lock` boundary at all. Option
 the kind of scope creep the §1.2 premise ("the verifier reads artifacts, not
 intentions") warns against.
 
-**Adjudication needed from the maintainer:** Option 1 / Option 2 / defer.
-Until recorded here, Family D ships nothing (parent spec §3.4).
+**Adjudication (2026-06-10):** the maintainer ruled **Option 2**. The
+recommendation above stands as the recorded rationale, with one sharpening:
+Option 2's listed "Against" (no automated nudge that the lock missed the
+deliverable set) is itself weak — the lock is a passport-side record and was
+never required to enter the package; whether a reproducibility artifact
+belongs in the package is a venue requirement, which `required_sections` +
+B4 already enforce.

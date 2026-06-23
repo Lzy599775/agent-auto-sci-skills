@@ -135,15 +135,20 @@ def _check_orchestrator(root: Path) -> list[str]:
 
 
 def _check_skill_md(root: Path) -> list[str]:
-    path = root / PIPELINE_SKILL_PATH
+    rel_path = (
+        Path("academic-pipeline/WORKFLOW.md")
+        if (root / "academic-pipeline/WORKFLOW.md").is_file()
+        else PIPELINE_SKILL_PATH
+    )
+    path = root / rel_path
     if not path.is_file():
-        return [f"{PIPELINE_SKILL_PATH} does not exist"]
+        return [f"{rel_path} does not exist"]
     text = path.read_text(encoding="utf-8").lower()
     if "collaboration_depth_agent" not in text:
-        return [f"{PIPELINE_SKILL_PATH}: does not mention collaboration_depth_agent"]
+        return [f"{rel_path}: does not mention collaboration_depth_agent"]
     if not any(p in text for p in NON_BLOCKING_PHRASES):
         return [
-            f"{PIPELINE_SKILL_PATH}: observer invocation must be explicitly "
+            f"{rel_path}: observer invocation must be explicitly "
             f"described as non-blocking (e.g. 'never blocks', 'advisory only')"
         ]
     return []

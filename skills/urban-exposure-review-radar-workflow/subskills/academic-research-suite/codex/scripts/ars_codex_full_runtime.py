@@ -21,7 +21,7 @@ CODEX_ROOT = SCRIPT.parents[1]
 SUITE_ROOT = SCRIPT.parents[2]
 MANIFEST_PATH = CODEX_ROOT / "full-runtime-manifest.json"
 
-ALIAS_RE = re.compile(r"(?<![\w/-])(/?ars-[a-z-]+)(?![\w-])", re.IGNORECASE)
+ALIAS_RE = re.compile(r"(?<![\w/-])(/?ars-[a-z0-9-]+)(?![\w-])", re.IGNORECASE)
 QUESTION_RE = re.compile(r"\b(research question|rq|hypothesis|hypotheses)\b|研究問題|研究问题|假設|假设", re.IGNORECASE)
 UNCLEAR_QUESTION_RE = re.compile(
     r"(do not|don't|does not|doesn't|not yet|without|no)\s+.{0,40}\b(research question|rq|hypothesis|hypotheses)\b|"
