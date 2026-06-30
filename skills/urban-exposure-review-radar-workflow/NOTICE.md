@@ -7,8 +7,9 @@ It also vendors a third-party Codex-native academic research package:
 - Source package: `Imbad0202/academic-research-skills-codex`
 - Upstream suite: `Imbad0202/academic-research-skills`
 - Vendored path: `subskills/academic-research-suite`
-- Codex adapter version: 0.1.14
-- Upstream ARS commit recorded in manifest: `c22c17eed8a5753aa60681be9734919f2e2f5b42`
+- Codex adapter version: 0.1.15
+- Codex package commit used: `efdbc2a`
+- Upstream ARS commit recorded in manifest: `17c518b286e48bbcd19fa7d05ec4f7d2aeb01641`
 - License: Creative Commons Attribution-NonCommercial 4.0 International
 
 The upstream license text is preserved at:
@@ -17,13 +18,13 @@ The upstream license text is preserved at:
 subskills/academic-research-suite/LICENSE
 ```
 
-The upstream README, changelog, security note, and version file are preserved as:
+The upstream manifest, notice, license, README files, changelog, and traceability material are preserved under:
 
 ```text
-subskills/academic-research-suite/README.upstream.md
-subskills/academic-research-suite/CHANGELOG.upstream.md
-subskills/academic-research-suite/SECURITY.upstream.md
-subskills/academic-research-suite/VERSION
+subskills/academic-research-suite/manifest.json
+subskills/academic-research-suite/NOTICE.md
+subskills/academic-research-suite/LICENSE
+subskills/academic-research-suite/ars/
 ```
 
 Modification note:

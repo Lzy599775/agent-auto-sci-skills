@@ -1,33 +1,22 @@
 # Auto-sci-research
 
-[中文](README.md) | [English](README_EN.md) | [🌐 Showcase](site/index.html)
+[中文](README.md) | [English](README_EN.md) | [Showcase](site/index.html)
 
-> A Codex-first skill suite for geography, sport science, urban health, geospatial exposure assessment, literature review, bibliometrics, machine learning, and SCI writing.
+> A Codex-first skill suite for geography, sport science, urban health, GIS/remote sensing, green exposure, sport parks/facilities, spatial equity, literature review, bibliometrics, machine learning, scientific figures, and SCI writing.
 
-`Auto-sci-research` is a reusable research-agent skill bundle for Codex. It is designed for research on sport parks, sport facilities, green exposure, heat exposure, spatial equity, urban health, GIS/remote sensing, systematic reviews, scoping reviews, bibliometrics, machine learning, scientific visualization, and manuscript writing.
+`Auto-sci-research` is a reusable research workbench, not a one-click paper generator. It helps Codex route research tasks across topic design, literature review, source manifests, GIS/RS processing, exposure/accessibility measurement, statistics, ML/XAI, publication figures, manuscript writing, cover letters, rebuttals, and project memory.
 
-It is not a paper generator. It is a maintainable research workbench that helps researchers organize search, screening, coding, analysis, figures, writing, peer-review responses, and policy agendas.
+The repository now contains **17 installable Codex skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-This release upgrades `urban-exposure-review-radar-workflow` into a domain router plus research-pipeline adapter. It combines review-project discipline with remote-sensing / Geospatial AI frontier radar, and now vendors an isolated `academic-research-suite` subskill for deep research, paper writing, reviewer simulation, citation checks, full research-to-paper pipelines, and experiment planning.
+Latest upstream refresh: 2026-06-30.
 
-The suite also packages the latest selected upstream skills from `K-Dense-AI/scientific-agent-skills` and `Haojae/scipilot-figure-skill`. K-Dense is not installed wholesale: only Machine Learning & AI, Data Analysis & Visualization, Geospatial Science & Remote Sensing, and Scientific Communication are wrapped as installable domain modules. `scipilot-figure-skill` is included as a publication-figure and visual-QA companion.
+- ARS updated to `v0.1.15` (`efdbc2a`).
+- K-Dense checked at `v2.53.0-6-g0807ddb`; selected local wrapper scope had no changed files.
+- SciPilot Figure remains `v2.1.0-1-g43098dd`.
+- SciPilot Writing `v1.0.0` was newly packaged.
+- GeoRS SCI Writing Adapter was added as an original adapter because the checked upstream source did not include an explicit license.
 
-The repository now contains **15 installable Codex skills**: one umbrella router, six Auto-sci core research modules, two sport-geography specialist modules, one urban-exposure review/radar workflow, four selected K-Dense upstream wrappers, and one SciPilot figure advisor.
-
-## Core Workflow
-
-```text
-sources
--> structured memory
--> idea and method design
--> literature review / bibliometrics / coding
--> GIS / exposure / data / ML analysis
--> manuscript / figures / tables / policy agenda
--> reviewer-risk audit / rebuttal
--> evolution archive
-```
-
-## Installation for Codex
+## Installation
 
 ```powershell
 git clone https://github.com/Lzy599775/agent-auto-sci-skills.git
@@ -41,74 +30,63 @@ Default target:
 $env:USERPROFILE\.codex\skills
 ```
 
-Restart Codex after installation.
-
 Custom target:
 
 ```powershell
 .\scripts\install.ps1 -Target "$env:USERPROFILE\.agents\skills"
 ```
 
-The 2026-06-16 F-drive skill consolidation and upstream refresh report is available at [docs/upstream-update-20260616.md](docs/upstream-update-20260616.md).
+Before public release:
 
-## Skill Index
+```powershell
+.\scripts\scan_public_safety.ps1
+```
 
-| Skill | Status | Purpose | Typical trigger |
-|---|---:|---|---|
-| `auto-sci-research` / legacy `agent-auto-sci` | Stable | Router, project memory, workflow orchestration, evolution archive | “Use Auto-sci-research to plan this research task.” |
-| `agent-auto-sci-automation` | Stable | Source manifests, checkpoints, failure logs, API safety | “Build a persistent research workflow.” |
-| `agent-auto-sci-methodology` | Stable | Research questions, hypotheses, evidence grading, bias audit | “Turn this topic into testable questions.” |
-| `agent-auto-sci-geospatial` | Stable | GIS, remote sensing, accessibility, exposure, spatial equity | “Audit my spatial workflow.” |
-| `agent-auto-sci-data-viz` | Stable | EDA, statistics, publication figures, bibliometric visuals | “Design figures and captions.” |
-| `agent-auto-sci-ai-ml` | Stable | ML, SHAP/XAI, leakage checks, spatial validation | “Audit model validation and interpretation.” |
-| `agent-auto-sci-scicomm` | Stable | Manuscript structure, journal fit, rebuttal, slides | “Rebuild the manuscript argument.” |
-| `kdense-ml-ai-selected` | New | Selected K-Dense ML/AI tools: scikit-learn, PyTorch Lightning, Transformers, SHAP, time series, GNN, UMAP | “Use the selected K-Dense ML toolkit for this modeling task.” |
-| `kdense-data-viz-selected` | New | Selected K-Dense EDA, statistics, plotting, visualization, NetworkX, Polars, Dask tools | “Use the selected K-Dense data-viz toolkit to analyze and plot this dataset.” |
-| `kdense-geospatial-rs-selected` | New | Selected K-Dense geospatial and remote-sensing helpers: GeoMaster and GeoPandas | “Use the selected K-Dense geospatial toolkit for this GIS workflow.” |
-| `kdense-scicomm-selected` | New | Selected K-Dense writing, review, slides, schematics, citation and literature-review helpers | “Use the selected K-Dense scicomm toolkit to polish this manuscript package.” |
-| `scipilot-figure-skill` | New | Scientific figure design, chart selection, visual QA, CJK-compatible publication figures | “Use SciPilot Figure Skill to design and audit my figures.” |
-| `urban-exposure-review-radar-workflow` | Stable | Review-route decision, bibliometric + critical review, systematic/scoping review, remote-sensing radar, CV-to-RS, medical database linkage | “Decide which route this review/radar/study should take.” |
-| `sport-geography-review-bibliometric` | Stable | Systematic/scoping reviews, bibliometrics, critical coding, policy agenda | “Design a review + bibliometrics manuscript.” |
-| `sport-geography-sci-writing` | Stable | Empirical SCI writing for sport geography, exposure, equity, urban health | “Turn my results into an SCI manuscript.” |
+## Which Skill Should I Use?
 
-## Complete Skill Matrix
+| Need | Start with |
+|---|---|
+| Route a complex multi-stage research task | `auto-sci-research` |
+| Build source manifests, checkpoints, and safe automation | `agent-auto-sci-automation` |
+| Refine research questions, mechanisms, evidence strength, and causality | `agent-auto-sci-methodology` |
+| Audit GIS, remote sensing, exposure, accessibility, and spatial equity | `agent-auto-sci-geospatial` |
+| Design EDA, statistics, bibliometric visuals, and paper figures | `agent-auto-sci-data-viz` |
+| Audit ML, SHAP/XAI, leakage, and spatial/temporal validation | `agent-auto-sci-ai-ml` |
+| Build manuscript argument, cover letters, rebuttals, and presentations | `agent-auto-sci-scicomm` |
+| Write sport geography empirical SCI papers | `sport-geography-sci-writing` |
+| Design sport geography reviews and bibliometric manuscripts | `sport-geography-review-bibliometric` |
+| Route urban exposure reviews, radar scans, and health database linkage | `urban-exposure-review-radar-workflow` |
+| Use a full academic research and paper pipeline | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` |
+| Decide what chart to use and produce publication-grade figures | `scipilot-figure-skill` |
+| Polish, translate, humanize, write cover letters, or rebut reviews | `scipilot-writing-skill` |
+| Write geography/remote-sensing SCI sections | `geors-sci-writing-adapter` |
+| Use selected upstream technical playbooks | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` |
 
-| Skill | Type | Best-fit scenario | Typical outputs | Boundary |
-|---|---|---|---|---|
-| `auto-sci-research` | Umbrella router | Multi-stage research tasks spanning topic, literature, data, analysis, figures, writing, and submission | Route plan, skill sequence, quality gates, evolution record | Routes to specialist skills; does not replace them |
-| `agent-auto-sci-automation` | Automation / memory | Long-lived projects, source manifests, checkpoints, API boundaries, failure logs | Source manifest, status tables, recovery points | Never publish secrets, private PDFs, paid exports, or unpublished material |
-| `agent-auto-sci-methodology` | Methodology | Weak research logic, unclear mechanisms, causal-language risk, evidence grading | SMART questions, mechanism map, hypotheses, bias audit | Does not turn correlations into causal claims |
-| `agent-auto-sci-geospatial` | GIS / remote sensing | Accessibility, green/heat exposure, LCZ, spatial equity, maps, spatial joins | CRS audit, exposure windows, accessibility workflow, map checklist | Keeps exposure, accessibility, availability, quality, and use separate |
-| `agent-auto-sci-data-viz` | Data / visualization | EDA, statistics, bibliometric figures, manuscript figures, policy matrices | Data audit, statistical route, figure plan, captions | Figures must support claims, not only decorate |
-| `agent-auto-sci-ai-ml` | ML / XAI | Machine learning, SHAP, spatial/temporal validation, leakage checks | Baselines, validation split, metrics, interpretation boundary | Feature importance is not causal evidence |
-| `agent-auto-sci-scicomm` | Writing / publication | Manuscript structure, argument, cover letter, rebuttal, slides, posters | Claim-evidence map, IMRAD outline, reviewer-risk scan, response matrix | Polishing must not inflate evidence strength |
-| `sport-geography-review-bibliometric` | Review / bibliometrics | Sport parks, sport facilities, green exposure, spatial equity, urban health reviews | Search strategy, PRISMA, coding table, bibliometric figures, policy agenda | Bibliometrics must lead to a framework or agenda |
-| `sport-geography-sci-writing` | SCI writing | Empirical sport geography, exposure, accessibility, equity, health mechanism papers | Journal positioning, introduction chain, methods narrative, discussion | Start from public problem and research gap, not only metrics |
-| `urban-exposure-review-radar-workflow` | Domain workflow | Reviews, frontier radar, urban exposure, public-health database linkage | Route decision, evidence gate, formal-corpus/radar handoff, ARS pipeline | Formal review evidence and frontier radar candidates stay separate |
-| `kdense-ml-ai-selected` | Upstream wrapper | Technical ML/AI playbooks for scikit-learn, Lightning, Transformers, SHAP, TimesFM, GNN, UMAP | Technical route, model notes, evaluation guidance | Domain interpretation remains with methodology/scicomm skills |
-| `kdense-data-viz-selected` | Upstream wrapper | EDA, statistics, Matplotlib, Seaborn, NetworkX, Polars, Dask | Technical analysis and plotting guidance | Claim design remains with data-viz/scicomm skills |
-| `kdense-geospatial-rs-selected` | Upstream wrapper | GeoPandas, GeoMaster, vector/raster and remote-sensing workflows | GIS and RS technical route | Does not bypass CRS, scale, exposure-definition, or map-compliance audits |
-| `kdense-scicomm-selected` | Upstream wrapper | Writing, review, citation, slides, posters, schematics, Mermaid | Writing and presentation templates | Does not replace field contribution and journal evidence gates |
-| `scipilot-figure-skill` | Figure advisor | “What chart should I use?”, publication figures, CJK labels, multi-panel visual QA | Chart choice, visual QA, font/cropping/overlap checks | Decide what the figure proves before plotting |
+## Skill Categories
 
-## Full Research Pipelines
+| Category | Skills |
+|---|---|
+| Router and automation | `auto-sci-research`, `agent-auto-sci-automation` |
+| Methodology and evidence design | `agent-auto-sci-methodology`, `urban-exposure-review-radar-workflow` |
+| Geospatial, RS, exposure, accessibility | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected`, `geors-sci-writing-adapter` |
+| Data, visualization, ML | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected`, `scipilot-figure-skill` |
+| Review and bibliometrics | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow`, `academic-research-suite` |
+| Writing and submission | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `geors-sci-writing-adapter`, `kdense-scicomm-selected` |
 
-### Urban exposure review radar + ARS academic pipeline
+## Typical Workflows
+
+### Sport facility accessibility manuscript
 
 ```text
 auto-sci-research
--> urban-exposure-review-radar-workflow
--> subskills/academic-research-suite
-   -> deep-research
-   -> academic-paper
-   -> academic-paper-reviewer
-   -> academic-pipeline
-   -> experiment-agent
+-> sport-geography-sci-writing
+-> agent-auto-sci-geospatial
+-> agent-auto-sci-data-viz
+-> agent-auto-sci-methodology
+-> scipilot-writing-skill
 ```
 
-Outputs: route decision, journal evidence gates, formal-corpus / radar-candidate handoff, extraction and coding plan, ARS-backed literature review, manuscript outline, citation check, reviewer-risk audit, revision roadmap, and integrity verification.
-
-### Review + bibliometrics + policy agenda
+### Green/heat exposure review
 
 ```text
 auto-sci-research
@@ -119,85 +97,37 @@ auto-sci-research
 -> agent-auto-sci-scicomm
 ```
 
-Outputs: search strategy, PRISMA protocol, screening criteria, coding framework, bibliometric figure plan, critical framework, and policy agenda.
-
-### Urban exposure + remote-sensing radar + health database linkage
+### Remote-sensing inversion or spatiotemporal change paper
 
 ```text
 auto-sci-research
--> urban-exposure-review-radar-workflow
+-> geors-sci-writing-adapter
 -> agent-auto-sci-geospatial
--> agent-auto-sci-methodology
--> agent-auto-sci-scicomm
-```
-
-Outputs: route decision, formal-corpus / radar-candidate handoff, remote-sensing and Geospatial AI candidate ranking, exposure-window and spatial-linkage plan, public-health outcome framework, journal evidence gate, and publishable research ideas.
-
-### Sport facility accessibility and spatial equity manuscript
-
-```text
-auto-sci-research
--> sport-geography-sci-writing
--> agent-auto-sci-geospatial
--> agent-auto-sci-data-viz
--> agent-auto-sci-methodology
-```
-
-Outputs: research questions, mechanism pathway, spatial data audit, accessibility/exposure/equity metrics, figures, discussion, limitations, and reviewer-risk scan.
-
-### ML + spatial health interpretation
-
-```text
-auto-sci-research
 -> agent-auto-sci-ai-ml
--> kdense-ml-ai-selected
--> agent-auto-sci-geospatial
--> agent-auto-sci-methodology
--> agent-auto-sci-scicomm
+-> agent-auto-sci-data-viz
+-> scipilot-writing-skill
 ```
 
-Outputs: baselines, spatial/temporal splits, leakage checks, SHAP/XAI interpretation boundaries, and manuscript-ready explanation.
-
-### Publication figures and visual QA
+### Publication figures
 
 ```text
-auto-sci-research
--> agent-auto-sci-data-viz
+agent-auto-sci-data-viz
 -> kdense-data-viz-selected
 -> scipilot-figure-skill
 -> agent-auto-sci-scicomm
 ```
 
-Outputs: figure argument, chart selection, statistics and plotting route, visual QA checklist, CJK font / label checks, caption-to-claim alignment, and journal-ready figure package.
+## Documentation
 
-## Example Prompts
-
-```text
-Use urban-exposure-review-radar-workflow to decide whether my project on heat exposure, green exposure, sport facility accessibility, and urban health should be a systematic review, scoping review, bibliometric + critical review, frontier radar, or empirical design. Include journal evidence gates for Cities, Sustainable Cities and Society, Environment International, and Health & Place.
-```
-
-```text
-Use Auto-sci-research and sport-geography-review-bibliometric to design a systematic review on sport park exposure, green equity, and urban health. Include search strategy, PRISMA, screening criteria, coding table, bibliometric figures, critical framework, and policy agenda. Target journals: Cities or Sustainable Cities and Society.
-```
-
-```text
-Use sport-geography-sci-writing and agent-auto-sci-geospatial to audit my empirical paper on sport facility accessibility. Focus on spatial units, network accessibility, exposure measurement, map compliance, spatial equity metrics, and reviewer risks.
-```
+- [Skill Map](docs/skill-map.md)
+- [External Skills And References](docs/external-skills.md)
+- [Upstream Update 2026-06-30](docs/upstream-update-20260630.md)
+- [Use Cases](docs/use-cases.md)
 
 ## Public Safety
 
 This repository must not contain API keys, tokens, cookies, private PDFs, paid database exports, unpublished manuscripts, reviewer comments, private datasets, personal absolute paths, or unauthorized third-party content.
 
-Before release:
-
-```powershell
-.\scripts\scan_public_safety.ps1
-```
-
-## References
-
-The public presentation borrows structural ideas from several open-source skill repositories, including XiaohongshuSkills, academic-paper-writer-pro-2, and nature-skills. The workflows here are redesigned for geography + sport science research and do not vendor those projects.
-
 ## License
 
-MIT License. Third-party code, templates, or assets must be reviewed separately for license compatibility and attribution.
+Original repository content is MIT licensed. Third-party vendored or wrapped content follows its own license. Unlicensed upstream content is not copied into the public repository; only attribution and original adapters are included.

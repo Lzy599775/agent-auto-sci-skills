@@ -33,7 +33,9 @@ Use this skill first when the task spans multiple research stages or asks to imp
 | Data figure advisor, chart selection, journal-ready plotting, CJK font setup, visual QA | `scipilot-figure-skill` |
 | GIS, spatial accessibility, remote sensing, spatial ML | `agent-auto-sci-geospatial` |
 | Upstream K-Dense geospatial and remote-sensing playbooks: geomaster, GeoPandas | `kdense-geospatial-rs-selected` |
-| Manuscript writing, slides, posters, peer review, rebuttal | `agent-auto-sci-scicomm` |
+| Manuscript argument, slides, posters, peer review, journal strategy, rebuttal | `agent-auto-sci-scicomm` |
+| Academic polishing, translation, de-AI/humanizing, cover letter, response-to-reviewers, writing lint | `scipilot-writing-skill` |
+| Geography and remote-sensing SCI writing: inversion, spatiotemporal change, exposure/accessibility IMRAD sections | `geors-sci-writing-adapter` |
 | Upstream K-Dense scientific communication playbooks: writing, peer review, citations, literature review, slides, posters, schematics | `kdense-scicomm-selected` |
 | Hypothesis, research design, critical appraisal, evidence grading | `agent-auto-sci-methodology` |
 | Urban exposure review workflow, systematic/scoping review, bibliometric + critical review, remote-sensing frontier radar, CV-to-RS idea generation, public health database linkage | `urban-exposure-review-radar-workflow` |
@@ -107,6 +109,8 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 - `../kdense-geospatial-rs-selected/SKILL.md`: selected K-Dense geospatial and remote-sensing package.
 - `../kdense-scicomm-selected/SKILL.md`: selected K-Dense scientific communication package.
 - `../scipilot-figure-skill/SKILL.md`: SciPilot scientific figure advisor and visual QA workflow.
+- `../scipilot-writing-skill/SKILL.md`: SciPilot writing, polishing, de-AI/humanizing, cover letter, and rebuttal workflow.
+- `../geors-sci-writing-adapter/SKILL.md`: original geography/remote-sensing SCI writing adapter for inversion, spatiotemporal change, exposure, accessibility, and urban-health manuscripts.
 
 ## Local Project Files
 

@@ -1,14 +1,14 @@
 {
   "name": "academic-research-suite",
-  "adapter_version": "0.1.14",
+  "adapter_version": "0.1.15",
   "version_file": "VERSION",
   "generated_for": "codex",
-  "generated_date": "2026-06-21",
+  "generated_date": "2026-06-29",
   "source_repositories": [
     {
       "name": "academic-research-skills",
       "url": "https://github.com/Imbad0202/academic-research-skills.git",
-      "commit": "c22c17eed8a5753aa60681be9734919f2e2f5b42",
+      "commit": "17c518b286e48bbcd19fa7d05ec4f7d2aeb01641",
       "included_paths": [
         "deep-research",
         "academic-paper",
@@ -30,7 +30,7 @@
         "pyproject.toml",
         ".gitattributes",
         ".gitleaks.toml",
-        "top-level README, README.zh-TW, README.zh-CN, README.ja-JP, QUICKSTART, SECURITY, NOTICE, CONTRIBUTING, MODE_REGISTRY, POSITIONING, CITATION.cff",
+        "top-level README, README.zh-TW, README.zh-CN, README.ja-JP, README.ko-KR, QUICKSTART, SECURITY, NOTICE, CONTRIBUTING, MODE_REGISTRY, POSITIONING, CITATION.cff",
         "requirements-dev.txt",
         "CHANGELOG.md",
         "LICENSE"
@@ -98,7 +98,7 @@
     "The Codex package carries scripts/codex_v3_6_7_block_baseline.json so first-time vendored trees can enforce v3.6.7 block byte-equivalence before Git history contains the upstream manifest.",
     "The Codex audit wrapper is patched to run on macOS stock Bash 3.2+ instead of requiring Bash 4+.",
     "Vendored test utilities keep macOS stock Python 3.9 compatibility where Codex local validation depends on it.",
-    "ARS v3.13.0 plus post-tag mainline documentation updates is the tracked upstream content; nested upstream .github workflows and root agents mirrors are preserved for traceability and upstream self-tests but are not repo-level CI or Codex entrypoints. Claude/plugin loader files under .claude, .claude-plugin, and upstream skills aliases remain intentionally excluded.",
+    "ARS v3.13.0 plus post-tag Korean README and platform-port reminder updates is the tracked upstream content; nested upstream .github workflows and root agents mirrors are preserved for traceability and upstream self-tests but are not repo-level CI or Codex entrypoints. Claude/plugin loader files under .claude, .claude-plugin, and upstream skills aliases remain intentionally excluded.",
     "Codex Desktop plugin packaging uses a materialized skills directory under plugins/academic-research-skills/skills instead of a symlink so Windows plugin caches can register the bundled academic-research-suite skill.",
     "Cross-model API behavior is disabled by default and requires explicit user request, provider configuration, and user consent before any external upload."
     ]

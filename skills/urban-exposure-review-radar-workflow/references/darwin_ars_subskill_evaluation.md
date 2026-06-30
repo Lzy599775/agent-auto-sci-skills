@@ -1,13 +1,13 @@
 # Darwin Evaluation: ARS Subskill Packaging
 
-Date: 2026-06-23
+Date: 2026-06-23; refreshed after upstream sync on 2026-06-30
 
 Scope: `urban-exposure-review-radar-workflow` with vendored `subskills/academic-research-suite`.
 
 Upstream package:
 
-- Codex package: `Imbad0202/academic-research-skills-codex` v0.1.14
-- Upstream ARS content: `Imbad0202/academic-research-skills@c22c17eed8a5753aa60681be9734919f2e2f5b42`
+- Codex package: `Imbad0202/academic-research-skills-codex` v0.1.15
+- Upstream ARS content: `Imbad0202/academic-research-skills@17c518b286e48bbcd19fa7d05ec4f7d2aeb01641`
 - License: CC BY-NC 4.0, attribution and non-commercial restriction preserved in `subskills/academic-research-suite/LICENSE`
 
 ## Score
@@ -58,7 +58,7 @@ For the urban exposure, sports geography, and bibliometric-review project, this 
 | Risk | Control |
 |---|---|
 | Vendored ARS is large and can overload context if loaded wholesale. | Parent skill instructs to read only the ARS router first, then one `WORKFLOW.md`. |
-| Upstream package may become stale. | Track v0.1.14 and upstream commit in manifest; refresh deliberately rather than silently. |
+| Upstream package may become stale. | Track v0.1.15 and upstream commit in manifest; refresh deliberately rather than silently. |
 | CC BY-NC 4.0 restricts commercial reuse. | Keep license and attribution with the subskill; avoid sharing without license notice. |
 | Historical ARS design docs contain TODO or placeholder text. | Treat `ars/docs/design/` as traceability material, not active runtime instruction. |
 | Dry-run scoring is weaker than blind independent judge evaluation. | Mark dimension 8 as `dry_run`; use multi-agent judges only when explicitly requested. |

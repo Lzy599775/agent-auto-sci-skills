@@ -127,8 +127,8 @@ Routing rule:
 
 Source and license:
 
-- The subskill vendors the Codex-native package `Imbad0202/academic-research-skills-codex` v0.1.14, which is the Codex sibling distribution of `Imbad0202/academic-research-skills`.
-- Upstream ARS content recorded in `subskills/academic-research-suite/manifest.json` tracks `Imbad0202/academic-research-skills@c22c17eed8a5753aa60681be9734919f2e2f5b42`.
+- The subskill vendors the Codex-native package `Imbad0202/academic-research-skills-codex` v0.1.15, which is the Codex sibling distribution of `Imbad0202/academic-research-skills`.
+- Upstream ARS content recorded in `subskills/academic-research-suite/manifest.json` tracks `Imbad0202/academic-research-skills@17c518b286e48bbcd19fa7d05ec4f7d2aeb01641`.
 - The vendored package is licensed under CC BY-NC 4.0. Preserve `subskills/academic-research-suite/LICENSE`, attribution, non-commercial limitation, and modification notes when copying or sharing.
 
 ## Checkpoints

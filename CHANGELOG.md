@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.0
+
+- Refreshed upstream mirrors on 2026-06-30.
+- Updated `urban-exposure-review-radar-workflow/subskills/academic-research-suite` to ARS Codex package `v0.1.15` (`efdbc2a`) and restored root attribution files.
+- Checked `K-Dense-AI/scientific-agent-skills` at `v2.53.0-6-g0807ddb`; selected local wrapper files were unchanged.
+- Added `scipilot-writing-skill` from `Haojae/scipilot-writing-skill` `v1.0.0` with MIT license, scripts, references, examples, NOTICE, and Codex UI metadata.
+- Added `geors-sci-writing-adapter` as an original geography/remote-sensing SCI writing adapter inspired by `xiangyu-Ge/sci-writing-geors`; no upstream text was vendored because no explicit LICENSE file was detected.
+- Rebuilt README, README_EN, skill map, external skill notes, upstream update notes, and local HTML homepage around a clearer 17-skill classification system.
+- Updated `auto-sci-research` routing and internal registry for the new writing skills.
+
 ## 0.4.0
 
 - Added selected wrappers from `K-Dense-AI/scientific-agent-skills` instead of installing the full upstream repository.

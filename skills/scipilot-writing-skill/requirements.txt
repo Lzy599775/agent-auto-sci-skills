@@ -1,0 +1,4 @@
+# scipilot-writing-skill 依赖
+# 核心脚本（writing_lint.py / latex_clean.py / text_stats.py）零依赖，仅用 Python 3.9+ 标准库。
+
+python-docx>=1.1   # optional；仅 docx_text.py 读写 .docx 时需要

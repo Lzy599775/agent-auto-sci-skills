@@ -41,10 +41,7 @@ urban-exposure-review-radar-workflow/
       SKILL.md
       manifest.json
       LICENSE
-      README.upstream.md
-      CHANGELOG.upstream.md
-      SECURITY.upstream.md
-      VERSION
+      NOTICE.md
       agents/
       ars/
       codex/
@@ -79,7 +76,7 @@ urban-exposure-review-radar-workflow/
 
 路径：`subskills/academic-research-suite/SKILL.md`
 
-这是本包封装的独立子 skill，来源于 `Imbad0202/academic-research-skills-codex` v0.1.14。它是 `Imbad0202/academic-research-skills` 的 Codex 原生分发版，已保留 manifest、license、upstream README、changelog 和 security 文档。
+这是本包封装的独立子 skill，来源于 `Imbad0202/academic-research-skills-codex` v0.1.15。它是 `Imbad0202/academic-research-skills` 的 Codex 原生分发版，已保留 manifest、license、NOTICE 和必要的上游追踪文档。
 
 它的作用不是替代父 skill，而是在研究进入“通用科研生产链条”后接管更复杂的写作、评审、引用和完整管线任务。父 skill 仍然负责城市暴露、体育地理和健康地理的领域判断。
 

@@ -22,6 +22,8 @@ Use this file to choose the right local skill.
 | `kdense-geospatial-rs-selected` | Selected upstream K-Dense geospatial and remote-sensing subskills | geomaster and GeoPandas technical workflows |
 | `agent-auto-sci-scicomm` | Manuscript writing, slides, posters, peer review, rebuttal | manuscript plan, section draft, response letter, presentation plan |
 | `kdense-scicomm-selected` | Selected upstream K-Dense scientific communication subskills | scientific writing, peer review, citations, literature review, slides, posters, schematics |
+| `scipilot-writing-skill` | SciPilot writing and polishing companion | polished text, back-translation, change log, writing_lint report, cover letter, rebuttal |
+| `geors-sci-writing-adapter` | Geography and remote-sensing SCI writing adapter | title, abstract, IMRAD sections, cover letter, geospatial/RS writing checks |
 | `agent-auto-sci-methodology` | Hypothesis, research design, critical appraisal, evidence grading | hypothesis matrix, method critique, risk-of-bias table |
 | `urban-exposure-review-radar-workflow` | Urban exposure review workflow, remote-sensing frontier radar, CV-to-RS idea generation, formal corpus/radar handoff | route decision, search/radar protocol, extraction/coding framework, journal evidence gate, project scaffold |
 
@@ -47,6 +49,8 @@ These are not subskills of this project, but they can be invoked as technical he
 - `kdense-geospatial-rs-selected`: selected K-Dense geospatial and remote-sensing bundle.
 - `kdense-scicomm-selected`: selected K-Dense scientific communication bundle.
 - `scipilot-figure-skill`: SciPilot figure advisor for chart selection, plotting, and visual QA.
+- `scipilot-writing-skill`: SciPilot writing/polishing workflow for translation, de-AI/humanizing, cover letters, and rebuttals.
+- `geors-sci-writing-adapter`: original geography/remote-sensing SCI writing adapter inspired by xiangyu-Ge/sci-writing-geors without copying unlicensed upstream text.
 - `hypothesis-generation`, `scientific-critical-thinking`, `scholar-evaluation`
 
 ## 5. Newly Deployed External Research Skills
@@ -77,13 +81,15 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 10. If the task involves spatial data or maps, add `agent-auto-sci-geospatial`.
 11. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`; add `kdense-ml-ai-selected` when upstream package-level technical playbooks are needed.
 12. If the task ends in figures/tables/statistics, add `agent-auto-sci-data-viz`; add `kdense-data-viz-selected` for upstream EDA/statistics/visualization playbooks and `scipilot-figure-skill` for chart selection or publication-grade data figures.
-13. If the task ends in text, slides, poster, or rebuttal, add `agent-auto-sci-scicomm`; add `kdense-scicomm-selected` for upstream writing, citation, peer-review, slide, poster, or schematic workflows.
-14. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
-15. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
-16. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
-17. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
-18. If the task asks to create a new thinking/persona skill, use `huashu-nuwa` and keep local evidence boundaries.
-19. If the task asks for writing prompts, use `awesome-ai-research-writing` plus local sport-geography writing rules.
+13. If the task is final-language polishing, translation, de-AI/humanizing, cover letter, or rebuttal, add `scipilot-writing-skill`.
+14. If the task is geography/remote-sensing SCI writing, especially inversion, spatiotemporal change, exposure, accessibility, or urban health manuscripts, add `geors-sci-writing-adapter`.
+15. If the task ends in text, slides, poster, or rebuttal at the argument/package level, add `agent-auto-sci-scicomm`; add `kdense-scicomm-selected` for upstream writing, citation, peer-review, slide, poster, or schematic workflows.
+16. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
+17. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
+18. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
+19. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
+20. If the task asks to create a new thinking/persona skill, use `huashu-nuwa` and keep local evidence boundaries.
+21. If the task asks for writing prompts, use `awesome-ai-research-writing` plus local sport-geography writing rules.
 
 ## 7. Full Pipeline Ownership
 
@@ -94,6 +100,6 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 | Data and spatial processing | `agent-auto-sci-automation`, `agent-auto-sci-geospatial` |
 | Modeling and analysis | `agent-auto-sci-ai-ml`, `kdense-ml-ai-selected`, `agent-auto-sci-data-viz`, `kdense-data-viz-selected`, `agent-auto-sci-methodology` |
 | Publication figures | `agent-auto-sci-data-viz`, `scipilot-figure-skill`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` |
-| Draft and revision | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `kdense-scicomm-selected` |
+| Draft and revision | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `kdense-scicomm-selected` |
 | Reviewer risk and rebuttal | `agent-auto-sci-methodology`, `agent-auto-sci-scicomm` |
 | Skill evolution and release | `auto-sci-research`, `agent-auto-sci-automation` |

@@ -1,0 +1,21 @@
+# 运行产物（写作质量证据链，属会话临时文件，不入库）
+lint_report.json
+change_log.md
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 临时文本
+/tmp/
+*_preview.txt

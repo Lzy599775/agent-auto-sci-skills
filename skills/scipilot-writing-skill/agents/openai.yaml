@@ -1,0 +1,4 @@
+interface:
+  display_name: "SciPilot Writing Skill"
+  short_description: "Academic writing and polishing co-pilot with writing lint, integrity checks, section drafting, cover letters, and rebuttals."
+  default_prompt: "Use scipilot-writing-skill to clarify the writing task, preserve facts and citations, polish or draft the target section, run writing lint checks, and report remaining issues."
