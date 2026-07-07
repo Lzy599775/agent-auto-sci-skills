@@ -1,20 +1,20 @@
 # Auto-sci-research
 
-[中文](README.md) | [English](README_EN.md) | [Showcase](site/index.html)
+[中文](README.md) | [English](README_EN.md) | [Local showcase](site/index.html) | [Evolution archive](site/agent-auto-sci-evolution.html)
 
 > A Codex-first skill suite for geography, sport science, urban health, GIS/remote sensing, green exposure, sport parks/facilities, spatial equity, literature review, bibliometrics, machine learning, scientific figures, and SCI writing.
 
 `Auto-sci-research` is a reusable research workbench, not a one-click paper generator. It helps Codex route research tasks across topic design, literature review, source manifests, GIS/RS processing, exposure/accessibility measurement, statistics, ML/XAI, publication figures, manuscript writing, cover letters, rebuttals, and project memory.
 
-The repository now contains **17 installable Codex skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
+The repository contains **17 installable Codex skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: 2026-06-30.
+Latest upstream refresh: **2026-07-07**.
 
-- ARS updated to `v0.1.15` (`efdbc2a`).
-- K-Dense checked at `v2.53.0-6-g0807ddb`; selected local wrapper scope had no changed files.
+- ARS Codex package updated to `v0.1.17` (`8626ccb`).
+- K-Dense checked at `v2.53.0-10-g4d97e29`; the selected local scope synced upstream `statistical-analysis` updates.
 - SciPilot Figure remains `v2.1.0-1-g43098dd`.
-- SciPilot Writing `v1.0.0` was newly packaged.
-- GeoRS SCI Writing Adapter was added as an original adapter because the checked upstream source did not include an explicit license.
+- SciPilot Writing remains `v1.0.0` (`51c5fd3`).
+- GeoRS SCI Writing Adapter remains an original adapter because the checked upstream source still has no explicit LICENSE file.
 
 ## Installation
 
@@ -48,7 +48,7 @@ Before public release:
 |---|---|
 | Route a complex multi-stage research task | `auto-sci-research` |
 | Build source manifests, checkpoints, and safe automation | `agent-auto-sci-automation` |
-| Refine research questions, mechanisms, evidence strength, and causality | `agent-auto-sci-methodology` |
+| Refine research questions, mechanisms, evidence strength, and causal language | `agent-auto-sci-methodology` |
 | Audit GIS, remote sensing, exposure, accessibility, and spatial equity | `agent-auto-sci-geospatial` |
 | Design EDA, statistics, bibliometric visuals, and paper figures | `agent-auto-sci-data-viz` |
 | Audit ML, SHAP/XAI, leakage, and spatial/temporal validation | `agent-auto-sci-ai-ml` |
@@ -73,6 +73,28 @@ Before public release:
 | Review and bibliometrics | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow`, `academic-research-suite` |
 | Writing and submission | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `geors-sci-writing-adapter`, `kdense-scicomm-selected` |
 
+## Detailed Skill Index
+
+| Skill | Role | Best for | Typical output | Boundary |
+|---|---|---|---|---|
+| `auto-sci-research` | Router | Multi-stage tasks across topic, literature, data, analysis, figures, writing, submission | Skill sequence, route map, quality gates | Does not replace specialist skills |
+| `agent-auto-sci-automation` | Automation | Source manifests, checkpoints, project memory, API safety | Manifest, status table, recovery plan | Never stores secrets or private materials |
+| `agent-auto-sci-methodology` | Methodology | Research questions, mechanisms, causal language, evidence strength | RQ matrix, mechanism map, bias audit | Correlation is not written as causality |
+| `agent-auto-sci-geospatial` | GIS/RS | Accessibility, exposure, LCZ, spatial equity, maps | CRS audit, exposure window, map QA | Keeps exposure/accessibility/use separate |
+| `agent-auto-sci-data-viz` | Data/figures | EDA, statistics, bibliometrics, manuscript figures | Figure plan, statistical route, captions | Every chart must serve a claim |
+| `agent-auto-sci-ai-ml` | ML/XAI | Prediction, SHAP, leakage checks, validation design | Baseline, split plan, interpretation limits | Feature importance is not causal evidence |
+| `agent-auto-sci-scicomm` | Writing/submission | Manuscript argument, cover letters, rebuttals, slides | Claim-evidence map, response matrix | Polishing must not change evidence strength |
+| `sport-geography-review-bibliometric` | Domain review | Sport geography reviews and bibliometrics | Search strategy, PRISMA, coding table | Bibliometrics must support a framework |
+| `sport-geography-sci-writing` | Domain writing | Sport facilities, sport parks, spatial equity empirical papers | Journal positioning, IMRAD sections | Start from the public problem, not only metrics |
+| `urban-exposure-review-radar-workflow` | Domain workflow | Urban exposure reviews, formal corpus, frontier radar | Route decision, journal gate, radar handoff | Formal corpus and radar candidates stay separate |
+| `kdense-ml-ai-selected` | Upstream wrapper | ML/AI technical playbooks | Model and training guidance | Technical reference only |
+| `kdense-data-viz-selected` | Upstream wrapper | EDA, statistics, plotting, large tables | Library-level route and code guidance | Does not design manuscript claims |
+| `kdense-geospatial-rs-selected` | Upstream wrapper | GeoPandas, GeoMaster, GIS/RS details | Spatial processing guidance | Does not bypass CRS/scale audit |
+| `kdense-scicomm-selected` | Upstream wrapper | Writing, peer review, citation, slides/posters/schematics | Templates and technical references | Does not replace domain judgment |
+| `scipilot-figure-skill` | Figure advisor | Chart choice and publication-grade visual QA | Chart advice, plotting route, export checks | First decide what the figure proves |
+| `scipilot-writing-skill` | Writing polish | Translation, polishing, de-AI, cover letters, rebuttals | Revised text, back-translation, lint report | Does not alter facts, values, citations |
+| `geors-sci-writing-adapter` | Geo/RS writing | Inversion, spatiotemporal change, exposure/accessibility papers | Section drafting, journal positioning, spatial writing checks | Original adapter, no unlicensed upstream text |
+
 ## Typical Workflows
 
 ### Sport facility accessibility manuscript
@@ -86,7 +108,7 @@ auto-sci-research
 -> scipilot-writing-skill
 ```
 
-### Green/heat exposure review
+### Green or heat exposure review
 
 ```text
 auto-sci-research
@@ -108,25 +130,15 @@ auto-sci-research
 -> scipilot-writing-skill
 ```
 
-### Publication figures
+## Upstream And Licensing
 
-```text
-agent-auto-sci-data-viz
--> kdense-data-viz-selected
--> scipilot-figure-skill
--> agent-auto-sci-scicomm
-```
+- `Haojae/scipilot-writing-skill`: MIT, fully packaged with LICENSE and NOTICE.
+- `Haojae/scipilot-figure-skill`: MIT, packaged as a figure-advisor skill.
+- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v0.1.17`.
+- `K-Dense-AI/scientific-agent-skills`: selected wrappers only, not a full import.
+- `xiangyu-Ge/sci-writing-geors`: no explicit LICENSE detected, so this repo keeps only attribution and an original adapter.
 
-## Documentation
-
-- [Skill Map](docs/skill-map.md)
-- [External Skills And References](docs/external-skills.md)
-- [Upstream Update 2026-06-30](docs/upstream-update-20260630.md)
-- [Use Cases](docs/use-cases.md)
-
-## Public Safety
-
-This repository must not contain API keys, tokens, cookies, private PDFs, paid database exports, unpublished manuscripts, reviewer comments, private datasets, personal absolute paths, or unauthorized third-party content.
+See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20260707.md](docs/upstream-update-20260707.md).
 
 ## License
 

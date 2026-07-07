@@ -1,46 +1,38 @@
 ---
 name: kdense-geospatial-rs-selected
-description: "精选 K-Dense Scientific Agent Skills 的地理空间科学与遥感工具包。用于 geomaster、geopandas、GIS、遥感、矢量/栅格处理、空间分析、空间机器学习和地球观测工作流，并按 Auto-sci-research 的体育设施可达性、绿色暴露、热暴露、LCZ、空间公平和城市健康研究进行封装。"
+description: "精选 K-Dense Scientific Agent Skills 的地理空间科学与遥感工具包。用于 geomaster、GeoPandas、GIS、遥感、矢量/栅格处理、空间分析、空间机器学习和地球观测工作流，并按 Auto-sci-research 的体育设施可达性、绿色暴露、热暴露、LCZ、空间公平和城市健康研究进行封装。"
 ---
 
 # K-Dense Geospatial / Remote Sensing Selected
 
-This wrapper packages the selected Geospatial Science & Remote Sensing skills from `K-Dense-AI/scientific-agent-skills`.
+This wrapper packages selected Geospatial Science & Remote Sensing skills from `K-Dense-AI/scientific-agent-skills`.
 
-Use it when a task needs:
-
-- GIS workflow planning;
-- vector processing and GeoPandas operations;
-- remote sensing and Earth observation workflow reasoning;
-- spatial ML, terrain, raster/vector, or cloud-native geospatial pipelines.
-
-## Included Upstream Subskills
-
-Located in `subskills/k-dense/`:
+Use it when a task needs library-level or workflow-level support for:
 
 - `geomaster`
 - `geopandas`
+- vector and raster handling;
+- CRS and geometry operations;
+- remote-sensing feature workflows;
+- spatial analysis and spatial ML implementation details.
 
 ## Local Adaptation
 
-Use these upstream skills with Auto-sci-research spatial rules:
+Use these upstream skills with local geospatial rules:
 
-1. Audit CRS before distance, area, buffer, or network calculations.
-2. Separate exposure, accessibility, availability, quality, and actual use.
-3. Record sensor, acquisition date, spatial resolution, temporal window, and resampling for remote-sensing data.
-4. For heat exposure, separate surface temperature, air temperature, thermal comfort, and population-weighted exposure.
-5. For maps involving China context, use compliant standard-map material.
+1. Check CRS, units, topology, geometry validity, and spatial resolution before analysis.
+2. Keep exposure, accessibility, availability, quality, and use conceptually separate.
+3. Record buffer/network/travel-time assumptions in methods-ready language.
+4. For environmental exposure, state temporal window, season, data product, and aggregation rule.
+5. For maps, check legends, classification, scale, north arrow needs, and projection disclosure.
 
 For domain-specific guidance, also read:
 
-- `../agent-auto-sci-geospatial/references/k_dense_geospatial_mapping.md`
-- `../agent-auto-sci-geospatial/references/sport_geography_spatial_playbook.md`
-- `../urban-exposure-review-radar-workflow/references/workflow_playbook.md`
+- `../agent-auto-sci-geospatial/references/k_dense_geospatial_rs_mapping.md`
+- `../agent-auto-sci-geospatial/references/exposure_accessibility_definitions.md`
 
 ## Must Not Do
 
-- Do not calculate distance or area in unprojected geographic CRS.
-- Do not treat NDVI, park area, green quality, and use as interchangeable.
-- Do not use remote-sensing pixels without checking date, cloud, resolution, and aggregation.
-- Do not overclaim health effects from exposure maps alone.
-
+- Do not convert spatial units silently.
+- Do not use Euclidean buffers when network access is required without explaining the limitation.
+- Do not treat remote-sensing classification output as ground truth without validation.

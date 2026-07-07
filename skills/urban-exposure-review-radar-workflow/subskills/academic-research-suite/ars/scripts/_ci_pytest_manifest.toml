@@ -147,6 +147,10 @@ id = "v3.10-184-eval-harness-workflow"
 path = "scripts/test_eval_harness_workflow.py"
 
 [[pytest]]
+id = "184-render-eval-comment"
+path = "scripts/test_render_eval_comment.py"
+
+[[pytest]]
 id = "v3.10-134-write-scope-guard"
 path = "scripts/test_ars_write_scope_guard.py"
 
@@ -251,3 +255,15 @@ path = "scripts/test_ars_apply_revision_patch.py"
 [[pytest]]
 id = "390-revision-patch-discipline-lint"
 path = "scripts/test_check_390_revision_patch_discipline.py"
+
+[[pytest]]
+id = "release-gate-changelog-covers-merges"
+path = "scripts/test_check_changelog_covers_merges.py"
+
+[[pytest]]
+id = "v3.9.4-temporal-verification"
+path = "scripts/test_check_v3_9_4_temporal_verification.py"
+
+[[pytest]]
+id = "491-setup-cross-model-parity"
+path = "scripts/test_check_setup_cross_model_parity.py"

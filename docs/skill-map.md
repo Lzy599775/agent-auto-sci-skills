@@ -1,6 +1,6 @@
 # Skill Map
 
-本页按“什么时候用哪个 skill”组织，而不是按文件夹字母顺序组织。
+本页按“什么时候用哪个 skill”组织，而不是按文件夹字母顺序组织。优先从任务类型出发，再进入具体 skill。
 
 ## 1. 七层架构
 
@@ -23,7 +23,7 @@
 | `agent-auto-sci-methodology` | 方法论 | 选题收敛、机制、因果语言、证据分级 | RQ 矩阵、机制图、偏倚审计 | 不把相关写成因果 |
 | `agent-auto-sci-geospatial` | GIS/RS | 可达性、绿地/热暴露、LCZ、空间公平、地图 | CRS 审计、暴露窗口、空间指标 | 不混用 exposure/accessibility/use |
 | `agent-auto-sci-data-viz` | 数据/图表 | EDA、统计、文献计量图、论文图表 | figure plan、caption、table shell | 图表服务 claim |
-| `agent-auto-sci-ai-ml` | ML/XAI | 机器学习、SHAP、泄露检查、空间/时间验证 | baseline、验证切分、解释边界 | 特征重要性不是因果证据 |
+| `agent-auto-sci-ai-ml` | ML/XAI | 机器学习、SHAP、泄漏检查、空间/时间验证 | baseline、验证切分、解释边界 | 特征重要性不是因果证据 |
 | `agent-auto-sci-scicomm` | 写作/投稿 | 论文结构、投稿信、rebuttal、展示材料 | claim-evidence map、回复矩阵 | 润色不扩张证据 |
 | `sport-geography-review-bibliometric` | 领域综述 | 体育公园、体育设施、绿地公平、城市健康综述 | 检索式、PRISMA、编码表、政策议程 | 文献计量必须上升到框架 |
 | `sport-geography-sci-writing` | 领域写作 | 体育设施可达性、体育公园暴露、空间公平实证论文 | 期刊定位、IMRAD 段落、讨论 | 从公共问题进入，不从技术指标开篇 |
@@ -40,7 +40,7 @@
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `0.1.15` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、实验规划 |
+| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `0.1.17` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、实验规划 |
 
 使用原则：
 
@@ -60,11 +60,11 @@
 
 ## 5. 选择规则
 
-- 任务跨度大：先 `auto-sci-research`。
-- 任务是“该不该这样研究”：先 `agent-auto-sci-methodology`。
-- 任务涉及空间数据、地图、暴露或可达性：先 `agent-auto-sci-geospatial`。
+- 任务跨度大：先进 `auto-sci-research`。
+- 任务是“该不该这样研究”：先进 `agent-auto-sci-methodology`。
+- 任务涉及空间数据、地图、暴露或可达性：先进 `agent-auto-sci-geospatial`。
 - 任务涉及图表：先 `agent-auto-sci-data-viz`，再 `scipilot-figure-skill`。
-- 任务涉及语言最后一公里：先 `scipilot-writing-skill`。
-- 任务是地理/遥感 SCI 章节写作：先 `geors-sci-writing-adapter`。
-- 任务是体育地理实证论文：先 `sport-geography-sci-writing`。
-- 任务是城市暴露综述或前沿雷达：先 `urban-exposure-review-radar-workflow`。
+- 任务涉及语言最后一公里：用 `scipilot-writing-skill`。
+- 任务是地理/遥感 SCI 章节写作：用 `geors-sci-writing-adapter`。
+- 任务是体育地理实证论文：用 `sport-geography-sci-writing`。
+- 任务是城市暴露综述或前沿雷达：用 `urban-exposure-review-radar-workflow`。

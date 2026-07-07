@@ -26,6 +26,18 @@ Enforces three invariants:
    boundary), so the same keyword appearing elsewhere in the agent file
    does not count toward passing.
 
+4. **Canonical enforcement sentence (#491 defrift lock)** — every Bucket A
+   block's enforcement paragraph must carry the canonical sentence verbatim
+   (version-matched to the block's v3.9.2/v3.9.4 marker; per-file tails
+   AFTER the sentence stay free — formatter's v3.7.1 hard-gate note, the
+   reviewers' Sprint Contract notes are legitimately file-specific). The
+   previous copy ("hook deferred to v3.10 #134") went factually stale
+   repo-wide with no lint noticing (audits/harness-retirement-2026-07-04.md
+   B4-F01). Scope: the constant governs the Bucket A blocks only — the
+   `agents/` mirrors follow mechanically via check_agents_mirror_sync.py,
+   and the SKILL.md copies carry a different, shorter wording (separate
+   surface). Update procedure: see the error message in check_bucket_a.
+
 Falsifiability discipline (per feedback_lint_passes_but_prompt_silent.md):
 keywords are scoped to the v3.9.2 block; bare keyword presence anywhere
 in the agent file does NOT count. The block must include all four phrases
@@ -98,8 +110,30 @@ BUCKET_BCD_AGENTS = [
 
 # v3.9.4: widened to accept either v3.9.2 or v3.9.4 phase boundary markers.
 # timeline_extraction_agent.md (added in v3.9.4) uses v3.9.4 in both markers.
-PHASE_BOUNDARY_RE = re.compile(r"## Phase Boundary \(v3\.9\.(?:2|4)\)")
+PHASE_BOUNDARY_RE = re.compile(r"## Phase Boundary \(v3\.9\.(2|4)\)")
 ENFORCEMENT_RE = re.compile(r"Enforcement \(v3\.9\.(?:2|4)\)")
+
+# #491 defrift lock — the canonical enforcement sentence, keyed by the block's
+# version marker ("2" = v3.9.2, "4" = v3.9.4). Any Bucket A copy that drifts
+# fails the lint; update procedure lives in check_bucket_a's error message.
+# Deliberately lint-local rather than a shared/references/firm_rules.md
+# canonical block: this is factual enforcement-STATUS prose, not a behavioral
+# firm rule, and co-locating it with its only consumer avoids cross-lint
+# coupling (cross-referenced in firm_rules.md "Related mechanisms").
+CANONICAL_ENFORCEMENT = {
+    "2": (
+        "**Enforcement (v3.9.2):** prompt-level fence + advisory verifier "
+        "(`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), "
+        "a deterministic PreToolUse write-scope guard enforces the WRITE clause "
+        "where a hook runs; where none runs, this fence is the enforcement layer."
+    ),
+    "4": (
+        "**Enforcement (v3.9.4):** prompt-level fence + advisory verifier "
+        "(`scripts/check_pipeline_integrity.py` v3.9.4 extension). Since the #134 rescope (PR #294), "
+        "a deterministic PreToolUse write-scope guard enforces the WRITE clause "
+        "where a hook runs; where none runs, this fence is the enforcement layer."
+    ),
+}
 
 # H2 marker that ends the Phase Boundary block scope.
 # Used to scope keyword checks: keywords appearing elsewhere in the file
@@ -158,6 +192,22 @@ def check_bucket_a(path: Path) -> list[str]:
             f"{path.relative_to(REPO_ROOT)}: Phase Boundary block missing "
             f"required phrase: 'Enforcement (v3.9.2|v3.9.4)' (falsifiability "
             f"discipline: phrase must appear inside the H2 block)"
+        )
+    # Canonical enforcement sentence check (#491 defrift lock).
+    # Version-matched to the block's own marker; per-file tail after the
+    # sentence is free, so containment of the full sentence is the assertion.
+    version = PHASE_BOUNDARY_RE.search(block).group(1)
+    canonical = CANONICAL_ENFORCEMENT[version]
+    if canonical not in block:
+        errors.append(
+            f"{path.relative_to(REPO_ROOT)}: enforcement paragraph has drifted "
+            f"from the canonical sentence (#491 defrift lock, v3.9.{version} "
+            f"variant). It must contain CANONICAL_ENFORCEMENT from "
+            f"{Path(__file__).name} verbatim (per-file tail after the sentence "
+            f"stays free). If the enforcement reality legitimately changed, "
+            f"update the constant and sweep all {len(BUCKET_A_AGENTS)} Bucket A "
+            f"files in the same PR; the `agents/` mirrors follow via "
+            f"check_agents_mirror_sync.py."
         )
     return errors
 

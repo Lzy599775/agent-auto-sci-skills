@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.0
+
+- Refreshed upstream mirrors on 2026-07-07.
+- Updated `urban-exposure-review-radar-workflow/subskills/academic-research-suite` to ARS Codex package `v0.1.17` (`8626ccb`) and restored root attribution files.
+- Checked `K-Dense-AI/scientific-agent-skills` at `v2.53.0-10-g4d97e29`; synced the selected `statistical-analysis` subskill into `kdense-data-viz-selected`.
+- Verified SciPilot Figure, SciPilot Writing, and GeoRS SCI Writing Adapter had no upstream commit change.
+- Checked AutoSci at `a01841d`; latest delta only touched a WeChat image asset, so no public package change was made.
+- Rebuilt README, README_EN, skill map, external skill notes, use cases, upstream update notes, and local HTML pages with clean UTF-8 Chinese text and clearer skill classification.
+
 ## 0.5.0
 
 - Refreshed upstream mirrors on 2026-06-30.
