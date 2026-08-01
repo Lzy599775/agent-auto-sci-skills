@@ -23,6 +23,7 @@ $allowedFalsePositiveText = @(
   'api_key="your_openrouter_key",',
   "export OPENROUTER_API_KEY='sk-or-v1-your_key_here'",
   'echo ''export OPENROUTER_API_KEY="sk-or-v1-your_key"'' >> ~/.bashrc  # or ~/.zshrc',
+  'echo ''export OPENROUTER_API_KEY="sk-or-v1-your_key"'' >> ~/.zshrc',
   "export OPENROUTER_API_KEY='your_api_key_here'",
   'api_key = check_env_file()',
   'print("OPENROUTER_API_KEY=your-api-key-here")',
@@ -35,7 +36,18 @@ $allowedFalsePositiveText = @(
   'FLAG_TOKEN = "ARS_PASSPORT_RESET"',
   'PROTOCOL_TOKEN = "passport_as_reset_boundary"',
   'token = _annotation_match_token(literal)',
-  'suite_version, invalid_suite_token = _parse_suite_version(claude_text)'
+  'suite_version, invalid_suite_token = _parse_suite_version(claude_text)',
+  'token = stable_token(title, kind="sequence_id")',
+  'token = stable_token(value, kind="value")',
+  'group_token = stable_token(row[group_index], kind="group")',
+  'split_token = stable_token(row[split_index], kind="split")',
+  'entity_token = stable_token(row[entity_index], kind="entity")',
+  'api_key = resolve_api_key(args.api_key)',
+  'self.api_key = _resolve_api_key(api_key)',
+  'api_key = _resolve_api_key(args.api_key)',
+  'print("\nOr add OPENROUTER_API_KEY=your_api_key to a .env file")',
+  'assert any("api_key=test-key-123" in url for url in captured_url)',
+  'client = OpenAlexClient(api_key="sk-secret-key")'
 )
 $gitFiles = git -C $Root -c core.quotePath=false ls-files --cached --others --exclude-standard 2>$null
 if ($LASTEXITCODE -eq 0 -and $gitFiles) {

@@ -3,8 +3,8 @@
 This wrapper includes selected upstream skills from:
 
 - Repository: `K-Dense-AI/scientific-agent-skills`
-- Upstream commit checked: `4d97e29`
-- Upstream tag snapshot: `v2.53.0-10-g4d97e29`
+- Upstream commit checked: `ad21a38`
+- Upstream tag snapshot: `v2.62.0`
 - Upstream license: MIT, see `LICENSE.upstream.md`.
 
-Only selected Data Analysis & Visualization skills were copied. The full upstream repository was not vendored. The 2026-07-07 refresh synced upstream `statistical-analysis` updates into this wrapper; other selected data/visualization subskills were unchanged.
+Only selected Data Analysis & Visualization skills were copied. The full upstream repository was not vendored. The 2026-08-01 refresh synchronized all eight selected directories; seven had substantive upstream changes and `statistical-analysis` received metadata-only updates after its previous content refresh.

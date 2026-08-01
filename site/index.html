@@ -81,7 +81,7 @@
         <div class="actions">
           <a class="btn" href="../README.md">README</a>
           <a class="btn" href="../docs/skill-map.md">Skill Map</a>
-          <a class="btn" href="../docs/upstream-update-20260707.md">2026-07-07 更新记录</a>
+          <a class="btn" href="../docs/upstream-update-20260801.md">2026-08-01 更新记录</a>
           <a class="btn" href="agent-auto-sci-evolution.html">进化档案</a>
         </div>
       </div>
@@ -93,7 +93,7 @@
       <div class="stat"><strong>17</strong><span>可安装 Codex skills</span></div>
       <div class="stat"><strong>1</strong><span>ARS 内置科研管线子 skill</span></div>
       <div class="stat"><strong>6</strong><span>任务分类入口</span></div>
-      <div class="stat"><strong>2026-07-07</strong><span>最新上游检查</span></div>
+      <div class="stat"><strong>2026-08-01</strong><span>最新上游检查</span></div>
     </div>
 
     <section>
@@ -126,7 +126,7 @@
           <article class="skill"><h3><code>agent-auto-sci-methodology</code></h3><p>研究问题、机制、假设、偏倚和因果语言审计。</p><dl><dt>输入</dt><dd>选题、变量、草稿、结果。</dd><dt>输出</dt><dd>RQ 矩阵、机制图、证据分级、限制。</dd><dt>边界</dt><dd>不把相关结果写成因果。</dd></dl></article>
           <article class="skill"><h3><code>urban-exposure-review-radar-workflow</code></h3><p>城市暴露、体育地理、遥感热环境和公共健康连接的路线判别。</p><dl><dt>输入</dt><dd>主题、目标期刊、语料来源、数据类型。</dd><dt>输出</dt><dd>route decision、journal gate、formal corpus/radar handoff。</dd><dt>边界</dt><dd>正式综述语料和前沿雷达候选必须分开。</dd></dl></article>
           <article class="skill"><h3><code>sport-geography-review-bibliometric</code></h3><p>体育地理系统综述、scoping review 和文献计量。</p><dl><dt>输入</dt><dd>主题、数据库、关键词、目标期刊。</dd><dt>输出</dt><dd>检索式、PRISMA、编码表、图表计划、政策议程。</dd><dt>边界</dt><dd>文献计量必须服务机制框架或政策议程。</dd></dl></article>
-          <article class="skill"><h3><code>academic-research-suite</code></h3><p>ARS 子 skill，处理深度研究、论文管线、审稿模拟和引用完整性。</p><dl><dt>位置</dt><dd><code>urban-exposure-review-radar-workflow/subskills</code></dd><dt>版本</dt><dd><code>0.1.17</code></dd><dt>边界</dt><dd>只在父 skill 判定需要通用科研管线时调用。</dd></dl></article>
+          <article class="skill"><h3><code>academic-research-suite</code></h3><p>ARS 子 skill，处理深度研究、论文管线、审稿模拟、PDF 阅读预检和引用完整性。</p><dl><dt>位置</dt><dd><code>urban-exposure-review-radar-workflow/subskills</code></dd><dt>版本</dt><dd><code>0.1.22</code></dd><dt>边界</dt><dd>只在父 skill 判定需要通用科研管线时调用；外部模型验证必须经过明确授权。</dd></dl></article>
         </div></div></div>
 
         <div class="band"><div class="wrap band-grid"><div><h3>GIS、遥感与暴露</h3><p>空间数据处理、暴露/可达性定义、遥感写作和技术 playbook。</p></div><div class="skill-grid">
@@ -183,8 +183,8 @@
       <div class="wrap">
         <h2 class="section-title">上游与许可证状态</h2>
         <div class="notice">
-          <p>ARS 已同步到 <code>v0.1.17</code>；K-Dense 已检查到 <code>v2.53.0-10-g4d97e29</code>，并同步了精选范围内的 <code>statistical-analysis</code> 更新。SciPilot Figure、SciPilot Writing 和 GeoRS 当前无新 commit。</p>
-          <p><code>xiangyu-Ge/sci-writing-geors</code> 仍未检测到明确 LICENSE，因此本仓库只保留原创适配和来源说明，不复制上游参考全文。详细记录见 <a href="../docs/external-skills.md">external-skills.md</a> 和 <a href="../docs/upstream-update-20260707.md">upstream-update-20260707.md</a>。</p>
+          <p>ARS 已同步到 <code>v0.1.22</code>；K-Dense 已检查到 <code>v2.62.0</code>，27 个精选子技能中 26 个有更新并已同步，<code>transformers</code> 无文件变化。SciPilot Figure、SciPilot Writing 和 GeoRS 当前无新 commit。</p>
+          <p><code>xiangyu-Ge/sci-writing-geors</code> 仍未检测到明确 LICENSE，因此本仓库只保留原创适配和来源说明，不复制上游参考全文。详细记录见 <a href="../docs/external-skills.md">external-skills.md</a> 和 <a href="../docs/upstream-update-20260801.md">upstream-update-20260801.md</a>。</p>
         </div>
       </div>
     </section>

@@ -16,7 +16,7 @@ Invariants:
      Schema 8 completion), the no-rewrite window, both escalation trigger
      layers, the MANDATORY checkpoint, full_reemission_escalated
      provenance, never-auto-fallback, and the 0.6 threshold.
-  3. academic-paper/SKILL.md: mode-table revision row says patch document;
+  3. academic-paper/WORKFLOW.md: mode-table revision row says patch document;
      the Revision Mode Patch Protocol section exists with the honest
      boundary sentence and the protocol-doc pointer.
   4. Schema 8 (shared/handoff_schemas.md): ResponseItem carries
@@ -56,7 +56,7 @@ ORCHESTRATOR = REPO_ROOT / "academic-pipeline/agents/pipeline_orchestrator_agent
 PAPER_SKILL = (
     REPO_ROOT / "academic-paper/WORKFLOW.md"
     if (REPO_ROOT / "academic-paper/WORKFLOW.md").is_file()
-    else REPO_ROOT / "academic-paper/SKILL.md"
+    else REPO_ROOT / "academic-paper/WORKFLOW.md"
 )
 SCHEMAS = REPO_ROOT / "shared/handoff_schemas.md"
 PROTOCOL = REPO_ROOT / "academic-paper/references/revision_patch_protocol.md"

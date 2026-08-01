@@ -6,10 +6,10 @@
 
 `Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的本地科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让你在 Codex 里知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
 
-当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-07-07**：
+当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-08-01**：
 
-- ARS Codex 包已同步到 `v0.1.17` (`8626ccb`)。
-- K-Dense 已检查到 `v2.53.0-10-g4d97e29`，本地精选范围内同步了 `statistical-analysis` 更新。
+- ARS Codex 包已同步到 `v0.1.22` (`f8d6b06`)，内含 ARS `v3.19.0`。
+- K-Dense 已检查到 `v2.62.0` (`ad21a38`)；27 个精选子技能中 26 个已同步更新，`transformers` 无文件变化。
 - SciPilot Figure 仍为 `v2.1.0-1-g43098dd`。
 - SciPilot Writing 仍为 `v1.0.0` (`51c5fd3`)。
 - GeoRS SCI Writing Adapter 仍基于 `xiangyu-Ge/sci-writing-geors` 的公开仓库说明做原创适配；上游仍未检测到明确 LICENSE，因此不复制上游正文。
@@ -108,7 +108,7 @@ $env:USERPROFILE\.codex\skills
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `skills/urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `0.1.17` | 通用深度研究、文献综述、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划和引用完整性检查。 |
+| `academic-research-suite` | `skills/urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `0.1.22` | 通用深度研究、文献综述、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划、本地 PDF 阅读完整性预检和引用完整性检查。 |
 
 ARS 只在父 skill 判定需要“通用科研生产管线”时调用。城市暴露、体育地理、暴露/可达性定义、因果语言和正式语料库规则仍由父 skill 把关。
 
@@ -172,11 +172,11 @@ auto-sci-research
 
 - `Haojae/scipilot-writing-skill`：MIT，完整封装并保留 LICENSE/NOTICE。
 - `Haojae/scipilot-figure-skill`：MIT，已封装为图件顾问。
-- `Imbad0202/academic-research-skills-codex`：ARS Codex 包，已同步到 `v0.1.17`；许可证和来源见 subskill 内 `LICENSE`、`NOTICE.md`、`manifest.json`。
+- `Imbad0202/academic-research-skills-codex`：ARS Codex 包，已同步到 `v0.1.22`；许可证和来源见 subskill 内 `LICENSE`、`NOTICE.md`、`manifest.json`。
 - `K-Dense-AI/scientific-agent-skills`：只保留 4 个与本研究方向强相关的精选 wrapper，不全量引入。
 - `xiangyu-Ge/sci-writing-geors`：未检测到明确 LICENSE，因此只做原创 Codex 适配，不复制上游参考全文。
 
-详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20260707.md](docs/upstream-update-20260707.md)。
+详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20260801.md](docs/upstream-update-20260801.md)。
 
 ## 公开安全原则
 

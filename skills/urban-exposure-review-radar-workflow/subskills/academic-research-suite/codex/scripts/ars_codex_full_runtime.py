@@ -22,12 +22,16 @@ SUITE_ROOT = SCRIPT.parents[2]
 MANIFEST_PATH = CODEX_ROOT / "full-runtime-manifest.json"
 
 ALIAS_RE = re.compile(r"(?<![\w/-])(/?ars-[a-z0-9-]+)(?![\w-])", re.IGNORECASE)
-QUESTION_RE = re.compile(r"\b(research question|rq|hypothesis|hypotheses)\b|研究問題|研究问题|假設|假设", re.IGNORECASE)
+QUESTION_RE = re.compile(
+    r"\b(research question|rq|hypothesis|hypotheses)\b|研究問題|研究问题|假設|假设|연구 질문|연구 문제|가설",
+    re.IGNORECASE,
+)
 UNCLEAR_QUESTION_RE = re.compile(
     r"(do not|don't|does not|doesn't|not yet|without|no)\s+.{0,40}\b(research question|rq|hypothesis|hypotheses)\b|"
     r"\bunclear\s+(research question|rq|hypothesis|hypotheses)\b|"
     r"\b(research question|rq|hypothesis|hypotheses)\b\s+.{0,30}\b(still\s+)?unclear\b|"
-    r"尚未.{0,20}(研究問題|研究问题)|沒有.{0,20}(研究問題|研究问题)|没有.{0,20}(研究問題|研究问题)",
+    r"尚未.{0,20}(研究問題|研究问题)|沒有.{0,20}(研究問題|研究问题)|没有.{0,20}(研究問題|研究问题)|"
+    r"(아직|명확하지|모르겠).{0,30}(연구 질문|연구 문제|무엇을 연구)",
     re.IGNORECASE,
 )
 
@@ -47,7 +51,11 @@ VAGUE_TOPIC_PATTERNS = (
     "研究主題",
     "研究主题",
     "題目是",
-    "题目是"
+    "题目是",
+    "논문을 쓰고 싶",
+    "논문 주제",
+    "연구 방향",
+    "무엇을 연구할지 모르겠"
 )
 
 ALIAS_SOC_OVERRIDE = {
@@ -123,14 +131,31 @@ def infer_natural_route(request: str) -> tuple[str, str, str]:
     lowered = request.lower()
     if is_vague_paper_topic(request):
         return "deep-research", "socratic", "paper_topic_scoping_override"
-    if "reviewer" in lowered or "peer review" in lowered or "review this paper" in lowered:
+    if any(
+        signal in lowered
+        for signal in (
+            "reviewer",
+            "peer review",
+            "review this paper",
+            "논문을 심사",
+            "논문 심사",
+            "동료 심사",
+            "원고 심사",
+            "모의 심사",
+            "심사자 관점",
+        )
+    ):
         return "academic-paper-reviewer", "full", "natural_review_request"
-    if "systematic review" in lowered or "meta-analysis" in lowered:
+    if any(signal in lowered for signal in ("systematic review", "meta-analysis", "체계적 문헌고찰", "메타분석")):
         return "deep-research", "systematic-review", "natural_research_request"
-    if "literature review" in lowered or "annotated bibliography" in lowered:
+    if any(signal in lowered for signal in ("literature review", "annotated bibliography", "문헌 조사", "문헌 고찰")):
         return "deep-research", "lit-review", "natural_research_request"
-    if "academic pipeline" in lowered or "research to paper" in lowered or "full pipeline" in lowered:
+    if any(signal in lowered for signal in ("academic pipeline", "research to paper", "full pipeline", "연구부터 논문까지", "논문 전체 워크플로")):
         return "academic-pipeline", "pipeline", "natural_pipeline_request"
+    if any(signal in lowered for signal in ("논문을 수정", "논문 수정", "심사 의견 반영")):
+        return "academic-paper", "revision", "natural_revision_request"
+    if "초록 작성" in lowered:
+        return "academic-paper", "abstract-only", "natural_abstract_request"
     return "academic-paper", "plan", "default_academic_planning"
 
 
@@ -153,11 +178,46 @@ def profile_from_env(env: dict[str, str]) -> dict[str, Any]:
     full_runtime = env.get("ARS_CODEX_FULL_RUNTIME") == "1"
     agent_team = env.get("ARS_CODEX_AGENT_TEAM") == "1"
     hooks = env.get("ARS_CODEX_HOOKS") == "1"
+    requested_tiering = env.get("ARS_MODEL_TIERING", "").strip().lower()
+    requested_cross_model = env.get("ARS_CROSS_MODEL", "").strip()
+    raw_stale_days = env.get("ARS_CACHE_STALE_ADVISORY_DAYS")
+    try:
+        cache_stale_advisory_days = 30 if raw_stale_days is None else int(raw_stale_days)
+    except ValueError:
+        cache_stale_advisory_days = 30
+    if cache_stale_advisory_days < 0:
+        cache_stale_advisory_days = 30
+    cache_revalidation_requested = env.get("ARS_CACHE_REVALIDATE") == "1"
+    if not requested_tiering:
+        tiering_status = "unset"
+    elif requested_tiering not in {"economy", "quality-boost"}:
+        tiering_status = "unknown_warn_unset"
+    elif not (full_runtime and agent_team):
+        tiering_status = "inline_noop"
+    else:
+        tiering_status = "advisory_requires_runtime_model_override"
+    if not requested_cross_model:
+        cross_model_status = "unset"
+    elif full_runtime and agent_team:
+        cross_model_status = "dispatcher_transport_requires_explicit_request_and_consent"
+    else:
+        cross_model_status = "inline_transport_requires_explicit_request_and_consent"
     return {
         "full_runtime_enabled": full_runtime,
         "agent_team_enabled": full_runtime and agent_team,
         "hooks_enabled": full_runtime and hooks,
         "execution_mode": "codex_agent_team" if full_runtime and agent_team else "inline_role_prompts",
+        "model_tiering_requested": requested_tiering or None,
+        "model_tiering_status": tiering_status,
+        "cross_model_configured": requested_cross_model or None,
+        "cross_model_handoff_status": cross_model_status,
+        "cache_stale_advisory_days": cache_stale_advisory_days,
+        "cache_revalidation_requested": cache_revalidation_requested,
+        "cache_revalidation_status": (
+            "live_bibliographic_revalidation_requested"
+            if cache_revalidation_requested
+            else "cached_default"
+        ),
     }
 
 
@@ -172,16 +232,21 @@ def build_agent_plan(manifest: dict[str, Any], workflow: str, mode: str, profile
         plan: list[dict[str, Any]] = []
         for index, agent_file in enumerate(REVIEWER_ORDER):
             is_synth = agent_file == "editorial_synthesizer_agent.md"
-            plan.append(
-                {
-                    "agent": agent_file.removesuffix(".md"),
-                    "prompt_path": prompt_path(workflow, agent_file),
-                    "dispatch": "after_independent_reviews" if is_synth else "parallel_independent_review",
-                    "independence_group": "synthesis" if is_synth else "reviewer_blind_phase",
-                    "output_contract": "synthesis_matrix" if is_synth else "independent_reviewer_section",
-                    "order": index + 1,
-                }
-            )
+            item = {
+                "agent": agent_file.removesuffix(".md"),
+                "prompt_path": prompt_path(workflow, agent_file),
+                "dispatch": "after_independent_reviews" if is_synth else "parallel_independent_review",
+                "independence_group": "synthesis" if is_synth else "reviewer_blind_phase",
+                "output_contract": "synthesis_matrix" if is_synth else "independent_reviewer_section",
+                "order": index + 1,
+            }
+            if mode == "full" and agent_file == "domain_reviewer_agent.md":
+                item["cross_model_reviewer_track"] = (
+                    "configured_requires_explicit_content_consent"
+                    if profile["cross_model_configured"]
+                    else "not_configured_single_family_disclosure_required"
+                )
+            plan.append(item)
         return plan
     if workflow == "academic-pipeline":
         return [

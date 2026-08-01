@@ -34,7 +34,7 @@ academic-paper-reviewer/references/review_criteria_framework.md plus overall.
 Scores are on the 0-100 scale per
 academic-paper-reviewer/references/quality_rubrics.md — the scale the
 delta thresholds below and the v3.2 Early-Stopping Criterion
-("delta < 3 points on the 0-100 rubric", academic-pipeline/SKILL.md) assume.
+("delta < 3 points on the 0-100 rubric", academic-pipeline/WORKFLOW.md) assume.
 ```
 
 ### Decision rules

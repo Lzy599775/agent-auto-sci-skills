@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# version: 1.1.0
+# version: 1.2.0
 #
 # SessionStart hook script for the ARS Claude Code plugin (v3.7.0+).
 #
@@ -57,7 +57,24 @@ case "${SOURCE}" in
     ANNOUNCE="ARS plugin still loaded after ${SOURCE}. Slash commands: /ars-full /ars-plan /ars-outline /ars-revision /ars-revision-coach /ars-rebuttal-audit /ars-abstract /ars-lit-review /ars-3w /ars-reviewer /ars-format-convert /ars-citation-check /ars-disclosure /ars-mark-read /ars-unmark-read /ars-cache-invalidate. Plugin agents: synthesis_agent, research_architect_agent, report_compiler_agent."
     ;;
   startup|clear|*)
-    ANNOUNCE="ARS (academic-research-skills) plugin loaded.
+    # -----------------------------------------------------------------
+    # #544 update reminder. The checker is consulted INSIDE this arm so
+    # compact/resume structurally never run it (no network mid-session).
+    # Any checker failure degrades to "no reminder" — the announce must
+    # never break. Wording lives here, not in the checker (single wording
+    # surface; ASCII "->" keeps the JSON escaping path trivial).
+    # -----------------------------------------------------------------
+    UPDATE_LINE=""
+    if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+      _UPD=$(bash "${CLAUDE_PLUGIN_ROOT}/scripts/ars_update_check.sh" 2>/dev/null || true)
+      _UPDATE_RE='^UPDATE_AVAILABLE[[:space:]]([^[:space:]]+)[[:space:]]([^[:space:]]+)$'
+      if [[ "${_UPD}" =~ ${_UPDATE_RE} ]]; then
+        UPDATE_LINE="ARS update available: v${BASH_REMATCH[2]} (installed: v${BASH_REMATCH[1]}). Run /plugin update academic-research-skills, or enable auto-update in /plugin -> Marketplaces.
+
+"
+      fi
+    fi
+    ANNOUNCE="${UPDATE_LINE}ARS (academic-research-skills) plugin loaded.
 
 Slash commands (16) — light modes pin sonnet in frontmatter; the three heavy modes inherit the session model (the v3.7.0 opus floor was retired in the 2026-06 harness pass):
   /ars-full              inherit Full pipeline (research → write → review → revise → finalize)
@@ -77,7 +94,7 @@ Slash commands (16) — light modes pin sonnet in frontmatter; the three heavy m
   /ars-unmark-read       sonnet  Rescind a prior human-read mark for one or more citation keys
   /ars-cache-invalidate  sonnet  Drop cached verification rows for one or more citation keys
 
-Plugin agents (3, v3.6.7-hardened, model: inherit) — dispatched by ARS pipeline:
+Plugin agents (3, v3.6.7-hardened, model: inherit, tools allowlist: Read/Write/Edit/Grep/Glob per #514) — dispatched by ARS pipeline:
   synthesis_agent             Cross-source integration, contradiction resolution, gap analysis
   research_architect_agent    Methodology blueprint (paradigm, method, data strategy)
   report_compiler_agent       APA 7.0 report drafting (Phase 4 + Phase 6)
@@ -99,6 +116,22 @@ escape_json() {
   raw="${raw//\\/\\\\}"
   raw="${raw//\"/\\\"}"
   raw="${raw//$'\n'/\\n}"
+  raw="${raw//$'\r'/}"
+  # Defense-in-depth (belt-and-suspenders): the #544 checker's strict, bounded
+  # version grammar already blocks control bytes upstream, but strip any
+  # remaining raw C0 control bytes (0x01-0x1f) here too so nothing can corrupt
+  # the JSON envelope. Real newlines were already converted to the literal
+  # two-char `\n` above (bytes 0x5C 0x6E), so this drops only stray control
+  # bytes, never legitimate text — and never the reminder's `\n\n` separator.
+  #
+  # `tr` is POSIX but not guaranteed on a constrained PATH (e.g. PATH=/bin on
+  # macOS, where tr lives in /usr/bin): guard on `command -v tr` so the strip
+  # is skipped when tr is absent rather than blowing up the whole pipeline and
+  # returning an empty additionalContext (P2-b). Skipping is safe — this pass
+  # is defense-in-depth on top of the upstream grammar, not the sole barrier.
+  if command -v tr >/dev/null 2>&1; then
+    raw="$(printf '%s' "${raw}" | LC_ALL=C tr -d '\001-\037')"
+  fi
   printf '%s' "${raw}"
 }
 

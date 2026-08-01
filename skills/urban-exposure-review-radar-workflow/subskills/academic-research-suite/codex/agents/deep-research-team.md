@@ -22,6 +22,11 @@ enabled. Otherwise, execute the roles inline from the same source prompts.
   verified / unverified / contradicted claims separate.
 - `full` mode may parallelize bibliography, source verification, risk-of-bias,
   ethics, and devil's advocate work after the RQ brief is stable.
+- If an explicitly enabled and consented design-freeze owner emits
+  `[CROSS-MODEL-HANDOFF v1]`, the team dispatcher validates it with
+  `ars/scripts/cross_model_handoff.py`, sends only the payload, and returns a
+  divergent result to the original owner for judgment. Malformed handoffs or
+  results degrade to `unavailable`.
 
 ## Output Contract
 

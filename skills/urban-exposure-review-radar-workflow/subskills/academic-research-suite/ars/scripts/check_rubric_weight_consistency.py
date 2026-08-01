@@ -12,7 +12,7 @@ Invariants enforced:
      (Weight: NN%)") match the terms of its own Aggregation Formula
      ("(X x 0.NN)"), dimension by dimension.
   2. The weighted-dimension weights sum to exactly 100%.
-  3. academic-paper/SKILL.md rule 14 ("Five dimensions — X (NN%), ...")
+  3. academic-paper/WORKFLOW.md rule 14 ("Five dimensions — X (NN%), ...")
      states the same five weights as quality_rubrics.md.
   4. review_criteria_framework.md does NOT restate any weight — no
      "Weight NN%" / "Weight: NN%" header suffix and no "(NN%)" formula
@@ -34,7 +34,7 @@ from pathlib import Path
 
 RUBRICS_REL = Path("academic-paper-reviewer/references/quality_rubrics.md")
 FRAMEWORK_REL = Path("academic-paper-reviewer/references/review_criteria_framework.md")
-PAPER_SKILL_REL = Path("academic-paper/SKILL.md")
+PAPER_SKILL_REL = Path("academic-paper/WORKFLOW.md")
 
 # The aggregation formula abbreviates dimension names; map the short formula
 # token to the canonical dimension-header name.
@@ -91,7 +91,7 @@ def _parse_rubrics_formula(text: str) -> dict[str, int]:
 def _parse_skill_rule(text: str) -> dict[str, int]:
     m = SKILL_RULE_RE.search(text)
     if not m:
-        raise RuntimeError("'**Five dimensions** —' rule not found in academic-paper/SKILL.md")
+        raise RuntimeError("'**Five dimensions** —' rule not found in academic-paper/WORKFLOW.md")
     found = {
         t.group("name").strip(): int(t.group("pct"))
         for t in SKILL_TERM_RE.finditer(m.group("body"))
@@ -149,7 +149,7 @@ def main(argv: list[str] | None = None) -> int:
     # Invariant 3: academic-paper SKILL.md rule 14 agrees.
     if skill_weights != weighted_headers and skill_weights != formula:
         errors.append(
-            "academic-paper/SKILL.md Five-dimensions rule disagrees with "
+            "academic-paper/WORKFLOW.md Five-dimensions rule disagrees with "
             f"quality_rubrics.md: SKILL.md={skill_weights}, rubrics={formula}"
         )
 

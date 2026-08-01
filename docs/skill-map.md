@@ -40,7 +40,7 @@
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `0.1.17` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、实验规划 |
+| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `0.1.22` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、本地 PDF 阅读预检、实验规划 |
 
 使用原则：
 

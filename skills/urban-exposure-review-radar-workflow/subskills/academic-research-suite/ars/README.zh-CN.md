@@ -1,6 +1,6 @@
 # Academic Research Skills for Claude Code
 
-[![Version](https://img.shields.io/badge/version-v3.15.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.15.0)
+[![Version](https://img.shields.io/badge/version-v3.19.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.19.0)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
@@ -244,7 +244,7 @@ ARS Stage 2 写作      →  用验证过的实验结果撰写论文
 
 7 个 Agent 的多视角审查，搭配 **0-100 质量量表**。模式：full、re-review、quick、methodology-focus、guided、calibration。**决策对照：** ≥80 接受、65-79 小修、50-64 大修、<50 退稿。第一轮审查团队 vs. 精简再审团队的分界：见 ARCHITECTURE.md §3 Stage 3 / Stage 3'。
 
-### Academic Pipeline (v3.15.0)
+### Academic Pipeline (v3.19.0)
 
 10 阶段调度器，含学术诚信验证、两阶段审查、苏格拉底指导、协作质量评估。Pipeline 保证：每个阶段都需用户确认 checkpoint；学术诚信验证（Stage 2.5 + 4.5）不可跳过；R&R 追溯矩阵（Schema 11）独立验证作者修订主张。v3.4 添加 Compliance Agent（PRISMA-trAIce + RAISE）于 Stage 2.5 / 4.5。v3.5 添加 **协作深度观察员**（`collaboration_depth_agent`，仅咨询性质、永不阻挡流程）于每一次 FULL/SLIM checkpoint 与 pipeline 完成时。MANDATORY 学术诚信闸门（2.5 / 4.5）明确跳过观察员，避免稀释合规检查。理论基础：Wang & Zhang (2026), IJETHE 23:11。逐阶段矩阵（agent、产出物、闸门）：见 ARCHITECTURE.md §3。
 
@@ -307,6 +307,22 @@ https://github.com/Imbad0202/academic-research-skills
 ---
 
 ## 更新纪录
+
+### v3.19.0（2026-07-22）— 修订轮次的主张漂移防护、PDF 读取完整性预检、read-scope 诚实覆盖标记
+
+> **新增**：三个 advisory-or-opt-in 的完整性层加一个 launcher 修复。**修订轮次主张漂移防护（#569/#570）**：一条主张强度阶梯（`is associated with < predicts < causes`，未经授权的 roadmap 项目不得静默移动）接进修订草拟与新的 advisory Phase E6，外加一支确定性的数值/引注 token 守恒检查器——两者合起来补上 #390 honest-claim 残余的认知面与 token 面（被改动的 block 内部原本没有完整性检查）。先在当前前沿模型测量 baseline（`evals/heldout/revision_claim_drift/`），机制形状出处归功 [Yila-AI/sci-ssci-skills](https://github.com/Yila-AI/sci-ssci-skills)。**PDF 读取完整性预检（#512）**：三信号的页数交叉检查，让被截断／页码错位的 PDF 读取无法产生一个看似有效的 `page` 锚点。**read_scope 诚实覆盖标记（#513）**：在人工读取台账上可选地声明诚实覆盖范围（`full_text` / `sections` / `abstract_only` / `toc_only`），让 finalizer 的引用晋升具备 read-scope 意识。**launcher watchdog 修复（#545）**：移除一个会让每次正常 PreToolUse write-scope-guard 调用卡满整个 wall-clock 上限的 pipe 停滞。套件 → v3.19.0；底层三个 skill 版本不变。
+
+### v3.18.0（2026-07-18）— 自我改进 survey 整合
+
+> **新增**：由 Ren et al.（2026，arXiv:2607.13104）驱动的八项质量机制——子问题范围绑定＋Phase E 范围一致性 advisory（#547）、有界化 novelty 主张＋E5 分类（#548，均 advisory-only、在 MANDATORY 检查点逐行显示）；Stage 2.5 风险分层 claim 查核（HIGH-IMPACT 全查＋随机哨兵，#549）；引用查验 gate 接通缓存层＋时效 advisory＋opt-in 实时重验（#541）；同意制跨模型评审席（五席面板一席换底座，#540）与复审裁判独立性＋Judge Record（#539）；路由/关卡措辞稳健性测试集 v0.1（#550，并补齐 reviewer skill 缺失的中文触发词）；survey 本身列为第三个 human-in-the-loop 文献锚点（#542）。另有一项独立于 survey 轨的功能：#544 SessionStart 更新提醒——plugin 安装落后 main 时提示 `/plugin update`（`ARS_UPDATE_CHECK=0` 可关闭）。`academic-pipeline` 随套件升至 v3.18.0；其余三个 skill 版本不变。
+
+### v3.17.0（2026-07-16）— Pipeline 边界语义、跨模型交接信封、可执行 panel checker
+
+> **修复：**收敛 #528 两个未明确定义的 pipeline 边界 — Stage 5「finalize 前一律 MANDATORY」现在只指定唯一一个 checkpoint（Stage 4.5 通过与 Stage 5 派工之间的入口闸门），Stage 6 新增终止确认词汇（`finish`/`end`/`done`/`confirm`）与明确的婉拒路径；五个 pipeline 表面现在都加上全文件 sha256 内容锁（#529），日后任何 prompt 表面漂移都会挡 CI，直到同一个 commit 更新哈希值。盲测 checkpoint 传输移到派工层（#523）— 原本 Bucket A 的 checkpoint 拥有者被要求自行执行跨模型传输，但这在 runtime Bash deny 下无法执行；现在改由派工层负责传输调用。**新增：**canonical `[CROSS-MODEL-HANDOFF v1]` 信封 + 标准化 Python 文法（#527）取代原本纯文字约束的拥有者→派工者→拥有者传输路径，把一致/分歧/格式错误结果的路由钉死在全部三个 checkpoint 拥有者上。#514 工具白名单的防漂移锁（#524，74 个 mutation test）挡住「对 agent 本体与其镜像同步修改、悄悄加回 Bash」的漂移路径。可执行的 sprint-contract panel checker（#510）从原始产出物重新算出 v3.6.2 的两层决策，并抓到多数决公式的一个转录错误。机器可读的降级注册表（#511 Part A）把套件内每个优雅降级机制都列成索引，另加引用验证闸门的 hermetic transport-fixture 集成测试（#511 Part B），对四个解析器 client 端到端跑过检入版的合成 API 响应。`academic-pipeline` 跟随套件版本至 v3.17.0；其余三个 skill 版本不变。
+
+### v3.16.0（2026-07-12）— 模型分层、跨模型闸门强化、WP 提示语锐化
+
+> **新增：**可选模型分层（#517）— 新 `ARS_MODEL_TIERING` 开关含两个方向（`economy` 让 13 个执行型 agent 以低于 session 模型一档派工、下限 Opus 级；`quality-boost` 让完整性闸门与最终审查面的判断型 agent 升到前沿档）；未设置时逐字节等同旧行为，冻结的 39-agent 分类由新 manifest + lint 钉死。跨模型闸门强化（#518）— 风险分层抽验（HIGH-IMPACT 参考文献在两道闸门 100% 验证）、两个不可逆决策点（设计冻结 + 最终编辑决定）的盲测分歧检查、验证模型 id 状态白名单、升格 bakeoff 协议；原规划的通用第 6 位审查者确定退役、非延期。GPT-5.6 Sol 列为暂定跨模型验证者并增设明确 reasoning-effort 控制（#515）。devCharlotte 提案的韩文触发词 + 路由边界 fixture（#452/#509）。论文写作端新增 CARS 导论修辞 + 标题设计参考文件（#500）。**变更：**WP 研究问题提示语经名词替换测试泛化到 20 壳表之外（#501）并锐化豁免条款、抓到装饰型标题壳（#505）— held-out 漏判率 0.34–0.38 → 0.094、误触 0/16 维持；审查者校准协议记载 LLM 评审偏宽方向（FARS 锚点，#484）；OpenAlex API key 认证 + 预算感知 429 处理 + arXiv ToU 对齐退避（#495/#496）。**文档：**THIRD_PARTY.md 社区目录（#497/#498）。`academic-pipeline` 跟随套件版本至 v3.16.0；其余三个 skill 版本不变。
 
 ### v3.15.0（2026-07-04）— 发版闸门强化、prompt 债务清理第二轮、防漂移锁
 

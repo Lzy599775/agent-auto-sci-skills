@@ -125,6 +125,9 @@ ARS exposes a few opt-in flags. All default to OFF; setting them changes behavio
 | `ARS_PASSPORT_RESET=1` | v3.6.3 | Promote every FULL checkpoint to a context-reset boundary. Required to *emit* boundary entries; **not** required to invoke `resume_from_passport=<hash>` in a fresh session. With the flag ON in `systematic-review` mode, reset is mandatory at every FULL checkpoint. | `academic-pipeline/references/passport_as_reset_boundary.md` |
 | `ARS_CROSS_MODEL_SAMPLE_INTERVAL` | v3.5.0 | Sampling interval for cross-model integrity checks (advisory) | `shared/cross_model_verification.md` |
 | `ARS_VERIFICATION_CACHE_PATH` | v3.11 | Override the citation-verification cache location (see below). Not an on/off flag — the cache is on by default; this only relocates it. | `scripts/verification_cache.py` |
+| `ARS_CACHE_STALE_ADVISORY_DAYS` | v3.18.0 (#541) | Age threshold (days) for the cache-staleness advisory: cache-served verifications older than this surface as `ADV-CACHE` advisory rows at the integrity checkpoints (never gating). Default 30; `0` disables; malformed/negative values fall back to the default. | `scripts/verification_cache.py` |
+| `ARS_CACHE_REVALIDATE=1` | v3.18.0 (#541) | Opt-in live re-verification at the gate: cached rows past the staleness threshold are re-verified live (per-row bypass, then re-populated) instead of served. Cost scales with the stale-row count. Default off = advisory-only. | `scripts/verification_gate/__init__.py` + `integrity_verification_agent.md` § A0.5 |
+| `ARS_MODEL_TIERING` | v3.16.0 (#517) | Opt-in model tiering: `economy` (frontier session — execution-type agents step down one tier, floor Opus-class) or `quality-boost` (below-frontier session — judgment-type agents jump up to the frontier tier at the checkpoint surfaces: Stage 2.5/4.5 gates, the opt-in Stage 4→5 claim–ref audit, and final review). Unset = session model everywhere; unknown values warn once and behave as unset. | `shared/model_tiering.md` |
 
 ---
 
@@ -154,6 +157,10 @@ export GOOGLE_AI_API_KEY="AIza-your-key-here"    # For Gemini 3.1 Pro
 # Step 2: Choose your cross-verification model
 export ARS_CROSS_MODEL="gpt-5.5"                # Recommended pair (gpt-5.5-pro = strongest reasoning, ~6x cost)
 # or: export ARS_CROSS_MODEL="gemini-3.1-pro-preview"  # Strong at factual verification
+# or: export ARS_CROSS_MODEL="gpt-5.6-sol"      # Frontier, provisional pending ARS validation (same rates as gpt-5.5)
+
+# Optional: reasoning effort for OpenAI verifier calls (unset = provider default)
+# export ARS_CROSS_MODEL_REASONING_EFFORT="medium"
 
 # Step 3: Run Claude Code as normal — cross-verification activates automatically
 claude
@@ -163,9 +170,10 @@ claude
 
 | Feature | Without cross-model | With cross-model |
 |---|---|---|
-| Integrity verification | Single-model 100% check | + 30% sample independently verified by 2nd model |
+| Integrity verification | Single-model 100% check | + risk-stratified verification by 2nd model: 100% of high-impact references (final gate adds 100% of new/changed-claim references) + a sampled remainder |
 | Devil's Advocate | Single-model DA | + Cross-model generates independent critique, novel findings added |
 | Peer Review | 5 reviewers (same model) | Same 5 reviewers + cross-model DA critique/calibration support |
+| Irreversible checkpoints | Single-model decision | + Blind cross-model decision at design freeze + final editorial decision; divergence escalated to you, never averaged |
 
 ### Cost
 
@@ -201,6 +209,8 @@ The four skills (`deep-research`, `academic-paper`, `academic-paper-reviewer`, `
 
 **Strongly recommended: open auto-update.** Open the `/plugin` UI, find `academic-research-skills`, and toggle auto-update on. ARS releases roughly every 1–2 weeks; auto-update keeps you in sync without manual refreshes. To refresh manually: `/plugin update academic-research-skills`. (`/plugin marketplace update academic-research-skills` only refreshes the marketplace source list, not the installed plugin itself.)
 
+**Built-in update reminder.** The plugin also nudges you on its own: at session start it compares your installed version against `main` (at most one network request per day, 3-second ceiling, silent on any failure) and, when you are behind, prepends one line to the session-start announce pointing at `/plugin update academic-research-skills`. Set `ARS_UPDATE_CHECK=0` to disable the check entirely. Privacy: the check performs a single HTTPS GET of this repository's public `.claude-plugin/plugin.json` and transmits no user data.
+
 **Plugin platform scope:**
 - ✅ Claude Code CLI / VS Code extension / JetBrains extension — full support
 - ❌ claude.ai web / Claude for Work / Anthropic API direct calls — plugins not supported; use Method 1 / 2 / 3 below
@@ -226,10 +236,10 @@ cp -R ~/academic-research-skills/academic-pipeline .claude/skills/academic-pipel
 Expected path shape:
 
 ```text
-/path/to/your/project/.claude/skills/deep-research/SKILL.md
-/path/to/your/project/.claude/skills/academic-paper/SKILL.md
-/path/to/your/project/.claude/skills/academic-paper-reviewer/SKILL.md
-/path/to/your/project/.claude/skills/academic-pipeline/SKILL.md
+/path/to/your/project/.claude/skills/deep-research/WORKFLOW.md
+/path/to/your/project/.claude/skills/academic-paper/WORKFLOW.md
+/path/to/your/project/.claude/skills/academic-paper-reviewer/WORKFLOW.md
+/path/to/your/project/.claude/skills/academic-pipeline/WORKFLOW.md
 ```
 
 Then copy the `.claude/CLAUDE.md` content into your project's `.claude/CLAUDE.md` (merge with existing if you have one).
@@ -368,7 +378,7 @@ Anthropic's current [Project file limits](https://support.claude.com/en/articles
 Method 4a is claude.ai's standard Custom Skill install path: zip each skill folder, upload through Settings → Capabilities → Skills, and Claude treats it as an installed Skill with auto-loading and routing. claude.ai's Custom Skills do support multi-file skill packages including `scripts/` (see Anthropic's [How to create custom Skills](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills) on supporting files and code execution), so Method 4a is mechanically capable of hosting skills with executable assets. The reasons not to recommend it for this specific suite are different and compound:
 
 1. **ARS depends on Claude Code-only orchestration features**. Each ARS skill drives 12-13 specialised agents through Claude Code's Task / subagent tooling and Material Passport file handoffs that resume across sessions. The Anthropic-documented scope of claude.ai's Custom Skill runtime — a containerised code-execution environment per session, with the Skills user guide ([Use Skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude)) describing skill activation but not multi-agent dispatch — does not include Claude Code's Task / subagent control surface. Method 4a is therefore expected to surface ARS as the SKILL.md body's instructions, without the multi-agent dispatch that produces the suite's actual outputs. We have not run a live upload to characterise this in detail; the recommendation is forward-looking based on the Claude Code-specific assumptions baked into the agent orchestration, not on a measured failure.
-2. **Cost to Claude Code and Cowork routing**. claude.ai limits each skill's `description` field to 200 characters per the [Custom Skills documentation](https://claude.com/docs/skills/how-to), while the [Agent Skills specification](https://agentskills.io/specification) and [Claude Code Skills documentation](https://code.claude.com/docs/en/skills) allow up to 1,024 characters. The four ARS descriptions currently sit in the 440-842 range, front-loading routing keywords that Claude Code and Cowork use to discriminate between research, writing, review, and orchestration. Trimming them to fit Method 4a would weaken routing on Claude Code and Cowork — the platforms ARS was built for — in exchange for an unverified partial fit on claude.ai.
+2. **Cost to Claude Code and Cowork routing**. claude.ai limits each skill's `description` field to 200 characters per the [Custom Skills documentation](https://claude.com/docs/skills/how-to), while the [Agent Skills specification](https://agentskills.io/specification) and [Claude Code Skills documentation](https://code.claude.com/docs/en/skills) allow up to 1,024 characters. The four ARS descriptions each exceed the 200-character claude.ai cap while staying under the 1,024-character Claude Code allowance, front-loading routing keywords that Claude Code and Cowork use to discriminate between research, writing, review, and orchestration. Trimming them to fit Method 4a would weaken routing on Claude Code and Cowork — the platforms ARS was built for — in exchange for an unverified partial fit on claude.ai.
 
 **Recommended paths instead:**
 

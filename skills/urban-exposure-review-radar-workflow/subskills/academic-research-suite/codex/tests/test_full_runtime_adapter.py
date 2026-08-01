@@ -11,6 +11,7 @@ CODEX_ROOT = Path(__file__).resolve().parents[1]
 SUITE_ROOT = CODEX_ROOT.parent
 PLANNER_PATH = CODEX_ROOT / "scripts" / "ars_codex_full_runtime.py"
 GATES_PATH = CODEX_ROOT / "scripts" / "ars_codex_quality_gates.py"
+MODEL_TIERING_CHECK = SUITE_ROOT / "ars" / "scripts" / "check_model_tiering.py"
 
 
 def _load_planner():
@@ -92,6 +93,95 @@ def test_ars_rebuttal_audit_alias_routes_to_academic_paper() -> None:
     assert plan["command_recipe"] == "ars/commands/ars-rebuttal-audit.md"
 
 
+def test_korean_revision_routes_to_academic_paper_not_reviewer() -> None:
+    planner = _load_planner()
+    plan = planner.plan_request(
+        "이 논문을 수정해줘. 심사 의견은 아직 없고, 초고를 더 다듬고 싶어.",
+        env={},
+    )
+    assert plan["workflow"] == "academic-paper"
+    assert plan["mode"] == "revision"
+
+
+def test_korean_review_routes_to_reviewer_not_revision() -> None:
+    planner = _load_planner()
+    plan = planner.plan_request("이 논문을 심사해줘.", env={})
+    assert plan["workflow"] == "academic-paper-reviewer"
+    assert plan["mode"] == "full"
+
+
+def test_model_tiering_is_surfaced_without_forcing_a_codex_model() -> None:
+    planner = _load_planner()
+    inline = planner.plan_request("ars-plan Research question: Why?", env={"ARS_MODEL_TIERING": "economy"})
+    assert inline["profile"]["model_tiering_status"] == "inline_noop"
+
+    delegated = planner.plan_request(
+        "ars-plan Research question: Why?",
+        env={
+            "ARS_CODEX_FULL_RUNTIME": "1",
+            "ARS_CODEX_AGENT_TEAM": "1",
+            "ARS_MODEL_TIERING": "quality-boost",
+        },
+    )
+    assert delegated["profile"]["model_tiering_status"] == "advisory_requires_runtime_model_override"
+    assert delegated["profile"]["model_tiering_requested"] == "quality-boost"
+
+
+def test_cross_model_configuration_requires_dispatcher_consent_gate() -> None:
+    planner = _load_planner()
+    inline = planner.plan_request(
+        "ars-reviewer full review for this manuscript.",
+        env={"ARS_CROSS_MODEL": "gpt-5.5"},
+    )
+    assert inline["profile"]["cross_model_configured"] == "gpt-5.5"
+    assert inline["profile"]["cross_model_handoff_status"] == (
+        "inline_transport_requires_explicit_request_and_consent"
+    )
+
+    delegated = planner.plan_request(
+        "ars-reviewer full review for this manuscript.",
+        env={
+            "ARS_CODEX_FULL_RUNTIME": "1",
+            "ARS_CODEX_AGENT_TEAM": "1",
+            "ARS_CROSS_MODEL": "gpt-5.5",
+        },
+    )
+    assert delegated["profile"]["cross_model_handoff_status"] == (
+        "dispatcher_transport_requires_explicit_request_and_consent"
+    )
+    reviewer_2 = next(
+        item
+        for item in delegated["agent_team_plan"]
+        if item["agent"] == "domain_reviewer_agent"
+    )
+    assert reviewer_2["cross_model_reviewer_track"] == (
+        "configured_requires_explicit_content_consent"
+    )
+
+
+def test_v318_cache_controls_are_surfaced_without_changing_gate_semantics() -> None:
+    planner = _load_planner()
+    default = planner.plan_request("ars-cache-invalidate smith2024", env={})
+    assert default["profile"]["cache_stale_advisory_days"] == 30
+    assert default["profile"]["cache_revalidation_status"] == "cached_default"
+
+    requested = planner.plan_request(
+        "ars-cache-invalidate smith2024",
+        env={"ARS_CACHE_STALE_ADVISORY_DAYS": "0", "ARS_CACHE_REVALIDATE": "1"},
+    )
+    assert requested["profile"]["cache_stale_advisory_days"] == 0
+    assert requested["profile"]["cache_revalidation_requested"] is True
+    assert requested["profile"]["cache_revalidation_status"] == (
+        "live_bibliographic_revalidation_requested"
+    )
+
+    malformed = planner.plan_request(
+        "ars-cache-invalidate smith2024",
+        env={"ARS_CACHE_STALE_ADVISORY_DAYS": "not-a-number"},
+    )
+    assert malformed["profile"]["cache_stale_advisory_days"] == 30
+
+
 def test_ars_full_starts_pipeline_and_stops_at_dashboard_checkpoint() -> None:
     planner = _load_planner()
     plan = planner.plan_request(
@@ -147,3 +237,14 @@ def test_quality_gates_all_pass() -> None:
     )
     payload = json.loads(result.stdout)
     assert all(item["ok"] for item in payload.values()), payload
+
+
+def test_model_tiering_lint_accepts_separately_vendored_experiment_agents() -> None:
+    result = subprocess.run(
+        [sys.executable, str(MODEL_TIERING_CHECK)],
+        cwd=SUITE_ROOT / "ars",
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "39 agents classified" in result.stdout

@@ -2,23 +2,23 @@
 
 本仓库优先维护原创和领域适配 skill。第三方项目只有在能明确增强体育地理、城市暴露、GIS/遥感、文献综述、图件或 SCI 写作工作流时才封装，并严格遵守许可证边界。
 
-Latest upstream check: [`docs/upstream-update-20260707.md`](upstream-update-20260707.md).
+Latest upstream check: [`docs/upstream-update-20260801.md`](upstream-update-20260801.md).
 
 ## Packaged Or Wrapped Sources
 
 | Upstream project | Local package | Current checked snapshot | License/status | Packaging decision |
 |---|---|---:|---|---|
-| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | `4d97e29` (`v2.53.0-10-g4d97e29`) | MIT, upstream license kept in wrappers | Only selected ML/AI, data-viz, geospatial/RS, and scicomm areas are packaged. The 2026-07-07 refresh synced `statistical-analysis`; other selected areas were checked and unchanged. |
+| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | `ad21a38` (`v2.62.0`) | MIT, upstream license kept in wrappers | Only selected ML/AI, data-viz, geospatial/RS, and scicomm areas are packaged. The 2026-08-01 refresh synchronized 26 selected subskills; `transformers` had no file-level change. |
 | [Haojae/scipilot-figure-skill](https://github.com/Haojae/scipilot-figure-skill) | `scipilot-figure-skill` | `43098dd` (`v2.1.0-1-g43098dd`) | MIT | Full figure-advisor package retained with NOTICE and LICENSE. |
 | [Haojae/scipilot-writing-skill](https://github.com/Haojae/scipilot-writing-skill) | `scipilot-writing-skill` | `51c5fd3` (`v1.0.0`) | MIT | Full writing/polishing package vendored with scripts, references, examples, NOTICE, and LICENSE. |
-| [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `8626ccb` (`v0.1.17`) | CC BY-NC 4.0 via vendored ARS license | Vendored as an isolated subskill. Parent urban-exposure skill keeps domain authority. |
+| [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `f8d6b06` (`v0.1.22`) | CC BY-NC 4.0 via vendored ARS license | Vendored as an isolated subskill. Parent urban-exposure skill keeps domain authority. |
 | [xiangyu-Ge/sci-writing-geors](https://github.com/xiangyu-Ge/sci-writing-geors) | `geors-sci-writing-adapter` | `1f58c00` | No explicit LICENSE file detected | No upstream text vendored. Local package is an original Codex adapter with attribution and source link only. |
 
 ## Optional Reference Sources
 
-| Project | Use | 2026-07-07 status |
+| Project | Use | 2026-08-01 status |
 |---|---|---|
-| [skyllwt/AutoSci](https://github.com/skyllwt/AutoSci) | Long-horizon research-agent memory and workflow ideas. | Checked at `a01841d` (`v1.0.0-30-ga01841d`). Latest delta only affected `assets/wechat_group_4.png`; no public package change. |
+| [skyllwt/AutoSci](https://github.com/skyllwt/AutoSci) | Long-horizon research-agent memory and workflow ideas. | Checked at `ff3485e` (`v1.0.0-36-gff3485e`). Its research router now delegates cold-start bootstrap to `/init`; the local original router was reviewed but not overwritten. |
 | [assafelovic/gpt-researcher](https://github.com/assafelovic/gpt-researcher) | Autonomous web deep research reference. | Reference only. |
 | [hwang847/codex-paper-reader](https://github.com/hwang847/codex-paper-reader) | Local PDF reading workflow reference. | Reference only. |
 | [Leey21/awesome-ai-research-writing](https://github.com/Leey21/awesome-ai-research-writing) | Academic writing prompt-library style reference. | Reference only. |

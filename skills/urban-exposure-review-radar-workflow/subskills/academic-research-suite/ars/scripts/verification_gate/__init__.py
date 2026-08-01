@@ -42,7 +42,11 @@ try:
         _resolve_arxiv_id_then_title,
         _resolve_doi_then_title,
         queried_by_for,
+        resolve_arxiv_detailed,
+        resolve_doi_then_title_detailed,
+        resolve_s2_detailed,
     )
+    from verification_cache import stale_advisory_days
 except ImportError:  # pragma: no cover - dual-path import
     from scripts.citation_verification_summary import (
         STATUS_MATCHED,
@@ -59,9 +63,35 @@ except ImportError:  # pragma: no cover - dual-path import
         _resolve_arxiv_id_then_title,
         _resolve_doi_then_title,
         queried_by_for,
+        resolve_arxiv_detailed,
+        resolve_doi_then_title_detailed,
+        resolve_s2_detailed,
     )
+    from scripts.verification_cache import stale_advisory_days
 
 _ANCHOR_PRESENT_KINDS = frozenset({"quote", "page", "section", "paragraph"})
+
+# #541 omitted-argument sentinel: omission = default cache-through (a
+# VerificationCache at the default/env path) + revalidation derived from
+# ARS_CACHE_REVALIDATE; an EXPLICIT cache=None is the live opt-out.
+_UNSET = object()
+
+
+def _default_cache():
+    try:
+        from verification_cache import VerificationCache
+    except ImportError:  # pragma: no cover - dual-path import
+        from scripts.verification_cache import VerificationCache
+    return VerificationCache()
+
+
+def _resolve_cache_args(cache, revalidate_stale):
+    import os
+    if cache is _UNSET:
+        cache = _default_cache()
+    if revalidate_stale is _UNSET:
+        revalidate_stale = os.environ.get("ARS_CACHE_REVALIDATE") == "1"
+    return cache, revalidate_stale
 
 
 def _is_valid_ref_slug(ref_slug: Any) -> bool:
@@ -84,40 +114,68 @@ def _ran_outcome(unmatched: bool, queried_by: str | None) -> dict[str, Any]:
     return _outcome(STATUS_UNMATCHED if unmatched else STATUS_MATCHED, queried_by)
 
 
-def _run_doi_then_title(entry, client, unavailable_exc) -> dict[str, Any]:
+def _run_doi_then_title(
+    entry, client, unavailable_exc, *, resolver_name=None, cache=None,
+    bypass_stale=False,
+) -> tuple[dict[str, Any], bool]:
     """Run a doi-then-title resolver, mapping execution to a status outcome.
     Used by crossref / openalex (same flow + DOI key, different exception).
-    The manual exemption is short-circuited upstream in verify_citation."""
+    The manual exemption is short-circuited upstream in verify_citation.
+    Returns (outcome, served_from_cache) — #541 cache-through routes via the
+    detailed contamination_signals wrapper (same cache keys, interoperable
+    rows); cache=None is byte-equivalent to the historical live path."""
     try:
-        unmatched, _matched_by, queried_by = _resolve_doi_then_title(entry, client)
+        if cache is not None:
+            unmatched, _mb, queried_by, from_cache = (
+                resolve_doi_then_title_detailed(
+                    entry, client, resolver_name=resolver_name, cache=cache,
+                    bypass_stale=bypass_stale))
+        else:
+            unmatched, _mb, queried_by = _resolve_doi_then_title(entry, client)
+            from_cache = False
     except unavailable_exc:
-        return _outcome(STATUS_UNREACHABLE, None)
-    return _ran_outcome(unmatched, queried_by)
+        return _outcome(STATUS_UNREACHABLE, None), False
+    return _ran_outcome(unmatched, queried_by), from_cache
 
 
-def _run_semantic_scholar(entry, client) -> dict[str, Any]:
+def _run_semantic_scholar(
+    entry, client, *, cache=None, bypass_stale=False,
+) -> tuple[dict[str, Any], bool]:
     """S2's lookup(entry) is a single entry-keyed call (DOI-first then title
     internally). queried_by follows the has-an-id rule (C-V6(a)). The manual
     exemption is short-circuited upstream in verify_citation."""
     queried_by = queried_by_for(entry, id_field="doi")
     try:
+        if cache is not None:
+            unmatched, _mb, queried_by, from_cache = resolve_s2_detailed(
+                entry, client, cache=cache, bypass_stale=bypass_stale)
+            return _ran_outcome(unmatched, queried_by), from_cache
         matched = bool(client.lookup(entry).get("matched", False))
     except SemanticScholarUnavailable:
-        return _outcome(STATUS_UNREACHABLE, None)
-    return _ran_outcome(not matched, queried_by)
+        return _outcome(STATUS_UNREACHABLE, None), False
+    return _ran_outcome(not matched, queried_by), False
 
 
-def _run_arxiv(entry, client) -> dict[str, Any]:
+def _run_arxiv(
+    entry, client, *, cache=None, bypass_stale=False,
+) -> tuple[dict[str, Any], bool]:
     """arXiv resolver is applicable only when the citation has an arXiv ID;
     otherwise it is skipped (not unmatched) per Delta 1 / spec line 119. The
     manual exemption is short-circuited upstream in verify_citation."""
     if not entry.get("arxiv_id"):
-        return _outcome(STATUS_SKIPPED, None)  # non-arXiv citation → not applicable
+        # non-arXiv citation → not applicable
+        return _outcome(STATUS_SKIPPED, None), False
     try:
-        unmatched, _matched_by, queried_by = _resolve_arxiv_id_then_title(entry, client)
+        if cache is not None:
+            unmatched, _mb, queried_by, from_cache = resolve_arxiv_detailed(
+                entry, client, cache=cache, bypass_stale=bypass_stale)
+        else:
+            unmatched, _mb, queried_by = _resolve_arxiv_id_then_title(
+                entry, client)
+            from_cache = False
     except ArxivUnavailable:
-        return _outcome(STATUS_UNREACHABLE, None)
-    return _ran_outcome(unmatched, queried_by)
+        return _outcome(STATUS_UNREACHABLE, None), False
+    return _ran_outcome(unmatched, queried_by), from_cache
 
 
 def _anchor_present(anchor: Any) -> bool:
@@ -137,7 +195,8 @@ def verify_citation(
     *,
     ref_slug: str,
     anchor: Mapping[str, Any] | None = None,
-    cache=None,
+    cache=_UNSET,
+    revalidate_stale=_UNSET,
 ) -> dict[str, Any]:
     """Verify one citation's existence across the four resolvers.
 
@@ -154,23 +213,27 @@ def verify_citation(
     ref_slug, already parsed from writer prose and joined upstream (None when no
     anchor marker exists for the ref_slug). It is a SEPARATE input, not an entry
     field — the anchor lives in prose, not in literature_corpus (spec Delta 4:
-    the summary is a join across three sources). `cache` is reserved for future
-    cache-through wiring at this layer (the resolver-level cache lands in
-    contamination_signals; threading it here is a Delta-2 follow-up).
+    the summary is a join across three sources).
+
+    `cache` (#541, closes the Delta-2 follow-up): an optional VerificationCache
+    threaded through the four resolvers (same cache keys as the
+    contamination-signals layer — interoperable rows). OMITTING the argument gives the
+    default cache-through (VerificationCache at the default/env path) with
+    revalidation derived from ARS_CACHE_REVALIDATE; passing cache=None
+    EXPLICITLY is the live opt-out, byte-equivalent to the historical path. When any resolver outcome was
+    served from cache, the summary additionally carries `cache_age_days`
+    (citation-level oldest-live-row age, rounded to 0.1) and
+    `cache_stale_advisory` (that rounded value > ARS_CACHE_STALE_ADVISORY_DAYS,
+    0 disables) — advisory metadata, never a gate input. `revalidate_stale`
+    (#541 `ARS_CACHE_REVALIDATE`): a would-be hit whose own row age exceeds
+    the threshold is recomputed live and re-cached instead of served.
 
     Returns a dict validating against citation_verification_summary.schema.json:
     {citation_key, ref_slug, lookup_verified, anchor_present,
-     verification_timestamp, resolver_outcomes}.
+     verification_timestamp, resolver_outcomes} (+ the two #541 fields when
+    cache-served).
     """
-    if cache is not None:
-        # Honest forward-decl: the resolver-level cache lands in
-        # contamination_signals, but it is not yet threaded through this layer
-        # (a Delta-2 follow-up). Refuse rather than silently drop a cache the
-        # caller passed expecting it to take effect.
-        raise NotImplementedError(
-            "cache-through at the verification_gate layer is not yet wired "
-            "(#182 Delta-2 follow-up); pass cache=None"
-        )
+    cache, revalidate_stale = _resolve_cache_args(cache, revalidate_stale)
     if not _is_valid_ref_slug(ref_slug):
         # ref_slug is the prose-join key stamped verbatim into the summary, which
         # the schema requires as a non-empty string. This is the single emission
@@ -189,17 +252,27 @@ def verify_citation(
             r: _outcome(STATUS_SKIPPED, None)
             for r in ("crossref", "openalex", "semantic_scholar", "arxiv")
         }
+        any_from_cache = False
     else:
-        resolver_outcomes = {
+        ran = {
             "crossref": _run_doi_then_title(
-                entry, clients["crossref"], CrossrefUnavailable),
+                entry, clients["crossref"], CrossrefUnavailable,
+                resolver_name="crossref", cache=cache,
+                bypass_stale=revalidate_stale),
             "openalex": _run_doi_then_title(
-                entry, clients["openalex"], OpenAlexUnavailable),
+                entry, clients["openalex"], OpenAlexUnavailable,
+                resolver_name="openalex", cache=cache,
+                bypass_stale=revalidate_stale),
             "semantic_scholar": _run_semantic_scholar(
-                entry, clients["semantic_scholar"]),
-            "arxiv": _run_arxiv(entry, clients["arxiv"]),
+                entry, clients["semantic_scholar"], cache=cache,
+                bypass_stale=revalidate_stale),
+            "arxiv": _run_arxiv(
+                entry, clients["arxiv"], cache=cache,
+                bypass_stale=revalidate_stale),
         }
-    return {
+        resolver_outcomes = {name: oc for name, (oc, _fc) in ran.items()}
+        any_from_cache = any(fc for _oc, fc in ran.values())
+    summary = {
         "citation_key": entry.get("citation_key"),
         "ref_slug": ref_slug,
         "lookup_verified": reduce_lookup_verified(resolver_outcomes),
@@ -207,6 +280,15 @@ def verify_citation(
         "verification_timestamp": datetime.now(timezone.utc).isoformat(),
         "resolver_outcomes": resolver_outcomes,
     }
+    if cache is not None and any_from_cache:
+        age = cache.entry_age_days(entry.get("citation_key"))
+        if age is not None:
+            rounded = round(age, 1)
+            threshold = stale_advisory_days()
+            summary["cache_age_days"] = rounded
+            summary["cache_stale_advisory"] = bool(
+                threshold and rounded > threshold)
+    return summary
 
 
 def verify_passport(
@@ -215,7 +297,8 @@ def verify_passport(
     *,
     ref_slug_by_key: Mapping[str, str],
     anchors: Mapping[str, Mapping[str, Any]] | None = None,
-    cache=None,
+    cache=_UNSET,
+    revalidate_stale=_UNSET,
 ) -> list[dict[str, Any]]:
     """Batch helper: run verify_citation over every entry in the passport's
     literature_corpus[].
@@ -237,6 +320,7 @@ def verify_passport(
     verification (one entry under several ref slugs) is a different API shape, out
     of scope here.
     """
+    cache, revalidate_stale = _resolve_cache_args(cache, revalidate_stale)
     corpus = passport.get("literature_corpus") or []
     anchors = anchors or {}
     outcomes: list[dict[str, Any]] = []
@@ -256,5 +340,6 @@ def verify_passport(
             )
         outcomes.append(verify_citation(
             entry, clients, ref_slug=ref_slug,
-            anchor=anchors.get(ref_slug), cache=cache))
+            anchor=anchors.get(ref_slug), cache=cache,
+            revalidate_stale=revalidate_stale))
     return outcomes

@@ -181,6 +181,14 @@ id = "v3.10-182-arxiv-client"
 path = "scripts/test_arxiv_client.py"
 
 [[pytest]]
+id = "511-transport-fixture-citation-gate"
+path = "scripts/test_transport_fixture_citation_gate.py"
+
+[[pytest]]
+id = "511-degradation-registry"
+path = "scripts/test_check_degradation_registry.py"
+
+[[pytest]]
 id = "v3.10-182-verification-cache"
 path = "scripts/test_verification_cache.py"
 
@@ -267,3 +275,35 @@ path = "scripts/test_check_v3_9_4_temporal_verification.py"
 [[pytest]]
 id = "491-setup-cross-model-parity"
 path = "scripts/test_check_setup_cross_model_parity.py"
+
+[[pytest]]
+id = "517-model-tiering-classification"
+path = "scripts/test_check_model_tiering.py"
+
+[[pytest]]
+id = "524-tools-allowlist-lock"
+path = "scripts/test_check_tools_allowlist.py"
+
+[[pytest]]
+id = "510-panel-synthesis-checker"
+path = "scripts/test_check_panel_synthesis.py"
+
+[[pytest]]
+id = "528-pipeline-boundary-semantics"
+path = "scripts/test_check_pipeline_boundary_semantics.py"
+
+[[pytest]]
+id = "527-handoff-envelope-fixtures"
+path = "scripts/test_cross_model_handoff.py"
+
+[[pytest]]
+id = "527-handoff-contract-lint"
+path = "scripts/test_check_cross_model_handoff_contract.py"
+
+[[pytest]]
+id = "544-update-reminder"
+path = "scripts/test_ars_update_check.py"
+
+[[pytest]]
+id = "570-revision-token-conservation"
+path = "scripts/test_check_revision_token_conservation.py"

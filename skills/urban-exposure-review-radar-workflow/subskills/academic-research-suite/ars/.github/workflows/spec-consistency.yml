@@ -127,6 +127,13 @@ jobs:
         # unified manifest.
         run: python3 scripts/check_agents_mirror_sync.py
 
+      - name: Check tools-allowlist content lock (#524)
+        # Pins the #514 allowlist VALUE (mirror-sync pins only the pair) +
+        # the Bucket-A-must-not-advertise-Bash reconciliation. The pytest
+        # companion `test_check_tools_allowlist.py` runs via the unified
+        # manifest.
+        run: python3 scripts/check_tools_allowlist.py
+
       - name: Check revision-patch discipline (#390 Slice B)
         # The pytest companion `test_check_390_revision_patch_discipline.py`
         # runs via the unified manifest.
@@ -142,6 +149,11 @@ jobs:
         # runs via the unified manifest (and also under pytest.yml's
         # scripts/ glob — that 2x overlap is the accepted manifest pattern).
         run: python3 scripts/check_setup_cross_model_parity.py
+
+      - name: Check model-tiering classification (#517)
+        # The pytest companion `test_check_model_tiering.py` runs via the
+        # unified manifest.
+        run: python3 scripts/check_model_tiering.py
 
       - name: Run version consistency unit tests
         env:
@@ -187,6 +199,14 @@ jobs:
 
       - name: Validate literature_corpus schemas and examples
         run: python3 scripts/check_literature_corpus_schema.py
+
+      - name: Validate degradation registry (#511 Part A)
+        # Pins shared/contracts/degradation_registry.json to the repo state it
+        # cites: every authority content-anchor must appear verbatim in its
+        # file, every pinned test/lint/schema must exist (path::function
+        # resolved for .py). The registry indexes, it never re-authors —
+        # semantics stay in each row's authority file.
+        run: python3 scripts/check_degradation_registry.py
 
       - name: Validate corpus consumer protocol (v3.6.5+)
         run: python3 scripts/check_corpus_consumer_protocol.py
@@ -346,6 +366,27 @@ jobs:
         env:
           PYTHONPATH: .
         run: python scripts/check_439_format_profile.py
+
+      - name: Run #527 cross-model handoff contract lint
+        # Pins the canonical [CROSS-MODEL-HANDOFF v1] envelope + dispatcher
+        # consumer contract across shared/cross_model_verification.md, the
+        # three checkpoint owners, and the Mode-A orchestrator. Normative
+        # grammar: scripts/cross_model_handoff.py; owner->dispatcher->owner
+        # fixtures + this lint's mutation tests run via the unified
+        # manifest (#156).
+        run: python3 scripts/check_cross_model_handoff_contract.py
+
+      - name: Run #528 pipeline boundary-semantics defrift lock
+        # Pins the four Mode-A-replay resolutions (#529 items 1-2 + #528
+        # items 3-4) across academic-pipeline SKILL.md / orchestrator /
+        # state machine / process_summary_protocol: Methodology Blueprint
+        # in the Stage 1->2 handoff, Stage 3' Minor never triggers
+        # coaching, the Stage 5 MANDATORY boundary is the entry gate
+        # (completion checkpoint FULL — never SLIM), and the Stage 6
+        # terminal-acknowledgement semantics. The pytest companion
+        # `test_check_pipeline_boundary_semantics.py` runs via the
+        # unified manifest (#156).
+        run: python3 scripts/check_pipeline_boundary_semantics.py
 
       - name: Run v3.9.2 Phase Boundary coverage lint (#133)
         # Enforces 22 Bucket A agents have ## Phase Boundary (v3.9.2)

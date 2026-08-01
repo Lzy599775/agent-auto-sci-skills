@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.0
+
+- Refreshed all configured upstream mirrors on 2026-08-01.
+- Updated the vendored `academic-research-suite` from `v0.1.17` to `v0.1.22` (`f8d6b06`), carrying ARS `v3.19.0` with local-PDF read-integrity preflight, read-scope attestations, cross-model verification guards, and revision claim-drift checks.
+- Adapted the ARS quality-gate runner for this nested standalone distribution while retaining all skill-level gates and explicitly skipping only the absent repository-level Desktop plugin bundle check.
+- Updated K-Dense selected wrappers from `v2.53.0-10-g4d97e29` to `v2.62.0` (`ad21a38`): 26 of 27 selected subskills changed; `transformers` remained file-identical.
+- Verified SciPilot Figure, SciPilot Writing, and GeoRS had no new commit.
+- Checked AutoSci at `ff3485e`; documented its cold-start `/init` handoff change without overwriting the local original router.
+- Updated Chinese and English READMEs, skill map, external-source registry, local HTML navigator, evolution page, notices, and the dated upstream audit.
+
 ## 0.6.0
 
 - Refreshed upstream mirrors on 2026-07-07.

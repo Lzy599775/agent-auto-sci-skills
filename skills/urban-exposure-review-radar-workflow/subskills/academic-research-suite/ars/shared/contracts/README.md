@@ -24,7 +24,7 @@ Protocol: `academic-paper-reviewer/references/sprint_contract_protocol.md`.
 - `writer/full.json` — single-agent writer, 7 dimensions (D1 section_completeness / D2 citation_density / D3 argument_blueprint_fidelity / D4 total_word_count / D5 per_section_word_count / D6 acknowledged_limitations / D7 register_consistency), 5 failure conditions (F1 / F4 / F2 / F3 / F0). No `scoring_plan` field.
 - `evaluator/full.json` — single-agent evaluator, 5 dimensions (D1 originality / D2 methodological_rigor / D3 evidence_sufficiency / D4 argument_coherence / D5 writing_quality), 7 failure conditions (F1 / F2 / F3 / F6 / F4 / F5 / F0). Carries full `scoring_plan` + `disagreement_handling`.
 
-Both writer + evaluator templates ship under Schema 13.1 (allOf branches 11/12 require `pre_commitment_artifacts` for `writer_full` and `disagreement_handling` for `evaluator_full`; branches 5/6 pin `failure_conditions[].action` to mode-specific enums; branches 8/9 pin F0 contains to the mode's accept variant). Orchestration block lives in `academic-paper/SKILL.md` § "v3.6.6 Generator-Evaluator Contract Protocol" + the writer/evaluator agent files.
+Both writer + evaluator templates ship under Schema 13.1 (allOf branches 11/12 require `pre_commitment_artifacts` for `writer_full` and `disagreement_handling` for `evaluator_full`; branches 5/6 pin `failure_conditions[].action` to mode-specific enums; branches 8/9 pin F0 contains to the mode's accept variant). Orchestration block lives in `academic-paper/WORKFLOW.md` § "v3.6.6 Generator-Evaluator Contract Protocol" + the writer/evaluator agent files.
 
 ### Reserved reviewer modes without shipped templates
 
@@ -59,6 +59,12 @@ Schemas for Material Passport input ports.
   `phase2_investigation/version_records.yaml` sidecar for academic citation version
   families (preprint -> proceedings -> journal extension). This is deliberately a
   sidecar: `literature_corpus_entry.schema.json` stays adapter-owned and unmodified.
+- `passport/human_read_log.schema.json` (#513) — the user-owned human-read ledger
+  (`<passport-stem>_human_read_log.yaml`, written by `scripts/ars_mark_read.py`),
+  including the optional #513 `read_scope` honest-coverage attestation
+  (`level`/`locators`/`note`, declaration-only). Deliberately a sidecar for the same
+  reason as above: corpus entries MUST NOT carry human-read state (v3.6.8 firm rule 3).
+  Audit/test-time validation only — the CLI stays dependency-light at runtime.
 
 ## Audit artifact contracts (v3.6.7 Step 6)
 

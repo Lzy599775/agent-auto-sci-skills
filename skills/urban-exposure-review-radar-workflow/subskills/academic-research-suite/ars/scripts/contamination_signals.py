@@ -8,10 +8,21 @@ post-hoc backfill on pre-v3.7.3 entries.
 
 Design: docs/design/2026-05-15-issue-105-contamination-signals-backfill-design.md
 Spec: docs/design/2026-05-12-ars-v3.7.3-claim-faithfulness-and-contaminated-source-spec.md §3.2
+
+Omission reason-provenance (#511 Part A): wherever a resolver's contract below
+says "caller MUST omit field" because of API DEGRADATION (an *Unavailable
+exception), the caller additionally records the omission on the entry as
+`contamination_signal_omissions: {<field>: "api_degraded"}` so a degraded
+lookup stays distinguishable from "never computed". Derivable omissions are
+NOT recorded (manual exemption ← obtained_via='manual'; arXiv skip ← absent
+arxiv_id). Schema + mutual-exclusion rules:
+shared/contracts/passport/literature_corpus_entry.schema.json; registry row
+`contamination_signal_api_degradation` in
+shared/contracts/degradation_registry.json.
 """
 from __future__ import annotations
 
-from typing import Any, Mapping, Protocol
+from typing import Any, Mapping, MutableMapping, Protocol
 
 # Re-export ArxivUnavailable so callers (and tests) can reference it from the
 # signals module alongside the other resolver exceptions. Dual-path import
@@ -213,6 +224,86 @@ def _query_form(*, id_label: str, id_value: str | None, title: str) -> str:
     return f"{id_label}:{id_value or ''}|title:{title}"
 
 
+def _cached_verdict_detailed(
+    *,
+    cache,
+    citation_key,
+    resolver_name: str,
+    query_form: str,
+    compute,
+    bypass_stale: bool = False,
+    require_queried_by: bool = True,
+) -> tuple[bool, str | None, str | None, bool]:
+    """#541 detailed form of `_cached_verdict`: returns
+    (unmatched, matched_by, queried_by, served_from_cache) so the
+    verification-gate layer keeps the C-V6(a) queried_by signal on cache hits.
+
+    Hit criteria are `_cached_verdict`'s (payload has `matched`, decision
+    version matches) PLUS — for gate callers (`require_queried_by=True`, the
+    default) — `queried_by` present: a foreign row without it cannot feed the
+    gate's outcome contract, so it is a miss there. The bool-only signal layer
+    (`_cached_verdict`) passes `require_queried_by=False`, preserving its
+    historical hit criteria byte-for-byte. When
+    `bypass_stale` is True (#541 `ARS_CACHE_REVALIDATE`), a hit whose OWN row
+    age exceeds the stale-advisory threshold is treated as a miss — forcing a
+    live re-verification that then re-populates the row. cache=None runs live.
+    """
+    if cache is None:
+        unmatched, matched_by, queried_by = compute()
+        return unmatched, matched_by, queried_by, False
+    cached = cache.get(citation_key, resolver_name, query_form)
+    if (
+        cached is not None
+        and "matched" in cached
+        and cached.get("decision_version") == RESOLVER_DECISION_VERSION
+        and (
+            not require_queried_by
+            # Gate callers additionally require TYPED payload values: matched
+            # must be a real bool (a string "false" is truthy and would launder
+            # into lookup_verified="true") and queried_by must be a valid
+            # C-V6(a) value. The bool signal wrapper keeps the looser
+            # historical criteria (require_queried_by=False).
+            or (
+                isinstance(cached.get("matched"), bool)
+                and cached.get("queried_by") in ("id", "title")
+            )
+        )
+    ):
+        stale_bypassed = False
+        if bypass_stale:
+            threshold = _stale_advisory_days()
+            age = cache.row_age_days(citation_key, resolver_name, query_form)
+            stale_bypassed = bool(
+                threshold and age is not None and age > threshold
+            )
+        if not stale_bypassed:
+            return (
+                not cached["matched"],
+                cached.get("matched_by"),
+                cached.get("queried_by"),
+                True,
+            )
+    unmatched, matched_by, queried_by = compute()
+    cache.put(
+        citation_key,
+        resolver_name,
+        query_form,
+        {"matched": not unmatched, "matched_by": matched_by,
+         "queried_by": queried_by,
+         "decision_version": RESOLVER_DECISION_VERSION},
+    )
+    return unmatched, matched_by, queried_by, False
+
+
+def _stale_advisory_days() -> int:
+    """Lazy import of the #541 threshold (avoids a hard import cycle)."""
+    try:
+        from verification_cache import stale_advisory_days
+    except ImportError:  # pragma: no cover - dual-path import
+        from scripts.verification_cache import stale_advisory_days
+    return stale_advisory_days()
+
+
 def _cached_verdict(
     *,
     cache,
@@ -233,34 +324,16 @@ def _cached_verdict(
     The stored payload carries `matched_by` + `queried_by` so a cached negative
     keeps the C-V6(a) ID-keyed signal the narrowed-false reducer needs.
     """
-    if cache is None:
-        unmatched, _, _ = compute()
-        return unmatched
-    cached = cache.get(citation_key, resolver_name, query_form)
-    # #431 §0.12.3b: a hit is reusable ONLY when its stored decision version
-    # matches the current logic. A row missing `matched` (written by an
-    # older/other tool) OR carrying a stale/absent decision version (e.g. any
-    # pre-v5 `matched_by=title` row written under the author-agree tiers) is
-    # treated as a MISS — forcing a live recompute under the current logic
-    # rather than reusing a verdict a different decision path produced. Without
-    # this the #431 pivot is a no-op for every citation already cached.
-    if (
-        cached is not None
-        and "matched" in cached
-        and cached.get("decision_version") == RESOLVER_DECISION_VERSION
-    ):
-        return not cached["matched"]
-    unmatched, matched_by, queried_by = compute()
-    # query_form is the cache key, not part of the value — no need to echo it
-    # into the stored payload (nothing reads it back). The decision version is
-    # stamped into the value so a future run under a newer logic re-resolves.
-    cache.put(
-        citation_key,
-        resolver_name,
-        query_form,
-        {"matched": not unmatched, "matched_by": matched_by,
-         "queried_by": queried_by,
-         "decision_version": RESOLVER_DECISION_VERSION},
+    # #431 §0.12.3b hit-reuse rule + #541 queried_by requirement live in the
+    # detailed form — single logic path; this wrapper keeps the historical
+    # bool-only return for the signal-layer callers.
+    unmatched, _, _, _ = _cached_verdict_detailed(
+        cache=cache,
+        citation_key=citation_key,
+        resolver_name=resolver_name,
+        query_form=query_form,
+        compute=compute,
+        require_queried_by=False,
     )
     return unmatched
 
@@ -460,21 +533,157 @@ def build_signals_object(
     cache: optional VerificationCache (spec §2 Delta 2), threaded into both the
     S2 and arXiv resolvers. cache=None is byte-equivalent to no caching.
     """
+    return build_signals_with_omissions(
+        entry, client, arxiv_client, cache=cache)[0]
+
+
+# ---------------------------------------------------------------------------
+# #511 Part A — omission reason-provenance writer API
+# ---------------------------------------------------------------------------
+
+OMISSION_API_DEGRADED = "api_degraded"
+_OMISSIONS_FIELD = "contamination_signal_omissions"
+
+
+def build_signals_with_omissions(
+    entry: Mapping[str, Any],
+    client: SemanticScholarClient,
+    arxiv_client=None,
+    *,
+    cache=None,
+) -> tuple[dict[str, bool], dict[str, str]]:
+    """`build_signals_object` plus the #511 Part A omission reasons.
+
+    Returns `(signals, omissions)`. `omissions` carries a
+    `{field: "api_degraded"}` row for every lookup field absent BECAUSE the
+    API degraded — the distinction `compute_ss_unmatched_signal`'s None return
+    collapses (manual vs degraded), surfaced here by checking the manual
+    exemption upstream. Derivable omissions are never recorded: manual entries
+    return `({preprint...}, {})` (no lookup ran), and a missing arxiv_id skips
+    the arXiv row entirely (#331). Callers persist a non-empty `omissions` as
+    the entry's `contamination_signal_omissions` object (schema forbids empty).
+    """
     obj: dict[str, bool] = {
         "preprint_post_llm_inflection": compute_preprint_signal(entry),
     }
+    omissions: dict[str, str] = {}
+    if entry.get("obtained_via") == "manual":
+        return obj, omissions  # all lookups skipped by design — derivable
     ss = compute_ss_unmatched_signal(entry, client, cache=cache)
-    if ss is not None:
+    if ss is None:
+        # Manual is excluded above, so None here means exactly one thing:
+        # the S2 lookup degraded.
+        omissions["semantic_scholar_unmatched"] = OMISSION_API_DEGRADED
+    else:
         obj["semantic_scholar_unmatched"] = ss
     # v3.11 #182 Delta 1: arxiv signal is opt-in via an explicit client so the
     # v3.7.3 caller (migrate_literature_corpus_to_v3_7_3) stays byte-equivalent
-    # (no client → no field). Manual exemption + API degradation both omit the
-    # field (resolve returns None / raises), matching the ss field's rules.
-    if arxiv_client is not None:
+    # (no client → no field).
+    if arxiv_client is not None and entry.get("arxiv_id"):
         try:
             ax = resolve_arxiv_unmatched(entry, arxiv_client, cache=cache)
         except ArxivUnavailable:
-            ax = None
-        if ax is not None:
-            obj["arxiv_unmatched"] = ax
-    return obj
+            omissions["arxiv_unmatched"] = OMISSION_API_DEGRADED
+        else:
+            if ax is not None:
+                obj["arxiv_unmatched"] = ax
+    return obj, omissions
+
+
+def record_signal_omission(entry: MutableMapping[str, Any], field: str) -> bool:
+    """Record `{field: "api_degraded"}` on the entry. Returns True iff the
+    entry changed (idempotent re-runs return False). The caller has already
+    established the omission is degradation-caused — this helper never
+    records derivable omissions itself."""
+    omissions = entry.setdefault(_OMISSIONS_FIELD, {})
+    if omissions.get(field) == OMISSION_API_DEGRADED:
+        return False
+    omissions[field] = OMISSION_API_DEGRADED
+    return True
+
+
+def clear_signal_omission(entry: MutableMapping[str, Any], field: str) -> bool:
+    """Recovery: a later run computed the signal, so the recorded omission is
+    stale — remove it (and the object when it empties: the schema's
+    minProperties forbids an empty omissions object). Returns True iff the
+    entry changed."""
+    omissions = entry.get(_OMISSIONS_FIELD)
+    if not isinstance(omissions, dict) or field not in omissions:
+        return False
+    del omissions[field]
+    if not omissions:
+        del entry[_OMISSIONS_FIELD]
+    return True
+
+
+
+# ---------------------------------------------------------------------------
+# #541 gate-facing detailed wrappers (verification_gate cache-through)
+# ---------------------------------------------------------------------------
+
+def resolve_doi_then_title_detailed(
+    entry: Mapping[str, Any], client, *, resolver_name: str, cache=None,
+    bypass_stale: bool = False,
+) -> tuple[bool, str | None, str | None, bool]:
+    """Cache-through detailed form of the crossref/openalex flow for the
+    verification gate (#541): same cache key as `_resolve_by_doi_then_title`
+    (interoperable rows), returns (unmatched, matched_by, queried_by,
+    served_from_cache). No manual exemption here — the gate short-circuits
+    manual entries upstream. Degradation exceptions propagate uncaught.
+    """
+    return _cached_verdict_detailed(
+        cache=cache,
+        citation_key=entry.get("citation_key"),
+        resolver_name=resolver_name,
+        query_form=_query_form(
+            id_label="doi", id_value=entry.get("doi"),
+            title=entry.get("title", ""),
+        ),
+        compute=lambda: _resolve_doi_then_title(entry, client),
+        bypass_stale=bypass_stale,
+    )
+
+
+def resolve_arxiv_detailed(
+    entry: Mapping[str, Any], client, *, cache=None, bypass_stale: bool = False,
+) -> tuple[bool, str | None, str | None, bool]:
+    """Cache-through detailed arXiv flow for the verification gate (#541).
+    Same cache key as `resolve_arxiv_unmatched` (interoperable rows).
+    Precondition: entry carries arxiv_id (the gate skips otherwise).
+    """
+    return _cached_verdict_detailed(
+        cache=cache,
+        citation_key=entry.get("citation_key"),
+        resolver_name="arxiv",
+        query_form=_query_form(
+            id_label="arxiv", id_value=entry.get("arxiv_id"),
+            title=entry.get("title", ""),
+        ),
+        compute=lambda: _resolve_arxiv_id_then_title(entry, client),
+        bypass_stale=bypass_stale,
+    )
+
+
+def resolve_s2_detailed(
+    entry: Mapping[str, Any], client, *, cache=None, bypass_stale: bool = False,
+) -> tuple[bool, str | None, str | None, bool]:
+    """Cache-through detailed S2 flow for the verification gate (#541).
+    Same cache key as `compute_ss_unmatched_signal` (interoperable rows).
+    SemanticScholarUnavailable propagates (the gate maps it to unreachable);
+    degradations are never cached (put runs only on compute success).
+    """
+    return _cached_verdict_detailed(
+        cache=cache,
+        citation_key=entry.get("citation_key"),
+        resolver_name="semantic_scholar",
+        query_form=_query_form(
+            id_label="doi", id_value=entry.get("doi"),
+            title=entry.get("title", ""),
+        ),
+        compute=lambda: (
+            not bool(client.lookup(entry).get("matched", False)),
+            None,
+            queried_by_for(entry, id_field="doi"),
+        ),
+        bypass_stale=bypass_stale,
+    )

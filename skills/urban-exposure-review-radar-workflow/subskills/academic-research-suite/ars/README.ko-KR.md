@@ -1,6 +1,6 @@
 # Claude Code를 위한 Academic Research Skills
 
-[![Version](https://img.shields.io/badge/version-v3.15.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.15.0)
+[![Version](https://img.shields.io/badge/version-v3.19.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.19.0)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
@@ -251,7 +251,7 @@ You: "status"
 
 **0-100 품질 루브릭**을 갖춘 7개 에이전트 다관점 심사. 모드: full, re-review, quick, methodology-focus, guided, calibration. **결정 매핑:** ≥80 Accept, 65-79 Minor Revision, 50-64 Major Revision, <50 Reject. 1차 심사팀 대 좁은 re-review 팀 경계: ARCHITECTURE.md §3 Stage 3 / Stage 3' 참조.
 
-### Academic Pipeline (v3.15.0)
+### Academic Pipeline (v3.19.0)
 
 무결성 검증, 2단계 심사, 소크라테스식 코칭, 협업 평가를 갖춘 10단계 오케스트레이터. 파이프라인 보장: 모든 단계는 사용자 확인 체크포인트를 요구하며, 무결성 검증(Stage 2.5 + 4.5)은 건너뛸 수 없고, R&R Traceability Matrix(Schema 11)는 저자의 수정 주장을 독립적으로 검증합니다. v3.4는 Stage 2.5 / 4.5에 Compliance Agent(PRISMA-trAIce + RAISE)를 추가했습니다. v3.5는 모든 FULL/SLIM 체크포인트와 파이프라인 완료 시점에 **Collaboration Depth Observer**(`collaboration_depth_agent`, 자문 전용 — 절대 차단하지 않음)를 추가합니다. 필수(MANDATORY) 무결성 게이트(2.5 / 4.5)는 컴플라이언스 점검이 희석되지 않도록 observer를 명시적으로 건너뜁니다. Wang & Zhang (2026), IJETHE 23:11에 기반합니다. 에이전트·산출물·게이트를 포함한 단계별 매트릭스: ARCHITECTURE.md §3 참조.
 
@@ -337,6 +337,22 @@ https://github.com/Imbad0202/academic-research-skills
 ---
 
 ## 변경 이력
+
+### v3.19.0 (2026-07-22) — 개정 라운드 클레임 드리프트 가드, PDF 읽기 무결성 프리플라이트, read-scope 어테스테이션
+
+> **추가**: 3 개의 advisory-or-opt-in 무결성 계층과 런처 수정. **개정 라운드 클레임 드리프트 가드(#569/#570)**: 클레임 강도 사다리(`is associated with < predicts < causes` 를 권한을 부여하는 로드맵 항목 없이 조용히 이동하지 않음)를 개정 드래프팅과 새 advisory Phase E6 에 연결하고, 결정론적 수치/인용 토큰 보존 체커를 추가 — #390 honest-claim 잔여(수정된 블록 내부에 무결성 검사가 없던 문제)의 인식적 절반과 토큰 절반을 닫음. 현재 프런티어 모델에서 베이스라인을 먼저 측정(`evals/heldout/revision_claim_drift/`), 메커니즘 형태는 [Yila-AI/sci-ssci-skills](https://github.com/Yila-AI/sci-ssci-skills) 에 귀속. **PDF 읽기 무결성 프리플라이트(#512)**: 3 신호 페이지 수 교차 검사로 잘리거나 페이지가 어긋난 PDF 읽기가 겉보기에 유효한 `page` 앵커를 만들지 못하게 함. **read_scope 어테스테이션(#513)**: 사람 읽음 원장에 대한 선택적 정직 커버리지 선언(`full_text` / `sections` / `abstract_only` / `toc_only`)으로 파이널라이저의 인용 승격을 read-scope 인식형으로 만듦. **런처 watchdog 수정(#545)**: 정상적인 PreToolUse write-scope-guard 호출을 wall-clock 전체 동안 막던 파이프 정지를 제거. 스위트 → v3.19.0; 기반 3 스킬 버전은 변경 없음.
+
+### v3.18.0 (2026-07-18) — 자기개선 서베이 통합
+
+> **추가**: Ren et al.(2026, arXiv:2607.13104)에서 동기를 얻은 8가지 품질 메커니즘 — 하위질문 범위 바인딩＋Phase E 범위 정합 어드바이저리(#547), 검색 범위로 한정된 novelty 주장＋E5 분류(#548, 모두 advisory-only, MANDATORY 체크포인트에서 행 단위 표시); Stage 2.5 위험 계층화 클레임 검증(HIGH-IMPACT 전수＋랜덤 센티널, #549); 인용 검증 게이트에 캐시 연결＋신선도 어드바이저리＋opt-in 실시간 재검증(#541); 동의 기반 크로스모델 리뷰어 좌석(고정 5석 중 1석을 다른 모델 패밀리로, #540)과 재심사 심판 독립성＋Judge Record(#539); 라우팅/게이트 강건성 평가 시드셋(#550); 서베이 자체를 세 번째 human-in-the-loop 문헌 앵커로 추가(#542). 서베이 트랙과 별개로 #544 SessionStart 업데이트 알림도 탑재(설치 버전이 main보다 뒤처지면 `/plugin update` 안내; `ARS_UPDATE_CHECK=0`으로 비활성화). `academic-pipeline`은 스위트를 따라 v3.18.0으로; 나머지 세 스킬 버전은 불변.
+
+### v3.17.0 (2026-07-16) — 파이프라인 경계 시맨틱스, 정규 크로스모델 핸드오프 엔벨로프, 실행 가능한 패널 체커
+
+> **수정:** #528의 두 가지 불명확한 파이프라인 경계 해소 — Stage 5의 "finalize 전 항상 MANDATORY"는 이제 Stage 4.5 통과와 Stage 5 파견 사이의 단 하나의 체크포인트(진입 게이트)만을 가리키도록 정의되었고, Stage 6에는 종료 확인 어휘(`finish`/`end`/`done`/`confirm`)와 명시적 거절 경로가 추가되었습니다. 다섯 개의 파이프라인 표면 모두 전체 파일 sha256 콘텐츠 잠금을 갖게 되어(#529), 앞으로의 프롬프트 표면 드리프트는 동일 커밋에서 해시를 갱신하지 않는 한 CI에서 실패합니다. 블라인드 체크포인트 전송이 디스패치 계층으로 이동(#523) — 원래 Bucket A 체크포인트 소유자가 크로스모델 전송을 직접 실행하도록 되어 있었으나 런타임 Bash 차단 아래에서는 실행 불가능했습니다. 이제 디스패치 계층이 전송 호출을 담당합니다. **추가:** 정규 `[CROSS-MODEL-HANDOFF v1]` 엔벨로프 + 규범적 Python 문법(#527)이 그동안 프로즈로만 강제되던 owner→dispatcher→owner 전송 경로를 대체하여, 합의/불일치/형식 오류 결과 라우팅을 세 체크포인트 소유자 전체에 고정합니다. #514 도구 허용 목록의 드리프트 방지 잠금(#524, 74개 뮤테이션 테스트)은 에이전트 본체와 그 미러를 대칭적으로 수정해 Bash를 조용히 재추가하는 드리프트 경로를 막습니다. 실행 가능한 sprint-contract 패널 체커(#510)는 1차 산출물로부터 v3.6.2의 2단계 결정을 재계산하고 다수결 공식의 전사 오류를 포착합니다. 기계 판독 가능한 degradation registry(#511 Part A)는 스위트 내 모든 우아한 성능 저하 메커니즘을 색인화하며, 인용 검증 게이트를 위한 hermetic transport-fixture 통합 테스트(#511 Part B)가 네 개의 리졸버 클라이언트를 체크인된 합성 API 응답에 대해 엔드투엔드로 검증합니다. `academic-pipeline`은 스위트를 따라 v3.17.0으로, 나머지 세 스킬 버전은 변경 없습니다.
+
+### v3.16.0 (2026-07-12) — 모델 계층화, 크로스모델 게이트 강화, WP 어드바이저리 정밀화
+
+> **추가:** 옵트인 모델 계층화(#517) — 새 `ARS_MODEL_TIERING` 스위치에 두 방향(`economy`: 13개 실행형 에이전트를 세션 모델보다 한 단계 아래로 파견, 하한은 Opus급; `quality-boost`: 무결성 게이트와 최종 리뷰 표면의 판단형 에이전트를 프런티어 단계로 상향); 미설정 시 기존 동작과 바이트 동일하며, 동결된 39개 에이전트 분류는 새 매니페스트 + lint로 고정. 크로스모델 게이트 강화(#518) — 위험 계층화 샘플링(HIGH-IMPACT 참고문헌은 두 게이트에서 100% 검증), 두 비가역 결정 지점(설계 동결 + 최종 편집 결정)의 블라인드 불일치 점검, 검증 모델 id 상태 허용 목록, 승격 베이크오프 프로토콜; 한때 계획됐던 범용 6번째 리뷰어는 연기가 아니라 폐기. GPT-5.6 Sol을 잠정 크로스모델 검증자로 등재하고 명시적 reasoning-effort 제어 추가(#515). devCharlotte 님이 제안한 한국어 트리거 키워드 + 라우팅 경계 픽스처(#452/#509). 논문 작성 측에 CARS 서론 수사 + 제목 설계 레퍼런스(#500). **변경:** WP 연구질문 어드바이저리를 명사 치환 테스트로 20개 셸 표 밖까지 일반화(#501)하고 장식형 제목 셸을 잡도록 면제 조항을 정밀화(#505) — held-out 누락률 0.34–0.38 → 0.094, 오발화 0/16 유지; 리뷰어 캘리브레이션 프로토콜에 LLM 심사의 관대화 방향 기재(FARS 앵커, #484); OpenAlex API 키 인증 + 예산 인지 429 처리 + arXiv ToU 정렬 백오프(#495/#496). **문서:** THIRD_PARTY.md 커뮤니티 디렉터리(#497/#498). `academic-pipeline`은 스위트를 따라 v3.16.0으로, 나머지 세 스킬 버전은 변경 없습니다.
 
 ### v3.15.0 (2026-07-04) — 릴리스 게이트 강화, 프롬프트 부채 정리 2차, 드리프트 방지 잠금
 

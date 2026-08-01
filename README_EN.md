@@ -8,10 +8,10 @@
 
 The repository contains **17 installable Codex skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: **2026-07-07**.
+Latest upstream refresh: **2026-08-01**.
 
-- ARS Codex package updated to `v0.1.17` (`8626ccb`).
-- K-Dense checked at `v2.53.0-10-g4d97e29`; the selected local scope synced upstream `statistical-analysis` updates.
+- ARS Codex package updated to `v0.1.22` (`f8d6b06`), carrying ARS `v3.19.0`.
+- K-Dense checked at `v2.62.0` (`ad21a38`); 26 of 27 selected subskills were refreshed, while `transformers` had no file-level change.
 - SciPilot Figure remains `v2.1.0-1-g43098dd`.
 - SciPilot Writing remains `v1.0.0` (`51c5fd3`).
 - GeoRS SCI Writing Adapter remains an original adapter because the checked upstream source still has no explicit LICENSE file.
@@ -134,11 +134,11 @@ auto-sci-research
 
 - `Haojae/scipilot-writing-skill`: MIT, fully packaged with LICENSE and NOTICE.
 - `Haojae/scipilot-figure-skill`: MIT, packaged as a figure-advisor skill.
-- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v0.1.17`.
+- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v0.1.22`.
 - `K-Dense-AI/scientific-agent-skills`: selected wrappers only, not a full import.
 - `xiangyu-Ge/sci-writing-geors`: no explicit LICENSE detected, so this repo keeps only attribution and an original adapter.
 
-See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20260707.md](docs/upstream-update-20260707.md).
+See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20260801.md](docs/upstream-update-20260801.md).
 
 ## License
 

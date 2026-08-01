@@ -5,7 +5,7 @@ Target spec: docs/design/2026-04-22-ars-v3.7.3-reading-check-probe-design.md §5
 These are file-content lints (grep / regex / structure assertions) against:
 - deep-research/agents/socratic_mentor_agent.md §"Optional Reading Probe Layer"
 - deep-research/references/socratic_mode_protocol.md §"Reading Probe"
-- deep-research/SKILL.md §"Opt-in Reading Probe (v3.5.1)"
+- deep-research/WORKFLOW.md §"Opt-in Reading Probe (v3.5.1)"
 - academic-pipeline/references/process_summary_protocol.md §"Reading Probe Outcomes"
 
 Pattern matches test_check_compliance_report.py — no LLM runtime, no subprocess fork,

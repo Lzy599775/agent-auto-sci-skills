@@ -1,34 +1,34 @@
 ---
 name: academic-research-suite
 description: >
-  Codex-native Academic Research Skills suite for deep research, academic paper
-  writing, manuscript review, full research-to-paper pipelines, and experiment
-  planning or validation. Use when the user asks for deep research, literature
+  ARS-Codex workflows for research, academic writing, manuscript review,
+  research-to-paper pipelines, and experiment planning. Use when the user asks for deep research, literature
   review, systematic review, meta-analysis, research question refinement,
   academic paper drafting, paper revision, citation or integrity checks,
   reviewer simulation, peer review, editorial decision letters, research-to-paper
   workflows, experiment execution planning, statistical interpretation, or human
-  study protocol support. Also use for Claude-style ARS command aliases such as
+  study protocol support. Korean triggers: 논문 심사, 논문 수정, 초록 작성,
+  체계적 문헌고찰, 연구부터 논문까지. Also use for Claude-style ARS command aliases such as
   /ars-plan, ars-plan, /ars-outline, /ars-abstract, /ars-lit-review,
   /ars-citation-check, /ars-disclosure, /ars-format-convert, /ars-3w,
   /ars-revision-coach, /ars-revision, /ars-reviewer, /ars-mark-read,
   /ars-unmark-read, /ars-cache-invalidate, /ars-rebuttal-audit, and /ars-full. This skill vendors ARS role prompts,
   references, templates, and shared handoff schemas under ars/.
 metadata:
-  version: "0.1.17"
+  version: "0.1.22"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
 ---
 
-# Academic Research Suite for Codex
+# ARS-Codex
 
 This is a Codex adapter for the ARS suite. The vendored ARS content lives under
 `ars/`; keep it as source material and route through this file first.
 
 ## Versioning
 
-This Codex package is version `0.1.17`. The repo-root `VERSION`, this
+This Codex package is version `0.1.22`. The repo-root `VERSION`, this
 `SKILL.md` metadata version, and `manifest.json` `adapter_version` must match.
 Vendored ARS suite versions are tracked separately by source repository commit
 in `manifest.json`.
@@ -80,6 +80,8 @@ intent:
 - "我想做一篇論文，題目是..."
 - "我有一個研究方向/主題，但還不確定問題"
 - "幫我想論文題目/收斂研究問題"
+- "논문을 쓰고 싶은데 연구 질문이 아직 명확하지 않아"
+- "논문 주제/연구 방향은 있지만 무엇을 연구할지 모르겠어"
 
 First response in this path:
 
@@ -121,7 +123,7 @@ uses the current model unless the user explicitly requests another model.
 | `/ars-revision`, `ars-revision` | `ars/commands/ars-revision.md` | `ars/academic-paper/WORKFLOW.md` in `revision` mode |
 | `/ars-rebuttal-audit`, `ars-rebuttal-audit` | `ars/commands/ars-rebuttal-audit.md` | `ars/academic-paper/WORKFLOW.md` in `rebuttal-audit` mode; requires both reviewer comments and an existing response draft |
 | `/ars-reviewer`, `ars-reviewer` | `ars/commands/ars-reviewer.md` | `ars/academic-paper-reviewer/WORKFLOW.md` in `full` mode unless another reviewer mode is explicit |
-| `/ars-mark-read`, `ars-mark-read` | `ars/commands/ars-mark-read.md` | Mark one or more citation keys as human-read against the active Material Passport |
+| `/ars-mark-read`, `ars-mark-read` | `ars/commands/ars-mark-read.md` | Mark one or more citation keys as human-read against the active Material Passport, optionally declaring `read_scope` and locators without fabricating coverage |
 | `/ars-unmark-read`, `ars-unmark-read` | `ars/commands/ars-unmark-read.md` | Rescind a prior human-read mark against the active Material Passport |
 | `/ars-cache-invalidate`, `ars-cache-invalidate` | `ars/commands/ars-cache-invalidate.md` | Invalidate cached verification entries for one citation key |
 | `/ars-full`, `ars-full` | `ars/commands/ars-full.md` | `ars/academic-pipeline/WORKFLOW.md` |
@@ -146,13 +148,16 @@ using them in Codex:
 | AskUserQuestion | Ask concise clarification questions, or use Codex's structured user-input tool when available in the active mode. |
 | WebSearch | Use Codex web browsing for current facts, source verification, citation checks, and external evidence. Provide source links. |
 | Bash, Write, Edit | Treat as capability descriptions, not required tool names. Follow Codex safety rules and the user's filesystem constraints. |
+| Agent frontmatter `tools: Read, Write, Edit, Grep, Glob` | Preserve this as a least-privilege role boundary. The three protected top-level agent roles do not receive Bash or network transport when dispatched separately; inline execution must not use those roles to widen the current task's authority. |
 | Claude, Claude Code, model-specific wording | Interpret as "the current Codex agent" unless the text is part of a disclosure template or historical example. |
-| `ARS_CROSS_MODEL`, `ARS_CROSS_MODEL_SAMPLE_INTERVAL`, `ARS_OPENAI_COMPAT_BASE_URL`, `ARS_OPENAI_COMPAT_API_KEY` | Treat upstream secondary-model dispatch instructions as no-op unless the user explicitly asks for cross-model review. When explicitly enabled in this Codex package, follow `ars/shared/cross_model_verification.md`: identify the provider/model/content class, obtain explicit user consent before any external upload, and call only the configured provider API. Do not route the reviewer through the active Codex model or invent unconfigured cross-model sections. |
-| `S2_API_KEY`, `OPENALEX_POLITE_EMAIL`, `CROSSREF_POLITE_EMAIL` | These are optional upstream bibliographic lookup settings. Use them only when the user explicitly runs contamination-signal migration or programmatic reference verification; normal Codex routing does not require them. |
-| `ARS_VERIFICATION_CACHE_PATH` | Optional local SQLite cache path for the v3.11 citation verification gate. Use the upstream default unless the user explicitly asks to inspect or relocate the verification cache. |
+| `ARS_MODEL_TIERING=economy|quality-boost` | Unset remains the default and preserves current-model behavior. The upstream relative Opus/Sonnet tier names are not hard-mapped to Codex model ids. Apply tiering only when the active Codex runtime supports an explicit per-dispatch model override; otherwise announce a one-line no-op and keep every role on the active model. Use `ars/shared/model_tiering.md` and `ars/scripts/model_tiering_manifest.json` as the classification contract. |
+| `ARS_CROSS_MODEL`, `ARS_CROSS_MODEL_REASONING_EFFORT`, `ARS_OPENAI_COMPAT_BASE_URL`, `ARS_OPENAI_COMPAT_API_KEY` | Treat upstream secondary-model dispatch instructions as no-op unless the user explicitly asks for cross-model review. When explicitly enabled in this Codex package, follow `ars/shared/cross_model_verification.md`: identify the provider/model/id status/content class, obtain explicit user consent before any external upload, preserve risk-stratified sampling and blind-disagreement checkpoint rules, and call only the configured provider API. A dispatched owner emits the canonical `[CROSS-MODEL-HANDOFF v1]` envelope; the dispatching Codex context validates it, sends only the payload, applies the mechanical result routing, and returns judgment work to the owner. In reviewer `full` mode, the consented cross-model track swaps the existing Reviewer 2 seat rather than adding a reviewer; re-review runs the independent Priority-1 judge pass and records the Judge Record. Disclose single-family or fallback execution and never simulate either track through the active Codex model. |
+| `S2_API_KEY`, `OPENALEX_API_KEY`, `OPENALEX_POLITE_EMAIL`, `CROSSREF_POLITE_EMAIL` | These are optional upstream bibliographic lookup settings. Use them only when the user explicitly runs contamination-signal migration or programmatic reference verification; normal Codex routing does not require them. Never log credential-bearing query strings, and do not use browser retrieval to bypass API rate limits. |
+| `ARS_VERIFICATION_CACHE_PATH`, `ARS_CACHE_STALE_ADVISORY_DAYS`, `ARS_CACHE_REVALIDATE` | These configure the local SQLite citation-verification cache, the advisory-only stale-row threshold (default 30 days; `0` disables), and opt-in live re-validation. Preserve cached-by-default behavior when the programmatic citation gate is run. Live re-validation may call external bibliographic services, so use it only within the user's verification task and normal network/credential boundaries; an advisory never becomes a gate failure. |
+| Local PDF page anchors, `scripts/pdf_read_preflight.py` | Before trusting a `page` anchor from a locally read PDF, run the v3.19 preflight once and carry its sidecar by `ref_slug`. Treat `FAIL` as positive read-integrity evidence against the page anchor and `UNAVAILABLE` as an explicit advisory; never convert a missing dependency, encrypted file, parser repair, or absent sidecar into `PASS`. |
 | `fresh Claude Code session`, `Claude Code session` | Read as "a new Codex conversation". Material Passport reset semantics still apply; only the runtime changes. This rule covers `ars/academic-pipeline/WORKFLOW.md`, `ars/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `ars/academic-pipeline/references/passport_as_reset_boundary.md`, `ars/experiment-agent/README.md`, `ars/experiment-agent/README.zh-TW.md`, and `ars/docs/PERFORMANCE.md`. |
 | `/ars-*` slash command, Claude plugin command | Treat `ars/commands/ars-*.md` as optional prompt recipes. Codex does not register slash commands from this package. |
-| SessionStart hook, SubagentStop hook, `hooks/hooks.json` | Treat as upstream Claude Code hook metadata only. Do not install or execute Claude hooks in Codex unless the user explicitly asks to inspect or port a hook. |
+| SessionStart hook, SubagentStop hook, `hooks/hooks.json`, `scripts/ars_update_check.sh` | Treat as upstream Claude Code hook metadata only. The v3.18 update checker is vendored for traceability and tests but is not installed or executed by Codex; Codex package updates remain manual unless the user explicitly asks to port hook behavior. |
 
 ## Security Boundaries
 
@@ -173,10 +178,13 @@ external model/API merely because an environment variable is configured. Before
 cross-model review or programmatic verification that uploads content, confirm
 the provider, the exact content class being sent, and the user's consent. Prefer
 minimal bibliographic metadata or short query snippets over full-text payloads.
+The vendored `ars/scripts/cross_model_smoke_test.sh` is a manual, live provider
+check; never add it to automatic Codex validation or run it without the same
+provider, content, credential, and consent checks.
 
 ## Optional Full-Runtime Profile
 
-Normal ARS Codex behavior remains inline role-prompt execution in this
+Normal ARS-Codex behavior remains inline role-prompt execution in this
 conversation. The Codex-only `codex/` directory provides an optional
 full-runtime profile for users who explicitly want planner-driven agent-team or
 hook behavior:
@@ -206,6 +214,12 @@ When a workflow lists agents:
 For multi-review phases, preserve independence by writing each reviewer section
 before synthesizing. Do not let the final synthesis erase critical findings from
 devil's advocate or methodology roles.
+
+When an explicitly enabled cross-model checkpoint owner emits
+`[CROSS-MODEL-HANDOFF v1]`, treat it as a transport request rather than a
+deliverable. Follow the closed owner/kind/result mapping and fail-closed parsing
+in `ars/scripts/cross_model_handoff.py`; malformed envelopes or results degrade
+to `unavailable` and must never be repaired by guesswork.
 
 ## Canonical Agent Files
 
@@ -250,6 +264,25 @@ Use `ars/shared/` for cross-workflow contracts and quality gates:
 - `ars/shared/handoff_schemas.md` defines inter-stage artifact schemas.
 - `ars/shared/style_calibration_protocol.md` defines writing voice calibration.
 - `ars/shared/mode_spectrum.md` defines fidelity, balanced, and originality modes.
+- `ars/shared/model_tiering.md` defines the optional judgment/execution
+  classification; Codex applies it only when per-dispatch model selection exists.
+- `ars/shared/cross_model_verification.md` defines risk-stratified verification,
+  blind disagreement checkpoints, the canonical dispatcher handoff envelope,
+  the fixed-seat cross-model reviewer track, re-review judge independence,
+  provider grounding guards, and model-id status.
+- `ars/academic-pipeline/references/claim_verification_protocol.md` defines the
+  v3.18 high-impact-first sampling gate plus advisory-only scope-conformance
+  and search-bounded novelty classifications, and the v3.19 revision-round
+  claim-strength drift audit.
+- `ars/shared/references/claim_strength_ladder.md` and
+  `ars/scripts/check_revision_token_conservation.py` define the v3.19 semantic
+  and deterministic revision-drift guards.
+- `ars/shared/contracts/passport/human_read_log.schema.json` defines optional
+  user-owned read-scope attestations. Missing scope remains `unknown`; partial
+  coverage remains visible and is never promoted to full coverage.
+- `ars/shared/contracts/degradation_registry.json` indexes every graceful-
+  degradation mechanism, its emitted state, authority, downstream consumer,
+  and terminal-policy effect without replacing the underlying authority.
 - `ars/shared/agents/compliance_agent.md` defines compliance checks.
 - `ars/shared/compliance_checkpoint_protocol.md`, `ars/shared/prisma_trAIce_protocol.md`, and `ars/shared/raise_framework.md` define integrity and reporting gates.
 - `ars/scripts/` contains upstream validators and reference adapters.

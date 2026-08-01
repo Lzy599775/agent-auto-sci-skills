@@ -84,7 +84,7 @@ def _write_framework(root: Path, *, restate_weight: bool = False) -> None:
 
 
 def _write_paper_skill(root: Path, *, originality: int = 20) -> None:
-    path = root / "academic-paper" / "SKILL.md"
+    path = root / "academic-paper" / "WORKFLOW.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         textwrap.dedent(
@@ -129,7 +129,7 @@ class TestRubricWeightConsistency(unittest.TestCase):
             _write_paper_skill(root, originality=15)
             result = _run(root)
             self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertIn("SKILL.md", result.stderr)
+            self.assertIn("WORKFLOW.md", result.stderr)
 
     def test_framework_weight_restatement_fails(self) -> None:
         with TemporaryDirectory() as tmp:
@@ -201,7 +201,7 @@ class TestRubricWeightConsistency(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             _write_consistent_tree(root)
-            (root / "academic-paper" / "SKILL.md").unlink()
+            (root / "academic-paper" / "WORKFLOW.md").unlink()
             result = _run(root)
             self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
 

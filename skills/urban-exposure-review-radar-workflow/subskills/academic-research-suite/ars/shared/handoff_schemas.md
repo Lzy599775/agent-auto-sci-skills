@@ -34,6 +34,7 @@ Consuming agents should validate input and request re-generation if schema viola
 | `socratic_insights` | list[string] | Key insights from Socratic dialogue (if socratic mode) |
 | `hypothesis` | string | Preliminary hypothesis (if applicable) |
 | `exclusion_criteria` | list[string] | What is explicitly out of scope |
+| `sub_question_bindings` | list[object] | Per-sub-question inherited scope constraints (#547): `{sub_question: 1-based index, inherits: subset of scope keys (population/timeframe/geography/domain) with values, deviations: list[string] of user-approved divergences (default empty)}`. Effective-scope semantics: axes named in `inherits` use those values; omitted axes inherit the parent `scope` value; each approved deviation replaces the bound on its axis. Absent field = every sub-question inherits the full `scope` object unchanged. External motivation: Ren et al. arXiv:2607.13104 §5.1 (decomposition that stops preserving the parent task's constraints). |
 | `stakeholders` | list[string] | Key stakeholders affected by the research |
 | `ethical_flags` | list[string] | Preliminary ethical considerations |
 
@@ -48,6 +49,11 @@ Consuming agents should validate input and request re-generation if schema viola
 1. What types of AI-assisted formative assessment tools are currently used in Taiwan HEI STEM courses?
 2. What measurable learning outcome improvements have been documented?
 3. What student and faculty perceptions exist regarding AI-assisted assessment?
+
+**Sub-Question Bindings** (#547, optional):
+1. inherits: population=Undergraduate STEM students; timeframe=2018-2025; geography=Taiwan — deviations: none
+2. inherits: same as parent scope — deviations: none
+3. inherits: same as parent scope — deviations: extends population to faculty (user-approved)
 
 **FINER Scores**: Feasible: 8, Interesting: 9, Novel: 7, Ethical: 9, Relevant: 10
 
@@ -78,7 +84,7 @@ Consuming agents should validate input and request re-generation if schema viola
 | Field | Type | Description |
 |-------|------|-------------|
 | `sources` | list[Source] | All identified sources (minimum 15 for full mode, 5 for quick mode) |
-| `search_strategy` | object | `{databases: list[string], keywords: list[string], inclusion_criteria: list[string], exclusion_criteria: list[string], date_range: string}` |
+| `search_strategy` | object | `{databases: list[string], keywords: list[string], inclusion_criteria: list[string], exclusion_criteria: list[string], date_range: string, last_searched_at?: ISO date (#548 — when the search was last executed; producers SHOULD record it: E5 requires it for SUPPORTED_WITHIN_SEARCH, and the search-bounded novelty template consumes it)}` |
 | `coverage_assessment` | string | Self-assessment of literature coverage completeness |
 | `minimum_sources` | integer | 15 (full mode), 5 (quick mode) |
 
@@ -365,6 +371,12 @@ score_trajectory: {
 | `consensus` | enum | `"CONSENSUS-4"` / `"CONSENSUS-3"` / `"SPLIT"` / `"DA-CRITICAL"` |
 | `revision_roadmap` | list[RoadmapItem] | Prioritized list of required changes |
 | `confidence_score` | integer | 0-100 editorial confidence |
+
+### Optional Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `judge_record` | object | #539 judge transparency: `{verification_judge, round1_panel_provenance, cross_model_pass: "ran"|"partial"|"not_configured"|"failed", cross_model_items_judged?: int, cross_model_items_total?: int (required when partial), cross_model_id?, failure_reason?, prompt_rubric_surfaces, evidence_seen, judging_budget_note}`. `round1_panel_provenance` is copied seat-level from the #540 Review Panel Provenance block ("unknown (provenance block absent)" when absent — a singular revision-driving judge is not well-defined for a mixed-family panel). Emitted by re-review (Stage 3'); absent = pre-#539 report. External motivation: Ren et al. arXiv:2607.13104 §8.1.2. |
 
 ### ReviewerReport Object
 
@@ -775,6 +787,8 @@ See `shared/style_calibration_protocol.md` for full consumption rules and confli
 ---
 
 ### Schema 11: R&R Traceability Matrix
+
+> #539 optional per-row fields: `cross_model_verdict` (FULLY_ADDRESSED / PARTIALLY_ADDRESSED / NOT_ADDRESSED / MADE_WORSE; present only on `diverges`/`agree` rows) + `cross_model_status` (`agree` / `diverges` / `unavailable` / `not_configured`). Scope: the independent pass evaluates PRIORITY 1 rows only — #539-era Priority 1 rows ALWAYS carry `cross_model_status` (`not_configured` when cross-model is not active); Priority 2/3 rows omit both fields (not evaluated). A Priority 1 row with neither field = pre-#539.
 
 **Producer (multi-stage, Kong A1 / v3.11)**:
 - `concern_id` / `priority` / `original_comment` / `reviewer_source`: academic-paper-reviewer (first-round review)

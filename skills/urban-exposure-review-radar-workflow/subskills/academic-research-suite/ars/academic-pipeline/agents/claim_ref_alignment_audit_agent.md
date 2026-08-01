@@ -58,7 +58,7 @@ Read these passport fields:
 
   **Sentence scope (Step 13 R6 codex P1):** the documented sentence shape is `sentence_text` + `section_path` + optional `adjacent_text` — sentences do NOT need to carry `scoped_manifest_id`. The pipeline derives constraint scope per sentence: if the caller pins `scoped_manifest_id` on the sentence dict (legacy / explicit-scope shape), only that manifest's MNCs apply. Otherwise the pipeline applies **every manifest's MNCs** (uncited sentences have no claim-level binding, so manifest-scoped MNCs reach them universally per spec §3.5 D4-c stream (d) semantics). The emitted `constraint_violation` row derives its `scoped_manifest_id` from the `violated_constraint_id` ↔ source-manifest mapping; no MANIFEST-MISSING sentinel is admitted per the schema's pattern constraint.
 
-Configuration (`claim_audit_config` block in `academic-pipeline/SKILL.md` mode flags):
+Configuration (`claim_audit_config` block in `academic-pipeline/WORKFLOW.md` mode flags):
 
 | Key | Type | Default | Purpose |
 |---|---|---|---|
@@ -162,6 +162,8 @@ Use `anchor_value` to locate the relevant passage inside `retrieved_excerpt`:
 - `paragraph`: 1-based paragraph index within the located section
 
 The located passage is what the judge sees. If `quote` mode fails to locate the exact substring, fall back to passing the full retrieved excerpt with a `[anchor_quote_unlocated]` rationale tag — do NOT mark the citation UNSUPPORTED on a locator miss alone.
+
+**PDF read-integrity precondition for `page` anchors (#512):** applies to rows whose Step 2 `ref_retrieval_method` is `manual_pdf` — the machine-readable "locally-read PDF" signal; do NOT re-infer the channel from prose context. For those rows, the orchestrator supplies `scripts/pdf_read_preflight.py` sidecars keyed by `ref_slug`; the sidecar's `sha256` is confirmatory when the corpus entry's `source_pointer` resolves to a hashable file, not the primary join key (until the #513 read-ledger lands, no anchor-side field carries a file hash to match against). Treat the page number as a trustworthy retrieval scope only when the row's sidecar verdict is `PASS`. On a missing sidecar or a `FAIL` / `UNAVAILABLE` verdict, do NOT mark the citation UNSUPPORTED on this basis alone: locate the passage by content instead of by the untrusted page number, and tag the audit row's rationale with `[pdf_read_integrity_unverified]` so the finding surfaces downstream (advisory — terminality stays with the existing formatter-gate machinery). In the executable pipeline this is enforced in code, not prose: `run_audit_pipeline(pdf_preflight_sidecars=...)` (`scripts/claim_audit_pipeline.py`, keyed by `ref_slug`) appends the tag at the Step-6 emission point for every completed `manual_pdf` page-anchor row without a `PASS` sidecar — after cache resolution, so cache hits cannot bypass it — and the finalizer surfaces `[LOW-WARN-PDF-READ-INTEGRITY-UNVERIFIED]` on SUPPORTED rows carrying the tag (`scripts/claim_audit_finalizer.py`), so the advisory is visible even when content-based fallback finds support. Rationale: PDF readers silently truncate documents with malformed cross-reference tables; a page number from a truncated or mispaginated read can look perfectly well-formed.
 
 ### Step 5 — Judge invocation
 

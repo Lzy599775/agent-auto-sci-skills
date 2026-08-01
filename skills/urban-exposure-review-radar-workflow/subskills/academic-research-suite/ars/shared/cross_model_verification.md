@@ -28,6 +28,7 @@ A stress test of 68 AI-generated citations found 31% had problems — and all pa
 | Claude (session model) | _(inherited Claude Code session model — e.g., Fable 5)_ | Anthropic | Primary model (default for all ARS skills) |
 | GPT-5.5 | `gpt-5.5` | OpenAI | Cross-verification — recommended balance (supports `xhigh` reasoning) |
 | GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI | Cross-verification — strongest reasoning (premium pricing: ~6× GPT-5.5) |
+| GPT-5.6 Sol | `gpt-5.6-sol` | OpenAI | Cross-verification — frontier tier, **provisional pending ARS validation** (same standard rates as GPT-5.5) |
 | Gemini 3.1 Pro | `gemini-3.1-pro-preview` | Google | Cross-verification — strong at factual verification |
 
 ### OpenAI-compatible providers (Chat Completions API — UNGROUNDED, opt-in)
@@ -44,6 +45,8 @@ A stress test of 68 AI-generated citations found 31% had problems — and all pa
 
 > The primary row deliberately names no version: the primary is always the session model, so the row cannot go stale on the next Anthropic release. Verifier IDs stay concrete because they are literal API strings the user must export. (`gpt-5.4` / `gpt-5.4-pro` remain accepted for existing setups.)
 
+> **GPT-5.6 Sol is provisional (listed 2026-07-11, three days after release).** Its endpoint support (Responses API), hosted `web_search` tool, and reasoning-effort values are confirmed against OpenAI's model documentation, but its ARS-specific behavior — grounded-search completion rate, citation-mismatch recall, false-disagreement rate, response-shape stability against the jq grounding guards, p95 latency — is unvalidated. **GPT-5.5 remains the recommended default** until `gpt-5.6-sol` passes the § Promotion Bakeoff below (non-inferiority on those measures earns `validated`) AND a separate superiority or operational-benefit case is stated for the default flip; run `scripts/cross_model_smoke_test.sh` against your key before adopting it. Two facts that differ from the GPT-5.5 lineup: GPT-5.6 ships **no `-pro` model ID** — premium operation is standard `gpt-5.6-sol` plus `reasoning: {mode: "pro"}` in the request, billed at standard token rates with more model work per request (the old fixed ~6× unit-price split does not carry over); and its reasoning effort accepts `none|low|medium|high|xhigh|max` (GPT-5.5 tops out at `xhigh`), defaulting to `medium` in both standard and pro modes.
+
 Using two non-Anthropic models as primary+verifier is possible but not tested with ARS prompts.
 
 ## Setup Guide
@@ -54,7 +57,7 @@ You need API keys from at least one additional provider. ARS itself runs inside 
 
 ### Step 1: Get API Keys
 
-**OpenAI (GPT-5.5):**
+**OpenAI (GPT-5.5 / GPT-5.6 Sol):**
 1. Go to [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 2. Create a new API key
 3. Copy the key (starts with `sk-`)
@@ -80,6 +83,12 @@ Add to your shell profile (`~/.zshrc` or `~/.bashrc`):
 # --- Option A: OpenAI (first-party, grounded) ---
 export OPENAI_API_KEY="<your-openai-api-key>"
 export ARS_CROSS_MODEL="gpt-5.5"
+# Frontier alternative, provisional pending ARS validation (see Supported Models):
+# export ARS_CROSS_MODEL="gpt-5.6-sol"
+# Optional: reasoning effort for OpenAI verifier calls (unset = the provider's own
+# default for the chosen model). GPT-5.6 accepts none|low|medium|high|xhigh|max;
+# GPT-5.5 tops out at xhigh.
+# export ARS_CROSS_MODEL_REASONING_EFFORT="medium"
 
 # --- Option B: Google Gemini (first-party, grounded) ---
 export GOOGLE_AI_API_KEY="<your-google-ai-api-key>"
@@ -121,7 +130,7 @@ unset ARS_CROSS_MODEL
 
 **When `ARS_CROSS_MODEL` is set:**
 - Primary model (Claude) runs full Phase A-E verification as normal
-- After Phase A completes, a random 30% sample of references is sent to the cross-model for independent verification
+- After Phase A completes, a **risk-stratified** selection of references is sent to the cross-model for independent verification (see step 2 below; replaces the pre-#518 uniform random 30%)
 - Cross-model receives only the reference text and paper context — not Claude's verification result (to prevent anchoring)
 - Disagreements are flagged as `[CROSS-MODEL-DISAGREEMENT]` and prioritized for human review
 
@@ -133,7 +142,12 @@ unset ARS_CROSS_MODEL
 When the integrity_verification_agent detects `ARS_CROSS_MODEL` in the environment, it should:
 
 1. Complete Phase A verification normally
-2. Select 30% of references randomly (minimum 5, maximum 15). If total references < 5, sample all of them.
+2. Select references by **risk stratification** (#518; replaces uniform random 30%). Classify each reference at selection time and record the tier in the results table. Four tiers; a reference qualifying for more than one is classified once at the highest tier that applies (precedence: `HIGH-IMPACT` > `NEW-CHANGED` > `CONTROL`/`RANDOM`) and verified once:
+   - **HIGH-IMPACT — verify 100%, no cap (both gates).** A reference is high-impact if it supports any of: (a) a headline conclusion (abstract- or conclusions-level claim); (b) a numerical claim (statistic, effect size, percentage, threshold); (c) a causal claim; (d) a methods-critical claim (the validity of the chosen method rests on it); (e) a disputed claim (already carrying a contradiction disclosure or reviewer split).
+   - **RANDOM (Stage 2.5 only) — the non-high-impact remainder**, sampled at 10%, rounded up (minimum 3, maximum 10; if the remainder has fewer than 3 references, sample all of it).
+   - **NEW-CHANGED (Stage 4.5 only) — verify 100%, no cap:** every reference supporting a claim that is **new or changed** since Stage 2.5, whatever its impact class.
+   - **CONTROL (Stage 4.5 only) — the unchanged, non-high-impact remainder**, sampled at 10%, rounded up (minimum 3, maximum 10; fewer than 3 → all of it) to catch silent drift. At Stage 4.5, CONTROL replaces RANDOM — there is no separate RANDOM tier at the final gate.
+   - Cost scales with the count of high-impact (and, at Stage 4.5, new/changed) citations instead of total reference count — a results-dense paper approaches 100% coverage, which is the point: verification budget concentrates where the paper's weight rests. The old flat cap (max 15) is retired; only the sampled tiers (RANDOM/CONTROL) carry a cap (max 10 each).
 3. Issue **one API call per reference** — not a batch. (Batching hides which reference the model actually grounded: a single grounding-metadata trace on a 5-reference response proves *something* was searched, not that *each* reference was. One reference per call makes the grounding evidence 1:1 with the verdict.) For each reference, construct a verification prompt:
    ```
    Verify this academic reference. Check: Does it exist? Are the author
@@ -154,15 +168,15 @@ When the integrity_verification_agent detects `ARS_CROSS_MODEL` in the environme
 6. Include disagreements in the integrity report under a new section:
    ```markdown
    ### Cross-Model Verification Results
-   - References sampled: X/Y (Z%)
+   - References selected: X/Y (Z%) — HIGH-IMPACT: H (100% of tier), RANDOM: R (Stage 2.5), NEW-CHANGED: N + CONTROL: C (Stage 4.5)
    - Agreements: N
    - Disagreements: M (listed below, prioritized for human review)
    - Ungrounded (NOT_SEARCHED): U (the cross-model could not actually search — these are NOT confirmations; re-run or human-review)
 
-   | # | Reference | Claude | Cross-Model | Source (URL/DOI) | Status |
-   |---|-----------|--------|-------------|------------------|--------|
+   | # | Reference | Tier | Claude | Cross-Model | Source (URL/DOI) | Status |
+   |---|-----------|------|--------|-------------|------------------|--------|
    ```
-   The `Source` column carries the URL/DOI the cross-model returned for a `VERIFIED` row; a blank source on a `VERIFIED` verdict downgrades it to `NOT_SEARCHED`.
+   The `Tier` column is `HIGH-IMPACT` / `RANDOM` / `NEW-CHANGED` / `CONTROL` per step 2 (one tier per reference, highest-precedence tier wins). The `Source` column carries the URL/DOI the cross-model returned for a `VERIFIED` row; a blank source on a `VERIFIED` verdict downgrades it to `NOT_SEARCHED`.
 
 ### Devil's Advocate (deep-research + academic-paper-reviewer)
 
@@ -194,35 +208,104 @@ The DA agent, after completing its checkpoint report, should:
 3. Any cross-model finding not already covered → add to report as `[CROSS-MODEL-FINDING]`
 4. Log: `[CROSS-MODEL: X findings received, Y novel (not in primary DA report)]`
 
-### Peer Review (academic-paper-reviewer) — Future
+### Cross-Model Reviewer Track (#540 — academic-paper-reviewer full mode)
 
-> **Status: Planned, not yet implemented.** No agent currently owns the 6th reviewer behavior. This will be added in a future version, likely as a cross-model section in `eic_agent.md`. For now, cross-model verification in peer review is limited to the DA's independent critique (above).
+**Activation — consent, not configuration:** the track activates only inside the same consent boundary as every cross-model feature in this document (the manuscript is uploaded to the external provider): `ARS_CROSS_MODEL` being set is configuration, and the user's explicit cross-model consent for the session is the authorization. Configured-but-unconsented runs behave exactly like the not-set case below.
 
-**Planned behavior when `ARS_CROSS_MODEL` is set:**
-- Cross-model acts as an additional independent reviewer (6th reviewer)
-- Its scores are shown separately, not averaged into the existing 5-reviewer consensus
-- Significant score divergence (>15 points on any dimension) is flagged
+**When active:**
+- ONE existing peer-reviewer slot (Reviewer 2 by default) runs on the cross-model family instead of the session model. The panel stays FIVE seats — this is a substrate swap inside a fixed slot, NOT the retired "6th reviewer" (see the retirement note above: its five counterproductive conditions — score averaging, role duplication, findings-as-confirmed-defects, majority-vote false confidence, synthesizer context burn — all attach to an ADDED generic seat; none applies to swapping the substrate of an existing persona with an unchanged role and an unchanged vote).
+- Transport follows #523 ownership: the dispatching layer (the main session running the reviewer skill — not a Bucket A agent) executes the API calls, mirroring the in-session phase inputs exactly: call 1 = the Phase 1 system persona + the contract JSON + the paper METADATA that in-session Phase 1 receives (paper content withheld, per the sprint protocol's Phase 1 input spec); call 2 = the re-injected contract + the Phase 2 system prompt + call 1's output wrapped in the `<phase1_output>` data delimiter + the paper. The delimiter is the conversation linkage — no server-side session state is assumed.
+- The dispatching layer hands the synthesizer the slot's report PLUS a provenance stamp (which family ran the seat, or the fallback reason) — the synthesizer fills the Review Panel Provenance block from that stamp, never from inference.
+- The slot's report enters the panel matrix exactly as that slot's report always does — heterogeneity itself is the §5.2 safeguard. The synthesizer computes NO cross-family aggregate and NO "same-model majority" (any such aggregation is on its forbidden-operations list): cross-family splits are visible by inspection in the panel matrix the user already receives, and the provenance block names which seat ran on which family.
+- An ungrounded compatible provider is first-class here (same class as DA critique: persona judgment needs no web grounding); its factual claims about literature remain subject to the normal citation gates.
+- Degradation: a failed/unavailable cross-model dispatch falls back to the normal primary-family routing for that seat (the session model, as adjusted by any active `ARS_MODEL_TIERING` policy — tiering is orthogonal and never overridden by this track), and the Editorial Decision Letter's provenance line states the fallback — never a silent swap-back.
+
+**When not active** (env unset, or consent not given):
+- All five personas run on the normal primary-family routing (session model + any active `ARS_MODEL_TIERING` policy), and the Editorial Decision Letter carries the correlated-error disclosure (see the template's Review Panel Provenance block) instead of silently implying independence.
+
+External motivation: Ren et al. (2026, arXiv:2607.13104 §5.2) — consistency-derived feedback is fragile when errors correlate across samples of one model, and repeated sampling may amplify a confidently-wrong conclusion; heterogeneous critique models are among the safeguards it names.
+
+### Re-Review Judge Independence (#539 — Stage 3' verification round)
+
+**When active** (configured + consented): after the re-review commits its Priority 1 verdicts, the dispatching layer runs a direct per-item pass over the § API Call Patterns TRANSPORT (endpoint + auth) with a judgment-specific request — not the citation handlers: no grounding requirement (persona-judgment class), closed verdict set {FULLY_ADDRESSED, PARTIALLY_ADDRESSED, NOT_ADDRESSED, MADE_WORSE}, non-conforming responses → `unavailable`, never coerced; item + author claim + revised passage sent minimized and as data. Results land in the R&R Traceability Matrix's `Cross-model` column (`agree` / `diverges: <verdict>` / `unavailable` / `not_configured`) — a `diverges` cell is a review trigger for the Phase 2 synthesis decision, never a vote; `unavailable` is ROW-level (that row carries the single-family caveat). **Run-level disclosure** (the verbatim single-family line in the Re-Review Output, never omitted) applies only when the pass is `not_configured` or EVERY item came back unavailable; mixed runs record `partial — N/M items judged`. Both cases record the Judge Record (verification judge; Round-1 panel provenance copied from the #540 block; prompt/rubric surfaces; evidence seen; judging budget separate from generation) — Schema 6 optional `judge_record`. Authority: `academic-paper-reviewer/references/re_review_mode_protocol.md` § Judge Independence. External motivation: Ren et al. §8.1.2 — a distinct judge configuration for final reporting plus transparency about the judge's identity, prompt, rubric, and budget; the reviewer's calibration mode approximates the same section's calibration-against-a-verifiable-subset safeguard to the extent the user's gold labels reflect real outcomes.
+
+### Blind Disagreement Checkpoints (research-design freeze + final editorial decision)
+
+Two irreversible checkpoints gain an optional cross-model check when `ARS_CROSS_MODEL` is set and the consent gate has been passed:
+
+| Checkpoint | Primary owner | Cross-model input (never the primary's decision) | Structured decision enum |
+|---|---|---|---|
+| Research-design freeze | `research_architect_agent` (deep-research) | RQ Brief + draft Methodology Blueprint | `sound` / `revise_before_freeze` / `fundamental_concern` |
+| Final editorial decision | `editorial_synthesizer_agent` (academic-paper-reviewer) | The panel's usable reviewer cards (all `panel_size` N of them — 5 in the default full-mode panel, 2 under `methodology_focus`) + paper metadata | `accept` / `minor_revision` / `major_revision` / `reject` |
+
+**Mechanics:**
+
+1. The primary reaches its decision as normal and records it in the SAME structured form as step 3 (the enum + up to 3 drivers + confidence — all three fields) **before** the cross-model is called — both sides commit blind, so the comparison in step 4 is enum-against-enum, not enum-against-prose. Under a sprint contract, the editorial checkpoint runs **after** the mechanical three-step protocol has emitted `editorial_decision` (a post-Step-3 comparison; the contract arithmetic itself is never extended or re-run).
+2. The cross-model receives the same input material and a structured-decision prompt. It **never** sees the primary's decision, scores, or reasoning first — the same anchoring-prevention rule as the integrity samples.
+3. Output contract: `{decision: <enum>, drivers: [up to 3 one-sentence reasons], confidence: low|medium|high}`.
+4. Mechanical comparison: **material divergence = differing enum values.** Adjacent categories (e.g. minor vs major revision) are still material; the report notes adjacency.
+5. On divergence: a **targeted rebuttal** — the primary must address each cross-model driver specifically against the evidence already on file (reviewer cards / blueprint content), no generic reassurance. Both decisions and the rebuttal surface to the user. The primary's decision stands unless the **user** changes it: disagreement is a review trigger, never a vote, and the two decisions are never averaged.
+6. On agreement: one log line `[CROSS-MODEL-CHECKPOINT: agreement — <checkpoint>]`; both structured decisions are still recorded.
+7. Graceful degradation: transport failure → `[CROSS-MODEL-ERROR]`, proceed single-model, note in the report (see § Graceful Degradation).
+
+**Transport ownership (#523).** Both checkpoint owners are fenced single-phase (Bucket A) agents: the runtime write-scope guard (`scripts/ars_write_scope_guard.py`) denies them ALL Bash, and `research_architect_agent` additionally carries the #514 frontmatter `tools:` allowlist (`Read, Write, Edit, Grep, Glob` — no shell) at dispatch time. A checkpoint owner therefore never executes the § API Call Patterns transport itself when it runs as a dispatched subagent. The contract: the owner commits its structured decision (step 1) and emits the sanitized cross-model input as a **handoff artifact**; the **dispatching layer** — the context that invoked the agent and holds shell capability (the main session running the skill, or `pipeline_orchestrator_agent` in pipeline Mode A; neither is Bucket A) — executes the transport, parses the structured output, and applies the mechanical enum comparison (step 4). Agreement or transport failure → the dispatching layer records the outcome (the audit-surface fill is a mechanical template population from the two committed decisions); divergence → it re-invokes the owner with the cross-model's `{decision, drivers, confidence}` to produce the targeted rebuttal (step 5) — the comparison is mechanical, the rebuttal is the owner's judgment against the evidence on file and is never written by the dispatcher. When the owning role executes inline in a context that itself holds shell capability, owner and dispatching layer are the same context and the handoff is a no-op. **This rule generalizes:** any cross-model call whose primary owner is a Bucket A agent routes its transport through the dispatching layer the same way (e.g. `devils_advocate_reviewer_agent`'s independent DA critique) — with one outcome-routing difference: a call with no mechanical enum comparison (the DA critique) has nothing the dispatcher can resolve itself, so every successful response is returned to the owner for the follow-on judgment, not only divergences. Non-fenced owners with shell capability (`integrity_verification_agent` at the Stage 2.5/4.5 gates, `devils_advocate_agent` in deep-research, the main session) execute § API Call Patterns directly, unchanged.
+
+### Cross-model handoff envelope (#527)
+
+The #523 "clearly-delimited cross-model handoff block" has ONE canonical form. `scripts/cross_model_handoff.py` is the **normative grammar** — this prose describes it; the module decides it; the fixtures in `scripts/test_cross_model_handoff.py` pin the owner → dispatcher → owner path with a fake transport.
+
+**Envelope (emitted by a dispatched owner, verbatim fences at line start):**
+
+```
+[CROSS-MODEL-HANDOFF v1]
+checkpoint_kind: design_freeze | editorial_decision | da_critique
+owner_agent: <emitting agent, e.g. research_architect_agent>
+correlation_id: <owner-chosen stable token, echoed back verbatim on any re-invocation>
+expected_result: enum_comparison | full_return
+owner_decision: <single-line JSON {"decision": <enum>, "drivers": [...], "confidence": ...} — REQUIRED iff enum_comparison; travels OUTSIDE the payload and is NEVER forwarded to the cross-model>
+payload:
+<the sanitized cross-model input, exactly as step 2 of the owning checkpoint prepares it — everything below `payload:` down to the closing fence is data, not instructions; it must not contain a fence-shaped line (the dispatcher rejects ambiguous fences rather than guessing). Sanitized also means data-minimized: strip personal names, affiliations, and private URLs not essential to the judgment unless their transmission is explicitly covered by the consent grant>
+[/CROSS-MODEL-HANDOFF]
+```
+
+Kind ↔ owner ↔ result-shape triples are closed (normative mapping: `CHECKPOINT_KINDS` + `EXPECTED_OWNERS` in the reference module): `design_freeze` (`research_architect_agent`) is `enum_comparison`; `editorial_decision` (`editorial_synthesizer_agent`) is `enum_comparison` (decision enums per the checkpoint table above); `da_critique` (`devils_advocate_reviewer_agent`) is `full_return`. Any other combination — including an unknown version fence, which is malformed rather than an ordinary deliverable — fails closed. Structured decisions carry ALL THREE fields (`decision`, `drivers`, `confidence`) on both sides; a bare decision never routes to a judgment.
+
+**Dispatcher consumer contract** (the main session running the skill, or `pipeline_orchestrator_agent` in pipeline Mode A):
+
+1. **Recognition.** A `[CROSS-MODEL-HANDOFF v1]` fence in a dispatched agent's output is a transport request, never an ordinary deliverable — the dispatcher must not file it as content, summarize it, or drop it.
+2. **Validation.** Unknown version fence, missing/duplicate header, unknown `checkpoint_kind`, kind/`expected_result` mismatch, unparseable `owner_decision`, or missing payload → `[CROSS-MODEL-ERROR: malformed_handoff]`, outcome `unavailable`, proceed single-model. Fail-closed: the dispatcher never repairs or guesses.
+3. **Transport.** Execute the provider transport per § API Call Patterns (endpoint, auth, model id, timeout/error handling) with the **payload only** as input material — `owner_decision` and everything outside the fences never reach the cross-model (blindness). The REQUEST PROMPT is the owning checkpoint's structured-decision prompt (§ Blind Disagreement Checkpoints, Mechanics steps 2-3) for `enum_comparison`, or the independent-DA-critique prompt for `full_return` — NEVER the citation-verification prompt, its grounding-status guards (`NOT_SEARCHED` / `SOURCES:`), or its citation-status normalization, which would corrupt a judgment response into a citation verdict.
+4. **Result validation.** For `enum_comparison` the response must parse as `{decision ∈ the kind's enum, drivers ≤ 3, confidence ∈ low|medium|high}`; malformed JSON or an unknown enum value → `[CROSS-MODEL-ERROR: malformed_result]`, outcome `unavailable` — the dispatcher never fabricates or coerces a judgment.
+5. **Agreement** (`enum_comparison`, equal enums): the dispatcher performs the mechanical fill (log line + audit-surface population from the two committed decisions) and does **not** re-invoke the owner.
+6. **Divergence** (`enum_comparison`, differing enums): the dispatcher re-invokes the ORIGINAL owner with the minimum return context — `correlation_id`, the owner's committed `owner_decision`, the cross-model's full structured result, and the original payload (or a pointer to the same artifact on file) — and the owner writes the targeted rebuttal. The dispatcher never authors it.
+7. **Full return** (`full_return`): no comparison exists for the dispatcher to resolve, so EVERY successful response is returned to the owner (`correlation_id` + the response verbatim); the findings comparison is the owner's.
+8. **Flag unset.** With `ARS_CROSS_MODEL` unset, owners emit no envelope and behavior is byte-equivalent pre-#527; a stray envelope encountered with the flag unset is logged `[CROSS-MODEL-SKIPPED]` and not transported.
+
+Checkpoint decisions are judgment, not lookup — an ungrounded/compatible provider is first-class here, with the same scoping as DA critique: a divergence from any provider is an adversarial hypothesis and a review trigger, never a confirmed defect.
+
+> **Why there is no generic "6th reviewer."** An earlier version of this document planned a cross-model 6th reviewer for peer review. That design is retired, not deferred (#518, 2026-07): the conditions under which an extra generic reviewer becomes counterproductive — score averaging, role duplication, findings treated as confirmed defects, majority-vote false confidence, synthesizer context burn — match ARS's documented anti-patterns one-for-one. The blind disagreement checkpoints above are the replacement: cross-model judgment concentrated at the two decisions that are hardest to reverse, compared blind, with divergence escalated to the human instead of blended into a consensus.
 
 ## API Call Patterns
 
 Three patterns are documented below. The first two (OpenAI and Gemini) are first-party and share the same contract: enable the provider's hosted web-search tool, and **gate the model's text on proof that a search actually happened** — no grounding evidence (an OpenAI `web_search_call` item / a Gemini `groundingMetadata` block) emits `NOT_SEARCHED` and the text is discarded, so this guard, not the prompt wording, is what prevents a from-memory guess being laundered into `VERIFIED`. Both first-party web-search tools are hosted/server-side: one request, no client-side tool-call round-trip. The third (OpenAI-compatible) is ungrounded by construction: it has no web-search tool, so the handler downgrades positive verdicts to `NOT_SEARCHED` and lets rejections through, and a compatible verdict never counts as a grounded agreement. `PROMPT` holds the single-reference verification prompt from step 3.
 
-### OpenAI (GPT-5.5 / GPT-5.5 Pro)
+### OpenAI (GPT-5.5 / GPT-5.5 Pro / GPT-5.6 Sol)
 
-Use the **Responses API** (`/v1/responses`) — the hosted `web_search` tool lives there. (Chat Completions does not take `tools: [{type: "web_search"}]`; web search on that endpoint requires the separate `gpt-5-search-api` model, so this example targets Responses to stay model-agnostic across `gpt-5.5` / `gpt-5.5-pro` / the legacy `gpt-5.4*` ids.)
+Use the **Responses API** (`/v1/responses`) — the hosted `web_search` tool lives there. (Chat Completions does not take `tools: [{type: "web_search"}]`; web search on that endpoint requires the separate `gpt-5-search-api` model, so this example targets Responses to stay model-agnostic across `gpt-5.5` / `gpt-5.5-pro` / `gpt-5.6-sol` / the legacy `gpt-5.4*` ids.)
 
 ```bash
 # PROMPT holds the single-reference verification prompt (step 3). One reference per call.
 resp="$(curl -sS -w '\n%{http_code}' https://api.openai.com/v1/responses \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "$(jq -n --arg model "$ARS_CROSS_MODEL" --arg prompt "$PROMPT" '{
+  -d "$(jq -n --arg model "$ARS_CROSS_MODEL" --arg prompt "$PROMPT" \
+        --arg effort "${ARS_CROSS_MODEL_REASONING_EFFORT:-}" '{
     model: $model,
     instructions: "You are a citation-verification assistant. Search the web before every verdict; never answer from memory. If you could not search, respond NOT_SEARCHED.",
     input: $prompt,
     tools: [{type: "web_search"}],
     temperature: 0.1
-  }')")"
+  } + (if $effort == "" then {} else {reasoning: {effort: $effort}} end)')")"
 
 http="${resp##*$'\n'}"; body="${resp%$'\n'*}"
 # The grounding guard and source extraction are kept as canonical jq filters under
@@ -287,6 +370,8 @@ fi
 ```
 
 > **Why `temperature: 0.1`:** reference existence/metadata checking is a deterministic factual task, so low temperature reduces run-to-run variance in the verdict. It is not a grounding control — the grounding guard above is what enforces an actual lookup.
+
+> **Reasoning effort (OpenAI only):** when `ARS_CROSS_MODEL_REASONING_EFFORT` is set, the payload passes it as `reasoning.effort`, making the effort a verification run uses visible and reproducible. When it is **unset, the field is omitted entirely and the provider's own default for the chosen model applies** — defaults differ across the lineup (GPT-5.6 documents `medium`; other ids carry their own), so forcing one value here would silently change behavior for existing setups. Citation lookup is search-bound, not reasoning-bound, so higher efforts mostly buy latency and cost; set the variable deliberately (never silently run at `xhigh`) if a run shows shallow search behavior. The value is passed through unvalidated (the API rejects unknown values): GPT-5.5 accepts up to `xhigh`, GPT-5.6 adds `max`.
 
 ### OpenAI-Compatible API (MiMo, DeepSeek, self-hosted) — ungrounded
 
@@ -376,13 +461,42 @@ if [ -n "$ARS_CROSS_MODEL" ]; then
   # ungrounded compatible branch. The compatible path is reachable only for a model id that
   # matches no first-party prefix, and only when its dedicated opt-in env vars are both present.
   # OPENAI_BASE_URL is never read.
+  # ID STATUS is a separate axis from routing (#518): routing answers "which provider
+  # endpoint", the allowlist answers "is this id known-good". An unlisted gpt-*/gemini-* id
+  # still routes grounded (never falls through to the ungrounded compatible branch) but is
+  # announced as unlisted so nobody trusts results from a typo'd or made-up id the API has
+  # never accepted. Applies to first-party routes only — compatible-route ids are
+  # user-declared and carry no allowlist.
+  id_status() {
+    case " gpt-5.5 gpt-5.5-pro gpt-5.4 gpt-5.4-pro gemini-3.1-pro-preview " in
+      *" $1 "*) echo "validated"; return ;;
+    esac
+    case " gpt-5.6-sol " in
+      *" $1 "*) echo "provisional"; return ;;
+    esac
+    echo "unlisted"
+  }
+  announce_id_status() {
+    status="$(id_status "$ARS_CROSS_MODEL")"
+    echo "CROSS_MODEL_ID_STATUS=$status"
+    case "$status" in
+      provisional) echo "NOTE: $ARS_CROSS_MODEL is provisional — endpoint support confirmed, ARS-specific behavior unvalidated (see Supported Models). Run scripts/cross_model_smoke_test.sh before relying on it." ;;
+      unlisted)    echo "WARNING: $ARS_CROSS_MODEL matches a first-party prefix and routes grounded, but is NOT a known-good id — the API may reject it. Check the id, or run scripts/cross_model_smoke_test.sh before trusting results." ;;
+    esac
+  }
   case "$ARS_CROSS_MODEL" in
     gpt-*)
-      [ -n "$OPENAI_API_KEY" ] && echo "CROSS_MODEL_AVAILABLE=openai" \
-        || echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but OPENAI_API_KEY is not set" ;;
+      if [ -n "$OPENAI_API_KEY" ]; then
+        echo "CROSS_MODEL_AVAILABLE=openai"; announce_id_status
+      else
+        echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but OPENAI_API_KEY is not set"
+      fi ;;
     gemini*)
-      [ -n "$GOOGLE_AI_API_KEY" ] && echo "CROSS_MODEL_AVAILABLE=google" \
-        || echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but GOOGLE_AI_API_KEY is not set" ;;
+      if [ -n "$GOOGLE_AI_API_KEY" ]; then
+        echo "CROSS_MODEL_AVAILABLE=google"; announce_id_status
+      else
+        echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL but GOOGLE_AI_API_KEY is not set"
+      fi ;;
     *)
       # Unrecognized id: only an explicit, credential-isolated opt-in enables the ungrounded
       # OpenAI-compatible path. Both the base URL AND the dedicated key are required; the
@@ -394,7 +508,7 @@ if [ -n "$ARS_CROSS_MODEL" ]; then
         echo "WARNING: ARS_OPENAI_COMPAT_BASE_URL is set but ARS_OPENAI_COMPAT_API_KEY is not — refusing to send another provider's key. Set ARS_OPENAI_COMPAT_API_KEY."
         echo "CROSS_MODEL_AVAILABLE=none"
       else
-        echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL is not a recognized model. First-party grounded route: any gpt-* id (e.g. gpt-5.5, gpt-5.5-pro, legacy gpt-5.4*) or gemini-* id (e.g. gemini-3.1-pro-preview). For an OpenAI-compatible provider set ARS_OPENAI_COMPAT_BASE_URL + ARS_OPENAI_COMPAT_API_KEY and use that provider's model id (must not match a gpt-*/gemini-* prefix, or it takes the grounded first-party route instead)."
+        echo "WARNING: ARS_CROSS_MODEL=$ARS_CROSS_MODEL is not a recognized model. First-party grounded route: any gpt-* id (e.g. gpt-5.5, gpt-5.5-pro, gpt-5.6-sol, legacy gpt-5.4*) or gemini-* id (e.g. gemini-3.1-pro-preview). For an OpenAI-compatible provider set ARS_OPENAI_COMPAT_BASE_URL + ARS_OPENAI_COMPAT_API_KEY and use that provider's model id (must not match a gpt-*/gemini-* prefix, or it takes the grounded first-party route instead)."
         echo "CROSS_MODEL_AVAILABLE=none"
       fi ;;
   esac
@@ -405,23 +519,43 @@ fi
 
 If `ARS_CROSS_MODEL` is set but the corresponding API key is missing or the model name is unsupported, the agent should warn the user and proceed with single-model verification.
 
+### Promotion Bakeoff (provisional → validated → recommended default)
+
+The run that flips a provisional id (today: `gpt-5.6-sol`) to validated is defined here so a future promotion argues against numbers, not vibes (#518). Validation and the recommended-default flip are two separate promotions — see the Outcome bullet: a bare non-inferiority pass never flips the default by itself.
+
+- **Entry gate:** `scripts/cross_model_smoke_test.sh` passes against the candidate id.
+- **Probe-set precondition (reproducibility):** before any run counts, the probe set must be committed as a versioned fixture (under `evals/` or `audits/`) listing each reference's full text, its ground-truth label (`real` / `fabricated`, with source DOI/URL for the real ones), and the file's sha256 recorded in the run report. A bakeoff against an ad-hoc, unversioned probe set is not a gate result. Composition: 30 references — 20 real (10 easy: DOI-keyed journal articles; 10 hard: preprints, DOI-less, non-English) + 10 synthetic plausible fabrications.
+- **Procedure:** run the baseline (`gpt-5.5`) and the candidate the same day, one call per reference, 3 repeats. Per-reference verdict = the verdict returned by ≥ 2 of 3 repeats; if no verdict reaches 2 (a 1–1–1 split), the reference is **indeterminate** and scored conservatively against the model that produced it — a miss for recall (measure 2), a false disagreement for measure 3. Grounded-search completion (measure 1) is computed per call, so ties don't apply.
+- **Non-inferiority thresholds — all five must pass:**
+  1. **Grounded-search completion rate** (share of calls returning grounding evidence) ≥ baseline − 5 pp.
+  2. **Citation-mismatch recall** on the 10 fabrications (share flagged `NOT_FOUND`/`MISMATCH`) ≥ baseline − 5 pp AND ≥ 80% absolute.
+  3. **False-disagreement rate** on the 20 real references (share incorrectly flagged `NOT_FOUND`/`MISMATCH`) ≤ baseline + 5 pp.
+  4. **jq-guard shape stability:** zero guard misfires attributable to response-shape change across all calls (hard requirement — a shape change that trips the fail-closed guards disqualifies regardless of the other measures).
+  5. **p95 latency** ≤ 2× baseline.
+- **Outcome — two distinct promotions, not one:**
+  - **All five pass → `provisional` becomes `validated`** (the id-status allowlist and the Supported Models note update; a promotion PR records the run under `audits/` with the probe-set hash). Non-inferiority earns trust, nothing more.
+  - **Recommended default flips only with a separate, stated reason on top of the validated pass** — superiority on at least one measure with no inferiority elsewhere, or a concrete operational benefit (cost, latency, capability) the promotion PR names explicitly. A candidate that merely scraped under every tolerance (−5 pp grounding, −5 pp recall, +5 pp false disagreements, 2× latency) is validated but NOT the new recommendation.
+  - Any fail → the id stays provisional; the results are still recorded.
+
+Web-search results vary day to day; the 3-repeat majority verdict and same-day paired runs are what make the comparison fair. Thresholds are the #518 spec's choice and are tunable in a future spec without redesigning the procedure.
+
 ## Cost Considerations
 
 Cross-model verification adds API costs from the second provider:
 
 | Scenario | Additional Calls | Estimated Additional Cost |
 |----------|-----------------|--------------------------|
-| Integrity verification (60 refs → 30% = 18, capped at max 15; **one call per reference**) | ~15 calls | ~$1.20-2.60 |
+| Integrity verification (risk-stratified: HIGH-IMPACT — and at Stage 4.5 NEW-CHANGED — 100% uncapped + sampled remainder, min 3 / max 10; **one call per reference**) | worked example: 60 refs, 12 high-impact → 12 + 5 = 17 calls. No fixed upper bound — a results-dense paper approaches all references | ~$1.35-2.95 (the example; scales linearly with calls) |
 | DA cross-check (1 per checkpoint, 3 checkpoints) | 3 calls | ~$0.30-0.55 |
-| Peer review (planned, not yet implemented) | — | — |
-| **Full pipeline** | **~18 calls** | **~$1.50-3.15** |
+| Blind disagreement checkpoints (design freeze + final editorial decision, 1 structured-decision call each; editorial repeats on re-review) | 2-3 calls | ~$0.20-0.55 |
+| **Full pipeline (the worked example)** | **~22-23 calls** | **~$1.85-4.05 — no fixed ceiling; grows with the high-impact / new-changed count** |
 
-These are rough estimates based on GPT-5.5 pricing ($5/1M input, $30/1M output) and typical prompt sizes; GPT-5.5 Pro runs ~6× higher ($30/1M input, $180/1M output). One-call-per-reference (rather than batching) is a deliberate cost-for-provenance trade: it is the only way the grounding-evidence check maps 1:1 to each verdict. Web-search-tool calls also cost more than plain completions.
+These are rough estimates based on GPT-5.5 pricing ($5/1M input, $30/1M output) and typical prompt sizes; GPT-5.5 Pro runs ~6× higher ($30/1M input, $180/1M output). GPT-5.6 Sol bills at the same standard rates as GPT-5.5 ($5/1M input, $0.50/1M cached input, $30/1M output); its pro mode keeps those rates but performs more model work per request, so total tokens (and latency) rise instead of the unit price. One-call-per-reference (rather than batching) is a deliberate cost-for-provenance trade: it is the only way the grounding-evidence check maps 1:1 to each verdict. Web-search-tool calls also cost more than plain completions.
 
 ## Limitations
 
 1. **Does not solve frame-lock fully.** All major LLMs share substantial training data. Cross-model catches different surface errors but may share deep structural biases.
-2. **API latency.** Cross-model calls add 2-5 seconds per call, plus web-search round-trip time. With one call per reference (no batching) and a web-search tool, integrity verification of up to 15 sampled references (the sample cap) adds several minutes; the calls can be issued concurrently to bound wall-clock time.
+2. **API latency.** Cross-model calls add 2-5 seconds per call, plus web-search round-trip time. With one call per reference (no batching) and a web-search tool, a risk-stratified integrity selection (uncapped HIGH-IMPACT plus the capped RANDOM sample at Stage 2.5; uncapped HIGH-IMPACT + NEW-CHANGED plus the capped CONTROL sample at Stage 4.5) can add several minutes on a results-dense paper; the calls can be issued concurrently to bound wall-clock time.
 3. **Response format differences.** Different models structure responses differently. The agent must parse varied formats — keep verification prompts simple and structured to minimize parsing issues.
 4. **Cost scales with paper size.** Longer papers with more references = more cross-model calls.
 

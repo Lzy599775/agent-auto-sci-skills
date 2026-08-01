@@ -1,6 +1,6 @@
 # Claude Code 向け Academic Research Skills
 
-[![Version](https://img.shields.io/badge/version-v3.15.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.15.0)
+[![Version](https://img.shields.io/badge/version-v3.19.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.19.0)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
@@ -244,7 +244,7 @@ You: "status"
 
 **0-100 品質ルーブリック** を持つ 7 エージェントの多視点レビュー。モード: full、re-review、quick、methodology-focus、guided、calibration。**決定マッピング:** ≥80 Accept、65-79 Minor Revision、50-64 Major Revision、<50 Reject。初回レビューチーム vs. 限定的な再レビューチームの境界: ARCHITECTURE.md §3 Stage 3 / Stage 3' を参照。
 
-### Academic Pipeline（v3.15.0）
+### Academic Pipeline（v3.19.0）
 
 整合性検証、二段階レビュー、ソクラテス式コーチング、コラボレーション評価を持つ 10 ステージのオーケストレーター。パイプライン保証: 各ステージにユーザー確認チェックポイントが必要。整合性検証（Stage 2.5 + 4.5）はスキップできない。R&R Traceability Matrix（Schema 11）は著者の改訂主張を独立に検証する。v3.4 は Stage 2.5 / 4.5 に Compliance Agent（PRISMA-trAIce + RAISE）を追加した。v3.5 はすべての FULL/SLIM チェックポイントとパイプライン完了時に **Collaboration Depth Observer**（`collaboration_depth_agent`、advisory のみ — 決してブロックしない）を追加する。MANDATORY 整合性ゲート（2.5 / 4.5）は、コンプライアンスチェックが希薄化されないよう observer を明示的にスキップする。Wang & Zhang（2026）, IJETHE 23:11 に基づく。エージェント、成果物、ゲートを含むステージごとのマトリクス: ARCHITECTURE.md §3 を参照。
 
@@ -324,6 +324,22 @@ https://github.com/Imbad0202/academic-research-skills
 ---
 
 ## Changelog
+
+### v3.19.0 (2026-07-22) — 改訂ラウンドのクレームドリフト防御、PDF 読み取り整合性プリフライト、read-scope アテステーション
+
+> **追加**：3 つの advisory-or-opt-in 整合性層とランチャー修正。**改訂ラウンドのクレームドリフト防御（#569/#570）**：クレーム強度ラダー（`is associated with < predicts < causes` を、権限を与えるロードマップ項目なしに黙って動かさない）を改訂ドラフトと新しい advisory Phase E6 に接続し、決定論的な数値/引用トークン保存チェッカーを追加 — #390 の honest-claim 残余（触れたブロック内部に整合性チェックがなかった）の認識面とトークン面を閉じる。現行フロンティアモデルでベースラインを先に測定（`evals/heldout/revision_claim_drift/`）、メカニズムの着想は [Yila-AI/sci-ssci-skills](https://github.com/Yila-AI/sci-ssci-skills) に帰属。**PDF 読み取り整合性プリフライト（#512）**：3 信号のページ数クロスチェックにより、切り詰め/ページ番号ずれの PDF 読み取りが一見有効な `page` アンカーを生成できないようにする。**read_scope アテステーション（#513）**：人間読了台帳への任意の誠実カバレッジ宣言（`full_text` / `sections` / `abstract_only` / `toc_only`）で、ファイナライザの引用昇格を read-scope 対応にする。**ランチャー watchdog 修正（#545）**：正常な PreToolUse write-scope-guard 呼び出しを wall-clock 全体ブロックしていたパイプ停止を除去。スイートは v3.19.0 へ；基盤 3 スキルのバージョンは不変。
+
+### v3.18.0 (2026-07-18) — 自己改善サーベイ統合
+
+> **追加**：Ren et al.（2026、arXiv:2607.13104）に動機づけられた 8 つの品質メカニズム — サブ質問スコープ束縛＋Phase E スコープ整合アドバイザリ（#547）、検索範囲で有界化されたノベルティ主張＋E5 分類（#548、いずれも advisory-only、MANDATORY チェックポイントで行単位表示）；Stage 2.5 リスク層別クレーム検証（HIGH-IMPACT 全数＋ランダム歩哨、#549）；引用検証ゲートへのキャッシュ接続＋鮮度アドバイザリ＋opt-in 再検証（#541）；同意制クロスモデル査読席（固定 5 席の 1 席を別モデルファミリで、#540）と再査読の審査独立性＋Judge Record（#539）；ルーティング/ゲート頑健性評価シードセット（#550）；サーベイ自体を第 3 の human-in-the-loop 文献アンカーとして追加（#542）。サーベイ・トラックとは独立に、#544 SessionStart 更新リマインダーも搭載（インストール版が main より古い場合に `/plugin update` を案内；`ARS_UPDATE_CHECK=0` で無効化可）。`academic-pipeline` はスイートに追従して v3.18.0 へ；他 3 スキルのバージョンは不変。
+
+### v3.17.0 (2026-07-16) — パイプライン境界セマンティクス、正準クロスモデルハンドオフ・エンベロープ、実行可能パネルチェッカー
+
+> **修正:** #528 の 2 つの不明確なパイプライン境界を解消 — Stage 5 の「finalize 前は常に MANDATORY」は、Stage 4.5 の PASS と Stage 5 のディスパッチの間にある 1 つのチェックポイント（エントリーゲート）のみを指すよう定義され、Stage 6 には終端の確認語彙（`finish`/`end`/`done`/`confirm`）と明示的な辞退パスが追加された。5 つのパイプライン面すべてに全文 sha256 コンテンツロックが付与され（#529）、今後のプロンプト面のドリフトは同一コミットでハッシュを更新しない限り CI で失敗する。ブラインドチェックポイントの伝送はディスパッチ層へ移動（#523）— 元々 Bucket A のチェックポイント所有者にクロスモデル伝送の実行を求めていたが、ランタイムの Bash 拒否のもとでは実行不能だった。現在はディスパッチ層が伝送呼び出しを担う。**追加:** 正準 `[CROSS-MODEL-HANDOFF v1]` エンベロープ + 規範的な Python 文法（#527）が、これまでプローズのみで担保されていた owner→dispatcher→owner 伝送経路を置き換え、一致・不一致・不正形式の結果ルーティングを 3 つのチェックポイント所有者すべてに固定する。#514 ツール許可リストのドリフト防止ロック（#524、74 件のミューテーションテスト）は、エージェント本体とそのミラーを対称的に編集して Bash を静かに再追加するドリフト経路を塞ぐ。実行可能な sprint-contract パネルチェッカー（#510）は一次成果物から v3.6.2 の 2 層決定を再計算し、多数決の式にあった転記ミスを捕捉する。機械可読な degradation registry（#511 Part A）はスイート内のすべての優雅な劣化メカニズムを索引化し、引用検証ゲート向けの hermetic transport-fixture 統合テスト（#511 Part B）が 4 つのリゾルバークライアントをチェックイン済みの合成 API レスポンスに対してエンドツーエンドで検証する。`academic-pipeline` はスイートに合わせて v3.17.0 へ、他の 3 スキルのバージョンは変更ありません。
+
+### v3.16.0 (2026-07-12) — モデル階層化、クロスモデルゲート強化、WP アドバイザリ精緻化
+
+> **追加:** オプトインのモデル階層化（#517）— 新しい `ARS_MODEL_TIERING` スイッチに 2 方向（`economy`: 13 の実行型エージェントをセッションモデルの 1 段下で派遣、下限は Opus 級；`quality-boost`: 整合性ゲートと最終レビュー面の判断型エージェントをフロンティア段へ引き上げ）；未設定時は旧挙動とバイト等価で、凍結された 39 エージェント分類は新しいマニフェスト + lint で固定。クロスモデルゲート強化（#518）— リスク層別サンプリング（HIGH-IMPACT 参照は両ゲートで 100% 検証）、2 つの不可逆な決定点（設計凍結 + 最終編集判定）でのブラインド不一致チェック、検証モデル id ステータス許可リスト、昇格ベイクオフ・プロトコル；かつて計画されていた汎用第 6 レビュアーは延期ではなく廃止。GPT-5.6 Sol を暫定クロスモデル検証者として掲載し、明示的な reasoning-effort 制御を追加（#515）。devCharlotte 提案の韓国語トリガーキーワード + ルーティング境界フィクスチャ（#452/#509）。論文執筆側に CARS 序論レトリック + タイトル設計リファレンス（#500）。**変更:** WP 研究課題アドバイザリを名詞置換テストで 20 シェル表の外へ一般化（#501）し、装飾型タイトルシェルを捕捉するよう免除条項を精緻化（#505）— held-out 見逃し率 0.34–0.38 → 0.094、誤発火 0/16 を維持；レビュアー校正プロトコルに LLM 審査の寛大化方向を記載（FARS アンカー、#484）；OpenAlex API キー認証 + 予算対応 429 処理 + arXiv ToU 準拠バックオフ（#495/#496）。**ドキュメント:** THIRD_PARTY.md コミュニティディレクトリ（#497/#498）。`academic-pipeline` はスイートに合わせて v3.16.0 へ、他の 3 スキルのバージョンは変更ありません。
 
 ### v3.15.0 (2026-07-04) — リリースゲート強化、プロンプト負債整理第 2 弾、ドリフト防止ロック
 

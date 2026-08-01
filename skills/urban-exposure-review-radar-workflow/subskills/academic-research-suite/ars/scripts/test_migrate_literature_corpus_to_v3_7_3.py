@@ -314,10 +314,14 @@ literature_corpus:
             self.assertIn("lopez2024manual", output)
             self.assertIn("patch", output)
 
-    def test_partial_fill_with_persistent_api_degradation_does_not_re_patch(self) -> None:
-        """Codex R2-3 closure: when a partial entry's missing field
-        STILL cannot be computed (API still degraded), the merge loop
-        adds nothing. Don't claim it was patched, don't mark mutated."""
+    def test_partial_fill_with_persistent_api_degradation_records_omission_once(self) -> None:
+        """Codex R2-3 closure, amended by #511 Part A: when a partial entry's
+        missing field STILL cannot be computed (API still degraded), the merge
+        loop adds no signal — but the FIRST degraded run now records the
+        omission reason (a genuinely new fact on the entry:
+        contamination_signal_omissions.semantic_scholar_unmatched =
+        api_degraded), so it patches once. A SECOND degraded run adds nothing
+        (idempotent — the R2-3 no-re-patch guarantee, one field deeper)."""
         partial_yaml = """\
 origin_skill: deep-research
 literature_corpus:
@@ -345,9 +349,56 @@ literature_corpus:
             bad_client.lookup.side_effect = SemanticScholarUnavailable("still down")
             report = mig.migrate_passport(p, ss_client=bad_client, dry_run=False)
             after = p.read_text()
-            self.assertEqual(report["patched"], 0)
-            self.assertEqual(report["skipped_already_migrated"], 1)
-            self.assertEqual(before, after, "no rewrite when nothing was added")
+            self.assertEqual(report["patched"], 1)
+            self.assertNotEqual(
+                before, after, "first degraded run records the omission")
+            self.assertIn("contamination_signal_omissions", after)
+            self.assertIn("api_degraded", after)
+            # Re-run with the API still down: omission already recorded,
+            # nothing new — no re-patch, byte-identical passport.
+            report2 = mig.migrate_passport(p, ss_client=bad_client, dry_run=False)
+            after2 = p.read_text()
+            self.assertEqual(report2["patched"], 0)
+            self.assertEqual(report2["skipped_already_migrated"], 1)
+            self.assertEqual(after, after2, "no rewrite when nothing was added")
+
+
+    def test_partial_fill_recovery_clears_stale_omission(self) -> None:
+        """#511 Part A recovery (codex R2 witness): a degraded first run
+        records the omission; a later run with a HEALTHY API computes the
+        signal and clears the stale omission — removing the clear call in
+        the migration must fail this test."""
+        partial_yaml = """\
+origin_skill: deep-research
+literature_corpus:
+  - citation_key: chen2024ai
+    title: AI in education
+    authors:
+      - family: Chen
+        given: A
+    year: 2024
+    venue: arXiv
+    doi: 10.1234/abc
+    obtained_via: folder-scan
+    source_pointer: file:///refs/chen2024.pdf
+    contamination_signals:
+      preprint_post_llm_inflection: true
+    contamination_signals_backfilled_at: '2026-05-15T10:30:00Z'
+    contamination_signal_omissions:
+      semantic_scholar_unmatched: api_degraded
+"""
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "passport.yaml"
+            p.write_text(partial_yaml)
+            good_client = MagicMock()
+            good_client.lookup.return_value = {"matched": True, "paperId": "x"}
+            report = mig.migrate_passport(p, ss_client=good_client, dry_run=False)
+            self.assertEqual(report["patched"], 1)
+            after = p.read_text()
+            self.assertIn("semantic_scholar_unmatched: false", after)
+            self.assertNotIn(
+                "contamination_signal_omissions", after,
+                "stale omission must be cleared once the signal computes")
 
     def test_manual_entry_with_only_preprint_signal_is_complete(self) -> None:
         """A manual entry permanently omits semantic_scholar_unmatched
