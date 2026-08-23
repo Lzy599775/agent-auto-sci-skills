@@ -24,11 +24,11 @@ Extend `Lzy599775/agent-auto-sci-skills` with a persistent, auditable, evidence-
 
 1. Research authoritative sources. **Complete**
 2. Audit and select repository. **Complete**
-3. Add architecture and persistent instruction map. **In progress**
-4. Add Research Vault, templates, workflows, and standards. **Pending**
-5. Add Literature Skill V0 and eval scaffold. **Pending**
-6. Add and run lightweight validation. **Pending**
-7. Review diff, commit, push, and open Draft PR. **Pending**
+3. Add architecture and persistent instruction map. **Complete**
+4. Add Research Vault, templates, workflows, and standards. **Complete**
+5. Add Literature Skill V0 and eval scaffold. **Complete**
+6. Add and run lightweight validation. **Complete**
+7. Review diff, commit, push, and open Draft PR. **Complete**
 
 ## Expected outputs
 
@@ -48,3 +48,21 @@ None.
 
 - Extend the existing `agent-auto-sci-skills` repository rather than create a competing source of truth.
 - Keep Zotero as bibliographic/PDF source of truth and the Research Vault as derived knowledge only.
+
+## Completion record
+
+- Branch: `feature/agentic-research-workflow-v1`
+- Implementation commits:
+  - `fa885dc` `docs: establish research workflow architecture`
+  - `d5a6ca9` `docs: add research workflows and evidence standards`
+  - `96eafa5` `feat: scaffold literature workflow skill`
+  - `afa4fc3` `test: add research workflow validation`
+- Draft PR: https://github.com/Lzy599775/agent-auto-sci-skills/pull/2
+- Repository validator: PASS (38 required files, 68 Markdown files, 146 root `AGENTS.md` lines)
+- Literature Skill validation: PASS
+- Python compilation: PASS
+- Public-safety scan: PASS
+- Branch diff whitespace check: PASS
+- Research repositories modified: NO
+- Research data modified: NO
+- Default branch directly modified: NO
