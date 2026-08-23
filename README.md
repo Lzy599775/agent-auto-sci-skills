@@ -6,7 +6,11 @@
 
 `Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的本地科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让你在 Codex 里知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
 
-当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-08-01**：
+## 持久科研工作流
+
+仓库根目录的 [AGENTS.md](AGENTS.md) 提供精简的长期规则和路由入口；详细架构、工作流、证据标准、Research Vault、模板与评估体系从 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/index.md](docs/index.md) 进入。核心原则是：给 agent 一张可导航的地图，而不是把全部规则塞进一个巨大提示词。
+
+当前仓库包含 **18 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-08-01**：
 
 - ARS Codex 包已同步到 `v0.1.22` (`f8d6b06`)，内含 ARS `v3.19.0`。
 - K-Dense 已检查到 `v2.62.0` (`ad21a38`)；27 个精选子技能中 26 个已同步更新，`transformers` 无文件变化。
@@ -45,6 +49,7 @@ $env:USERPROFILE\.codex\skills
 | 你现在要做什么 | 先用哪个 skill |
 |---|---|
 | 不知道整个科研任务怎么拆 | `auto-sci-research` |
+| 搜索、核验、提取、综合文献或审计 citation–claim | `literature` |
 | 建文献库、source manifest、checkpoint、长期记忆 | `agent-auto-sci-automation` |
 | 把模糊选题变成研究问题、机制和假设 | `agent-auto-sci-methodology` |
 | 做 GIS、遥感、可达性、暴露、空间公平 | `agent-auto-sci-geospatial` |
@@ -67,6 +72,7 @@ $env:USERPROFILE\.codex\skills
 | Skill | 作用 | 输入 | 输出 | 边界 |
 |---|---|---|---|---|
 | `auto-sci-research` | 总控 router。判断任务属于选题、综述、GIS、数据、ML、图件、写作还是投稿，并安排子 skill 顺序。 | 任务描述、项目目标、已有材料、当前阶段。 | 路线图、子 skill 调用顺序、质量门控、进化记录。 | 不替代具体分析或写作子 skill。 |
+| `literature` | 证据可追溯的通用文献 workflow V0。 | 研究问题、seed papers、Zotero/DOI/引用或待核查 claim。 | 检索与去重记录、paper note、evidence trace、citation-support 结论。 | 先手工 workflow 与 golden set，不自动猜测缺失字段。 |
 | `agent-auto-sci-automation` | 长期项目自动化、source manifest、checkpoint、失败恢复和公开安全边界。 | 数据源、文献源、项目目录、API/密钥边界。 | manifest、状态表、恢复点、失败日志、目录规范。 | 不提交密钥、私有 PDF、付费导出或未发表正文。 |
 
 ### B. 方法论与综述路线
