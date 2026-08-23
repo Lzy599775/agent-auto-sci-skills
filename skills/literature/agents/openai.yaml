@@ -1,0 +1,4 @@
+interface:
+  display_name: "Literature Workflow"
+  short_description: "Evidence-traceable literature research workflow"
+  default_prompt: "Use $literature to search, verify, extract, and synthesize literature with explicit evidence traces."

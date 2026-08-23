@@ -11,7 +11,7 @@
 | L2 方法论 | 研究问题、机制、证据等级、因果语言 | `agent-auto-sci-methodology` |
 | L3 空间与暴露 | GIS、遥感、可达性、暴露、空间公平 | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected` |
 | L4 数据、图表与模型 | EDA、统计、ML/XAI、论文图件 | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected`, `scipilot-figure-skill` |
-| L5 综述与领域路线 | 体育地理综述、城市暴露综述、前沿雷达 | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
+| L5 综述与领域路线 | 通用文献证据、体育地理综述、城市暴露综述、前沿雷达 | `literature`, `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
 | L6 写作与投稿 | SCI 写作、润色、投稿信、审稿回复 | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `kdense-scicomm-selected` |
 
 ## 2. 子 Skill 作用矩阵
@@ -19,6 +19,7 @@
 | Skill | 类型 | 最适用任务 | 典型产出 | 调用边界 |
 |---|---|---|---|---|
 | `auto-sci-research` | 总控 | 跨选题、文献、数据、分析、图表、写作、投稿的复杂任务 | 路线图、子 skill 顺序、质量门控 | 不替代专项 skill |
+| `literature` | 通用文献证据 | 文献搜索、DOI/metadata 核验、paper note、citation–claim audit | verified corpus、evidence trace、support classification | 先手工 workflow 与 golden set，不猜缺失字段 |
 | `agent-auto-sci-automation` | 自动化 | 长期项目、source manifest、checkpoint、API 安全 | 项目清单、状态表、恢复点 | 不提交密钥或私有材料 |
 | `agent-auto-sci-methodology` | 方法论 | 选题收敛、机制、因果语言、证据分级 | RQ 矩阵、机制图、偏倚审计 | 不把相关写成因果 |
 | `agent-auto-sci-geospatial` | GIS/RS | 可达性、绿地/热暴露、LCZ、空间公平、地图 | CRS 审计、暴露窗口、空间指标 | 不混用 exposure/accessibility/use |
@@ -54,6 +55,7 @@
 |---|---|
 | 体育设施可达性实证论文 | `auto-sci-research -> sport-geography-sci-writing -> agent-auto-sci-geospatial -> agent-auto-sci-data-viz -> scipilot-writing-skill` |
 | 绿地/热暴露综述 | `auto-sci-research -> urban-exposure-review-radar-workflow -> sport-geography-review-bibliometric -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
+| 通用文献核验与 citation–claim 审计 | `literature -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
 | 遥感反演/时空变化 SCI 写作 | `auto-sci-research -> geors-sci-writing-adapter -> agent-auto-sci-geospatial -> agent-auto-sci-ai-ml -> scipilot-writing-skill` |
 | 论文图件 | `agent-auto-sci-data-viz -> kdense-data-viz-selected -> scipilot-figure-skill -> agent-auto-sci-scicomm` |
 | 机器学习解释 | `agent-auto-sci-ai-ml -> kdense-ml-ai-selected -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
@@ -61,6 +63,7 @@
 ## 5. 选择规则
 
 - 任务跨度大：先进 `auto-sci-research`。
+- 任务核心是文献、DOI、Zotero、citation 或证据支持：用 `literature`。
 - 任务是“该不该这样研究”：先进 `agent-auto-sci-methodology`。
 - 任务涉及空间数据、地图、暴露或可达性：先进 `agent-auto-sci-geospatial`。
 - 任务涉及图表：先 `agent-auto-sci-data-viz`，再 `scipilot-figure-skill`。
