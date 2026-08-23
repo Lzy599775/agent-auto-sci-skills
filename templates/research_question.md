@@ -1,0 +1,21 @@
+# Research Question Record
+
+- question_id:
+- working_title:
+- research_question:
+- population_or_context:
+- exposure_or_intervention:
+- comparator:
+- outcome:
+- mechanism:
+- spatial_scale:
+- temporal_scale:
+- established_evidence:
+- evidence_gap:
+- novelty_type:
+- candidate_designs:
+- feasibility_constraints:
+- ethical_or_privacy_constraints:
+- falsifiable_predictions:
+- decision: PROCEED | REFINE | PILOT | DEFER | REJECT
+- confidence: HIGH | MEDIUM | LOW
