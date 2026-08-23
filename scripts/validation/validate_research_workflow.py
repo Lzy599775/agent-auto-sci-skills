@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -16,6 +17,12 @@ REQUIRED_FILES = [
     "docs/research/source_hierarchy.md",
     "docs/research/external_sources.md",
     "docs/research/uncertainty_policy.md",
+    "docs/version.md",
+    "docs/chatgpt/index.md",
+    "docs/chatgpt/project_instructions.md",
+    "docs/chatgpt/new_chat_behavior.md",
+    "docs/chatgpt/cross_surface_contract.md",
+    "docs/chatgpt/cross_surface_gap_analysis.md",
     "docs/workflows/index.md",
     "docs/workflows/literature_review.md",
     "docs/workflows/paper_reproduction.md",
@@ -46,7 +53,15 @@ REQUIRED_FILES = [
     "skills/literature/references/zotero-integration.md",
     "skills/literature/references/failure-and-qc.md",
     "skills/literature/tests/activation_cases.md",
+    "skills/research-orchestrator/SKILL.md",
+    "skills/research-orchestrator/agents/openai.yaml",
+    "skills/research-orchestrator/references/source-retrieval.md",
+    "skills/research-orchestrator/references/routing-and-qc.md",
+    "skills/research-orchestrator/tests/activation_cases.md",
     "evals/literature/README.md",
+    "evals/cross-surface/README.md",
+    ".agents/plugins/marketplace.json",
+    ".agents/plugins/plugins/agentic-research-workflow/.codex-plugin/plugin.json",
 ]
 
 TEMPLATE_FIELDS = {
@@ -97,7 +112,16 @@ LINK_ROOTS = [
     ROOT / "research-vault",
     ROOT / "templates",
     ROOT / "skills" / "literature",
+    ROOT / "skills" / "research-orchestrator",
     ROOT / "evals" / "literature",
+    ROOT / "evals" / "cross-surface",
+    ROOT
+    / ".agents"
+    / "plugins"
+    / "plugins"
+    / "agentic-research-workflow"
+    / "skills"
+    / "research-orchestrator",
 ]
 
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
@@ -159,17 +183,17 @@ def check_templates(errors: list[str]) -> None:
                 errors.append(f"template field missing: {relative}: {field}")
 
 
-def check_skill(errors: list[str]) -> None:
-    path = ROOT / "skills" / "literature" / "SKILL.md"
+def check_skill(skill_name: str, errors: list[str]) -> None:
+    path = ROOT / "skills" / skill_name / "SKILL.md"
     if not path.is_file():
         return
     text = read_text(path)
     if not text.startswith("---\n"):
-        errors.append("skills/literature/SKILL.md lacks YAML frontmatter")
+        errors.append(f"skills/{skill_name}/SKILL.md lacks YAML frontmatter")
         return
     parts = text.split("---", 2)
     if len(parts) < 3:
-        errors.append("skills/literature/SKILL.md frontmatter is not closed")
+        errors.append(f"skills/{skill_name}/SKILL.md frontmatter is not closed")
         return
     keys = []
     values: dict[str, str] = {}
@@ -185,10 +209,105 @@ def check_skill(errors: list[str]) -> None:
         values[key] = value.strip()
     if set(keys) != {"name", "description"}:
         errors.append(f"skill frontmatter keys must be name and description; found {keys}")
-    if values.get("name") != "literature":
-        errors.append("literature skill name does not match its folder")
+    if values.get("name") != skill_name:
+        errors.append(f"{skill_name} skill name does not match its folder")
     if not values.get("description") or "TODO" in values.get("description", ""):
-        errors.append("literature skill description is missing or incomplete")
+        errors.append(f"{skill_name} skill description is missing or incomplete")
+
+
+def check_project_instructions(errors: list[str]) -> None:
+    path = ROOT / "docs" / "chatgpt" / "project_instructions.md"
+    if not path.is_file():
+        return
+    match = re.search(r"```text\s*(.*?)\s*```", read_text(path), re.DOTALL)
+    if match is None:
+        errors.append("ChatGPT Project instructions need one copy-ready text block")
+        return
+    word_count = len(match.group(1).split())
+    if not 300 <= word_count <= 600:
+        errors.append(
+            f"ChatGPT Project instructions must be 300-600 words; found {word_count}"
+        )
+
+
+def check_version_record(errors: list[str]) -> None:
+    path = ROOT / "docs" / "version.md"
+    if not path.is_file():
+        return
+    text = read_text(path)
+    for field in (
+        "workflow_version",
+        "stable_branch_after_merge",
+        "current_validation_ref",
+        "last_reviewed_date",
+    ):
+        if field not in text:
+            errors.append(f"workflow version field missing: {field}")
+
+
+def check_plugin_mirror(errors: list[str]) -> None:
+    source = ROOT / "skills" / "research-orchestrator"
+    mirror = (
+        ROOT
+        / ".agents"
+        / "plugins"
+        / "plugins"
+        / "agentic-research-workflow"
+        / "skills"
+        / "research-orchestrator"
+    )
+    if not source.is_dir() or not mirror.is_dir():
+        errors.append("Research Orchestrator plugin mirror is missing")
+        return
+    source_files = {
+        path.relative_to(source) for path in source.rglob("*") if path.is_file()
+    }
+    mirror_files = {
+        path.relative_to(mirror) for path in mirror.rglob("*") if path.is_file()
+    }
+    if source_files != mirror_files:
+        errors.append("Research Orchestrator plugin mirror file set differs from source")
+        return
+    for relative in sorted(source_files):
+        if (source / relative).read_bytes() != (mirror / relative).read_bytes():
+            errors.append(f"Research Orchestrator plugin mirror drift: {relative}")
+
+
+def check_plugin_metadata(errors: list[str]) -> None:
+    manifest_path = (
+        ROOT
+        / ".agents"
+        / "plugins"
+        / "plugins"
+        / "agentic-research-workflow"
+        / ".codex-plugin"
+        / "plugin.json"
+    )
+    marketplace_path = ROOT / ".agents" / "plugins" / "marketplace.json"
+    try:
+        manifest = json.loads(read_text(manifest_path))
+        marketplace = json.loads(read_text(marketplace_path))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"plugin metadata is unreadable: {exc}")
+        return
+    if manifest.get("name") != "agentic-research-workflow":
+        errors.append("plugin manifest name is incorrect")
+    if manifest.get("skills") != "./skills/":
+        errors.append("plugin manifest must expose ./skills/")
+    entries = marketplace.get("plugins", [])
+    match = next(
+        (
+            entry
+            for entry in entries
+            if entry.get("name") == "agentic-research-workflow"
+        ),
+        None,
+    )
+    if match is None:
+        errors.append("agentic-research-workflow marketplace entry is missing")
+        return
+    if match.get("source", {}).get("path") != "./plugins/agentic-research-workflow":
+        errors.append("agentic-research-workflow marketplace source path is incorrect")
 
 
 def check_placeholders(errors: list[str]) -> None:
@@ -203,7 +322,12 @@ def main() -> int:
     check_agents(errors)
     check_links(errors)
     check_templates(errors)
-    check_skill(errors)
+    check_skill("literature", errors)
+    check_skill("research-orchestrator", errors)
+    check_project_instructions(errors)
+    check_version_record(errors)
+    check_plugin_mirror(errors)
+    check_plugin_metadata(errors)
     check_placeholders(errors)
 
     if errors:
