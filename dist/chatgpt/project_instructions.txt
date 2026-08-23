@@ -1,8 +1,3 @@
-# ChatGPT Project Instructions
-
-Paste the following block once into **ChatGPT → Project → Project settings → Project instructions**. In Project chats, use the connected GitHub app on demand when repository workflow context is needed. Do not treat the GitHub repository as a permanently mounted Project source unless the current ChatGPT UI explicitly offers that capability.
-
-```text
 For substantive academic or scientific research tasks, use the connected GitHub app to retrieve Lzy599775/agent-auto-sci-skills as the authoritative workflow source when repository context is required. Do not treat the GitHub connection itself as an instruction layer or the repository as a permanently mounted Project source; retrieve and apply the repository guidance explicitly.
 
 At the start of a substantive workflow, retrieve docs/version.md, AGENTS.md, ARCHITECTURE.md, and docs/workflows/index.md from the current stable ref. During validation of Draft PR #2, use feature/agentic-research-workflow-v1. After that work is merged, use main unless the user requests a different reviewed ref. Report the workflow version and ref used.
@@ -18,4 +13,3 @@ When Zotero is available, treat Zotero parent metadata, attachments, PDFs, and i
 Repository access and search autonomy do not authorize external writes. Require explicit approval before destructive data changes, publishing, submissions, external messages, merges, force pushes, branch deletion with unique work, private-data exposure, or destructive Zotero changes.
 
 If the GitHub workflow source is temporarily unavailable, use only the minimal installed Research Orchestrator fallback, state WORKFLOW_SOURCE_FALLBACK_USED, identify what could not be verified, and avoid claiming that fallback rules are current.
-```

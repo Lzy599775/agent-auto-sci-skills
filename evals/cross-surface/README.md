@@ -32,7 +32,7 @@ Automated structural proxy: repository validator confirms the router, `AGENTS.md
 
 ## Test B — ChatGPT new chat inside Project
 
-After the one-time Project instructions/source setup, create a new chat inside that Project.
+After the one-time Project instructions setup and GitHub app connection check, create a new chat inside that Project.
 
 Prompt only:
 
@@ -40,7 +40,8 @@ Prompt only:
 
 Expected:
 
-- Project instructions and approved GitHub source available;
+- Project instructions available;
+- connected GitHub app can retrieve the workflow repository on demand when needed;
 - automatic route to research idea evaluation, with literature review as a companion;
 - no request to restate the workflow;
 - evidence, feasibility, uncertainty, and high-risk boundaries preserved;
@@ -48,7 +49,7 @@ Expected:
 
 Until run in the configured ChatGPT Project, record `MANUAL_TEST_REQUIRED`.
 
-## Test C — ordinary ChatGPT new chat
+## Test C — ordinary ChatGPT new chat with installed Skill
 
 Run only after the Agentic Research Workflow plugin or Research Orchestrator Skill is installed on that ChatGPT surface. Start a new ordinary chat outside the Project.
 
@@ -64,13 +65,23 @@ Expected:
 - association is not upgraded to causation;
 - workflow version/ref reported.
 
-If the Skill/Plugin is not installed, record `NOT_TESTABLE_ON_CURRENT_SURFACE`; do not fabricate a pass.
+If Skills are unavailable or the entitlement is unverified, record `ORDINARY_CHAT_PERSISTENCE_NOT_CURRENTLY_AVAILABLE_VIA_PERSONAL_SKILL`; do not fabricate a pass.
+
+## Test D — ordinary ChatGPT new chat without Project instructions or installed Skill
+
+Start a completely ordinary chat with neither the Project instructions nor the Research Orchestrator Skill/plugin available.
+
+Expected:
+
+- no guaranteed persistence of this repository workflow;
+- no assumption that GitHub connection alone applies `AGENTS.md`;
+- result recorded as `EXPECTED_NOT_PERSISTENT`.
 
 ## Result record
 
 | Field | Value |
 |---|---|
-| test_id | A, B, or C |
+| test_id | A, B, C, or D |
 | date | ISO date |
 | surface | Codex, ChatGPT Project, or ordinary ChatGPT |
 | workflow_version | From `docs/version.md` |
@@ -80,7 +91,7 @@ If the Skill/Plugin is not installed, record `NOT_TESTABLE_ON_CURRENT_SURFACE`; 
 | specialist_skill | Skill name or NOT_APPLICABLE |
 | uncertainty_behavior | PASS or FAIL |
 | approval_boundary | PASS or FAIL |
-| result | PASS, FAIL, MANUAL_TEST_REQUIRED, or NOT_TESTABLE_ON_CURRENT_SURFACE |
+| result | PASS, FAIL, MANUAL_TEST_REQUIRED, NOT_TESTABLE_ON_CURRENT_SURFACE, ORDINARY_CHAT_PERSISTENCE_NOT_CURRENTLY_AVAILABLE_VIA_PERSONAL_SKILL, or EXPECTED_NOT_PERSISTENT |
 | notes | Concise evidence only |
 
 ## M10 implementation-time status
@@ -88,5 +99,6 @@ If the Skill/Plugin is not installed, record `NOT_TESTABLE_ON_CURRENT_SURFACE`; 
 - GitHub connector retrieval of remote candidate `AGENTS.md`, `ARCHITECTURE.md`, and `docs/workflows/index.md`: `PASS`.
 - Structural router/Skill/plugin validation: `PASS`.
 - Test A fresh Codex product session: `MANUAL_TEST_REQUIRED`; this repository is not currently registered as a saved Codex Project, and the packaged WindowsApps CLI executable could not be launched from the validation shell.
-- Test B ChatGPT Project chat: `MANUAL_TEST_REQUIRED` after the one-time Project setup.
-- Test C ordinary ChatGPT chat: `NOT_TESTABLE_ON_CURRENT_SURFACE` until the plugin is installed and a new chat is started.
+- Test B ChatGPT Project chat: `MANUAL_TEST_REQUIRED` after the one-time Project setup; GitHub retrieval is on demand through the connected app.
+- Test C ordinary ChatGPT chat: `MANUAL_TEST_REQUIRED` only if Skill/plugin installation is supported and completed.
+- Test D ordinary ChatGPT chat without Project instructions or Skill/plugin: `EXPECTED_NOT_PERSISTENT`.

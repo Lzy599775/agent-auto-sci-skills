@@ -23,5 +23,5 @@
 ## Surface check
 
 - Codex repository task: confirm applicable `AGENTS.md` was discovered.
-- ChatGPT Project chat: confirm Project instructions and approved sources were available.
+- ChatGPT Project chat: confirm Project instructions were available and the connected GitHub app could retrieve repository context on demand when needed.
 - Ordinary ChatGPT chat: confirm the Skill/Plugin was installed; otherwise mark the test not supported on that surface.

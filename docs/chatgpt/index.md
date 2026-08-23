@@ -8,10 +8,11 @@ Use this directory to connect ChatGPT and Codex to the same versioned research w
 - [Gap analysis](cross_surface_gap_analysis.md)
 - [ChatGPT Project instructions](project_instructions.md)
 - [New-chat behavior](new_chat_behavior.md)
+- [ChatGPT handoff package](../../dist/chatgpt/INSTALL_CHATGPT.md)
 - [Workflow version](../version.md)
 - [Research Orchestrator Skill](../../skills/research-orchestrator/SKILL.md)
 - [Cross-surface evaluation protocol](../../evals/cross-surface/README.md)
 
 ## Principle
 
-GitHub stores the authoritative rules. ChatGPT Project instructions and the Research Orchestrator are short maps that retrieve the relevant repository context. They do not replace `AGENTS.md`, detailed workflows, evidence standards, Zotero ownership, or the original scientific sources.
+GitHub stores the authoritative rules. ChatGPT Project instructions and the Research Orchestrator are short maps that retrieve the relevant repository context. In Project chats, the connected GitHub app is used on demand; the repository is not assumed to be a permanently mounted Project source. These entrypoints do not replace `AGENTS.md`, detailed workflows, evidence standards, Zotero ownership, or the original scientific sources.

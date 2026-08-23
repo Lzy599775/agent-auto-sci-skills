@@ -1,6 +1,6 @@
 # Workflow Version
 
-- `workflow_version`: `1.1.0-rc.1`
+- `workflow_version`: `1.1.0-rc.2`
 - `contract_schema_version`: `1`
 - `stable_branch_after_merge`: `main`
 - `current_validation_ref`: `feature/agentic-research-workflow-v1`

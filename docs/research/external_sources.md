@@ -7,10 +7,10 @@ Access date for all sources below: **2026-08-23**.
 | Custom instructions with AGENTS.md | OpenAI | https://learn.chatgpt.com/docs/agent-configuration/agents-md | Keep root instructions concise, repository-scoped, and overridable by nearer project instructions. |
 | Build skills | OpenAI | https://learn.chatgpt.com/docs/build-skills | Use focused skills with concise triggering metadata and progressive disclosure through references/scripts. |
 | Long-running work | OpenAI | https://learn.chatgpt.com/docs/long-running-work | Store outcome, constraints, verification, decisions, and status for multi-step work. |
-| Projects and chats | OpenAI | https://learn.chatgpt.com/docs/projects | Use Project instructions, files, and connected sources as shared context for new chats created inside the same ChatGPT Project; do not extend that guarantee to ordinary chats outside the Project. |
-| Skills & Plugins | OpenAI | https://learn.chatgpt.com/docs/skills-and-plugins | Use Skills for reusable workflows and Plugins as installable bundles shared across supported ChatGPT and Codex surfaces. |
+| Projects and chats | OpenAI | https://help.openai.com/en/articles/10169521-projects-in-chatgpt | Use Project instructions, project files/sources, memory, and connected apps in chats inside the same Project; current documented app-link examples are Google Drive and Slack, so do not claim GitHub is a permanently mounted Project source. |
+| Skills in ChatGPT | OpenAI | https://help.openai.com/en/articles/20001066-skills-in-chatgpt | Skills are reusable workflows; personal Skill availability and upload/install controls depend on plan, workspace, role, and surface. |
+| Plugins in ChatGPT and Codex | OpenAI | https://help.openai.com/en/articles/20001256 | Plugins package Skills, Apps, and app templates; visibility and installation depend on plan, workspace, role, surface, region, and included-app permissions. |
 | Build plugins | OpenAI | https://developers.openai.com/plugins/build/plugins | Package the thin Research Orchestrator as a self-contained skills-only plugin and validate it before installation or sharing. |
-| Plugins | OpenAI | https://learn.chatgpt.com/docs/plugins | Treat plugin installation as a supported cross-surface distribution mechanism that becomes available to new chats after installation. |
 | GitHub flow | GitHub | https://docs.github.com/en/get-started/using-github/github-flow | Develop on isolated branches and use pull requests as the review boundary. |
 | Git status documentation | Git project | https://git-scm.com/docs/git-status | Inspect working-tree and staging state before commits. |
 | Git diff documentation | Git project | https://git-scm.com/docs/git-diff | Review unstaged and staged changes as explicit quality gates. |

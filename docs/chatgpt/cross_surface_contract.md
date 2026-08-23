@@ -16,15 +16,17 @@ ChatGPT and Codex must not independently maintain divergent copies of research p
 |---|---|
 | GitHub repository | Versioned source of truth for instructions, workflows, standards, templates, Skills, evals, and change review |
 | Codex repository session | Discover applicable `AGENTS.md`, read the checked-out repository, execute and validate scoped work |
-| ChatGPT Project | Persist concise Project instructions, approved files/sources, and Project memory/context where available across chats inside that Project |
+| ChatGPT Project | Persist concise Project instructions, project files/sources, and Project memory/context where available across chats inside that Project |
 | Research Orchestrator Skill | Recognize substantive research goals, retrieve current workflow context, route, hand off, and report QC |
-| Plugin | Distribute the Research Orchestrator to supported ChatGPT and Codex surfaces |
-| GitHub app/connector | Provide authorized repository data access; it does not by itself make ChatGPT obey `AGENTS.md` |
+| Plugin | Package and distribute Skills and, where supported, Apps for a workflow across supported ChatGPT and Codex surfaces |
+| GitHub app/connector | Provide authorized repository data access inside supported chats; it does not by itself make ChatGPT obey `AGENTS.md` or become a permanently mounted Project source |
 | Zotero | Remain the bibliographic, attachment, PDF, and indexed-full-text source of truth when available |
 
 ## Retrieval contract
 
 At the start of a substantive research workflow, retrieve `docs/version.md`, `AGENTS.md`, `ARCHITECTURE.md`, and `docs/workflows/index.md` from the applicable ref. Load only the selected workflow and standards needed for the task.
+
+For ChatGPT Project chats, Project instructions persist inside the Project and the connected GitHub app retrieves the repository on demand when needed. Do not claim that GitHub is an automatically synchronized or permanently mounted Project source. Current Project source-link support must be checked against the live ChatGPT UI; the documented supported app-link examples are not a general GitHub-source guarantee.
 
 If GitHub is unavailable, use only the minimal bundled fallback in the Research Orchestrator and report `WORKFLOW_SOURCE_FALLBACK_USED`. Never imply that fallback rules are the current repository version.
 
