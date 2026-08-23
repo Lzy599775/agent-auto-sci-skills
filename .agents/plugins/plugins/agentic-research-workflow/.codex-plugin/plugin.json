@@ -1,0 +1,37 @@
+{
+  "name": "agentic-research-workflow",
+  "version": "0.1.0",
+  "description": "Cross-surface routing for evidence-first academic and scientific research workflows backed by a versioned GitHub source of truth.",
+  "author": {
+    "name": "LZY_599775",
+    "url": "https://github.com/Lzy599775"
+  },
+  "homepage": "https://github.com/Lzy599775/agent-auto-sci-skills",
+  "repository": "https://github.com/Lzy599775/agent-auto-sci-skills",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "evidence",
+    "reproducibility",
+    "literature",
+    "workflow"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agentic Research Workflow",
+    "shortDescription": "Route evidence-first research across ChatGPT and Codex.",
+    "longDescription": "Retrieves the current GitHub workflow source, routes substantive academic and scientific tasks, selects specialist Skills, and applies concise evidence and approval quality gates.",
+    "developerName": "LZY_599775",
+    "category": "Research",
+    "capabilities": [
+      "Research routing",
+      "Workflow source retrieval",
+      "Evidence quality control"
+    ],
+    "defaultPrompt": [
+      "Evaluate this research goal and route it through the current evidence workflow.",
+      "Check whether this citation supports the claim.",
+      "Plan a reproducible paper reproduction workflow."
+    ]
+  }
+}

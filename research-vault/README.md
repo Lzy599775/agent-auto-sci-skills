@@ -22,4 +22,4 @@ Do not duplicate PDFs here by default. Do not treat a vault summary as equivalen
 
 ## Public repository rule
 
-This repository is public. Store only non-sensitive templates or derived records explicitly suitable for publication. Keep restricted data, private PDFs, unpublished manuscripts, confidential reviews, and personal paths outside this repository.
+This repository is public. Its vault is for structure, templates, and deliberately public examples only—not a private research knowledge store. Store only non-sensitive derived records explicitly suitable for publication. Keep restricted data, private PDFs, unpublished manuscripts, confidential reviews, personal paths, and private project notes outside this repository.

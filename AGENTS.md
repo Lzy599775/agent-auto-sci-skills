@@ -15,6 +15,7 @@ Use this file as a map. Load detailed rules from the linked documents only when 
 
 - System architecture: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Documentation index: [docs/index.md](docs/index.md)
+- Cross-surface entrypoint: [docs/chatgpt/index.md](docs/chatgpt/index.md)
 - Workflow router: [docs/workflows/index.md](docs/workflows/index.md)
 - Research standards: [docs/standards/](docs/standards/)
 - Research principles: [docs/research/](docs/research/)

@@ -4,13 +4,13 @@
 
 > 面向 Codex 的科研 skill 套件，聚焦地理学、体育学、城市健康、GIS/遥感、绿色暴露、体育公园/体育设施、空间公平、文献综述、文献计量、机器学习、论文图件和 SCI 写作。
 
-`Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的本地科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让你在 Codex 里知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
+`Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让 ChatGPT 与 Codex 知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
 
 ## 持久科研工作流
 
 仓库根目录的 [AGENTS.md](AGENTS.md) 提供精简的长期规则和路由入口；详细架构、工作流、证据标准、Research Vault、模板与评估体系从 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/index.md](docs/index.md) 进入。核心原则是：给 agent 一张可导航的地图，而不是把全部规则塞进一个巨大提示词。
 
-当前仓库包含 **18 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-08-01**：
+当前仓库包含 **19 个可安装 skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-08-01**：
 
 - ARS Codex 包已同步到 `v0.1.22` (`f8d6b06`)，内含 ARS `v3.19.0`。
 - K-Dense 已检查到 `v2.62.0` (`ad21a38`)；27 个精选子技能中 26 个已同步更新，`transformers` 无文件变化。
@@ -48,6 +48,7 @@ $env:USERPROFILE\.codex\skills
 
 | 你现在要做什么 | 先用哪个 skill |
 |---|---|
+| 在 ChatGPT/Codex 中自动识别并路由综合科研目标 | `research-orchestrator` |
 | 不知道整个科研任务怎么拆 | `auto-sci-research` |
 | 搜索、核验、提取、综合文献或审计 citation–claim | `literature` |
 | 建文献库、source manifest、checkpoint、长期记忆 | `agent-auto-sci-automation` |
@@ -71,6 +72,7 @@ $env:USERPROFILE\.codex\skills
 
 | Skill | 作用 | 输入 | 输出 | 边界 |
 |---|---|---|---|---|
+| `research-orchestrator` | ChatGPT/Codex 跨表面薄型入口。读取 GitHub 当前 workflow ref，判断任务类型，加载必要标准并交给专项 skill。 | 科研目标、已有材料、期望产出。 | workflow route、使用的 ref/version、专项 skill、QC。 | 不复制完整规则；GitHub 不可用时必须报告 fallback。 |
 | `auto-sci-research` | 总控 router。判断任务属于选题、综述、GIS、数据、ML、图件、写作还是投稿，并安排子 skill 顺序。 | 任务描述、项目目标、已有材料、当前阶段。 | 路线图、子 skill 调用顺序、质量门控、进化记录。 | 不替代具体分析或写作子 skill。 |
 | `literature` | 证据可追溯的通用文献 workflow V0。 | 研究问题、seed papers、Zotero/DOI/引用或待核查 claim。 | 检索与去重记录、paper note、evidence trace、citation-support 结论。 | 先手工 workflow 与 golden set，不自动猜测缺失字段。 |
 | `agent-auto-sci-automation` | 长期项目自动化、source manifest、checkpoint、失败恢复和公开安全边界。 | 数据源、文献源、项目目录、API/密钥边界。 | manifest、状态表、恢复点、失败日志、目录规范。 | 不提交密钥、私有 PDF、付费导出或未发表正文。 |
@@ -187,6 +189,10 @@ auto-sci-research
 ## 公开安全原则
 
 本仓库不应包含 API key、token、cookie、私有 PDF、WoS/Scopus 原始导出、未发表论文正文、审稿意见原文、私人数据集、个人绝对路径或无授权第三方内容。发现泄露时应立即移除跟踪、更新忽略规则，并轮换相关密钥。
+
+## ChatGPT 与 Codex 跨表面使用
+
+从 [docs/chatgpt/index.md](docs/chatgpt/index.md) 获取 ChatGPT Project 的一次性 instructions、普通新聊天的 Skill/Plugin 路线、GitHub source-of-truth 合约和测试协议。详细科研规则仍只在版本化仓库中维护。
 
 ## License
 

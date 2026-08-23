@@ -16,6 +16,7 @@ This repository provides a persistent, evidence-first operating system for AI-as
 | `evals/` | Golden-set and behavioral evaluation definitions | Reviewed test cases and scoring rules |
 | `scripts/validation/` | Deterministic structural checks | Lightweight executable validation |
 | Git and Draft PRs | Change history and review boundary | Branch history and pull-request review |
+| `docs/chatgpt/` | Cross-surface contract and concise ChatGPT Project entrypoint | Versioned guidance that points back to GitHub |
 
 ## Control flow
 
@@ -27,6 +28,14 @@ This repository provides a persistent, evidence-first operating system for AI-as
 6. Run workflow-specific and repository-level quality gates.
 7. Record durable decisions and long-running state when justified.
 8. Review Git diffs and deliver important changes through a task branch and Draft PR.
+
+## Cross-surface persistence
+
+- Codex repository sessions discover durable repository instructions through `AGENTS.md` and the checked-out tree.
+- ChatGPT Project chats inherit that Project's instructions, files, and connected sources; they do not automatically inherit repository `AGENTS.md` semantics.
+- Ordinary ChatGPT chats outside the Project need an installed Skill or Plugin to reuse the workflow without a bootstrap prompt.
+- The GitHub repository remains the canonical workflow backend. Project instructions and the Research Orchestrator are thin entrypoints, not independent policy copies.
+- See [docs/chatgpt/index.md](docs/chatgpt/index.md) and [docs/version.md](docs/version.md).
 
 ## Separation of concerns
 

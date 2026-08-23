@@ -8,6 +8,8 @@
 - [Source hierarchy](research/source_hierarchy.md)
 - [Uncertainty policy](research/uncertainty_policy.md)
 - [External design sources](research/external_sources.md)
+- [ChatGPT and cross-surface entrypoint](chatgpt/index.md)
+- [Workflow version](version.md)
 
 ## Standards
 
@@ -29,5 +31,7 @@
 ## Reusable behavior
 
 - [Repository skills](../skills/)
+- [Research Orchestrator Skill](../skills/research-orchestrator/SKILL.md)
 - [Literature Skill V0](../skills/literature/SKILL.md)
 - [Literature evaluation scaffold](../evals/literature/README.md)
+- [Cross-surface evaluation protocol](../evals/cross-surface/README.md)

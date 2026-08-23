@@ -6,7 +6,7 @@
 
 | 层级 | 目的 | Skills |
 |---|---|---|
-| L0 总控 | 判断任务类型、安排子 skill、维护科研管线 | `auto-sci-research` |
+| L0 总控 | 跨 ChatGPT/Codex 读取 workflow source、判断任务类型、安排子 skill | `research-orchestrator`, `auto-sci-research` |
 | L1 自动化与安全 | source manifest、checkpoint、长期记忆、公开安全 | `agent-auto-sci-automation` |
 | L2 方法论 | 研究问题、机制、证据等级、因果语言 | `agent-auto-sci-methodology` |
 | L3 空间与暴露 | GIS、遥感、可达性、暴露、空间公平 | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected` |
@@ -18,6 +18,7 @@
 
 | Skill | 类型 | 最适用任务 | 典型产出 | 调用边界 |
 |---|---|---|---|---|
+| `research-orchestrator` | 跨表面总控 | ChatGPT/Codex 中的综合科研目标、方法审计、复现、选题、证据核查 | workflow route、GitHub ref/version、专项 skill、QC | 只作薄型入口；GitHub 不可用时显式 fallback |
 | `auto-sci-research` | 总控 | 跨选题、文献、数据、分析、图表、写作、投稿的复杂任务 | 路线图、子 skill 顺序、质量门控 | 不替代专项 skill |
 | `literature` | 通用文献证据 | 文献搜索、DOI/metadata 核验、paper note、citation–claim audit | verified corpus、evidence trace、support classification | 先手工 workflow 与 golden set，不猜缺失字段 |
 | `agent-auto-sci-automation` | 自动化 | 长期项目、source manifest、checkpoint、API 安全 | 项目清单、状态表、恢复点 | 不提交密钥或私有材料 |
@@ -62,6 +63,7 @@
 
 ## 5. 选择规则
 
+- ChatGPT/Codex 需要从科研目标自动读取当前 workflow 并路由：用 `research-orchestrator`。
 - 任务跨度大：先进 `auto-sci-research`。
 - 任务核心是文献、DOI、Zotero、citation 或证据支持：用 `literature`。
 - 任务是“该不该这样研究”：先进 `agent-auto-sci-methodology`。
