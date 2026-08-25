@@ -237,11 +237,42 @@ def check_project_instructions(errors: list[str]) -> None:
     if match is None:
         errors.append("ChatGPT Project instructions need one copy-ready text block")
         return
-    word_count = len(match.group(1).split())
+    copy_ready_text = match.group(1)
+    word_count = len(copy_ready_text.split())
     if not 300 <= word_count <= 600:
         errors.append(
             f"ChatGPT Project instructions must be 300-600 words; found {word_count}"
         )
+
+    # These anchors protect the written bootstrap contract only. Structural
+    # validation is not evidence of real fresh-Project behavioral validation.
+    bootstrap_anchors = {
+        "workflow version file": ("docs/version.md",),
+        "repository instructions file": ("AGENTS.md",),
+        "architecture file": ("ARCHITECTURE.md",),
+        "workflow router file": ("docs/workflows/index.md",),
+        "bootstrap before first substantive reply": (
+            "Before the first substantive reply",
+            "before the first substantive response",
+        ),
+        "selected workflow or route": ("selected workflow", "selected route"),
+        "selected workflow retrieval": (
+            "retrieve the selected docs/workflows/<selected_workflow>.md",
+            "load the selected docs/workflows/<selected_workflow>.md",
+        ),
+        "workflow name not required": (
+            "users do not need to name a workflow",
+            "do not require the user to name",
+        ),
+        "incomplete bootstrap marker": ("WORKFLOW_BOOTSTRAP_INCOMPLETE",),
+        "concise workflow marker": (
+            "workflow version, repository ref, and selected route",
+            "workflow version, repository reference, and selected route",
+        ),
+    }
+    for label, alternatives in bootstrap_anchors.items():
+        if not any(anchor in copy_ready_text for anchor in alternatives):
+            errors.append(f"ChatGPT Project bootstrap contract missing: {label}")
 
 
 def check_version_record(errors: list[str]) -> None:

@@ -99,7 +99,7 @@ Expected:
 - GitHub connector retrieval of remote candidate `AGENTS.md`, `ARCHITECTURE.md`, and `docs/workflows/index.md`: `PASS`.
 - Structural router/Skill/plugin validation: `PASS`.
 - Test A fresh Codex product session: `PASS`.
-- Test B ChatGPT Project chat: `MANUAL_TEST_REQUIRED` after the one-time Project setup; GitHub retrieval is on demand through the connected app.
+- Test B ChatGPT Project chat: `PASS`.
 - Test C ordinary ChatGPT chat: `MANUAL_TEST_REQUIRED` only if Skill/plugin installation is supported and completed.
 - Test D ordinary ChatGPT chat without Project instructions or Skill/plugin: `EXPECTED_NOT_PERSISTENT`.
 
@@ -119,3 +119,23 @@ Expected:
 | approval_boundary | PASS |
 | result | PASS |
 | notes | The initial v1 behavioral test exposed `AGENTS.md` auto-availability but no router/workflow bootstrap. After the routing bootstrap was patched, a completely fresh Test A v2 loaded the version, router, and `citation_claim_audit` workflow before requesting missing inputs. No Literature Skill was needed before a source was supplied. The test stopped at the missing-input request; no complete citation analysis was performed. The structural validator was not used as substitute evidence for this behavioral PASS. |
+
+### Test B behavioral record — 2026-08-25
+
+| Field | Value |
+|---|---|
+| test_id | B |
+| date | 2026-08-25 |
+| surface | ChatGPT web Project fresh chat |
+| workflow_version | 1.1.0-rc.2 |
+| repository_ref | feature/agentic-research-workflow-v1 |
+| source_retrieval | PASS |
+| selected_route | research idea evaluation |
+| companion | literature review when needed |
+| project_instructions | AUTO_AVAILABLE |
+| github_app | USED |
+| bootstrap | PASS |
+| retrieved_before_first_substantive_reply | `docs/version.md`; `AGENTS.md`; `ARCHITECTURE.md`; `docs/workflows/index.md`; `docs/workflows/research_idea_evaluation.md` |
+| fallback | NO |
+| result | PASS |
+| notes | Test B v1 used GitHub successfully but retrieved only the version, router, and selected workflow; because `AGENTS.md` and `ARCHITECTURE.md` were not retrieved, v1 was `PARTIAL_PROJECT_ROUTING`. After the Project instructions were strengthened, a completely fresh ChatGPT web Project Test B v2 retrieved all four bootstrap files plus `research_idea_evaluation.md` before the first substantive reply and correctly reported version, ref, and route. One transient `fetch_file` 404 occurred, but every required file was subsequently retrieved; no fallback was used and nothing remained missing. No complete topic evaluation or literature review was performed. Structural validation is not the evidence for PASS; real fresh-Project behavior is the evidence. |
