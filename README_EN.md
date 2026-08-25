@@ -4,9 +4,9 @@
 
 > A Codex-first skill suite for geography, sport science, urban health, GIS/remote sensing, green exposure, sport parks/facilities, spatial equity, literature review, bibliometrics, machine learning, scientific figures, and SCI writing.
 
-`Auto-sci-research` is a reusable research workbench, not a one-click paper generator. It helps Codex route research tasks across topic design, literature review, source manifests, GIS/RS processing, exposure/accessibility measurement, statistics, ML/XAI, publication figures, manuscript writing, cover letters, rebuttals, and project memory.
+`Auto-sci-research` is a reusable research workbench, not a one-click paper generator. It helps ChatGPT and Codex route research tasks across topic design, literature review, source manifests, GIS/RS processing, exposure/accessibility measurement, statistics, ML/XAI, publication figures, manuscript writing, cover letters, rebuttals, and project memory.
 
-The repository contains **17 installable Codex skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
+The repository contains **19 installable skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
 Latest upstream refresh: **2026-08-01**.
 
@@ -46,7 +46,9 @@ Before public release:
 
 | Need | Start with |
 |---|---|
+| Route a substantive research goal across ChatGPT and Codex | `research-orchestrator` |
 | Route a complex multi-stage research task | `auto-sci-research` |
+| Search, verify, extract, synthesize literature, or audit citation support | `literature` |
 | Build source manifests, checkpoints, and safe automation | `agent-auto-sci-automation` |
 | Refine research questions, mechanisms, evidence strength, and causal language | `agent-auto-sci-methodology` |
 | Audit GIS, remote sensing, exposure, accessibility, and spatial equity | `agent-auto-sci-geospatial` |
@@ -66,18 +68,20 @@ Before public release:
 
 | Category | Skills |
 |---|---|
-| Router and automation | `auto-sci-research`, `agent-auto-sci-automation` |
+| Router and automation | `research-orchestrator`, `auto-sci-research`, `agent-auto-sci-automation` |
 | Methodology and evidence design | `agent-auto-sci-methodology`, `urban-exposure-review-radar-workflow` |
 | Geospatial, RS, exposure, accessibility | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected`, `geors-sci-writing-adapter` |
 | Data, visualization, ML | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected`, `scipilot-figure-skill` |
-| Review and bibliometrics | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow`, `academic-research-suite` |
+| Review and bibliometrics | `literature`, `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow`, `academic-research-suite` |
 | Writing and submission | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `geors-sci-writing-adapter`, `kdense-scicomm-selected` |
 
 ## Detailed Skill Index
 
 | Skill | Role | Best for | Typical output | Boundary |
 |---|---|---|---|---|
+| `research-orchestrator` | Cross-surface router | Substantive academic/scientific goals in ChatGPT or Codex | Workflow route, source ref/version, specialist Skill, QC | Retrieves live GitHub rules; discloses fallback instead of silently using stale policy |
 | `auto-sci-research` | Router | Multi-stage tasks across topic, literature, data, analysis, figures, writing, submission | Skill sequence, route map, quality gates | Does not replace specialist skills |
+| `literature` | Evidence workflow | Literature search, DOI/metadata verification, paper extraction, synthesis, citation-claim audits | Verified corpus, paper notes, evidence traces, support classifications | Manual workflow and golden-set validation precede broad automation |
 | `agent-auto-sci-automation` | Automation | Source manifests, checkpoints, project memory, API safety | Manifest, status table, recovery plan | Never stores secrets or private materials |
 | `agent-auto-sci-methodology` | Methodology | Research questions, mechanisms, causal language, evidence strength | RQ matrix, mechanism map, bias audit | Correlation is not written as causality |
 | `agent-auto-sci-geospatial` | GIS/RS | Accessibility, exposure, LCZ, spatial equity, maps | CRS audit, exposure window, map QA | Keeps exposure/accessibility/use separate |
@@ -139,6 +143,10 @@ auto-sci-research
 - `xiangyu-Ge/sci-writing-geors`: no explicit LICENSE detected, so this repo keeps only attribution and an original adapter.
 
 See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20260801.md](docs/upstream-update-20260801.md).
+
+## ChatGPT and Codex cross-surface use
+
+Start at [docs/chatgpt/index.md](docs/chatgpt/index.md) for the one-time ChatGPT Project instructions, ordinary-new-chat Skill/Plugin route, GitHub source-of-truth contract, and evaluation protocol. Detailed research rules remain versioned in the repository.
 
 ## License
 
