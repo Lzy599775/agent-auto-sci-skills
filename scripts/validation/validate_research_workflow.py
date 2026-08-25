@@ -141,9 +141,23 @@ def check_agents(errors: list[str]) -> None:
     path = ROOT / "AGENTS.md"
     if not path.is_file():
         return
-    lines = read_text(path).splitlines()
+    text = read_text(path)
+    lines = text.splitlines()
     if not 80 <= len(lines) <= 150:
         errors.append(f"AGENTS.md must be 80-150 lines; found {len(lines)}")
+
+    # Structural validation protects the bootstrap instructions; it does not prove
+    # real fresh-session routing behavior, which requires cross-surface testing.
+    routing_anchors = {
+        "workflow version bootstrap": ("docs/version.md",),
+        "workflow router bootstrap": ("docs/workflows/index.md",),
+        "first substantive reply timing": ("before the first substantive reply",),
+        "route selection": ("primary route", "selected route"),
+        "workflow naming is optional": ("Users do not need to name a workflow",),
+    }
+    for label, alternatives in routing_anchors.items():
+        if not any(anchor in text for anchor in alternatives):
+            errors.append(f"AGENTS.md routing bootstrap missing: {label}")
 
 
 def markdown_files() -> list[Path]:

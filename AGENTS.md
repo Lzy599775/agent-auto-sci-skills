@@ -59,11 +59,14 @@ Resolve conflicts using [docs/research/source_hierarchy.md](docs/research/source
 
 # Workflow routing
 
-- Route tasks automatically through [docs/workflows/index.md](docs/workflows/index.md).
-- Users do not need to name a workflow.
-- For long tasks, create an execution plan under `docs/exec-plans/active/`.
-- Use repository skills only when their descriptions match the task.
-- Prefer manual workflow, then a golden set, then evaluation, then automation.
+- For every substantive academic or scientific research task, before the first substantive reply, read [docs/version.md](docs/version.md) and [docs/workflows/index.md](docs/workflows/index.md).
+- Select one primary route from the user's goal, then read its `docs/workflows/<selected_workflow>.md` file. Users do not need to name a workflow.
+- Complete this routing bootstrap before requesting missing claims, sources, data, or other research inputs; missing inputs do not waive routing.
+- After selecting the route, load only the task-relevant standards and specialist Skills; do not read the entire repository.
+- In the first substantive reply, report only a concise workflow marker with the workflow version, repository ref, and selected route.
+- For citation-claim support checks, select `docs/workflows/citation_claim_audit.md`; load the Literature Skill only when source retrieval or extraction is needed.
+- The Research Orchestrator Skill is not a prerequisite for routing in a Codex repository session; this `AGENTS.md` must trigger the bootstrap, while specialist Skills load only when their scope matches.
+- For long tasks, create an execution plan under `docs/exec-plans/active/`; prefer manual workflow, then a golden set, evaluation, and automation.
 
 # Research discipline
 

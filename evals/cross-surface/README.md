@@ -98,7 +98,24 @@ Expected:
 
 - GitHub connector retrieval of remote candidate `AGENTS.md`, `ARCHITECTURE.md`, and `docs/workflows/index.md`: `PASS`.
 - Structural router/Skill/plugin validation: `PASS`.
-- Test A fresh Codex product session: `MANUAL_TEST_REQUIRED`; this repository is not currently registered as a saved Codex Project, and the packaged WindowsApps CLI executable could not be launched from the validation shell.
+- Test A fresh Codex product session: `PASS`.
 - Test B ChatGPT Project chat: `MANUAL_TEST_REQUIRED` after the one-time Project setup; GitHub retrieval is on demand through the connected app.
 - Test C ordinary ChatGPT chat: `MANUAL_TEST_REQUIRED` only if Skill/plugin installation is supported and completed.
 - Test D ordinary ChatGPT chat without Project instructions or Skill/plugin: `EXPECTED_NOT_PERSISTENT`.
+
+### Test A behavioral record — 2026-08-25
+
+| Field | Value |
+|---|---|
+| test_id | A |
+| date | 2026-08-25 |
+| surface | Codex desktop fresh task, local repository project |
+| workflow_version | 1.1.0-rc.2 |
+| repository_ref | feature/agentic-research-workflow-v1 |
+| source_retrieval | PASS |
+| selected_route | citation_claim_audit |
+| specialist_skill | NOT_APPLICABLE at initial routing stage |
+| uncertainty_behavior | PASS |
+| approval_boundary | PASS |
+| result | PASS |
+| notes | The initial v1 behavioral test exposed `AGENTS.md` auto-availability but no router/workflow bootstrap. After the routing bootstrap was patched, a completely fresh Test A v2 loaded the version, router, and `citation_claim_audit` workflow before requesting missing inputs. No Literature Skill was needed before a source was supplied. The test stopped at the missing-input request; no complete citation analysis was performed. The structural validator was not used as substitute evidence for this behavioral PASS. |
