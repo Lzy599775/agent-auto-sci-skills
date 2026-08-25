@@ -15,6 +15,7 @@
 
 - [Evidence trace](standards/evidence_trace.md)
 - [Academic claims](standards/academic_claims.md)
+- [Academic prose logic](standards/academic_prose_logic.md)
 - [Data provenance](standards/data_provenance.md)
 - [Reproducibility](standards/reproducibility.md)
 - [Git policy](standards/git_policy.md)
