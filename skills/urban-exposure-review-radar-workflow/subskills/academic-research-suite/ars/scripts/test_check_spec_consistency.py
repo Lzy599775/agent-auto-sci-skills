@@ -8,11 +8,58 @@ manifest runner instead.
 """
 from __future__ import annotations
 
+import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from scripts import check_spec_consistency as csc
+
+
+class TestRelativeMarkdownLinkGrammar(unittest.TestCase):
+    """#794: rendered-link grammar, with the old lint scope retained."""
+
+    def setUp(self) -> None:
+        self._old_root = csc.ROOT
+        csc.ERRORS.clear()
+        self._tmp = TemporaryDirectory()
+        csc.ROOT = Path(self._tmp.name)
+        (csc.ROOT / "docs").mkdir()
+
+    def tearDown(self) -> None:
+        csc.ROOT = self._old_root
+        csc.ERRORS.clear()
+        self._tmp.cleanup()
+
+    def _check(self, text: str) -> list[str]:
+        (csc.ROOT / "docs/PAGE.md").write_text(text, encoding="utf-8")
+        csc.check_relative_markdown_links("docs/PAGE.md")
+        return list(csc.ERRORS)
+
+    def test_rendered_dead_link_still_fires(self) -> None:
+        errors = self._check("[dead](MISSING.md)\n")
+        self.assertTrue(any("MISSING.md" in error for error in errors))
+
+    def test_non_rendering_and_image_targets_do_not_fire(self) -> None:
+        errors = self._check(
+            "![image](missing-image.png)\n"
+            "`[example](missing-inline.md)`\n"
+            "<!-- [commented](missing-comment.md) -->\n"
+            "```markdown\n[fenced](missing-fenced.md)\n```\n"
+        )
+        self.assertEqual(errors, [])
+
+    def test_titled_link_checks_only_its_destination(self) -> None:
+        errors = self._check('[dead](MISSING.md "optional title")\n')
+        self.assertEqual(
+            errors,
+            ["docs/PAGE.md: broken relative markdown link 'MISSING.md'"],
+        )
+
+    def test_existing_file_with_unknown_fragment_remains_out_of_scope(self) -> None:
+        (csc.ROOT / "docs/TARGET.md").write_text("# Real Heading\n", encoding="utf-8")
+        errors = self._check("[pointer](TARGET.md#not-a-real-heading)\n")
+        self.assertEqual(errors, [])
 
 
 # Minimal ja-JP README capturing the version-bearing surfaces the lint needs
@@ -39,9 +86,9 @@ JA_README_TEMPLATE = """\
 
 #### Academic Pipeline（オーケストレーター）
 
-### Deep Research（v2.11.0）
-### Academic Paper（v3.2.0）
-### Academic Paper Reviewer（v1.10.0）
+### Deep Research（v2.12.1）
+### Academic Paper（v3.3.1）
+### Academic Paper Reviewer（v1.11.1）
 ### Academic Pipeline（v{ver}）
 
 ### サポートされる出力フォーマット
@@ -112,9 +159,9 @@ KO_README_TEMPLATE = """\
 
 #### Academic Pipeline (오케스트레이터)
 
-### Deep Research (v2.11.0)
-### Academic Paper (v3.2.0)
-### Academic Paper Reviewer (v1.10.0)
+### Deep Research (v2.12.1)
+### Academic Paper (v3.3.1)
+### Academic Paper Reviewer (v1.11.1)
 ### Academic Pipeline (v{ver})
 
 ### 지원되는 출력 형식
@@ -123,7 +170,7 @@ KO_README_TEMPLATE = """\
 
 ## 변경 이력
 
-### v3.19.0 (2026-07-22) — current release
+### v3.21.1 (2026-08-24) — current release
 ### v3.18.0 (2026-07-18) — prior minor
 ### v3.12.0 (2026-06-08) — prior release
 ### v3.11.1 (2026-06-06) — prior patch
@@ -181,9 +228,9 @@ ZH_CN_README_TEMPLATE = """\
 
 #### Academic Pipeline（全流程调度器）
 
-### Deep Research (v2.11.0)
-### Academic Paper (v3.2.0)
-### Academic Paper Reviewer (v1.10.0)
+### Deep Research (v2.12.1)
+### Academic Paper (v3.3.1)
+### Academic Paper Reviewer (v1.11.1)
 ### Academic Pipeline (v{ver})
 
 ### 支持的输出格式
@@ -248,9 +295,9 @@ ZH_TW_README_TEMPLATE = """\
 
 #### Academic Pipeline（全流程調度器）
 
-### Deep Research (v2.11.0)
-### Academic Paper (v3.2.0)
-### Academic Paper Reviewer (v1.10.0)
+### Deep Research (v2.12.1)
+### Academic Paper (v3.3.1)
+### Academic Paper Reviewer (v1.11.1)
 ### Academic Pipeline (v{ver})
 
 ### 支援的輸出格式
@@ -312,7 +359,7 @@ class TestReadmeJaSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            _write_ja_readme(root, version="3.19.0")
+            _write_ja_readme(root, version="3.21.1")
 
             csc.check_readme_ja_sections()
 
@@ -332,17 +379,17 @@ class TestReadmeJaSections(unittest.TestCase):
             # Write the "current" v3.9.4.2 release block but downgrade only
             # the badge and tag link to v3.9.4.0. This is the realistic shape
             # of drift when one place gets forgotten during a release.
-            stale = JA_README_TEMPLATE.format(ver="3.19.0").replace(
-                "version-v3.19.0-blue", "version-v3.9.4.0-blue"
+            stale = JA_README_TEMPLATE.format(ver="3.21.1").replace(
+                "version-v3.21.1-blue", "version-v3.9.4.0-blue"
             ).replace(
-                "releases/tag/v3.19.0", "releases/tag/v3.9.4.0"
+                "releases/tag/v3.21.1", "releases/tag/v3.9.4.0"
             )
             (root / "README.ja-JP.md").write_text(stale, encoding="utf-8")
 
             csc.check_readme_ja_sections()
 
             self.assertTrue(
-                any("README.ja-JP.md" in e and "v3.19.0" in e for e in csc.ERRORS),
+                any("README.ja-JP.md" in e and "v3.21.1" in e for e in csc.ERRORS),
                 msg=f"expected ja-JP drift error in: {csc.ERRORS!r}",
             )
 
@@ -366,7 +413,7 @@ class TestReadmeKoSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            _write_ko_readme(root, version="3.19.0")
+            _write_ko_readme(root, version="3.21.1")
 
             csc.check_readme_ko_sections()
 
@@ -381,17 +428,17 @@ class TestReadmeKoSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            stale = KO_README_TEMPLATE.format(ver="3.19.0").replace(
-                "version-v3.19.0-blue", "version-v3.9.4.0-blue"
+            stale = KO_README_TEMPLATE.format(ver="3.21.1").replace(
+                "version-v3.21.1-blue", "version-v3.9.4.0-blue"
             ).replace(
-                "releases/tag/v3.19.0", "releases/tag/v3.9.4.0"
+                "releases/tag/v3.21.1", "releases/tag/v3.9.4.0"
             )
             (root / "README.ko-KR.md").write_text(stale, encoding="utf-8")
 
             csc.check_readme_ko_sections()
 
             self.assertTrue(
-                any("README.ko-KR.md" in e and "v3.19.0" in e for e in csc.ERRORS),
+                any("README.ko-KR.md" in e and "v3.21.1" in e for e in csc.ERRORS),
                 msg=f"expected ko-KR drift error in: {csc.ERRORS!r}",
             )
 
@@ -402,7 +449,7 @@ class TestReadmeKoSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            broken = KO_README_TEMPLATE.format(ver="3.19.0").replace(
+            broken = KO_README_TEMPLATE.format(ver="3.21.1").replace(
                 "#### Deep Research (8개 모드)", "#### Deep Research (8 modes)"
             )
             (root / "README.ko-KR.md").write_text(broken, encoding="utf-8")
@@ -419,7 +466,7 @@ class TestReadmeKoSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            broken = KO_README_TEMPLATE.format(ver="3.19.0").replace(
+            broken = KO_README_TEMPLATE.format(ver="3.21.1").replace(
                 "### v3.18.0 (2026-07-18)",
                 "### v3.18.0（2026-07-18）",
             )
@@ -458,8 +505,8 @@ class TestReadmeZhSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            _write_zh_tw_readme(root, version="3.19.0")
-            _write_zh_cn_readme(root, version="3.19.0")
+            _write_zh_tw_readme(root, version="3.21.1")
+            _write_zh_cn_readme(root, version="3.21.1")
 
             csc.check_readme_zh_sections()
 
@@ -475,18 +522,18 @@ class TestReadmeZhSections(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             csc.ROOT = root
-            _write_zh_tw_readme(root, version="3.19.0")
-            stale = ZH_CN_README_TEMPLATE.format(ver="3.19.0").replace(
-                "version-v3.19.0-blue", "version-v3.9.4.0-blue"
+            _write_zh_tw_readme(root, version="3.21.1")
+            stale = ZH_CN_README_TEMPLATE.format(ver="3.21.1").replace(
+                "version-v3.21.1-blue", "version-v3.9.4.0-blue"
             ).replace(
-                "releases/tag/v3.19.0", "releases/tag/v3.9.4.0"
+                "releases/tag/v3.21.1", "releases/tag/v3.9.4.0"
             )
             (root / "README.zh-CN.md").write_text(stale, encoding="utf-8")
 
             csc.check_readme_zh_sections()
 
             self.assertTrue(
-                any("README.zh-CN.md" in e and "v3.19.0" in e for e in csc.ERRORS),
+                any("README.zh-CN.md" in e and "v3.21.1" in e for e in csc.ERRORS),
                 msg=f"expected zh-CN drift error in: {csc.ERRORS!r}",
             )
 
@@ -722,9 +769,25 @@ def _write_skill_fixtures(root: Path, overrides: dict | None = None) -> None:
         fields = {"fm_ver": ver, "fm_date": date, "tbl_ver": ver, "tbl_date": date}
         fields.update(overrides.get(skill, {}))
         (root / skill).mkdir(parents=True, exist_ok=True)
-        (root / skill / "WORKFLOW.md").write_text(
+        (root / skill / "SKILL.md").write_text(
             SKILL_TEMPLATE.format(name=skill, **fields), encoding="utf-8"
         )
+
+
+def _write_codex_source_manifest(
+    root: Path, source_repositories: list[dict[str, object]]
+) -> None:
+    """Create the adjacent manifest that authorizes the WORKFLOW.md overlay."""
+    root.parent.mkdir(parents=True, exist_ok=True)
+    (root.parent / "manifest.json").write_text(
+        json.dumps(
+            {
+                "generated_for": "codex",
+                "source_repositories": source_repositories,
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 class TestSkillVersionTableConsistency(unittest.TestCase):
@@ -740,6 +803,115 @@ class TestSkillVersionTableConsistency(unittest.TestCase):
         csc.ROOT = self._orig_root
         csc.ERRORS.clear()
         csc.ERRORS.extend(self._orig_errors)
+
+    def test_skill_paths_follow_the_active_root(self) -> None:
+        """#809: paths derive from ROOT at call time, so a fixture tree with a
+        different skill set is policed on ITS skills, never the checkout's."""
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            csc.ROOT = root
+            (root / "only-skill").mkdir()
+            (root / "only-skill" / "SKILL.md").write_text(
+                "---\nname: only-skill\n---\n", encoding="utf-8"
+            )
+            self.assertEqual(csc._skill_version_paths(), ("only-skill/SKILL.md",))
+            csc.check_skill_version_blocks()
+            self.assertTrue(
+                all(e.startswith("only-skill/SKILL.md:") for e in csc.ERRORS),
+                csc.ERRORS,
+            )
+
+    def test_skill_paths_retain_codex_workflow_entry_names(self) -> None:
+        """The production overlay is discovered dynamically without rewriting
+        its WORKFLOW.md entry names back to nonexistent SKILL.md paths."""
+        csc.ROOT = self._orig_root
+        paths = csc._skill_version_paths()
+
+        self.assertIn("academic-pipeline/WORKFLOW.md", paths)
+        self.assertNotIn("experiment-agent/WORKFLOW.md", paths)
+        self.assertTrue(
+            all(path.endswith("/WORKFLOW.md") for path in paths), paths
+        )
+        self.assertTrue(
+            all((csc.ROOT / path).is_file() for path in paths), paths
+        )
+
+    def test_codex_external_source_excludes_only_its_owned_workflow(self) -> None:
+        """A disjoint experiment-agent source stays outside suite version checks."""
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp) / "package" / "ars"
+            root.mkdir(parents=True)
+            csc.ROOT = root
+            for name in ("academic-pipeline", "experiment-agent"):
+                (root / name).mkdir()
+                (root / name / "WORKFLOW.md").write_text(
+                    SKILL_TEMPLATE.format(
+                        name=name,
+                        fm_ver="1.0.0",
+                        fm_date="2026-09-02",
+                        tbl_ver="1.0.0",
+                        tbl_date="2026-09-02",
+                    ),
+                    encoding="utf-8",
+                )
+            _write_codex_source_manifest(
+                root,
+                [
+                    {
+                        "name": "academic-research-skills",
+                        "included_paths": ["academic-pipeline"],
+                    },
+                    {
+                        "name": "experiment-agent",
+                        "included_paths": ["experiment-agent"],
+                    },
+                ],
+            )
+
+            self.assertEqual(
+                csc._skill_version_paths(),
+                ("academic-pipeline/WORKFLOW.md",),
+            )
+            self.assertEqual(csc.ERRORS, [])
+
+    def test_conflicting_external_source_cannot_hide_core_workflow(self) -> None:
+        """Ambiguous ownership fails and retains the core path for version linting."""
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp) / "package" / "ars"
+            root.mkdir(parents=True)
+            csc.ROOT = root
+            (root / "academic-pipeline").mkdir()
+            (root / "academic-pipeline" / "WORKFLOW.md").write_text(
+                SKILL_TEMPLATE.format(
+                    name="academic-pipeline",
+                    fm_ver="1.0.0",
+                    fm_date="2026-09-02",
+                    tbl_ver="1.0.0",
+                    tbl_date="2026-09-02",
+                ),
+                encoding="utf-8",
+            )
+            _write_codex_source_manifest(
+                root,
+                [
+                    {
+                        "name": "academic-research-skills",
+                        "included_paths": ["academic-pipeline"],
+                    },
+                    {
+                        "name": "other-source",
+                        "included_paths": ["academic-pipeline"],
+                    },
+                ],
+            )
+
+            paths = csc._skill_version_paths()
+
+            self.assertEqual(paths, ("academic-pipeline/WORKFLOW.md",))
+            self.assertEqual(len(csc.ERRORS), 1)
+            self.assertIn("'academic-pipeline' is claimed", csc.ERRORS[0])
+            self.assertIn("academic-research-skills[0]", csc.ERRORS[0])
+            self.assertIn("other-source[1]", csc.ERRORS[0])
 
     def test_all_four_aligned_passes(self) -> None:
         """All four SKILL.md with frontmatter matching their table → no errors."""
@@ -769,7 +941,7 @@ class TestSkillVersionTableConsistency(unittest.TestCase):
 
             self.assertTrue(
                 any(
-                    "academic-pipeline/WORKFLOW.md" in e and "2026-06-08" in e and "2026-06-01" in e
+                    "academic-pipeline/SKILL.md" in e and "2026-06-08" in e and "2026-06-01" in e
                     for e in csc.ERRORS
                 ),
                 msg=f"expected frontmatter↔table date drift error in: {csc.ERRORS!r}",
@@ -789,7 +961,7 @@ class TestSkillVersionTableConsistency(unittest.TestCase):
 
             self.assertTrue(
                 any(
-                    "deep-research/WORKFLOW.md" in e and "2.9.4" in e and "2.9.3" in e
+                    "deep-research/SKILL.md" in e and "2.9.4" in e and "2.9.3" in e
                     for e in csc.ERRORS
                 ),
                 msg=f"expected frontmatter↔table version drift error in: {csc.ERRORS!r}",
@@ -802,7 +974,7 @@ class TestSkillVersionTableConsistency(unittest.TestCase):
             root = Path(tmp)
             csc.ROOT = root
             _write_skill_fixtures(root)
-            (root / "academic-paper" / "WORKFLOW.md").write_text(
+            (root / "academic-paper" / "SKILL.md").write_text(
                 '---\nname: academic-paper\nmetadata:\n  version: "3.2.0"\n'
                 '  last_updated: "2026-06-01"\n---\n\nNo version table here.\n',
                 encoding="utf-8",
@@ -811,13 +983,13 @@ class TestSkillVersionTableConsistency(unittest.TestCase):
             csc.check_skill_version_blocks()
 
             self.assertTrue(
-                any("academic-paper/WORKFLOW.md" in e and "Version Info" in e for e in csc.ERRORS),
+                any("academic-paper/SKILL.md" in e and "Version Info" in e for e in csc.ERRORS),
                 msg=f"expected missing-table-rows error in: {csc.ERRORS!r}",
             )
 
 
 # Minimal CHANGELOG whose latest entry date is the parameter; the suite-date-sanity check
-# compares academic-pipeline/WORKFLOW.md last_updated against this. Two prior entries so the
+# compares academic-pipeline/SKILL.md last_updated against this. Two prior entries so the
 # "latest" selection (first `## [X.Y.Z]` after [Unreleased]) is exercised, not just sole-entry.
 CHANGELOG_TEMPLATE = """\
 # Changelog
@@ -850,7 +1022,7 @@ def _write_date_sanity_fixtures(
 
 
 class TestSuiteSkillDateSanity(unittest.TestCase):
-    """#377(b): academic-pipeline/WORKFLOW.md last_updated must be >= the latest CHANGELOG entry
+    """#377(b): academic-pipeline/SKILL.md last_updated must be >= the latest CHANGELOG entry
     date. The other three SKILL.md version independently and are NOT date-policed here."""
 
     def setUp(self) -> None:
@@ -908,7 +1080,7 @@ class TestSuiteSkillDateSanity(unittest.TestCase):
 
             self.assertTrue(
                 any(
-                    "academic-pipeline/WORKFLOW.md" in e
+                    "academic-pipeline/SKILL.md" in e
                     and "2026-06-01" in e
                     and "2026-06-08" in e
                     for e in csc.ERRORS
@@ -946,11 +1118,11 @@ class TestSuiteSkillDateSanity(unittest.TestCase):
 
                 # Repoint the constant at academic-paper → its early date is now the policed one.
                 csc.ERRORS.clear()
-                csc._SUITE_SKILL_PATH = "academic-paper/WORKFLOW.md"
+                csc._SUITE_SKILL_PATH = "academic-paper/SKILL.md"
                 csc.check_suite_skill_date_sanity()
                 self.assertTrue(
                     any(
-                        "academic-paper/WORKFLOW.md" in e and "2026-06-01" in e and "2026-06-08" in e
+                        "academic-paper/SKILL.md" in e and "2026-06-01" in e and "2026-06-08" in e
                         for e in csc.ERRORS
                     ),
                     msg=f"repointed suite path must police academic-paper's early date: {csc.ERRORS!r}",
@@ -969,7 +1141,7 @@ class TestSuiteSkillDateSanity(unittest.TestCase):
                 root, changelog_date="2026-06-08", pipeline_date="2026-06-08"
             )
             # Strip the suite SKILL's Version-Info table rows so it fails to parse.
-            pipeline_skill = root / "academic-pipeline" / "WORKFLOW.md"
+            pipeline_skill = root / "academic-pipeline" / "SKILL.md"
             text = pipeline_skill.read_text(encoding="utf-8")
             pipeline_skill.write_text(
                 text.replace("| Skill Version | 3.12.0 |", "").replace(
@@ -981,7 +1153,7 @@ class TestSuiteSkillDateSanity(unittest.TestCase):
             csc.check_skill_version_blocks()
             csc.check_suite_skill_date_sanity()
 
-            pipeline_errors = [e for e in csc.ERRORS if "academic-pipeline/WORKFLOW.md" in e]
+            pipeline_errors = [e for e in csc.ERRORS if "academic-pipeline/SKILL.md" in e]
             self.assertEqual(
                 len(pipeline_errors), 1,
                 msg=f"expected exactly one pipeline error, got {len(pipeline_errors)}: {pipeline_errors!r}",

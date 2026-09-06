@@ -9,7 +9,7 @@ Content, design, and timing mistakes, with the corrections for each.
 **Dry, Boring Presentations** (CRITICAL TO AVOID):
 - Problem: Text-heavy slides with no visual interest, missing research context
 - Signs: All bullet points, no images, default templates, no citations
-- Solution:
+- Solution: 
   - Use research-lookup to find 8-15 papers for credible context
   - Add high-quality visuals to EVERY slide (figures, photos, diagrams, icons)
   - Choose modern color palette reflecting your topic

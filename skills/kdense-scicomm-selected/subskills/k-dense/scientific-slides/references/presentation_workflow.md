@@ -43,7 +43,7 @@ each stage.
 15. Conclusions (45 sec)
 16. Acknowledgments (15 sec)
 
-NOTE: Use research-lookup to find papers for background (slides 2-4)
+NOTE: Use research-lookup to find papers for background (slides 2-4) 
 and discussion (slides 13-14) BEFORE creating slides.
 ```
 

@@ -97,7 +97,7 @@ If you maintain a curated literature corpus (Zotero, Obsidian, a folder of PDFs,
 Three reference Python adapters ship with v3.6.4 at `scripts/adapters/`:
 
 ```bash
-# 1. Install adapter dependencies (PyYAML + jsonschema, already in requirements-dev.txt)
+# 1. Install the dev dependencies (the adapter requirements are declared in requirements-dev.txt)
 pip install -r requirements-dev.txt
 
 # 2. Run a reference adapter (pick one that matches your corpus source).
@@ -116,11 +116,12 @@ v3.6.5 wires `bibliography_agent` (deep-research, Phase 1) and `literature_strat
 
 ## Optional environment flags (v3.5.1+)
 
-ARS exposes a few opt-in flags. All default to OFF; setting them changes behaviour for the current session only.
+ARS exposes a few opt-in flags. All default to OFF; setting them changes behaviour for the current session only. These flags are behavior toggles; for standing *content* preferences (citation style, search inclusion), see [§"Standing preferences via CLAUDE.md"](#standing-preferences-via-claudemd) below.
 
 | Flag | Since | What it does | Reference |
 |---|---|---|---|
 | `ARS_CROSS_MODEL` | v3.0 | Enable cross-model verification (see next section) | [§"Cross-model verification"](#cross-model-verification-optional) |
+| `ARS_CROSS_MODEL_TRANSPORT=codex` | #630 | Use ChatGPT subscription transport for citation-integrity calls only; all DA/reviewer/judgment paths remain API-key based | `shared/cross_model_verification.md` |
 | `ARS_SOCRATIC_READING_PROBE=1` | v3.5.1 | Activate the Socratic reading-check probe layer in `socratic_mentor_agent`. Goal-oriented intent only; fires at most once per session when user has cited a specific paper; decline logged without penalty. | `deep-research/agents/socratic_mentor_agent.md` |
 | `ARS_PASSPORT_RESET=1` | v3.6.3 | Promote every FULL checkpoint to a context-reset boundary. Required to *emit* boundary entries; **not** required to invoke `resume_from_passport=<hash>` in a fresh session. With the flag ON in `systematic-review` mode, reset is mandatory at every FULL checkpoint. | `academic-pipeline/references/passport_as_reset_boundary.md` |
 | `ARS_CROSS_MODEL_SAMPLE_INTERVAL` | v3.5.0 | Sampling interval for cross-model integrity checks (advisory) | `shared/cross_model_verification.md` |
@@ -128,6 +129,34 @@ ARS exposes a few opt-in flags. All default to OFF; setting them changes behavio
 | `ARS_CACHE_STALE_ADVISORY_DAYS` | v3.18.0 (#541) | Age threshold (days) for the cache-staleness advisory: cache-served verifications older than this surface as `ADV-CACHE` advisory rows at the integrity checkpoints (never gating). Default 30; `0` disables; malformed/negative values fall back to the default. | `scripts/verification_cache.py` |
 | `ARS_CACHE_REVALIDATE=1` | v3.18.0 (#541) | Opt-in live re-verification at the gate: cached rows past the staleness threshold are re-verified live (per-row bypass, then re-populated) instead of served. Cost scales with the stale-row count. Default off = advisory-only. | `scripts/verification_gate/__init__.py` + `integrity_verification_agent.md` § A0.5 |
 | `ARS_MODEL_TIERING` | v3.16.0 (#517) | Opt-in model tiering: `economy` (frontier session — execution-type agents step down one tier, floor Opus-class) or `quality-boost` (below-frontier session — judgment-type agents jump up to the frontier tier at the checkpoint surfaces: Stage 2.5/4.5 gates, the opt-in Stage 4→5 claim–ref audit, and final review). Unset = session model everywhere; unknown values warn once and behave as unset. | `shared/model_tiering.md` |
+
+---
+
+## Standing preferences via CLAUDE.md
+
+ARS deliberately ships no user-level configuration file. The supported way to get "set once, applies every run" behavior for content preferences is a preferences block in your project's `CLAUDE.md`: Claude Code loads it at session start, and every ARS agent dispatched in that session inherits it as context. This is a stated design position, not a missing feature — search-related preferences are per-project inclusion/exclusion criteria that belong in the Annotated Bibliography's `search_strategy` (Schema 2), and a machine-global config silently inherited across projects would be a methodological hazard for systematic-review work. Decision record: #634.
+
+Copy-pasteable template (adjust to taste):
+
+```markdown
+## ARS standing preferences
+
+- Citation style: APA 7th unless a venue template says otherwise.
+- Literature search: exclude preprints unless I explicitly ask; prefer
+  peer-reviewed journal articles.
+- Journal tier: when ranking or shortlisting sources, prefer higher-tier
+  journals in the field, and say so when unsure of a journal's tier.
+- Open access: prefer OA versions when citing, and link the OA copy.
+```
+
+Two honest limitations:
+
+- **Journal tiers are model judgment.** None of the four lookup indexes (Semantic Scholar, OpenAlex, Crossref, arXiv) serves quartile or tier data, so a tier preference is applied from the model's own knowledge and should be stated as such — treat tier claims as advisory, never as verified metadata.
+- **There is intentionally no output-directory setting.** The user-supplied Material Passport path is the single discovery anchor (v3.6.8 design round, decision R4-003); a standing output-location preference would create a second source of truth. Name the destination per run.
+
+If a preference changes what a systematic review may include (preprint exclusion, language limits, date windows), record it in that project's `search_strategy` rather than relying on the ambient block — the ambient block sets defaults, the Schema 2 `search_strategy` is the auditable record.
+
+Re-evaluation trigger (recorded in #634): an ARS-owned preferences surface gets revisited only if additional users independently request it, or a platform port lacks a `CLAUDE.md` equivalent. If ever built, the architecturally consistent shape is a Material Passport-level `user_preferences` input aggregate (like `literature_corpus[]`), not a machine-global config file.
 
 ---
 
@@ -141,6 +170,10 @@ The deterministic citation-existence gate (#182) cross-checks each reference aga
 
 The cache is single-process (SQLite WAL); concurrent multi-user access to one cache file is out of scope.
 
+For the complete picture of what leaves the machine (resolvers, optional cross-model
+calls, the update check) and every local store's lifetime and deletion path, see
+[DATA_FLOWS.md](DATA_FLOWS.md).
+
 ---
 
 ## Cross-model verification (optional)
@@ -151,13 +184,13 @@ ARS works with the inherited Claude session model alone. For higher confidence, 
 
 ```bash
 # Step 1: Set your API key (choose one or both)
-export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.5 / GPT-5.5 Pro
+export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.6 Sol / GPT-5.5
 export GOOGLE_AI_API_KEY="AIza-your-key-here"    # For Gemini 3.1 Pro
 
 # Step 2: Choose your cross-verification model
-export ARS_CROSS_MODEL="gpt-5.5"                # Recommended pair (gpt-5.5-pro = strongest reasoning, ~6x cost)
-# or: export ARS_CROSS_MODEL="gemini-3.1-pro-preview"  # Strong at factual verification
-# or: export ARS_CROSS_MODEL="gpt-5.6-sol"      # Frontier, provisional pending ARS validation (same rates as gpt-5.5)
+export ARS_CROSS_MODEL="gpt-5.6-sol"            # Current OpenAI flagship — provisional pending ARS validation (run scripts/cross_model_smoke_test.sh)
+# or: export ARS_CROSS_MODEL="gemini-3.1-pro-preview"  # Current Google flagship — validated, strong at factual verification
+# or: export ARS_CROSS_MODEL="gpt-5.5"          # Previous generation — validated (designated bakeoff baseline)
 
 # Optional: reasoning effort for OpenAI verifier calls (unset = provider default)
 # export ARS_CROSS_MODEL_REASONING_EFFORT="medium"
@@ -171,7 +204,7 @@ claude
 | Feature | Without cross-model | With cross-model |
 |---|---|---|
 | Integrity verification | Single-model 100% check | + risk-stratified verification by 2nd model: 100% of high-impact references (final gate adds 100% of new/changed-claim references) + a sampled remainder |
-| Devil's Advocate | Single-model DA | + Cross-model generates independent critique, novel findings added |
+| Devil's Advocate | Single-model DA | + Cross-model generates a blind, separately executed critique; novel findings added |
 | Peer Review | 5 reviewers (same model) | Same 5 reviewers + cross-model DA critique/calibration support |
 | Irreversible checkpoints | Single-model decision | + Blind cross-model decision at design freeze + final editorial decision; divergence escalated to you, never averaged |
 
@@ -182,6 +215,32 @@ Full pipeline adds ~$0.60-1.10 in cross-model API costs (order-of-magnitude; mea
 ### No API key? No problem
 
 Without `ARS_CROSS_MODEL` set, everything works exactly as before. The cross-model features are invisible and add zero overhead.
+
+### ChatGPT subscription transport (citation integrity only)
+
+If Codex CLI 0.147.0+ is logged in through a ChatGPT subscription, citation-integrity
+calls can use that subscription without an OpenAI API key. This does not cover
+Devil's Advocate, Reviewer 2, calibration, re-review, or checkpoint judgments.
+
+```bash
+# Citation-integrity calls only. General DA/reviewer/judgment calls remain on API transport.
+export ARS_CROSS_MODEL_TRANSPORT="codex"
+# gpt-5.6-sol is validated for THIS transport (2026-08-19 codex-transport bakeoff,
+# superiority on recall + latency — audits/bakeoff-gpt-5-6-sol-codex-2026-08-19.md).
+# gpt-5.5 remains the validated bakeoff baseline alternative.
+export ARS_CROSS_MODEL="gpt-5.6-sol"
+
+python3 scripts/cross_model_codex_transport.py detect
+# The producer sends one closed codex_citation_request/1.0 object on stdin:
+printf '%s' "$CITATION_REQUEST_JSON" | scripts/cross_model_codex_verify.sh
+```
+
+The detector honors custom `CODEX_HOME` and requires the exact subscription
+attestation `Logged in using ChatGPT`; it never prints credentials. The adapter
+uses an auth-only ephemeral home, empty working root, read-only sandbox, no local
+tools, and binds accepted source URLs to structured search results. The optional
+live smoke `scripts/cross_model_smoke_test_codex.sh` spends subscription/model/network
+capacity and is never run by CI.
 
 ---
 
@@ -196,6 +255,11 @@ Claude discovers skills at `<install-root>/<skill-name>/SKILL.md`. This repo con
 
 Do not install the whole repository as one nested skill folder under `.claude/skills/academic-research-skills/`; that buries the four `SKILL.md` files one level too deep for discovery. See Anthropic's [Claude Code Skills documentation](https://code.claude.com/docs/en/skills).
 
+The methods below differ in more than convenience: hooks, slash commands, the tools
+allowlist, subagent orchestration, and script-backed checks are each available in some
+channels and degraded or absent in others. Before relying on any of those mechanisms,
+check the per-channel map: [CONTROL_AVAILABILITY.md](CONTROL_AVAILABILITY.md).
+
 ### Method 0: Claude Code Plugin (v3.7.0+, recommended for Claude Code CLI / IDE users)
 
 If you use Claude Code CLI, VS Code extension, or JetBrains extension, install ARS as a plugin:
@@ -206,6 +270,8 @@ If you use Claude Code CLI, VS Code extension, or JetBrains extension, install A
 ```
 
 The four skills (`deep-research`, `academic-paper`, `academic-paper-reviewer`, `academic-pipeline`) are auto-discovered from the plugin's `skills/` directory.
+
+**Slash command forms (#633).** Plugin installs namespace commands as `/academic-research-skills:ars-<mode>` — that form is canonical. Every command also declares an explicit frontmatter `name`, so on Claude Code v2.1.216 or later the bare `/ars-<mode>` alias works too whenever no other command claims that name; the bare form is what the session-start announce lists. On Claude Code older than v2.1.216, the frontmatter `name` replaces the whole command name, so commands appear only in their bare `/ars-<mode>` form (still invocable; the namespaced form loses autocomplete).
 
 **Strongly recommended: open auto-update.** Open the `/plugin` UI, find `academic-research-skills`, and toggle auto-update on. ARS releases roughly every 1–2 weeks; auto-update keeps you in sync without manual refreshes. To refresh manually: `/plugin update academic-research-skills`. (`/plugin marketplace update academic-research-skills` only refreshes the marketplace source list, not the installed plugin itself.)
 

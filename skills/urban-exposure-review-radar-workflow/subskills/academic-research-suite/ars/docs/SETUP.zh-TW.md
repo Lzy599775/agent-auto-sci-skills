@@ -97,7 +97,7 @@ curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
 v3.6.4 附三個 reference Python adapter，位於 `scripts/adapters/`：
 
 ```bash
-# 1. Install adapter dependencies (PyYAML + jsonschema, already in requirements-dev.txt)
+# 1. Install the dev dependencies (the adapter requirements are declared in requirements-dev.txt)
 pip install -r requirements-dev.txt
 
 # 2. Run a reference adapter (pick one that matches your corpus source).
@@ -116,11 +116,12 @@ v3.6.5 接上 `bibliography_agent`（deep-research, Phase 1）與 `literature_st
 
 ## 選用環境變數（v3.5.1+）
 
-ARS 暴露若干 opt-in flag，全部預設 OFF；設定後僅影響當前 session。
+ARS 暴露若干 opt-in flag，全部預設 OFF；設定後僅影響當前 session。這些 flag 是行為開關；「常設的內容偏好」（引用格式、檢索納入排除）見下方 [§「以 CLAUDE.md 設定常設偏好」](#以-claudemd-設定常設偏好)。
 
 | Flag | 起始版本 | 作用 | 參考 |
 |---|---|---|---|
 | `ARS_CROSS_MODEL` | v3.0 | 啟用跨模型驗證（見下節） | [§「跨模型驗證」](#跨模型驗證選用) |
+| `ARS_CROSS_MODEL_TRANSPORT=codex` | #630 | 僅讓引用完整性查驗使用 ChatGPT 訂閱；DA／審稿／判斷路徑仍須 API key | `shared/cross_model_verification.md` |
 | `ARS_SOCRATIC_READING_PROBE=1` | v3.5.1 | 啟用 `socratic_mentor_agent` 的讀書檢查 probe layer。僅 goal-oriented intent；使用者引用過具體論文時最多觸發一次；婉拒不留紀錄懲罰。 | `deep-research/agents/socratic_mentor_agent.md` |
 | `ARS_PASSPORT_RESET=1` | v3.6.3 | 把每個 FULL checkpoint 提升為 context 重置邊界。**emit** boundary entry 必須設此 flag；新 session 用 `resume_from_passport=<hash>` 續跑**不需要** flag。`systematic-review` 模式下 flag ON 時，每個 FULL checkpoint 一律強制重置。 | `academic-pipeline/references/passport_as_reset_boundary.md` |
 | `ARS_CROSS_MODEL_SAMPLE_INTERVAL` | v3.5.0 | 跨模型完整性抽查的取樣間隔（advisory） | `shared/cross_model_verification.md` |
@@ -128,6 +129,34 @@ ARS 暴露若干 opt-in flag，全部預設 OFF；設定後僅影響當前 sessi
 | `ARS_CACHE_STALE_ADVISORY_DAYS` | v3.18.0 (#541) | cache 時效 advisory 的天數門檻：由 cache 供應且超過此天數的查驗結果，會在誠信檢查點以 `ADV-CACHE` advisory 列呈現（永不擋關）。預設 30；`0` 停用；格式錯誤或負值回落預設。 | `scripts/verification_cache.py` |
 | `ARS_CACHE_REVALIDATE=1` | v3.18.0 (#541) | 選擇性即時重驗（gate 層）：超過時效門檻的快取列改為逐列繞過、即時查驗並回寫。成本隨過期列數量增加。預設關閉＝僅 advisory。 | `scripts/verification_gate/__init__.py` + `integrity_verification_agent.md` § A0.5 |
 | `ARS_MODEL_TIERING` | v3.16.0 (#517) | Opt-in 模型分層：`economy`（frontier session——execution 型 agent 降一階，樓地板 Opus 級）或 `quality-boost`（低於 frontier 的 session——judgment 型 agent 在檢查點表面跳升到 frontier 級：Stage 2.5/4.5 關卡、opt-in 的 Stage 4→5 claim–ref audit、最終審查）。未設定 = 全部用 session model；未知值警告一次後視同未設定。 | `shared/model_tiering.md` |
+
+---
+
+## 以 CLAUDE.md 設定常設偏好
+
+ARS 刻意不提供使用者層級的設定檔。要讓內容偏好「設一次、每次都生效」，支援的做法是在你專案的 `CLAUDE.md` 放一個偏好區塊：Claude Code 在 session 開始時載入，該 session 派出的每個 ARS agent 都會繼承。這是明文的設計立場，不是缺功能：檢索相關偏好本質上是每個專案自己的納入排除判準，屬於 Annotated Bibliography 的 `search_strategy`（Schema 2）；跨專案靜默繼承的全域設定，對系統性文獻回顧是方法學上的風險。決策紀錄：#634。
+
+可直接複製的模板（依需要調整）：
+
+```markdown
+## ARS standing preferences
+
+- Citation style: APA 7th unless a venue template says otherwise.
+- Literature search: exclude preprints unless I explicitly ask; prefer
+  peer-reviewed journal articles.
+- Journal tier: when ranking or shortlisting sources, prefer higher-tier
+  journals in the field, and say so when unsure of a journal's tier.
+- Open access: prefer OA versions when citing, and link the OA copy.
+```
+
+兩個誠實的限制：
+
+- **期刊分級是模型自己的判斷。** 四個查驗索引（Semantic Scholar、OpenAlex、Crossref、arXiv）都不提供 quartile 或分級資料，所以期刊層級偏好靠模型知識執行，且應如實聲明；分級主張只能當參考，不是查驗過的 metadata。
+- **刻意不提供輸出目錄設定。** 使用者提供的 Material Passport 路徑是唯一的發現錨點（v3.6.8 設計輪決議 R4-003）；常設輸出位置會製造第二個真值來源。每次執行時直接指定目的地。
+
+若某偏好會改變系統性回顧「可納入什麼」（排除 preprint、語言限制、日期範圍），請寫進該專案的 `search_strategy`，不要只靠環境偏好區塊：偏好區塊設定預設值，Schema 2 的 `search_strategy` 才是可稽核的紀錄。
+
+重新評估條件（記錄於 #634）：只有在更多使用者獨立提出需求，或某個平台移植版缺少 `CLAUDE.md` 等價物時，才重新考慮 ARS 自有的偏好介面；屆時架構上一致的形狀是 Material Passport 層級的 `user_preferences` 輸入欄（如同 `literature_corpus[]`），不是全機器的設定檔。
 
 ---
 
@@ -151,13 +180,13 @@ ARS 使用繼承的 Claude session 模型即可完整運作。想要更高信心
 
 ```bash
 # Step 1: Set your API key (choose one or both)
-export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.5 / GPT-5.5 Pro
+export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.6 Sol / GPT-5.5
 export GOOGLE_AI_API_KEY="AIza-your-key-here"    # For Gemini 3.1 Pro
 
 # Step 2: Choose your cross-verification model
-export ARS_CROSS_MODEL="gpt-5.5"                # Recommended pair (gpt-5.5-pro = strongest reasoning, ~6x cost)
-# or: export ARS_CROSS_MODEL="gemini-3.1-pro-preview"  # Strong at factual verification
-# or: export ARS_CROSS_MODEL="gpt-5.6-sol"      # Frontier, provisional pending ARS validation (same rates as gpt-5.5)
+export ARS_CROSS_MODEL="gpt-5.6-sol"            # Current OpenAI flagship — provisional pending ARS validation (run scripts/cross_model_smoke_test.sh)
+# or: export ARS_CROSS_MODEL="gemini-3.1-pro-preview"  # Current Google flagship — validated, strong at factual verification
+# or: export ARS_CROSS_MODEL="gpt-5.5"          # Previous generation — validated (designated bakeoff baseline)
 
 # Optional: reasoning effort for OpenAI verifier calls (unset = provider default)
 # export ARS_CROSS_MODEL_REASONING_EFFORT="medium"
@@ -183,6 +212,31 @@ claude
 
 沒有設定 `ARS_CROSS_MODEL` 時，一切照舊運作。跨模型功能不會出現，也不會增加任何額外開銷。
 
+### ChatGPT 訂閱傳輸（僅限引用完整性）
+
+若 Codex CLI 0.147.0 以上已透過 ChatGPT 訂閱登入，引用完整性查驗可不使用
+OpenAI API key 而改走該訂閱。這不涵蓋魔鬼代言人、Reviewer 2、校準、re-review
+或檢查點判斷。
+
+```bash
+# Citation-integrity calls only. General DA/reviewer/judgment calls remain on API transport.
+export ARS_CROSS_MODEL_TRANSPORT="codex"
+# gpt-5.6-sol is validated for THIS transport (2026-08-19 codex-transport bakeoff,
+# superiority on recall + latency — audits/bakeoff-gpt-5-6-sol-codex-2026-08-19.md).
+# gpt-5.5 remains the validated bakeoff baseline alternative.
+export ARS_CROSS_MODEL="gpt-5.6-sol"
+
+python3 scripts/cross_model_codex_transport.py detect
+# The producer sends one closed codex_citation_request/1.0 object on stdin:
+printf '%s' "$CITATION_REQUEST_JSON" | scripts/cross_model_codex_verify.sh
+```
+
+偵測與執行都遵守自訂 `CODEX_HOME`，並要求訂閱狀態逐字為
+`Logged in using ChatGPT`；憑證絕不輸出。Adapter 使用僅含 auth 的暫時 home、
+空白工作根、read-only sandbox、停用本機工具，且接受的來源 URL 必須綁定到
+結構化搜尋結果。選用的 live smoke `scripts/cross_model_smoke_test_codex.sh` 會耗用
+訂閱／模型／網路資源，CI 永不執行。
+
 ---
 
 ## 安裝方式
@@ -196,6 +250,10 @@ Claude 會在 `<install-root>/<skill-name>/SKILL.md` 尋找 skills。這個 repo
 
 不要把整個 repository 當成單一巢狀 skill 資料夾安裝到 `.claude/skills/academic-research-skills/`。那會讓四個 `SKILL.md` 比 Claude 可發現的位置多埋一層。請參考 Anthropic 的 [Claude Code Skills documentation](https://code.claude.com/docs/en/skills)。
 
+以下各安裝方式的差異不只是方便程度：hooks、slash commands、tools allowlist、subagent
+編排、以及需要 Python 的檢查功能，在某些管道可用、在其他管道會降級或不存在。倚賴任何
+一項機制之前，請先查對照表：[CONTROL_AVAILABILITY.md](CONTROL_AVAILABILITY.md)（英文）。
+
 ### 方法零：Claude Code Plugin（v3.7.0+，Claude Code CLI / IDE 用戶推薦）
 
 如果你用的是 Claude Code CLI、VS Code extension 或 JetBrains extension，可以一行指令安裝 ARS：
@@ -206,6 +264,8 @@ Claude 會在 `<install-root>/<skill-name>/SKILL.md` 尋找 skills。這個 repo
 ```
 
 四個 skill（`deep-research`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`）會從 plugin 的 `skills/` 目錄自動載入。
+
+**斜線命令的兩種形式（#633）。** Plugin 安裝下命令會帶命名空間：`/academic-research-skills:ars-<mode>`，這是正式形式。每個命令同時宣告了明確的 frontmatter `name`，所以在 Claude Code v2.1.216 以上，只要沒有其他命令撞名，短形式 `/ars-<mode>` 也可以直接用；session 開場宣告列的就是短形式。在 v2.1.216 之前的版本，frontmatter `name` 會取代整個命令名，命令只會以短形式 `/ars-<mode>` 出現（仍可正常呼叫，但命名空間形式失去自動完成）。
 
 **強烈建議開啟 auto-update。** 進 `/plugin` UI 找到 `academic-research-skills`，把 auto-update 開起來。ARS 大約 1–2 週發新版，開了之後會自動同步。手動更新已安裝的 plugin：`/plugin update academic-research-skills`。（`/plugin marketplace update academic-research-skills` 只重新拉 marketplace 來源，不會更新已裝 plugin。）
 

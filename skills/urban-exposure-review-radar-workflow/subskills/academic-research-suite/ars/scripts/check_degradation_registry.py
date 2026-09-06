@@ -69,6 +69,28 @@ _EXPECTED_MECHANISMS = frozenset({
     "submission_package_incompleteness",
     "cross_model_unavailable",
     "compliance_non_sr_warn_cap",
+    # #576 Spec B current 1.1 re-review contract marker family. The three
+    # missing-original mechanisms remain archived 1.0 behavior and are not
+    # reachable current degradations now that original_manuscript is required.
+    "re_review_attribution_indeterminate",
+    "re_review_criteria_layer_absent_no_letter",
+    "re_review_criteria_layer_absent_ordinal_mismatch",
+    "re_review_round1_findings_absent",
+    "re_review_commitment_evidence_absent",
+    "re_review_routing_degraded_unmapped_labels",
+    "re_review_routing_degraded_cards_unparsable",
+    "re_review_routing_degraded_no_cards",
+    "re_review_legacy_no_contract",
+    "re_review_apply_chain_witness_not_run",
+    # #769: write-scope guard launcher degradations (hooks/run_guard.sh).
+    # No degraded path ever blocks: launcher failure paths resolve to
+    # pass-through, and the no-timeout fallback still forwards the guard's
+    # real decision. Optional hardening outside the terminal-policy layer.
+    "write_scope_guard_no_python",
+    "write_scope_guard_no_git_bash",
+    "write_scope_guard_no_timeout_binary",
+    "write_scope_guard_subprocess_misbehaves",
+    "write_scope_guard_payload_capacity_edge",
 })
 
 

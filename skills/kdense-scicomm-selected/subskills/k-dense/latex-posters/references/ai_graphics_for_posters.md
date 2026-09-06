@@ -26,7 +26,7 @@ per-graphic-type tables, and the complete before/after prompt examples.
    - Conclusions
 
 ❌ BAD - 8+ sections crammed together:
-   - Overview, Introduction, Background, Methods,
+   - Overview, Introduction, Background, Methods, 
    - Results 1, Results 2, Discussion, Conclusions, Future Work
 ```
 
@@ -57,7 +57,7 @@ pdflatex poster.tex
 
 # Look for:
 # - Text cut off at any edge
-# - Content touching page boundaries
+# - Content touching page boundaries  
 # - Overfull hbox warnings in .log file
 grep -i "overfull" poster.log
 ```
@@ -186,9 +186,9 @@ python scripts/generate_schematic.py "POSTER FORMAT for A0. KEY FINDINGS with ON
 **Example - WRONG (too complex, text will be small):**
 ```bash
 # BAD - too many elements in one graphic
-python scripts/generate_schematic.py "Complete ML pipeline showing data collection,
-preprocessing with 5 steps, feature engineering with 8 techniques, model training
-with hyperparameter tuning, validation with cross-validation, and deployment with
+python scripts/generate_schematic.py "Complete ML pipeline showing data collection, 
+preprocessing with 5 steps, feature engineering with 8 techniques, model training 
+with hyperparameter tuning, validation with cross-validation, and deployment with 
 monitoring. Include all labels and descriptions." -o figures/pipeline.png
 ```
 
@@ -197,9 +197,9 @@ monitoring. Include all labels and descriptions." -o figures/pipeline.png
 # GOOD - split into multiple simple graphics with large text
 
 # Graphic 1: High-level overview (3-4 elements max)
-python scripts/generate_schematic.py "POSTER FORMAT for A0: Simple 4-step pipeline.
-Four large boxes: DATA → PROCESS → MODEL → RESULTS.
-GIANT labels (80pt+), thick arrows, lots of white space.
+python scripts/generate_schematic.py "POSTER FORMAT for A0: Simple 4-step pipeline. 
+Four large boxes: DATA → PROCESS → MODEL → RESULTS. 
+GIANT labels (80pt+), thick arrows, lots of white space. 
 Only 4 words total. Readable from 8 feet." -o figures/overview.png
 
 # Graphic 2: Key result (1 metric highlighted)
@@ -368,7 +368,7 @@ After all figures pass the post-generation review, include them in your poster t
 \block{Introduction}{
   \centering
   \includegraphics[width=0.85\linewidth]{figures/intro_visual.png}
-
+  
   \vspace{0.5em}
   Brief context text here (2-3 sentences max).
 }
@@ -390,7 +390,7 @@ After all figures pass the post-generation review, include them in your poster t
     \centering
     \includegraphics[width=\linewidth]{figures/result_2.png}
   \end{minipage}
-
+  
   \vspace{0.5em}
   Key findings in 3-4 bullet points.
 }
@@ -415,7 +415,7 @@ After all figures pass the post-generation review, include them in your poster t
 \headerbox{Results}{name=results,column=1,row=0}{
   \includegraphics[width=\linewidth]{figures/comparison_chart.png}
   \vspace{0.3em}
-
+  
   Key finding: Our method achieves 92% accuracy.
 }
 ```
@@ -456,7 +456,7 @@ python scripts/generate_schematic.py "POSTER FORMAT for A0. TWO bars only: 'BASE
 # Open each figure at 25% zoom:
 # ✅ workflow.png: 3 elements, text readable, 60% white - PASS
 # ✅ case1.png: 3 elements, giant numbers, clean - PASS
-# ✅ case2.png: 3 elements, giant numbers, clean - PASS
+# ✅ case2.png: 3 elements, giant numbers, clean - PASS  
 # ✅ case3.png: 3 elements, giant numbers, clean - PASS
 # ✅ timeline.png: 3 elements, readable, simple - PASS
 # ✅ results.png: 2 bars, giant percentages, clear - PASS

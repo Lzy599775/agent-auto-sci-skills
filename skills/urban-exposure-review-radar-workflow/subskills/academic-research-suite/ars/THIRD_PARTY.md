@@ -1,7 +1,8 @@
 # Third-party projects
 
 This page lists third-party projects, platforms, and services that build on, wrap,
-or integrate Academic Research Skills (ARS).
+or integrate Academic Research Skills (ARS). It also acknowledges upstream projects
+whose mechanisms ARS has adapted (see **Upstream & related projects** below).
 
 ## Disclaimer
 
@@ -15,6 +16,11 @@ operated by independent third parties, not affiliated with this project.
   data-handling policies. Read them before you sign up or upload anything.
 - **Use at your own risk.** Do not paste unpublished research, personal data, or any
   confidential material into a third-party service without checking its policies first.
+
+For contrast, the **core suite's own** network touchpoints and local stores are mapped
+in [docs/DATA_FLOWS.md](docs/DATA_FLOWS.md) — what leaves the machine, to which
+services, and how to turn each path off. That map covers this repository only, never
+the third-party projects below.
 
 If you want a project *reviewed and officially recognized* by ARS (rather than merely
 listed), that is a separate track — see **Getting officially recognized** below.
@@ -46,8 +52,19 @@ directory listing. See the Platform Port Reminder policy and open an issue to di
 | Project | Maintainer | What it does | Link |
 |---------|-----------|--------------|------|
 | ClawMama | kinhunt (third party) | Hosted OpenClaw/Hermes-style agent offering a first-run trial of the Academic Research Pipeline via Telegram or WhatsApp | [Try in Telegram or WhatsApp](https://app.clawmama.run/skills/639wu5/hermes?utm_source=github&utm_medium=issue&utm_campaign=skill_outreach_academic_research_skills) |
+| OrcaRouter | OrcaRouter team | OpenAI- and Anthropic-compatible gateway usable as the cross-model verification provider in Academic Research Skills via `ARS_OPENAI_COMPAT_BASE_URL` + `ARS_CROSS_MODEL`, with namespaced model IDs (e.g. `anthropic/claude-sonnet-5`) routing through the ungrounded OpenAI-compatible path | [orcarouter.ai](https://www.orcarouter.ai) |
 
 *Columns:* **Project** name as the third party calls it · **Maintainer** the account
 that submitted / operates it · **What it does** a one-line neutral description ·
 **Link** where it lives. Descriptions are the submitters' own claims, restated
 neutrally; the maintainer has not verified them.
+
+## Upstream & related projects
+
+The reverse direction: independent projects whose mechanisms ARS has adapted, with
+credit recorded in the corresponding issues and pull requests. Listing here is
+acknowledgement, not endorsement, and implies no affiliation.
+
+| Project | Maintainer | Relationship | Link |
+|---------|-----------|--------------|------|
+| sci-ssci-skills | [@MissOrangePeel](https://github.com/MissOrangePeel) (Yila-AI) | Origin of the claim-strength ladder + deterministic invariant-checking mechanism shape adapted into the v3.19.0 revision-round claim-drift guards (#569 / #570, PR [#571](https://github.com/Imbad0202/academic-research-skills/pull/571)) | [Yila-AI/sci-ssci-skills](https://github.com/Yila-AI/sci-ssci-skills) |

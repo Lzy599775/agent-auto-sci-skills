@@ -189,6 +189,26 @@ id = "511-degradation-registry"
 path = "scripts/test_check_degradation_registry.py"
 
 [[pytest]]
+id = "758-data-flows-map"
+path = "scripts/test_check_data_flows.py"
+
+[[pytest]]
+id = "771-markdown-lint-util"
+path = "scripts/test__markdown_lint_util.py"
+
+[[pytest]]
+id = "759-risk-register"
+path = "scripts/test_check_risk_register.py"
+
+[[pytest]]
+id = "756-data-access-level-pins"
+path = "scripts/test_check_data_access_level.py"
+
+[[pytest]]
+id = "809-skill-inventory-parity"
+path = "scripts/test_check_skill_inventory_parity.py"
+
+[[pytest]]
 id = "v3.10-182-verification-cache"
 path = "scripts/test_verification_cache.py"
 
@@ -217,8 +237,64 @@ id = "272-instruction-data-boundary-mutation"
 path = "scripts/test_check_instruction_data_boundary.py"
 
 [[pytest]]
-id = "272-runtime-injection-boundary-pebble"
-path = "scripts/test_runtime_injection_boundary_xfail.py"
+id = "675-indirect-injection-behavior-probe"
+path = "scripts/test_indirect_prompt_injection_behavior_probe.py"
+
+[[pytest]]
+id = "675-indirect-injection-no-call-envelope"
+path = "scripts/test_run_indirect_prompt_injection_no_call.py"
+
+[[pytest]]
+id = "659-within-session-ideation-diversity-assets"
+path = "scripts/test_validate_ideation_diversity_assets.py"
+
+[[pytest]]
+id = "582-role-topology-utility-dry-run"
+path = "scripts/test_run_role_topology_utility_dry_run.py"
+
+[[pytest]]
+id = "659-within-session-ideation-diversity-no-call-envelope"
+path = "scripts/test_run_ideation_diversity_no_call.py"
+
+[[pytest]]
+id = "659-within-session-ideation-diversity-assignment-gate"
+path = "scripts/test_ideation_diversity_assignment_gate.py"
+
+[[pytest]]
+id = "655-claim-standing-stance-seed-assets"
+path = "scripts/test_claim_standing_stance_assets.py"
+
+[[pytest]]
+id = "655-claim-standing-discovery-adapters"
+path = "scripts/test_claim_standing_discovery.py"
+
+[[pytest]]
+id = "655-claim-standing-stance-contracts"
+path = "scripts/test_claim_standing_stance_contracts.py"
+
+[[pytest]]
+id = "655-claim-standing-stance-runner"
+path = "scripts/test_claim_standing_stance_runner.py"
+
+[[pytest]]
+id = "655-claim-standing-query-plan-builder"
+path = "scripts/test_build_claim_standing_query_plan.py"
+
+[[pytest]]
+id = "655-claim-standing-freshness"
+path = "scripts/test_check_claim_standing_freshness.py"
+
+[[pytest]]
+id = "655-claim-standing-transmissions"
+path = "scripts/test_claim_standing_transmissions.py"
+
+[[pytest]]
+id = "655-claim-standing-pipeline-wiring"
+path = "scripts/test_claim_standing_pipeline_wiring.py"
+
+[[pytest]]
+id = "655-claim-standing-view-renderer"
+path = "scripts/test_render_claim_standing_view.py"
 
 [[pytest]]
 id = "250-title-fuzzy-false-positive-pin"
@@ -227,6 +303,34 @@ path = "scripts/test_title_fuzzy_false_positive.py"
 [[pytest]]
 id = "396-rubric-weight-consistency"
 path = "scripts/test_check_rubric_weight_consistency.py"
+
+[[pytest]]
+id = "reviewer-scoring-honesty"
+path = "scripts/test_check_reviewer_scoring_honesty.py"
+
+[[pytest]]
+id = "735-socratic-rq-non-generation"
+path = "scripts/test_socratic_rq_non_generation_contract.py"
+
+[[pytest]]
+id = "736-claim-strength-drift-disposition"
+path = "scripts/test_claim_strength_drift_disposition.py"
+
+[[pytest]]
+id = "737-claim-registry-coverage"
+path = "scripts/test_claim_registry_coverage.py"
+
+[[pytest]]
+id = "737-claim-verification-coverage-contract"
+path = "scripts/test_claim_verification_coverage_contract.py"
+
+[[pytest]]
+id = "738-human-read-attestation-resolver"
+path = "scripts/test_human_read_attestation_resolver.py"
+
+[[pytest]]
+id = "740-review-panel-provenance"
+path = "scripts/test_review_panel_provenance.py"
 
 [[pytest]]
 id = "392-citation-verification-intake"
@@ -289,6 +393,22 @@ id = "510-panel-synthesis-checker"
 path = "scripts/test_check_panel_synthesis.py"
 
 [[pytest]]
+id = "574-schema-13-2-validator"
+path = "scripts/test_check_sprint_contract.py"
+
+[[pytest]]
+id = "574-phase-conformance-checker"
+path = "scripts/test_check_phase_conformance.py"
+
+[[pytest]]
+id = "574-role-scoped-contract-lint"
+path = "scripts/test_check_role_scoped_contract.py"
+
+[[pytest]]
+id = "574-decision-contract-lint"
+path = "scripts/test_check_decision_contract.py"
+
+[[pytest]]
 id = "528-pipeline-boundary-semantics"
 path = "scripts/test_check_pipeline_boundary_semantics.py"
 
@@ -307,3 +427,231 @@ path = "scripts/test_ars_update_check.py"
 [[pytest]]
 id = "570-revision-token-conservation"
 path = "scripts/test_check_revision_token_conservation.py"
+
+[[pytest]]
+id = "574-seeded-defect-fixtures"
+path = "scripts/test_check_seeded_defect_fixtures.py"
+
+[[pytest]]
+id = "574-reviewer-data-fences"
+path = "scripts/test_check_reviewer_data_fences.py"
+
+[[pytest]]
+id = "574-reviewer-finding-contract"
+path = "scripts/test_check_reviewer_finding_contract.py"
+
+[[pytest]]
+id = "576-re-review-synthesis-checker"
+path = "scripts/test_check_re_review_synthesis.py"
+
+[[pytest]]
+id = "670-non-ranking-revision-roadmap"
+path = "scripts/test_revision_roadmap.py"
+
+[[pytest]]
+id = "670-revision-roadmap-integration"
+path = "scripts/test_check_670_revision_roadmap_integration.py"
+
+[[pytest]]
+id = "576-persuasion-invariance-fixtures"
+path = "scripts/test_check_persuasion_invariance_fixtures.py"
+
+[[pytest]]
+id = "608-e4-dispatch-harness"
+path = "scripts/test_dispatch_e4_panel.py"
+
+[[pytest]]
+id = "616-e4-promotion-integrity"
+path = "scripts/test_check_e4_promotion.py"
+
+[[pytest]]
+id = "616-e4-resume-record"
+path = "scripts/test_resume_e4_record.py"
+
+[[pytest]]
+id = "611-reviewer-sprint-prompt-sync"
+path = "scripts/test_check_reviewer_sprint_prompt_sync.py"
+
+[[pytest]]
+id = "610-receipt-enum-sync"
+path = "scripts/test_check_receipt_enum_sync.py"
+
+[[pytest]]
+id = "610-step5-recompute-calculator"
+path = "scripts/test_recompute_receipts.py"
+
+[[pytest]]
+id = "611-reviewer-role-label"
+path = "scripts/test_check_reviewer_role_label.py"
+
+[[pytest]]
+id = "619-disclosure-closeout"
+path = "scripts/test_check_619_disclosure_closeout.py"
+
+[[pytest]]
+id = "615-venue-disclosure-contract"
+path = "scripts/test_venue_disclosure_contract.py"
+
+[[pytest]]
+id = "595-chinese-literature-client"
+path = "scripts/test_chinese_literature_client.py"
+
+[[pytest]]
+id = "617-harness-retirement-generator"
+path = "scripts/test_render_harness_retirement_issue.py"
+
+[[pytest]]
+id = "633-command-frontmatter-name"
+path = "scripts/test_check_command_frontmatter_name.py"
+
+[[pytest]]
+id = "654-heldout-measurement-contract"
+path = "scripts/test_check_heldout_measurement_report.py"
+
+[[pytest]]
+id = "679-revision-claim-drift-suite-v2"
+path = "scripts/test_check_revision_claim_drift_suite_v2.py"
+
+[[pytest]]
+id = "665-human-subjects-output-contract"
+path = "scripts/test_check_human_subjects_output_contract.py"
+
+[[pytest]]
+id = "666-human-subjects-authority"
+path = "scripts/test_resolve_human_subjects_authority.py"
+
+[[pytest]]
+id = "669-review-pathway-rule-trace"
+path = "scripts/test_review_pathway_rule_trace.py"
+
+[[pytest]]
+id = "669-review-pathway-integration"
+path = "scripts/test_check_669_review_pathway_rule_trace.py"
+
+[[pytest]]
+id = "667-submission-packet-manifest"
+path = "scripts/test_build_submission_packet_manifest.py"
+
+[[pytest]]
+id = "667-submission-packet-integration"
+path = "scripts/test_check_submission_packet_manifest_integration.py"
+
+[[pytest]]
+id = "681-content-coverage-advisory"
+path = "scripts/test_content_coverage_advisory.py"
+
+[[pytest]]
+id = "681-content-coverage-integration"
+path = "scripts/test_check_content_coverage_advisory_integration.py"
+
+[[pytest]]
+id = "672-cross-document-consistency-advisory"
+path = "scripts/test_cross_document_consistency_advisory.py"
+
+[[pytest]]
+id = "672-cross-document-consistency-integration"
+path = "scripts/test_check_cross_document_consistency_advisory_integration.py"
+
+[[pytest]]
+id = "673-adjudication-activity-runtime"
+path = "scripts/test_adjudication_activity.py"
+
+[[pytest]]
+id = "673-adjudication-activity-integration"
+path = "scripts/test_check_673_adjudication_activity.py"
+
+[[pytest]]
+id = "680-human-subjects-reference-migration"
+path = "scripts/test_check_human_subjects_reference_migration.py"
+
+[[pytest]]
+id = "678-bibliographic-integrity-signals"
+path = "scripts/test_check_bibliographic_integrity_signals.py"
+
+[[pytest]]
+id = "660-tortured-phrase-screening"
+path = "scripts/test_tortured_phrase_screening.py"
+
+[[pytest]]
+id = "660-tortured-phrase-integration"
+path = "scripts/test_check_tortured_phrase_screening_integration.py"
+
+[[pytest]]
+id = "651-retraction-status"
+path = "scripts/test_retraction_status.py"
+
+[[pytest]]
+id = "668-committee-correspondence"
+path = "scripts/test_check_committee_correspondence.py"
+
+[[pytest]]
+id = "683-review-target-context"
+path = "scripts/test_resolve_review_target_context.py"
+
+[[pytest]]
+id = "684-review-criteria-binding-runtime"
+path = "scripts/test_review_criteria_binding.py"
+
+[[pytest]]
+id = "684-review-criteria-binding-integration"
+path = "scripts/test_check_684_review_criteria_binding.py"
+
+[[pytest]]
+id = "684-review-criteria-constructive-value-scorer"
+path = "scripts/test_score_review_criteria_constructive_value.py"
+
+[[pytest]]
+id = "684-review-criteria-constructive-value-runner"
+path = "scripts/test_run_review_criteria_constructive_value.py"
+
+[[pytest]]
+id = "656-shared-evidence-row-contract"
+path = "scripts/test_evidence_rows.py"
+
+[[pytest]]
+id = "656-evidence-row-integration"
+path = "scripts/test_check_evidence_row_integration.py"
+
+[[pytest]]
+id = "630-codex-subscription-transport"
+path = "scripts/test_cross_model_codex_transport.py"
+
+[[pytest]]
+id = "630-codex-subscription-integration"
+path = "scripts/test_check_630_codex_subscription_transport.py"
+
+[[pytest]]
+id = "655-claim-standing-candidate-ledger"
+path = "scripts/test_build_claim_standing_candidate_ledger.py"
+
+[[pytest]]
+id = "655-claim-standing-candidate-ledger-integration"
+path = "scripts/test_check_claim_standing_candidate_ledger_integration.py"
+
+[[pytest]]
+id = "512-pdf-read-preflight-and-content-sandbox"
+path = "scripts/test_pdf_read_preflight.py"
+
+[[pytest]]
+id = "745-stage-capability-matrix"
+path = "scripts/test_check_stage_capability_matrix.py"
+
+[[pytest]]
+id = "755-workflow-classification"
+path = "scripts/test_check_workflow_classification.py"
+
+[[pytest]]
+id = "757-control-availability-map"
+path = "scripts/test_check_control_availability.py"
+
+[[pytest]]
+id = "742-research-workflow-profile"
+path = "scripts/test_research_workflow_profile.py"
+
+[[pytest]]
+id = "743-inquiry-branch-ledger"
+path = "scripts/test_inquiry_branch_ledger.py"
+
+[[pytest]]
+id = "789-sealed-promotion-bakeoff"
+path = "scripts/test_check_promotion_bakeoff_preregistration.py"

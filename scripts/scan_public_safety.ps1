@@ -19,12 +19,10 @@ $allowedFalsePositiveText = @(
   'export NCBI_API_KEY="your_key_here"',
   'print("  export OPENROUTER_API_KEY=''your_api_key''")',
   "print(""  export OPENROUTER_API_KEY='your_api_key'"")",
-  "export OPENROUTER_API_KEY='your_api_key_here'",
   'api_key="your_openrouter_key",',
-  "export OPENROUTER_API_KEY='sk-or-v1-your_key_here'",
+  'export OPENROUTER_API_KEY="sk-or-v1-your_key_here"',
   'echo ''export OPENROUTER_API_KEY="sk-or-v1-your_key"'' >> ~/.bashrc  # or ~/.zshrc',
   'echo ''export OPENROUTER_API_KEY="sk-or-v1-your_key"'' >> ~/.zshrc',
-  "export OPENROUTER_API_KEY='your_api_key_here'",
   'api_key = check_env_file()',
   'print("OPENROUTER_API_KEY=your-api-key-here")',
   'print("export OPENROUTER_API_KEY=your-api-key-here")',
@@ -32,6 +30,7 @@ $allowedFalsePositiveText = @(
   'export OPENAI_API_KEY="sk-your-key-here"  # For GPT-5.4 Pro',
   'export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.4 Pro',
   'export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.5 / GPT-5.5 Pro',
+  'export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.6 Sol / GPT-5.5',
   'export GOOGLE_AI_API_KEY="AIza-your-key-here"    # For Gemini 3.1 Pro',
   'FLAG_TOKEN = "ARS_PASSPORT_RESET"',
   'PROTOCOL_TOKEN = "passport_as_reset_boundary"',
@@ -46,8 +45,16 @@ $allowedFalsePositiveText = @(
   'self.api_key = _resolve_api_key(api_key)',
   'api_key = _resolve_api_key(args.api_key)',
   'print("\nOr add OPENROUTER_API_KEY=your_api_key to a .env file")',
+  'print("\nOr add OPENROUTER_API_KEY=your_api_key to a .env file")',
   'assert any("api_key=test-key-123" in url for url in captured_url)',
-  'client = OpenAlexClient(api_key="sk-secret-key")'
+  'client = OpenAlexClient(api_key="sk-secret-key")',
+  'self._ncbi_api_key = ncbi_api_key',
+  'MULTI_DISSENT_TOKEN = "multi_dissent=true"',
+  'client = _client(ncbi_api_key="test-ncbi-key")',
+  'assert "api_key=test-ncbi-key" in transport.requests[0]',
+  '"https://evil.invalid/a?api_key=test-ncbi-key",',
+  "print(""  export OPENROUTER_API_KEY='your_api_key'"")",
+  "echo 'export OPENROUTER_API_KEY=""sk-or-v1-your_key""' >> ~/.zshrc"
 )
 $gitFiles = git -C $Root -c core.quotePath=false ls-files --cached --others --exclude-standard 2>$null
 if ($LASTEXITCODE -eq 0 -and $gitFiles) {
@@ -79,6 +86,9 @@ foreach ($pattern in $patterns) {
   foreach ($file in $files) {
     $matches = Select-String -Path $file.FullName -Pattern $pattern -CaseSensitive:$false -ErrorAction SilentlyContinue
     foreach ($m in $matches) {
+      if ($file.FullName -match "skills\\kdense-" -and $m.Line -match "your_api_key|your_key_here|sk-or-v1-your_key") {
+        continue
+      }
       if ($allowedFalsePositiveText -contains $m.Line.Trim()) {
         continue
       }

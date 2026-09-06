@@ -90,7 +90,7 @@ MeSH (Medical Subject Headings) provides controlled vocabulary for precise searc
 **Building Complex Queries**:
 ```bash
 # Clinical trials on diabetes treatment published recently
-"Diabetes Mellitus, Type 2"[MeSH] AND "Drug Therapy"[MeSH]
+"Diabetes Mellitus, Type 2"[MeSH] AND "Drug Therapy"[MeSH] 
 AND "Clinical Trial"[Publication Type] AND 2020:2024[Publication Date]
 
 # Reviews on CRISPR in specific journal

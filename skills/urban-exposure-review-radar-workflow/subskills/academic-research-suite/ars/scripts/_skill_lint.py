@@ -12,15 +12,36 @@ ONE of several section extractors in scripts/ — the heading-level / regex /
 fence-aware variants (check_392, check_216, check_firm_rules_sync) are
 deliberately not interchangeable with this plain line-walk and are not
 consolidated here.
+
+`norm_ws` / `read_or_exit2` are the verbatim-witness-lint pair
+(check_reviewer_data_fences, check_reviewer_finding_contract): whitespace
+folding is load-bearing for "verbatim match modulo wrapping" pins, so it must
+be single-sourced rather than re-implemented per lint. (Older lints with
+private `_norm` copies — check_instruction_data_boundary,
+check_firm_rules_sync — predate this helper; migrating them is a follow-up.)
 """
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
 
 import yaml
+
+# One row of the `.claude/CLAUDE.md` § "Skills Overview" table. The first cell is
+# the backticked skill directory name followed by its `vX.Y.Z` token. Two forms
+# are shared so the lints agree on what a row is:
+#   PREFIX — name only. check_skill_inventory_parity.py uses it to find every
+#            row that names a skill, so a row can never hide from the parity
+#            check by omitting its version.
+#   FULL   — name + version. check_version_consistency.py parses versions with
+#            it; the parity lint reports any PREFIX row that is not also a FULL
+#            row, closing the gap where a version-less row is invisible to the
+#            version lint (it only iterates FULL matches).
+SKILLS_TABLE_ROW_PREFIX = r"^\|\s*`([a-z0-9-]+)`"
+SKILLS_TABLE_ROW_FULL = SKILLS_TABLE_ROW_PREFIX + r"\s+v([A-Za-z0-9.\-_+]+)\s*\|"
 
 SKIP_DIRS = frozenset(
     {"shared", "scripts", "docs", ".git", ".github", "examples", ".local-plans", ".claude"}
@@ -37,15 +58,38 @@ class FrontmatterError(Exception):
     """
 
 
+def _uses_codex_workflow_overlay(root: Path) -> bool:
+    """Return whether *root* is the vendored tree of the Codex package."""
+    manifest_path = root.parent / "manifest.json"
+    if not manifest_path.is_file():
+        return False
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError, UnicodeDecodeError):
+        return False
+    return isinstance(manifest, dict) and manifest.get("generated_for") == "codex"
+
+
 def iter_skill_files(root: Path) -> list[Path]:
-    """Top-level SKILL.md files only. Skips SKIP_DIRS."""
+    """Top-level workflow entry files only. Skips SKIP_DIRS.
+
+    Upstream uses ``SKILL.md``. The Codex distribution deliberately renames
+    those four entry files to ``WORKFLOW.md`` so only its root router is
+    discoverable; the adjacent package manifest is the authority for that
+    fallback.
+    """
     results: list[Path] = []
+    codex_overlay = _uses_codex_workflow_overlay(root)
     for child in sorted(root.iterdir()):
         if not child.is_dir() or child.name in SKIP_DIRS:
             continue
         skill_md = child / "SKILL.md"
         if skill_md.is_file():
             results.append(skill_md)
+            continue
+        workflow_md = child / "WORKFLOW.md"
+        if codex_overlay and workflow_md.is_file():
+            results.append(workflow_md)
     return results
 
 
@@ -106,7 +150,7 @@ def check_metadata_field(
     violations: list[str] = []
     skills = iter_skill_files(root)
     if not skills:
-        violations.append(f"no SKILL.md files found under {root}")
+        violations.append(f"no workflow entry files found under {root}")
         return violations
     for path in skills:
         try:
@@ -164,8 +208,71 @@ def check_section_literals(invariant: int, text: str, heading: str,
     ]
 
 
+def heading_section(text: str, heading: str) -> str | None:
+    """Return the body of the section opened by the exact heading line
+    (column 0, outside ``` fences), up to the next heading of the SAME or
+    HIGHER level outside fences — deeper child headings stay inside the body.
+    None if absent. Nestable: pass a parent section's body back in to bind a
+    child heading to that parent (delivery-block scoping — a heading matched
+    anywhere in the file is NOT the delivered block)."""
+    open_level = len(heading) - len(heading.lstrip("#"))
+    stop = re.compile(rf"#{{1,{open_level}}} ")
+    # Both Markdown fence forms count — a heading "hidden" in a ~~~ block must
+    # not read as a real section boundary (CommonMark close: same fence char,
+    # run length >= the opening run, at most 3 spaces of indentation).
+    fence_re = re.compile(r"[ ]{0,3}(`{3,}|~{3,})")
+    # A CLOSING fence is the run alone on its line (CommonMark: no info string
+    # on a closer — "~~~not-a-close" does NOT close a ~~~ block — and a
+    # 4-space-indented run is content, not a closer).
+    fence_close_re = re.compile(r"[ ]{0,3}(`{3,}|~{3,})\s*$")
+    fence: str | None = None  # the opening fence run while inside a fenced block
+    started = False
+    body: list[str] = []
+    for line in text.splitlines(keepends=True):
+        m = fence_re.match(line)
+        if fence is not None:
+            mc = fence_close_re.match(line)
+            if mc and mc.group(1)[0] == fence[0] and len(mc.group(1)) >= len(fence):
+                fence = None
+            if started:
+                body.append(line)
+            continue
+        if m:
+            fence = m.group(1)
+            if started:
+                body.append(line)
+            continue
+        if not started:
+            if line.rstrip("\n") == heading:
+                started = True
+            continue
+        if stop.match(line):
+            break
+        body.append(line)
+    return "".join(body) if started else None
+
+
+def norm_ws(text: str) -> str:
+    """Collapse all whitespace runs so line-wrapping does not defeat a
+    verbatim-witness compare. Load-bearing for the fence/finding-contract
+    pins — hardening added here reaches every importing lint at once."""
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def read_or_exit2(root: Path, rel: str) -> str:
+    """Read a required lint surface; a missing file is an invocation error
+    (exit 2), never a lint failure (exit 1)."""
+    p = root / rel
+    if not p.is_file():
+        print(f"ERROR: required file missing: {rel}", file=sys.stderr)
+        raise SystemExit(2)
+    return p.read_text(encoding="utf-8")
+
+
 def run_lint(field: str, legal_values: set[str] | frozenset[str], ok_message: str) -> int:
-    """argparse + check + print + exit-code wrapper used by both check scripts."""
+    """argparse + check + print + exit-code wrapper (check_task_type.py;
+    check_data_access_level.py grew its own #756 pin-layer main and no
+    longer uses this)."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--path",

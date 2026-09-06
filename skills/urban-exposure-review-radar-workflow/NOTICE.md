@@ -7,8 +7,8 @@ It also vendors a third-party Codex-native academic research package:
 - Source package: `Imbad0202/academic-research-skills-codex`
 - Upstream suite: `Imbad0202/academic-research-skills`
 - Vendored path: `subskills/academic-research-suite`
-- Codex adapter version: 0.1.22
-- Codex package commit used: `f8d6b06`
+- Codex adapter version: 0.1.28
+- Codex package commit used: `925975e`
 - Upstream ARS commit recorded in manifest: `828ef3b613b0e8b91830da3328a1e33d4eb5ab4c`
 - License: Creative Commons Attribution-NonCommercial 4.0 International
 

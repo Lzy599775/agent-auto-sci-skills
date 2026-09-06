@@ -74,6 +74,9 @@ jobs:
           PYTHONPATH: .
         run: python3 scripts/run_ci_pytest_manifest.py
 
+      - name: Check claim-standing candidate-ledger integration (#655)
+        run: python3 scripts/check_claim_standing_candidate_ledger_integration.py
+
       - name: Check PREPRINT_VENUES list consistency (#105)
         run: python3 scripts/check_preprint_venues_consistency.py
 
@@ -87,6 +90,16 @@ jobs:
           PYTHONPATH: scripts
         run: python3 scripts/check_data_access_level.py
 
+      - name: Check skill-inventory parity (#809)
+        # Top-level <name>/SKILL.md dirs == skills/ symlinks == CLAUDE.md
+        # Skills Overview rows == marketplace.json plugins[].skills, plus the
+        # "N skills" count claims in plugin/marketplace descriptions. The pytest
+        # companion `test_check_skill_inventory_parity.py` runs via the unified
+        # manifest.
+        env:
+          PYTHONPATH: scripts
+        run: python3 scripts/check_skill_inventory_parity.py
+
       - name: Check instruction-vs-data boundary (#272 guidance layer)
         # Drift guard for the retrieved-content instruction/data principle:
         # authoritative canonical block in ground_truth_isolation_pattern.md +
@@ -95,6 +108,22 @@ jobs:
         # pytest manifest above. Commit-time documentation check only — not a
         # runtime gate (see docs/design/2026-06-07-272-...-design.md § 3/§ 5).
         run: python3 scripts/check_instruction_data_boundary.py
+
+      - name: Validate indirect prompt-injection behavior probe (#675)
+        # Hermetic asset/materialization contract only. This executes no model,
+        # provider, web, tool, or structural enforcement claim; the mutation and
+        # scoring tests run through the pytest manifest above.
+        run: python3 scripts/run_indirect_prompt_injection_probe.py validate-assets
+
+      - name: Validate role-topology utility dry-run assets (#582)
+        # Design/seed validation only: no provider, model, tool, judge, or dispatch.
+        run: python3 scripts/run_role_topology_utility_dry_run.py validate-assets
+
+      - name: Check indirect prompt-injection no-call envelope (#675 Phase 2)
+        # AST-only exact module/symbol/attribute/call allowlist. It rejects
+        # aliases, module escapes, provider/network/process capabilities, and any
+        # CLI beyond the five offline envelope commands.
+        run: python3 scripts/check_indirect_prompt_injection_no_call.py
 
       - name: Check task_type declarations
         env:
@@ -116,7 +145,10 @@ jobs:
           PYTHONPATH: .
         run: python3 -m unittest scripts.test_check_collaboration_depth_rubric -v
 
-      - name: Check rubric weight consistency (quality_rubrics / framework / SKILL rule 14)
+      - name: Check criterion-bound reviewer scoring honesty
+        run: python3 scripts/check_reviewer_scoring_honesty.py
+
+      - name: Check retired rubric-weight entrypoint compatibility
         run: python3 scripts/check_rubric_weight_consistency.py
 
       - name: Check citation-verification intake wiring (#392)
@@ -144,6 +176,11 @@ jobs:
           PYTHONPATH: scripts
         run: python3 scripts/check_version_consistency.py
 
+      - name: Check distribution-surface claim discipline (#753)
+        # The pytest companion `test_check_distribution_surface_claims.py`
+        # runs via the unified manifest.
+        run: python3 scripts/check_distribution_surface_claims.py
+
       - name: Check SETUP cross-model example parity (#491)
         # The pytest companion `test_check_setup_cross_model_parity.py`
         # runs via the unified manifest (and also under pytest.yml's
@@ -165,11 +202,6 @@ jobs:
           PYTHONPATH: .
         run: python3 -m unittest scripts.test_check_spec_consistency -v
 
-      - name: Run check_sprint_contract unit tests
-        env:
-          PYTHONPATH: .
-        run: python3 -m unittest scripts.test_check_sprint_contract -v
-
       - name: Validate sprint contract templates
         shell: bash
         run: |
@@ -183,14 +215,18 @@ jobs:
             echo "ERROR: could not extract ARS version from CHANGELOG.md (need '## [X.Y.Z]' heading)" >&2
             exit 1
           fi
+          # Contract families may co-locate JSON Schemas; validate only instances.
           for f in shared/contracts/reviewer/*.json; do
+            [[ "$f" == *.schema.json ]] && continue
             python3 scripts/check_sprint_contract.py "$f" --ars-version "v${ARS_VERSION}"
           done
           # v3.6.6: writer + evaluator template validation loops mirror reviewer loop above.
           for f in shared/contracts/writer/*.json; do
+            [[ "$f" == *.schema.json ]] && continue
             python3 scripts/check_sprint_contract.py "$f" --ars-version "v${ARS_VERSION}"
           done
           for f in shared/contracts/evaluator/*.json; do
+            [[ "$f" == *.schema.json ]] && continue
             python3 scripts/check_sprint_contract.py "$f" --ars-version "v${ARS_VERSION}"
           done
 
@@ -207,6 +243,51 @@ jobs:
         # resolved for .py). The registry indexes, it never re-authors —
         # semantics stay in each row's authority file.
         run: python3 scripts/check_degradation_registry.py
+
+      - name: Validate workflow classification table (#755)
+        # Pins docs/ARCHITECTURE.md §7.1's completeness claim: every
+        # .github/workflows/*.yml has exactly one row (both directions,
+        # WC-1) and class cells use the closed four-term vocabulary (WC-2).
+        # Class semantics stay owned by code review.
+        run: python3 scripts/check_workflow_classification.py
+
+      - name: Validate data-flow map coverage (#758)
+        # Pins docs/DATA_FLOWS.md's exhaustiveness claim: every non-test
+        # scripts/*.py with a network-module import (AST scan) and every
+        # curl-invoking shell script must be named on the map (DF-1/DF-2),
+        # and README + SECURITY + THIRD_PARTY keep a rendered inbound link
+        # (DF-3). Row semantics stay owned by code review.
+        run: python3 scripts/check_data_flows.py
+
+      - name: Validate stage capability matrix (#745)
+        # Pins shared/contracts/capability/stage_capability_matrix.json:
+        # frozen task-family vocabulary, non-collapsible evidence statuses
+        # (an unrun eval can never carry numbers), in-repo eval_ref and
+        # verbatim claim anchors, stale-evidence notes, and byte-identity of
+        # the generated docs/STAGE_CAPABILITY_MATRIX.md view.
+        run: python3 scripts/check_stage_capability_matrix.py
+
+      - name: Validate shipped research-workflow fallback (#742)
+        # Offline/default-off contract check only: validates the canonical
+        # content hash and exact field-general safety boundary. Human usability
+        # evidence remains NOT_RUN and no workflow profile is inferred here.
+        run: python3 scripts/research_workflow_profile.py validate-profile shared/research_workflow_profiles/field_general.json --shipped-field-general
+
+      - name: Validate risk register mirroring (#759)
+        # Pins docs/RISK_REGISTER.md's index-not-author posture: cited repo
+        # paths and relative links exist (RR-1), every evidence-status bullet
+        # carries a recognized citation and matrix-tied statuses mirror
+        # shared/contracts/capability/stage_capability_matrix.json verbatim
+        # (RR-2), README keeps a rendered inbound link (RR-3). Risk wording
+        # and control selection stay owned by code review.
+        run: python3 scripts/check_risk_register.py
+
+      - name: Validate control-availability map links (#757)
+        # Pins docs/CONTROL_AVAILABILITY.md's pointer integrity: relative
+        # links + anchors resolve (CA-1), every SETUP `### Method` heading is
+        # reachable from the channel table (CA-2), README + SETUP keep an
+        # inbound link (CA-3). Cell semantics stay owned by code review.
+        run: python3 scripts/check_control_availability.py
 
       - name: Validate corpus consumer protocol (v3.6.5+)
         run: python3 scripts/check_corpus_consumer_protocol.py
@@ -388,6 +469,83 @@ jobs:
         # unified manifest (#156).
         run: python3 scripts/check_pipeline_boundary_semantics.py
 
+      - name: Run held-out measurement contract validation (#654)
+        # Marker-based discovery: walks evals/heldout/ recursively and
+        # validates every JSON file carrying the measurement_contract key
+        # (schema branches B1-B6 + invariants I1-I14 + reference resolution
+        # R1-R5 + location binding L1). Filename conventions do not gate
+        # discovery; near-miss markers and strict-parse failures on marked
+        # files fail loudly. Legacy rows without the marker are skipped by
+        # design (retrofit scope: future runs and re-runs only). The mutation
+        # tests `test_check_heldout_measurement_report.py` run via the
+        # unified manifest (#156).
+        run: python3 scripts/check_heldout_measurement_report.py --all
+
+      - name: Check revision-claim-drift suite v2 protocol (#679)
+        # Pins the prospective C9 rubric amendment, historical-artifact lock,
+        # context/launcher/call-plan schemas, fixtures, complete future call/raw
+        # inventory, C9 evidence replay, and future measurement-row binding.
+        # Mutation tests run through the unified pytest manifest above.
+        run: python scripts/check_revision_claim_drift_suite_v2.py
+
+      - name: Check human-subjects output boundary (#665)
+        # Pins separate readiness/authorization fields, integrity-only verdict
+        # scope, the institution-owned pathway value, fixed footer, and the
+        # byte-stable existing Ethics Decision Log. Mutation tests run through
+        # the unified pytest manifest above.
+        run: python3 scripts/check_human_subjects_output_contract.py
+
+      - name: Check review-pathway rule-trace integration (#669)
+        # Pins the closed request/trace schemas, exact selected-profile
+        # predicate/anchor replay, fixed renderer, surface-scoped banned-output
+        # lint, hermetic runtime, and advisory-only non-consumer wiring. Runtime
+        # and mutation tests run through the unified pytest manifest above.
+        run: python3 scripts/check_669_review_pathway_rule_trace.py
+
+      - name: Check bibliographic-integrity signal contract (#678)
+        # Validates the canonical schema + #651/#660 round-trip fixtures and
+        # locks the finalizer/formatter to the one-summary-section,
+        # no-new-marker-token migration boundary. Mutation tests run through
+        # the unified pytest manifest above.
+        run: python3 scripts/check_bibliographic_integrity_signals.py
+
+      - name: Check tortured-phrase screening integration (#660)
+        # Locks the closed snapshot/manifest/advisory schemas, v1.2 carrier,
+        # exact-byte synthetic fixture, hermetic runtime, one-page renderer,
+        # UNMEASURED claim ceiling, documentation, and CI bindings. Behavioral
+        # and mutation tests run through the unified pytest manifest above.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_tortured_phrase_screening_integration.py
+
+      - name: Check cross-document consistency advisory integration (#672)
+        # Locks the five closed contracts, exact bilateral/trilateral evidence
+        # replay, preregistration handoff binding, #660 checkpoint coexistence,
+        # hermetic runtime, UNMEASURED claim ceiling, and legacy isolation.
+        # Behavioral and mutation tests run through the unified manifest above.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_cross_document_consistency_advisory_integration.py
+
+      - name: Check adjudication-activity advisory integration (#673)
+        # Static, hermetic guard for the closed schemas and CLI, exact renderer
+        # language, terminal-first/post-terminal best-effort wiring, sealed
+        # terminal authority, and the non-consumer boundary. Mutation tests run
+        # through the unified pytest manifest above.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_673_adjudication_activity.py
+
+      - name: Check review-criteria consumer binding integration (#684)
+        # Pins the one manifest authority, three exact consumer receipts,
+        # paper-blind Phase 1 wiring, five external seats including DA,
+        # constructive finding safety, advisory/non-consumer boundaries, and
+        # the contained subscription runner plus human-expert held-out plan.
+        # Focused and mutation tests run through the unified pytest manifest.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_684_review_criteria_binding.py
+
       - name: Run v3.9.2 Phase Boundary coverage lint (#133)
         # Enforces 22 Bucket A agents have ## Phase Boundary (v3.9.2)
         # block, 16 Bucket B/C/D agents DON'T, and each Bucket A block
@@ -434,6 +592,87 @@ jobs:
         env:
           PYTHONPATH: .
         run: python3 scripts/check_216_surface_form.py
+
+      - name: Run #574 reviewer seeded-defect fixture integrity lint
+        # Structure-only gate for evals/heldout/reviewer_seeded_defects/ (the E4
+        # acceptance instrument for reviewer-prompt changes): manifest schema +
+        # closed enums + defect-count agreement + every anchor_quote verbatim-unique
+        # in its manuscript + clean control present and never manifested. Fixture
+        # integrity, NOT a behavioral measurer (baseline runs are the manual
+        # protocol in the set's README). Companion
+        # test_check_seeded_defect_fixtures.py (mutation suite) runs via the
+        # unified manifest (#156). Issue #574 E4.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_seeded_defect_fixtures.py
+
+      - name: Run #576 persuasion-invariance fixture integrity lint
+        # Structure-only gate for evals/heldout/re_review_persuasion_invariance/ (the
+        # Spec B §14 paired controls, joining the E4 harness per SD-11): index/disk
+        # agreement + pinned scenario+arm inventory + closed relation/observable enums
+        # + pair-cell referential integrity + relation-vs-expected-value agreement +
+        # the P-1 claim-set equality its construct validity rests on + apply-report
+        # hash placeholders + P-6 pointer arms + the held-out boundary (no material
+        # file names the ground truth or carries a scripted checkpoint answer) +
+        # the packet/arm section split. Fixture integrity, NOT a behavioral measurer
+        # (baseline runs are the manual protocol in the set's README). Companion
+        # test_check_persuasion_invariance_fixtures.py (mutation suite) runs via the
+        # unified manifest (#156). Issue #576 Spec B §14.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_persuasion_invariance_fixtures.py
+
+      - name: Run #574 reviewer data-fence lint (A6 / PR #578 pin)
+        # Pins the <paper_content> + <phase1_output> data-fence contract across
+        # all five reviewer panel agents (both canonical paragraphs verbatim,
+        # exactly once each), the sprint-contract delivery side, and the
+        # cross-model Reviewer 2 transport — so a prompt edit cannot silently
+        # drop or weaken the untrusted-manuscript boundary. Companion
+        # test_check_reviewer_data_fences.py (mutation suite) runs via the
+        # unified manifest (#156). Issue #574 A6 (shipped with the behavior batch).
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_reviewer_data_fences.py
+
+      - name: Run #574 reviewer finding-contract lint (behavior batch pin)
+        # Pins the A1/A2/A3/B1 behavior-batch surfaces: no finding quotas +
+        # Coverage Receipt (A1), typed evidence-anchor vocabulary + DA anchor
+        # columns (A2), Schema 6 severity single-source + synthesizer transport
+        # tags (A3), decision-symmetry section + no base-rate anchors (B1), and
+        # the P0-3 overlap-prohibition residue. Companion
+        # test_check_reviewer_finding_contract.py (mutation suite) runs via the
+        # unified manifest (#156). Issue #574 behavior batch.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_reviewer_finding_contract.py
+
+      - name: Run #574 Schema 13.2 role-scoped contract lints
+        # Mutation companions and the executable checker suites run through
+        # scripts/_ci_pytest_manifest.toml in the same commit.
+        env:
+          PYTHONPATH: .
+        run: |
+          python3 scripts/check_role_scoped_contract.py
+          python3 scripts/check_decision_contract.py
+
+      - name: Run #611 reviewer protocol/name/calibration lints
+        # Mutation companions run through scripts/_ci_pytest_manifest.toml.
+        env:
+          PYTHONPATH: .
+        run: |
+          python3 scripts/check_reviewer_sprint_prompt_sync.py
+          python3 scripts/check_reviewer_role_label.py
+          python3 scripts/check_calibration_tiers.py
+
+      - name: Run #610 receipt closed-enum defrift lint
+        # Pins the four receipt enums (procedure_id / status /
+        # not_computable_reason / tail_convention) to set equality across the
+        # methodology-receipt prompt fragment, the conformance checker's
+        # frozensets, and the #610 spec §4. Mutation companion
+        # test_check_receipt_enum_sync.py runs via the unified manifest.
+        env:
+          PYTHONPATH: .
+        run: python3 scripts/check_receipt_enum_sync.py
 
       - name: Run v3.10 #134 write-scope three-way name cross-check lint
         # THE FAIL-OPEN GUARD for the Slice 1 write-scope hook. Asserts the 23 Bucket A
@@ -548,6 +787,18 @@ jobs:
         # 346-349-cross-model-grounding-guards.
         run: python3 scripts/check_cross_model_verification_sync.py
 
+      - name: Check sealed Promotion Bakeoff preregistrations (#789)
+        # Requires checkout fetch-depth: 0 above. Verifies local byte binding,
+        # immutable Git ordering, fixed composition, and detectable historical
+        # non-reuse; remote publication/fleet timing stays a run-report witness.
+        run: python3 scripts/check_promotion_bakeoff_preregistration.py verify-tree --repo-root .
+
+      - name: Check Codex subscription citation transport (#630)
+        # Pins the closed citation-only selector, auth-only containment,
+        # structured app-server result binding, Bash 3.2 wrappers, contributor
+        # credit, hermetic fixtures/tests, and explicit exclusion of live smoke.
+        run: python3 scripts/check_630_codex_subscription_transport.py
+
       - name: Run v3.8 claim_audit pipeline + schema + uncited-assertion + manifest + finalizer + e2e + calibration tests (#103)
         # The v3.8 #103 test suite covers the L3 claim-faithfulness audit
         # contract end-to-end:
@@ -596,6 +847,9 @@ jobs:
 
       - name: Validate v3.6.7 Step 8 pattern-eval fixture manifests (Phase 6.8)
         run: python3 scripts/check_pattern_eval_manifest.py
+
+      - name: "Check venue disclosure policy database structure (#596)"
+        run: python3 scripts/check_venue_disclosure_policies.py
 
       - name: "Check policy anchor table structural lint (#108)"
         run: python3 scripts/check_policy_anchor_table.py

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.0
+
+- Refreshed all configured upstream checks on 2026-09-06.
+- Updated the selected K-Dense wrappers to `v2.66.0` (`1e5eeff`); 26 of 27 selected directories changed and `timesfm-forecasting` remained file-identical.
+- Updated the isolated ARS Codex package to `v0.1.28` (`925975e`) with ARS upstream content at `9443623`.
+- Rechecked AutoSci at `8642426`; its rotating image-only delta remains reference-only and does not replace the local domain router.
+- Confirmed SciPilot Figure, SciPilot Writing, and GeoRS have no new main-branch commit.
+- Refreshed source notices, upstream audit, skill map, and local HTML navigator metadata.
+
 ## 0.7.0
 
 - Refreshed all configured upstream mirrors on 2026-08-01.
