@@ -8,10 +8,10 @@
 
 The repository contains **17 installable Codex skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: **2026-09-06**.
+Latest upstream refresh: **2026-09-13**.
 
 - ARS Codex package updated to `v0.1.28` (`925975e`), locking ARS content to `9443623` (ARS `v3.21.1` post-release main updates).
-- K-Dense checked at `v2.66.0` (`1e5eeff`); 26 of 27 selected subskills were refreshed, while `timesfm-forecasting` was file-identical.
+- K-Dense checked at main `c1ed16d`; `geomaster`, `scientific-slides`, and `umap-learn` changed within the selected package scope.
 - SciPilot Figure remains `v2.1.0-1-g43098dd`.
 - SciPilot Writing remains `v1.0.0` (`51c5fd3`).
 - GeoRS SCI Writing Adapter remains an original adapter because the checked upstream source still has no explicit LICENSE file.

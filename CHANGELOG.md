@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.1
+
+- Refreshed configured upstream checks on 2026-09-13.
+- Updated K-Dense selected wrappers from `1e5eeff` to `c1ed16d`; the selected `geomaster`, `scientific-slides`, and `umap-learn` directories changed.
+- Rechecked AutoSci at `9ff3087`; its only change is a dependency pointer to a GitHub-hosted `requests` fork, so the local original router and requirements remain unchanged.
+- Confirmed ARS, SciPilot Figure, SciPilot Writing, and GeoRS remain unchanged.
+- Updated upstream notices, audit documentation, and local HTML status metadata.
+
 ## 0.8.0
 
 - Refreshed all configured upstream checks on 2026-09-06.

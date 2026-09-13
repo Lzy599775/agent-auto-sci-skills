@@ -2,13 +2,13 @@
 
 本仓库优先维护原创和领域适配 skill。第三方项目只有在能明确增强体育地理、城市暴露、GIS/遥感、文献综述、图件或 SCI 写作工作流时才封装，并严格遵守许可证边界。
 
-Latest upstream check: [`docs/upstream-update-20260906.md`](upstream-update-20260906.md).
+Latest upstream check: [`docs/upstream-update-20260913.md`](upstream-update-20260913.md).
 
 ## Packaged Or Wrapped Sources
 
 | Upstream project | Local package | Current checked snapshot | License/status | Packaging decision |
 |---|---|---:|---|---|
-| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | `1e5eeff` (`v2.66.0`) | MIT, upstream license kept in wrappers | Only selected ML/AI, data-viz, geospatial/RS, and scicomm areas are packaged. The 2026-09-06 refresh synchronized 26 selected subskills; `timesfm-forecasting` was file-identical. |
+| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` | `c1ed16d` (`v2.66.0+main`) | MIT, upstream license kept in wrappers | Only selected ML/AI, data-viz, geospatial/RS, and scicomm areas are packaged. The 2026-09-13 refresh updated `geomaster`, `scientific-slides`, and `umap-learn`. |
 | [Haojae/scipilot-figure-skill](https://github.com/Haojae/scipilot-figure-skill) | `scipilot-figure-skill` | `43098dd` (`v2.1.0-1-g43098dd`) | MIT | Full figure-advisor package retained with NOTICE and LICENSE. |
 | [Haojae/scipilot-writing-skill](https://github.com/Haojae/scipilot-writing-skill) | `scipilot-writing-skill` | `51c5fd3` (`v1.0.0`) | MIT | Full writing/polishing package vendored with scripts, references, examples, NOTICE, and LICENSE. |
 | [Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex) | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `925975e` (`v0.1.28`) | CC BY-NC 4.0 via vendored ARS license | Vendored as an isolated subskill. Parent urban-exposure skill keeps domain authority. |
@@ -16,9 +16,9 @@ Latest upstream check: [`docs/upstream-update-20260906.md`](upstream-update-2026
 
 ## Optional Reference Sources
 
-| Project | Use | 2026-09-06 status |
+| Project | Use | 2026-09-13 status |
 |---|---|---|
-| [skyllwt/AutoSci](https://github.com/skyllwt/AutoSci) | Long-horizon research-agent memory and workflow ideas. | Checked at `8642426` (`v1.0.0-42-g8642426`). The delta is a rotating WeChat asset; the local original router was not overwritten. |
+| [skyllwt/AutoSci](https://github.com/skyllwt/AutoSci) | Long-horizon research-agent memory and workflow ideas. | Checked at `9ff3087`. The delta changes a dependency pointer to a GitHub-hosted `requests` fork; the local original router and requirements were not overwritten. |
 | [assafelovic/gpt-researcher](https://github.com/assafelovic/gpt-researcher) | Autonomous web deep research reference. | Reference only. |
 | [hwang847/codex-paper-reader](https://github.com/hwang847/codex-paper-reader) | Local PDF reading workflow reference. | Reference only. |
 | [Leey21/awesome-ai-research-writing](https://github.com/Leey21/awesome-ai-research-writing) | Academic writing prompt-library style reference. | Reference only. |

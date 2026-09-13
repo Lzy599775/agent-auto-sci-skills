@@ -6,10 +6,10 @@
 
 `Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的本地科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让你在 Codex 里知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
 
-当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-09-06**：
+当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-09-13**：
 
 - ARS Codex 包已同步到 `v0.1.28` (`925975e`)，上游 ARS 内容锁定到 `9443623`（ARS `v3.21.1` 后续主线更新）。
-- K-Dense 已检查到 `v2.66.0` (`1e5eeff`)；27 个精选子技能中 26 个已同步更新，`timesfm-forecasting` 文件级无变化。
+- K-Dense 已检查到 main `c1ed16d`；本次精选范围中 `geomaster`、`scientific-slides` 和 `umap-learn` 有内容更新。
 - SciPilot Figure 仍为 `v2.1.0-1-g43098dd`。
 - SciPilot Writing 仍为 `v1.0.0` (`51c5fd3`)。
 - GeoRS SCI Writing Adapter 仍基于 `xiangyu-Ge/sci-writing-geors` 的公开仓库说明做原创适配；上游仍未检测到明确 LICENSE，因此不复制上游正文。
