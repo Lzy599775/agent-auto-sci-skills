@@ -49,6 +49,11 @@ Every section must close one part of that chain. Every main claim must point to 
    - Make Discussion explain mechanisms, compare literature, translate to planning, and state boundaries.
    - Read `references/workflow-checklists.md` for pre-submission checks.
 
+6. **Run prose style QC after scientific content stabilizes**
+   - Read `../agent-auto-sci-scicomm/references/academic_prose_style_guard.md`.
+   - Apply positive-first framing, then retain only necessary qualifications; inspect defensive-contrast clusters and semantic repetition.
+   - Do not use style revision to upgrade association into effect, conditional estimates into universal claims, or uncertain findings into certainty.
+
 For end-to-end projects, this skill enters after the topic, literature, data, analysis, and figure plan have stable outputs. If the user asks to start from zero, route first through `auto-sci-research/references/08_full_research_to_manuscript_pipeline.md`, then return here for the empirical manuscript.
 
 ## Journal Routing

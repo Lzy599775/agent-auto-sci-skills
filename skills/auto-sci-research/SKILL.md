@@ -28,6 +28,10 @@ Route by the current deliverable, not by topic keywords alone. Green exposure, h
 - For mixed tasks, choose the owner for the current handoff. A frozen empirical Results/Discussion remains owned by `sport-geography-sci-writing` even when it cites literature; review skills may be helpers and must not take over. Do not load both domain owners merely because the topic contains literature and empirical terms; make a later handoff explicit when the deliverable changes.
 - If the immediate deliverable is only review evidence structure and explicitly says not to write prose, do not add `sport-geography-sci-writing`, `scipilot-writing-skill`, or `agent-auto-sci-scicomm` as primary owners.
 
+### Academic prose quality-control handoff
+
+Any route that produces manuscript prose, Discussion, Introduction, Conclusion, Abstract, review synthesis prose, rebuttal prose, or substantial academic interpretation must invoke the shared `agent-auto-sci-scicomm/references/academic_prose_style_guard.md` after claims and evidence are stable. This is a writing QC handoff, not a primary research router; it preserves causal, conditional, uncertainty, null, conflicting, and reviewer-relevant boundaries while reducing repetitive defensive contrast.
+
 | Task | Use |
 |---|---|
 | Full workflow from topic selection to final manuscript | Start here, then read `references/08_full_research_to_manuscript_pipeline.md` |
