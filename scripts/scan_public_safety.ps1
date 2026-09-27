@@ -31,6 +31,7 @@ $allowedFalsePositiveText = @(
   'export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.4 Pro',
   'export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.5 / GPT-5.5 Pro',
   'export OPENAI_API_KEY="sk-your-key-here"        # For GPT-5.6 Sol / GPT-5.5',
+  'export OPENAI_API_KEY="sk-your-key-here"        # For GPT-6 Astra / GPT-5.6 Sol / GPT-5.5',
   'export GOOGLE_AI_API_KEY="AIza-your-key-here"    # For Gemini 3.1 Pro',
   'FLAG_TOKEN = "ARS_PASSPORT_RESET"',
   'PROTOCOL_TOKEN = "passport_as_reset_boundary"',

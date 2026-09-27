@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.0
+
+- Refreshed configured upstream checks on 2026-09-27.
+- Updated the isolated ARS Codex package from `0.1.28` (`925975e`) to `3.22.0` (`3c37ef8`), locking vendored ARS content to `3c546bc`.
+- Rechecked K-Dense at `49c6e97`; no selected packaged directory changed after the previous `c1ed16d` synchronization.
+- Rechecked AutoSci at `cf88930`; the upstream `requests` dependency pointer was reverted, so the local original router remains unchanged.
+- Preserved the standalone nested-package quality-gate adaptation and updated the local README, skill map, notices, audit record, and HTML navigator.
+
 ## 0.8.1
 
 - Refreshed configured upstream checks on 2026-09-13.

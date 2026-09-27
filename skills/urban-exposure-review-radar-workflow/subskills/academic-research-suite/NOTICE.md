@@ -3,10 +3,10 @@
 This subskill is packaged from:
 
 - Codex package repository: `Imbad0202/academic-research-skills-codex`
-- Codex package commit used: `925975e`
-- Codex package tag snapshot: `v0.1.27` plus post-release main updates
+- Codex package commit used: `3c37ef8`
+- Codex package tag snapshot: `v3.22.0`
 - Upstream ARS repository: `Imbad0202/academic-research-skills`
-- Upstream ARS commit recorded in `manifest.json`: `94436237913091d4739870159d241660527e8338`
+- Upstream ARS commit recorded in `manifest.json`: `3c546bc08c56f79e0068f1ea4f0acedf5bf69b5e`
 - Upstream license: CC BY-NC 4.0, see `LICENSE`.
 
 The suite is vendored only as an isolated subskill under `urban-exposure-review-radar-workflow`. The parent skill remains responsible for urban exposure, sport geography, accessibility/use separation, causal-language boundaries, and formal-corpus versus frontier-radar separation.

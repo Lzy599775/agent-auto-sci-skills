@@ -8,10 +8,12 @@
 
 The repository contains **17 installable Codex skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: **2026-09-13**.
+Latest upstream refresh: **2026-09-27**.
 
-- ARS Codex package updated to `v0.1.28` (`925975e`), locking ARS content to `9443623` (ARS `v3.21.1` post-release main updates).
-- K-Dense checked at main `c1ed16d`; `geomaster`, `scientific-slides`, and `umap-learn` changed within the selected package scope.
+- ARS Codex package updated to `v3.22.0` (`3c37ef8`), locking ARS content to `3c546bc`.
+- K-Dense checked at `49c6e97`; no selected packaged directory changed after the previous synchronization.
+- AutoSci checked at `cf88930`; its temporary GitHub-hosted `requests` dependency pointer was reverted upstream.
+- The previous K-Dense synchronization at `c1ed16d` changed `geomaster`, `scientific-slides`, and `umap-learn`; the current `49c6e97` check found no further selected-directory changes.
 - SciPilot Figure remains `v2.1.0-1-g43098dd`.
 - SciPilot Writing remains `v1.0.0` (`51c5fd3`).
 - GeoRS SCI Writing Adapter remains an original adapter because the checked upstream source still has no explicit LICENSE file.
@@ -134,7 +136,7 @@ auto-sci-research
 
 - `Haojae/scipilot-writing-skill`: MIT, fully packaged with LICENSE and NOTICE.
 - `Haojae/scipilot-figure-skill`: MIT, packaged as a figure-advisor skill.
-- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v0.1.28`.
+- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v3.22.0`.
 - `K-Dense-AI/scientific-agent-skills`: selected wrappers only, not a full import.
 - `xiangyu-Ge/sci-writing-geors`: no explicit LICENSE detected, so this repo keeps only attribution and an original adapter.
 
