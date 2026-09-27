@@ -24,13 +24,16 @@ Required workflow:
    - justice/equity dimension;
    - health or physical-activity pathway;
    - planning implication.
-7. Synthesize a critical framework and policy agenda.
+7. Record paper-level evidence in the Evidence Trace, then link supporting and contradictory records in the Cross-paper Argument Map.
+8. Create paragraph synthesis contracts before drafting the critical framework and policy agenda.
 
 Quality gate:
 
 - Contribution cannot be “we used CiteSpace/VOSviewer”.
 - Every major cluster needs interpretation beyond keyword labels.
 - Figures must support a claim about field evolution, method gap, or policy implication.
+- Every major synthesis claim must have an Argument_ID, and every Argument_ID must trace to Evidence IDs and source locators.
+- Co-word clusters, method similarity, or citation counts cannot be treated as empirical agreement, mechanism, or evidence strength.
 
 ## M2. Systematic Review
 
@@ -46,12 +49,15 @@ Required workflow:
 6. Extract exposure, outcome, population, methods, confounders, effect direction, limitations.
 7. Assess risk of bias or evidence quality.
 8. Synthesize by exposure type, health outcome, population strata, method, and setting.
+9. Preserve Evidence Trace locators and contradictory evidence when forming cross-paper claims.
+10. Gate each factual or synthesis paragraph through the paragraph synthesis contract before drafting.
 
 Quality gate:
 
 - Do not use systematic-review language without screening records.
 - Do not report pooled effects unless meta-analysis assumptions are met.
 - Use causal language only when supported by design and sensitivity checks.
+- Do not write `most studies`, `consensus`, or `consistent evidence` without a traceable corpus-level comparison.
 
 ## M3. Scoping Review
 
@@ -64,11 +70,13 @@ Required workflow:
 3. Chart evidence rather than estimate effect size.
 4. Build evidence maps by topic, method, scale, population, and geography.
 5. End with a research agenda, not a causal conclusion.
+6. Use the Evidence Trace and Cross-paper Argument Map to record agreement, conflict, heterogeneity, and unresolved gaps before drafting.
 
 Quality gate:
 
 - The output must explain what is known, how it has been studied, and what remains uncharted.
 - It should not claim exhaustive effect evidence unless it followed a systematic review design.
+- A paragraph with a factual or synthesis claim cannot be marked ready to draft without Evidence IDs.
 
 ## M4. Green Exposure / Sports Park Exposure
 
@@ -197,5 +205,7 @@ Decision rules:
 2. Use `radar-candidate` for current papers/projects worth tracking but not yet protocol-eligible.
 3. Use `background-method` for transferable AI/CV/RS methods that inform future research but do not answer the review question directly.
 4. Use `excluded` for modality, topic, quality, or access mismatch.
+
+Evidence from `formal-corpus` and `radar-candidate` remains separate. Radar candidates cannot enter the Evidence Trace used for formal review synthesis until they pass the same inclusion, deduplication, and screening process. A radar item may be recorded as background-method or future agenda evidence, but it cannot silently support a formal-corpus synthesis claim.
 
 This prevents recent arXiv/GitHub items from contaminating systematic counts while still preserving their value for future agenda writing.

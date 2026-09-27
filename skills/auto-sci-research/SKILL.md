@@ -19,6 +19,15 @@ For full paper projects, use the expanded route:
 
 Use this skill first when the task spans multiple research stages or asks to improve the user's local skills.
 
+### Deliverable-first precedence
+
+Route by the current deliverable, not by topic keywords alone. Green exposure, heat exposure, urban health, spatial equity, accessibility, and SHAP can occur in either a literature review or an empirical manuscript, so they do not select the writing owner by themselves.
+
+- External literature synthesis, review corpus construction, paper-level extraction, Evidence Trace, cross-paper synthesis, conflicting evidence, heterogeneity, literature gaps, review coding, or review drafting routes to `sport-geography-review-bibliometric`. If the review type or domain route is still undecided, place `urban-exposure-review-radar-workflow` before it.
+- The user's own data/method/results manuscript drafting or revision routes to `sport-geography-sci-writing`. Add geospatial, ML, data-viz, methodology, or scicomm helpers only when the immediate deliverable requires them.
+- For mixed tasks, choose the owner for the current handoff. A frozen empirical Results/Discussion remains owned by `sport-geography-sci-writing` even when it cites literature; review skills may be helpers and must not take over. Do not load both domain owners merely because the topic contains literature and empirical terms; make a later handoff explicit when the deliverable changes.
+- If the immediate deliverable is only review evidence structure and explicitly says not to write prose, do not add `sport-geography-sci-writing`, `scipilot-writing-skill`, or `agent-auto-sci-scicomm` as primary owners.
+
 | Task | Use |
 |---|---|
 | Full workflow from topic selection to final manuscript | Start here, then read `references/08_full_research_to_manuscript_pipeline.md` |

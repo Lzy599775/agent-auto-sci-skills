@@ -1,6 +1,6 @@
 ---
 name: sport-geography-sci-writing
-description: "体育地理 SCI 顶刊写作全流程技能。用于体育设施可达性、体育公园、绿地/绿色暴露、热暴露、蓝绿空间、15 分钟生活圈、环境公平、健康公平、空间机制、机器学习解释和投稿期刊适配。触发于：体育地理论文、体育设施公平、sports geography, sport facility accessibility, green exposure, heat exposure, urban green space equity, SHAP 写作、SCI 投稿、Sustainable Cities and Society、Cities、Landscape and Urban Planning、Ecological Indicators、Environmental Research、npj Urban Sustainability 等。"
+description: "用于用户自己研究的体育地理/城市暴露实证 manuscript 起草、修改和期刊适配，尤其是已有 data/method/results 的 Title、Abstract、Introduction、Methods、Results、Discussion、Conclusion、figures 和结果叙事。主题可包括体育设施可达性、体育公园、绿地/绿色暴露、热暴露、空间公平和 SHAP。"
 metadata:
   version: "1.0.0"
   source_corpus_date: "2026-05-26"
@@ -9,7 +9,9 @@ metadata:
 
 # Sport Geography SCI Writing
 
-This skill turns a sport geography or green/heat exposure study into a journal-positioned SCI manuscript. It is based on a local writing playbook and a corpus scan of sport geography, green exposure, heat exposure, and equity papers.
+This skill turns the user's own sport geography or green/heat exposure empirical study into a journal-positioned SCI manuscript. It is based on a local writing playbook and a corpus scan of sport geography, green exposure, heat exposure, and equity papers.
+
+It is not the primary owner for literature-review evidence structuring, PRISMA/systematic/scoping review, Evidence Trace, cross-paper argument mapping, or review synthesis contracts. When the immediate deliverable is external-literature evidence construction, hand off to `sport-geography-review-bibliometric`.
 
 Use it for manuscripts about sports facilities, sports parks, urban parks, green exposure, heat exposure, accessibility, equity, spatial justice, and explainable machine learning in urban geography.
 
@@ -101,4 +103,3 @@ When the user asks "where did this come from" or wants deeper paper-level eviden
 - the user's local Sportpark figure-system memories when the task is specifically about paper figures.
 
 Do not copy private paper full text from those folders into public outputs.
-

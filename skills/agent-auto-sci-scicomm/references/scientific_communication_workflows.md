@@ -1,11 +1,19 @@
 # Scientific Communication Workflows
 
-## 1. Manuscript Claim-Evidence Map
+## 1. Evidence-to-Draft Handoff
 
-| Claim | Evidence | Figure/Table | Citation | Boundary | Section |
+The writing skill receives a stable handoff from the review skill in this order:
+
+`Evidence Trace -> Cross-paper Argument Map -> Paragraph Synthesis Contract -> Draft`
+
+The Claim-Evidence Map remains a useful index, but it is not a replacement for source locators, contradictory evidence, heterogeneity, or paragraph-level constraints.
+
+| Claim | Evidence IDs | Argument IDs | Figure/Table | Citation role | Boundary | Section |
 |---|---|---|---|---|---|
 
-Write the map before drafting major sections.
+Write the map and paragraph contract before drafting major sections. Language polishing is allowed only after the scientific logic, evidence boundaries, and citation audit are stable.
+
+For every paragraph contract, check the academic function, exact target claim, evidence coverage, agreement/conflict, required qualification, allowed inference, forbidden escalation, and `Ready_to_Draft` state. Do not draft a factual paragraph with no Evidence ID. Do not write consensus language when the Argument Map contains contradictory evidence. Policy language must name its target actor, evidence basis, and boundary condition.
 
 ## 2. Empirical Paper Structure
 
@@ -46,5 +54,4 @@ Typical research talk:
 5. Mechanism;
 6. Implication;
 7. Limitations and next steps.
-
 
