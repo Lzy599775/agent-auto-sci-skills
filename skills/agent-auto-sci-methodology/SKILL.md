@@ -18,6 +18,10 @@ Use this subskill when the research logic itself is uncertain or needs strengthe
 
 Read `references/research_methodology_workflows.md`.
 
+### Empirical support and exchangeability
+
+Treat empirical support, positivity, and overlap as support-domain diagnostics: they identify where the observed data contain sufficiently comparable treatment variation. They do not by themselves establish conditional exchangeability. Strong overlap does not rule out unmeasured confounding, and rich covariate adjustment does not automatically prove exchangeability. Weak overlap limits which treatment contrasts are identifiable or transportable without extrapolation. Do not describe a local support screen as causal identification proof; causal interpretation also requires the design-specific identification assumptions to be credible.
+
 For full paper projects, this skill owns topic selection, SMART research questions, hypothesis design, innovation diagnosis, feasibility, scope boundaries, conceptual framework, and reviewer-risk logic. When the task spans the whole manuscript lifecycle, coordinate through `auto-sci-research/references/08_full_research_to_manuscript_pipeline.md`.
 
 For deeper K-Dense-style encapsulation:
@@ -41,3 +45,6 @@ For deeper K-Dense-style encapsulation:
 - Do not claim equity or justice from distribution maps alone.
 - Do not hide uncertainty in policy language.
 
+## QC Visibility
+
+Apply routine validity, support, terminology, and causal-language checks silently. Report a methodological boundary when it could change the interpretation, estimand, sample, result, or conclusion. Pause for author input only when safe continuation is impossible or a material identification/design choice requires the author's judgment. Do not present routine checks as a gate log, and do not repeat a boundary already explained in the current task unless new evidence changes it, the section needs it independently, or the user requests a full audit.

@@ -60,7 +60,19 @@ For review manuscripts, code:
 | causal effect | longitudinal/quasi-experimental/experimental identification |
 | policy priority | evidence, affected population, lever, feasibility, risk |
 
-## 6. Target-Journal Method Expectations
+## 6. Positivity, Empirical Support, and Exchangeability
+
+Keep these concepts separate when evaluating treatment contrasts or causal interpretations:
+
+- **Positivity/overlap** asks whether treatment variation is present across the relevant covariate or spatial domain.
+- **Empirical support** defines the samples, treatment levels, or local neighborhoods where estimates rely less on extrapolation. It answers where the observed data contain comparable treatment variation.
+- **Conditional exchangeability** is a separate identification assumption: after conditioning on the adjustment variables, treatment assignment must be sufficiently comparable with respect to the relevant potential outcomes.
+
+Overlap diagnostics, nearest-neighbor support, quantile trimming, support masks, and an OISA replacement margin can delineate the empirically supported region. They cannot alone establish conditional exchangeability. Good support can coexist with unmeasured confounding, while plausible exchangeability with poor overlap can still leave a contrast weakly identifiable or highly dependent on extrapolation. Causal interpretation therefore requires empirical support plus conditional exchangeability, confounding control, temporal ordering, consistency, interference assumptions, measurement validity, and other design-specific identification assumptions.
+
+For a Tree-for-OISA analysis, local-neighborhood support, the treatment interval, and the OISA replacement margin can define where the observed data contain comparable support. These diagnostics map the supported contrast; they do not replace review of unmeasured confounding, spatial interference, or the remaining identification assumptions.
+
+## 7. Target-Journal Method Expectations
 
 | Journal route | Method emphasis |
 |---|---|
@@ -70,7 +82,7 @@ For review manuscripts, code:
 | Environment International | exposure assessment, health relevance, bias control |
 | Nature Cities | concise, conceptually strong, transferable urban insight |
 
-## 7. Pre-Submission Method Audit
+## 8. Pre-Submission Method Audit
 
 Before drafting claims:
 
@@ -80,4 +92,3 @@ Before drafting claims:
 - Are weak evidence areas explicitly retained?
 - Are limitations specific rather than generic?
 - Does the policy agenda follow from evidence rather than from preference?
-

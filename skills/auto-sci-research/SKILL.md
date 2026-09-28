@@ -73,6 +73,14 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 5. Never store secrets in skill files, HTML, markdown logs, or committed examples.
 6. Every major skill change must update the evolution archive HTML.
 
+### QC visibility protocol
+
+Keep quality control strict internally and quiet externally. Run routine checks—citation and terminology consistency, basic causal-language review, figure/table alignment, routine support checks, style lint, and minor uncertainty checks—silently; do not list each check or announce that work must “pass a gate.” Report a finding only when it could change the current scientific interpretation, estimand, sample, result, or conclusion. Pause for author input only when safe continuation is impossible or a material scientific choice belongs to the author. Present ordinary work in the order `answer -> evidence -> interpretation -> material limitation -> next step`, not as a gate or warning log.
+
+Once a boundary has been stated for the current task, do not repeat it unless new evidence changes it, the current section must independently contain it, or the user requests a full audit.
+
+Treat a result file that conflicts with `CURRENT_STATE` on effect direction or another conclusion-determining fact as a blocking issue: stop interpretation and ask the author to resolve the authoritative value before proceeding.
+
 ## Workflow
 
 1. **Scope the task**
@@ -91,9 +99,9 @@ Read `references/02_subskill_registry.md` when choosing among skills.
    - For full manuscript projects, progress phase by phase and keep handoffs explicit.
    - For large tasks, compose subagents instead of creating new standalone skills by default.
 
-4. **Gate quality**
+4. **Check quality**
    - Verify files, scripts, outputs, citations, figures, and assumptions.
-   - For manuscripts, run claim-evidence checks and reviewer-risk scans.
+   - For manuscripts, run claim-evidence checks and reviewer-risk scans internally; surface only findings that materially affect interpretation or require author judgment.
    - For data or models, run EDA, leakage checks, baselines, sensitivity, and reproducibility checks.
 
 5. **Update evolution records**
