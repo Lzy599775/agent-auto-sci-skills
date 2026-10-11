@@ -137,6 +137,8 @@ auto-sci-research
 
 Target-journal benchmarking is treated as evidence-first exemplar decomposition, not language imitation. Build `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE`, select 3–5 function-matched papers per substantive section, record `FULLTEXT`, `ABSTRACT_ONLY`, or `METADATA_ONLY`, draft from the user's evidence, and then hand off to the Academic Prose Style Guard and SciPilot. The reference protocol lives under `agent-auto-sci-scicomm`; it does not replace literature, domain-writing, or polishing owners. Official journal requirements outrank the soft empirical abstract profile, and journal recommendations must use the full manuscript when available rather than IF alone. See [the cross-client matrix](docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md).
 
+V2 adds a reusable global academic-writing contract: story-relevance, sentence-increment, paragraph-contribution, Results/Introduction/Discussion selection, Methods reproducibility, robustness placement, three-line tables, no manual prose breaks, figure/table citation and fact-placement ledgers, and conservative redundancy lint. Copy [CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2](CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt) into Project Instructions or account-level Custom Instructions when desired; this repository cannot modify ChatGPT account settings.
+
 ## Upstream And Licensing
 
 - `Haojae/scipilot-writing-skill`: MIT, fully packaged with LICENSE and NOTICE.

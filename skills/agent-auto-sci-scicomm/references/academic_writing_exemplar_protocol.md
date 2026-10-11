@@ -1,6 +1,6 @@
 # Academic Writing Exemplar Decomposition Protocol
 
-**Version:** V1
+**Version:** V2
 **Role:** pre-drafting and pre-revision argument-architecture handoff
 **Owner:** `agent-auto-sci-scicomm`
 **Not:** a top-level skill, a literature-review owner, or a polishing owner
@@ -70,6 +70,20 @@ whole-document consistency audit
 ```
 
 Do not accommodate an obviously false premise merely to preserve tone. Record unresolved items as `UNKNOWN`, `NOT_REPORTED`, `NOT_APPLICABLE`, or `NOT_VERIFIED` as appropriate.
+
+### Source-specific terminology, labels, and claim timing
+
+- In formal Chinese narration, prefer `本研究` over `本文` only when the sentence refers to the current study; do not apply a blind global replacement.
+- At first use, write the full English term followed by its abbreviation, then use the defined abbreviation consistently. Keep a terminology ledger across the title, abstract, text, figures/tables, and conclusion.
+- Do not write a result or conclusion before the supporting analysis has been completed and checked. A prospective expectation remains a research question or hypothesis, not a finding.
+- Do not copy an internal analysis-table title, code label, or operational category mechanically into prose. Translate it into natural scientific language while preserving the exact construct and definition; retain the raw label only when formally introduced or required for traceability.
+- Every major conclusion must point to a result from the current study or a verified citation in the claim-evidence map. `[证据边界问题]` is an internal working-draft/QC marker only; resolve it and remove the marker before submission-ready prose.
+
+The final consistency audit explicitly compares Title, Abstract, main text, figures/tables, and Conclusion for terminology, sample size, time point, effect direction, and claim strength. Resolve mismatches against evidence rather than silently harmonizing them.
+
+Use the single most accurate hedge needed for the uncertainty at issue; remove stacked near-synonyms when they express the same qualification. State a necessary causal disclaimer once in the most relevant location rather than appending it after every result. Distinct causal, estimand, measurement, population, uncertainty, and generalization boundaries must remain distinct.
+
+Do not automatically explain a non-significant result by sample size, statistical power, measurement error, or model specification. Include such an explanation only when additional evidence supports it; otherwise report the estimate and uncertainty without assigning an unsupported cause. Report core Results fully, compress secondary findings, and summarize repeated similar patterns while retaining necessary nulls, denominators, and uncertainty.
 
 ## Exemplar selection
 
@@ -263,7 +277,7 @@ OFFICIAL_JOURNAL_REQUIREMENT
   > USER_ABSTRACT_PREFERENCE
 ```
 
-When recommending journals, do not rank from Title/Abstract alone. When available, use the full manuscript plus the research field, scientific question, gap, contribution, methods, main conclusions, and overall manuscript level. Verify current publisher scope, indexing, IF/JCR/CAS only when verified, OA/APC, recent similar papers, and review time only when reliable. Do not sort by IF alone.
+When recommending journals, do not rank from Title/Abstract alone. When available, read the full manuscript and assess field, scientific question, knowledge gap, innovation, methods, main conclusions, overall manuscript level, and keywords. Verify current publisher, scope, SCI/SCIE/indexing, IF/JCR/CAS, CiteScore, OA/APC, and recent similar papers from current authoritative sources; report review time only when reliable. Mark unverified items `NOT_VERIFIED`; do not sort by IF alone.
 
 ## Preferred empirical abstract profile
 
@@ -272,11 +286,13 @@ When recommending journals, do not rank from Title/Abstract alone. When availabl
 ```yaml
 background: very short
 gap: one compact sentence
+gap_style: compact however-style contrast is preferred when natural; the literal word however is optional
 study_response: directly answers the gap
 methods: mention only one or two central methods
 results: prioritize main findings; avoid equal-weight variable-by-variable reporting
 implication: one concise final statement
 word_count: soft target only; never a hard scientific gate
+exact_sentence_or_word_count: SOFT_GUIDANCE; official journal/reporting rules take precedence
 ```
 
 The journal's official format wins over this profile. Do not delete a scientifically necessary null, uncertainty, or boundary to meet a soft length target.
@@ -319,6 +335,159 @@ PROVENANCE_METADATA_AUTO_STRIP = NO
 
 The cross-client private profile may contain only reusable preferences under these keys:
 
-`preferred_academic_tone`, `long_document_audit`, `claim_forward_preference`, `results_prioritization`, `abstract_soft_profile`, `punctuation_and_rhythm`, `anti_template_preference`, `journal_exemplar_preference`, and `necessary_boundary_preservation`.
+`preferred_academic_tone`, `long_document_audit`, `claim_forward_preference`, `results_prioritization`, `abstract_soft_profile`, `punctuation_and_rhythm`, `anti_template_preference`, `journal_exemplar_preference`, `necessary_boundary_preservation`, `sentence_academic_increment_audit`, `paragraph_story_contribution_audit`, `methods_reproducibility_priority`, `robustness_placement_rule`, `three_line_table_contract`, `no_manual_line_break_in_prose`, `figure_table_citation_ledger`, and `fact_placement_ledger`.
 
 It must not contain absolute personal paths, API secrets, private manuscript text, or copied copyrighted prose.
+
+## V2 global academic-writing contract
+
+`DEFAULT_ACADEMIC_WRITING_PREFERENCES` is the reusable default for substantive academic-writing routes. It is a workflow contract, not a replacement for a target journal's official requirements, reporting guidelines, author evidence, or researcher judgment. Apply the following precedence:
+
+```text
+OFFICIAL_JOURNAL_REQUIREMENT
+  > REPORTING_GUIDELINE
+  > VERIFIED_SCIENTIFIC_CONTENT
+  > NECESSARY_REPRODUCIBILITY
+  > DEFAULT_ACADEMIC_WRITING_PREFERENCES
+  > USER_SOFT_STYLE_PREFERENCE
+```
+
+```yaml
+DEFAULT_ACADEMIC_WRITING_PREFERENCES:
+  claim_forward: true
+  positive_first_when_boundary_preserved: true
+  preserve_causal_measurement_uncertainty_scope_boundaries: true
+  long_document_order: whole_document_audit -> section_revision -> cross_section_audit
+  own_evidence_order: OUR_EVIDENCE_MAP -> OUR_ARGUMENT_MAP -> EXEMPLAR_COMPARISON -> OUR_DRAFT -> PROSE_STYLE_GUARD -> POLISHING
+  sentence_increment_audit: required_for_substantial_rewriting
+  paragraph_story_contribution_audit: required_for_substantial_rewriting
+  methods_reproducibility_priority: higher_than_story_compression
+  results_hierarchy: main_result_complete -> secondary_result_compressed -> repeated_pattern_summary_or_supplement
+  introduction_relevance: every_paragraph_advances_problem_synthesis_gap_or_question
+  discussion_nonrepetition: every_paragraph_adds_interpretation_comparison_explanation_implication_or_boundary
+  hidden_formatting_cleanup: AUTO
+  provenance_metadata_stripping: EXPLICIT_OPT_IN_ONLY
+```
+
+### Preflight and long-document order
+
+Before a rewrite, inspect the premise, evidence map, and document scope for a false premise, logic jump, missing input, unsupported causal escalation, and section leakage. Record unresolved information as `UNKNOWN`, `NOT_REPORTED`, `NOT_APPLICABLE`, or `NOT_VERIFIED`; do not repair a missing fact by inventing prose. For long documents, the required order is:
+
+```text
+WHOLE_DOCUMENT_AUDIT -> SECTION_REVISION -> CROSS_SECTION_AUDIT
+```
+
+The whole-document audit identifies the research question, claim/evidence chain, repeated facts, figure/table order, terminology, and section boundaries. Section revision then works on the highest-value scientific functions. The cross-section audit checks that abstract, Introduction, Methods, Results, Discussion, Conclusion, figures, tables, and supplements remain consistent.
+
+### Sentence academic increment audit
+
+For substantial rewriting, classify each sentence or smallest meaning unit as one of:
+
+`CORE_CLAIM` · `EVIDENCE` · `METHOD_REPRODUCIBILITY` · `INTERPRETATION` · `ESSENTIAL_TRANSITION` · `NECESSARY_BOUNDARY` · `SUPPORTING_CONTEXT` · `REDUNDANT_LOW_INCREMENT`.
+
+`REDUNDANT_LOW_INCREMENT` is the default deletion candidate. A sentence is not low increment merely because it is short, cautious, or non-narrative: a required Methods detail, null result, uncertainty statement, conflict, denominator, or scope boundary remains protected. The audit must record the reason for a deletion or move rather than silently optimizing for stylistic variety.
+
+### Paragraph story contribution audit
+
+For each paragraph, state which function it serves: `research_question`, `argument_chain`, `evidence_chain`, `main_finding`, `interpretation`, `planning_or_scientific_implication`, `reproducibility`, `citation_synthesis`, or `necessary_boundary`. If removing the paragraph leaves the scientific story unchanged and it does not carry reproducibility, citation synthesis, or a necessary boundary, mark it `DELETE` or `MOVE_TO_SUPPLEMENT`. This check must never delete required Methods information merely because its story contribution is low.
+
+### Results, Introduction, and Discussion selection rules
+
+**Results hierarchy.** The main result receives complete evidence, necessary numbers, denominators, statistical or spatial support, and two or three sentences of factual orientation without adding an unsupported mechanism. Secondary results receive one or two sentences when they change interpretation or answer a declared sub-question. Repeated patterns are summarized or moved to a supplement while preserving a necessary null, uncertainty, conflict, or denominator.
+
+**Introduction relevance.** Each paragraph must advance problem narrowing, literature synthesis, gap establishment, question framing, or a directly necessary context. Encyclopedia-style background, ordinary facts, and citations that do not move the gap are deletion or relocation candidates.
+
+**Discussion nonrepetition.** A Discussion paragraph must add at least one of `INTERPRETATION`, `NEAREST_STUDY_COMPARISON`, `EVIDENCE_SUPPORTED_EXPLANATION`, `IMPLICATION`, or `BOUNDARY`. A paragraph that only restates a Results sentence is a `REDUNDANT_LOW_INCREMENT` candidate. The audit does not prohibit a necessary quantitative reminder when it carries new interpretation.
+
+### NOT_BUT_CONSTRUCTION_CLUSTER
+
+`NOT_BUT_CONSTRUCTION_CLUSTER` is an advisory cluster rule, not a global word ban. Detect these forms in Chinese and English, with ordinary punctuation tolerated:
+
+```text
+不是……而是……       并非……而是……       不在于……而在于……
+并不是……             而不是……
+not ... but ...        rather than          is not ...; instead ...
+does not ... but ...   not simply ... but ...
+```
+
+Keep one necessary comparison when it protects a real scientific boundary. Emit a warning when the same paragraph has at least two contrastive-defensive constructions, a three-sentence window has at least two, adjacent paragraphs repeat the same boundary, or the full document shows a fixed template pattern. Rewrite from the positive core (for example, “本研究聚焦 Y，并将 X 作为……”); do not mechanically replace words or erase the protected distinction.
+
+### STORY_RELEVANCE_AND_DEFENSE_AUDIT
+
+For every defensive or qualifying sentence, ask:
+
+1. Does it protect a real estimand, causal status, population, measurement meaning, uncertainty, or scope boundary?
+2. Would deletion change claim strength, interpretation, or reviewer ability to evaluate the result?
+3. Has the same boundary already been stated nearby?
+4. Does the sentence add information to the research story?
+
+If no new scientific information is added and the boundary is already protected, mark `DELETE` or merge. If the boundary is necessary, keep the most precise formulation once. This audit is advisory and must not auto-delete a material caveat.
+
+### Methods reproducibility preservation
+
+`METHOD_REPRODUCIBILITY` has priority over `STORY_COMPRESSION`. Preserve details required to reproduce the design or interpret the estimand, including data source, population, measurement, processing, parameters, model, validation, uncertainty, ethics/licensing, and scope. If detail is too long for the main text, move it to a clearly linked Supplement/Appendix; never delete it solely because it does not advance the narrative.
+
+### ROBUSTNESS_PLACEMENT_RULE
+
+For sensitivity analysis, robustness checks, alternative specifications, bandwidth checks, and secondary diagnostics:
+
+- keep the analysis in the main text when it is necessary evidence for the core claim, identification credibility, interpretation, or a reader's evaluation of the main result;
+- otherwise place detailed results in Supplementary Materials or an Appendix and keep at most one bounded pointer sentence in the main text (for example, “Results were robust to … (Supplementary …)”);
+- omit even the pointer when it adds no academic increment;
+- never make robustness or sensitivity the main scientific storyline by default.
+
+### THREE_LINE_TABLE_CONTRACT
+
+For final Word, LaTeX, XLSX, or manuscript artifacts, every table has exactly the semantic equivalent of a top rule, a header separator rule, and a bottom rule, with no vertical rules. LaTeX should prefer `\toprule`, `\midrule`, and `\bottomrule` from `booktabs`. Word should keep only the table top border, header bottom border, and table bottom border. Cell text is trimmed at both ends; a cell may not begin with two half-width spaces, two full-width spaces, or a tab.
+
+Chat Markdown tables are `CHAT_TABLE = PREVIEW_ONLY`: they preview row/column semantics and cannot be claimed to be publication-grade three-line tables. When a DOCX/LaTeX/XLSX/manuscript artifact is requested, convert to its native three-line contract.
+
+### NO_MANUAL_LINE_BREAK_IN_PROSE
+
+Generated prose paragraphs must not contain soft line breaks, manual line breaks, `<br>`, Markdown hard breaks (two trailing spaces followed by a newline), U+2028, U+2029, or vertical tab. Word Shift+Enter equivalents are also prohibited. Normal paragraph boundaries are valid. LaTeX commands, code, equations, and table syntax may contain line breaks required by their grammar; the exception does not apply to ordinary prose text.
+
+### FIGURE_TABLE_CITATION_LEDGER
+
+Maintain a ledger for every `Fig.`, `Figure`, `Table`, `Supplementary Figure`, and `Supplementary Table` with `first_introduction_location`, `claim_supported`, and `subsequent_citations`. Introduce an item completely at the first meaningful location. A later citation is allowed only when a new substantive claim requires the reader to inspect that item again. Otherwise mark `REPEATED_FIGURE_CITATION = REMOVE`. Check first-citation order, numbering, and caption/text consistency; do not introduce Figure 3 before Figure 2 unless the venue explicitly allows it.
+
+### FACT_PLACEMENT_LEDGER
+
+Record a canonical narrative location for concrete facts and numbers, including sample size, street-block/grid counts, time ranges, thresholds, radii, model parameters, and main effect sizes. A low-value exact number or semantically equivalent fact normally appears fully once. Necessary repetition is allowed in an abstract, a core result, a self-contained figure/table, or a Discussion interpretation when it adds a distinct function. Otherwise emit the advisory `REPEATED_LOW_VALUE_NUMBER` or `REPEATED_FACT_CANDIDATE`; do not suppress required reporting mechanically.
+
+### Target-journal recommendations and abstract profile
+
+`EMPIRICAL_ABSTRACT_USER_PROFILE` remains a soft default:
+
+```yaml
+background: very_short
+gap: compact
+study_response: direct_answer_to_gap
+methods: one_or_two_central_methods
+results: main_findings_prioritized
+implication: concise_and_bounded
+```
+
+Official journal structure, reporting guidelines, scientific content, and necessary uncertainty outrank this preference. Journal recommendations require full-manuscript analysis when the manuscript is available and should compare scope, research-question fit, recent similar papers, novelty fit, manuscript level, positioning, acceptance plausibility, and verified current metrics. Unverified live data must be labeled `NOT_VERIFIED`; title, abstract, or IF alone is insufficient.
+
+### Hidden formatting and provenance
+
+`HIDDEN_FORMATTING_CLEANUP = AUTO` may remove accidental hidden Unicode and formatting residue as document hygiene. `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`. C2PA, XMP/EXIF provenance, authorship provenance, and source metadata must not be removed automatically or merely to evade AI/source detection. The contract does not support AI-detection evasion.
+
+Punctuation review is a density audit, not a global replacement pass: inspect dashes, semicolons, colons, parentheses, Chinese enumeration commas, and quotation marks. Split overloaded multi-level asides when useful. Use quotation marks for defined terms, direct quotations, or genuinely necessary emphasis. Preserve symbols required by formulas, variables, and citation formats. Flag unnecessary A-B/A-B-C noun chains for review while retaining standardized technical terms, intervention names, ranges, formulas, and citation syntax.
+
+## V2 handoff sequence
+
+For a substantive academic-writing route, the existing owners use this order:
+
+```text
+whole-document/story audit
+  -> own evidence and argument maps
+  -> exemplar protocol (REQUIRED or AUTO; SKIP for minor proofreading)
+  -> draft/revise from our evidence
+  -> sentence and paragraph increment/story audits
+  -> Academic Prose Style Guard
+  -> SciPilot polishing and lint
+  -> figure/table/fact/section cross-check
+```
+
+The route remains an insertion into the existing owner chain. It does not create a duplicate top-level skill or require a user to paste the contract into every Codex conversation.

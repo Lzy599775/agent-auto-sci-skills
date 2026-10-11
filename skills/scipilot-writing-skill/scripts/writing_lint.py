@@ -21,6 +21,10 @@ scipilot-writing-skill :: writing_lint.py
   - 模型/方法名所有格（GPT's → the performance of GPT）
   - 句长节奏（burstiness 过低 = 均匀机械，疑似 AI）
   - 被动语态比例（仅提示）
+  - NOT_BUT_CONSTRUCTION_CLUSTER / repeated defensive contrast（仅提示）
+  - prose manual line breaks（<br>, soft/hard breaks, Unicode separators, vertical tab）
+  - table-cell leading/trailing whitespace（Markdown/LaTeX table rows）
+  - repeated low-value number and figure/table citation candidates（仅提示）
 LaTeX 载体（--mode latex）：
   - 未转义特殊字符 %（FAIL，会注释掉整行）、& 、_ 、#
   - `$` 数学定界符是否配平（FAIL）
@@ -36,6 +40,10 @@ Word / 纯中文载体（--mode word，或 --lang zh）：
     echo "some text" | python writing_lint.py - --mode plain
 
 退出码：0=PASS（无 WARN/FAIL）  1=有 WARN  2=有 FAIL
+
+V2 advisory checks deliberately do not auto-delete text. They surface candidates for the story, evidence,
+reproducibility, figure/table, and fact-placement audits; necessary reporting and scientific boundaries remain the
+author/model's responsibility.
 """
 from __future__ import annotations
 
@@ -112,7 +120,7 @@ AI_TELL_WORDS_ZH = [
 ]
 
 # 中文机械连接 / 罗列
-MECH_CONNECTIVES_ZH = ["此外", "另外", "更重要的是", "首先", "其次", "再者", "最后", "综上"]
+MECH_CONNECTIVES_ZH = ["此外", "另外", "更重要的是", "首先", "其次", "再次", "再者", "最后", "综上", "综上所述", "进一步而言", "总而言之", "由此可见"]
 
 # 空泛归因（英文正则）
 VAGUE_ATTR_EN = [
@@ -406,6 +414,410 @@ def _check_fullwidth(text: str) -> list:
 
 
 # ──────────────────────────────────────────────────────────────────────────
+# V2 academic-writing contract checks (advisory unless noted)
+# ──────────────────────────────────────────────────────────────────────────
+
+_NOT_BUT_PATTERNS = (
+    ("不是…而是…", r"不是[^。！？；\n]{0,80}而是"),
+    ("并非…而是…", r"并非[^。！？；\n]{0,80}而是"),
+    ("不在于…而在于…", r"不在于[^。！？；\n]{0,80}而在于"),
+    ("并不是…", r"并不是"),
+    ("而不是…", r"而不是"),
+    ("not ... but ...", r"\bnot\b[^.!?;\n]{1,100}\bbut\b"),
+    ("rather than", r"\brather\s+than\b"),
+    ("is not ... instead", r"\bis\s+not\b[^.!?;\n]{1,80}[;,]\s*instead\b"),
+    ("does not ... but ...", r"\bdoes\s+not\b[^.!?;\n]{1,80}\bbut\b"),
+    ("not simply ... but ...", r"\bnot\s+simply\b[^.!?;\n]{1,80}\bbut\b"),
+)
+
+
+def _check_not_but_cluster(text: str) -> list:
+    """Flag clustered contrastive templates without banning one necessary contrast."""
+    matches = []
+    for name, pattern in _NOT_BUT_PATTERNS:
+        for hit in re.finditer(pattern, text, re.IGNORECASE):
+            matches.append((hit.start(), hit.end(), name, hit.group(0)))
+    matches.sort()
+    if len(matches) < 2:
+        return []
+
+    paragraph_counts = {}
+    for start, _end, _name, _value in matches:
+        paragraph = text.count("\n\n", 0, start)
+        paragraph_counts[paragraph] = paragraph_counts.get(paragraph, 0) + 1
+    sentence_index = []
+    for start, _end, _name, _value in matches:
+        # This intentionally tolerates mixed Chinese/English punctuation.
+        sentence_index.append(len(re.findall(r"[.!?。！？；]", text[:start])))
+    local_cluster = any(
+        sentence_index[i + 1] - sentence_index[i] <= 2
+        for i in range(len(sentence_index) - 1)
+    )
+    same_paragraph_cluster = any(count >= 2 for count in paragraph_counts.values())
+    document_template_cluster = len(matches) >= 3
+    if not (local_cluster or same_paragraph_cluster or document_template_cluster):
+        return []
+
+    examples = [value.strip()[:80] for _start, _end, _name, value in matches[:4]]
+    out = [Issue(
+        SEV_WARN,
+        "NOT_BUT_CLUSTER",
+        "NOT_BUT_CONSTRUCTION_CLUSTER：对比/防御句式在局部或全文聚集；保留必要边界并优先正面直陈",
+        line=_line_of(text, matches[0][0]),
+        count=len(matches),
+        examples=examples,
+    )]
+    # A separate stable code makes the repeated-defensive-contrast contract easy
+    # for downstream workflows to consume without treating one contrast as an error.
+    if same_paragraph_cluster or document_template_cluster:
+        out.append(Issue(
+            SEV_WARN,
+            "REPEATED_DEFENSIVE_CONTRAST",
+            "同一段或全文重复表达防御性边界；检查 STORY_RELEVANCE_AND_DEFENSE_AUDIT，必要边界只保留最精确的一次",
+            line=_line_of(text, matches[0][0]),
+            count=len(matches),
+            examples=examples,
+        ))
+    return out
+
+
+def _check_manual_line_break(text: str, mode: str) -> list:
+    """Detect prose line-break artifacts while allowing syntax-oriented lines."""
+    hits = []
+    for match in re.finditer(r"<br\s*/?>|\u2028|\u2029|\x0b", text, re.IGNORECASE):
+        hits.append((match.start(), match.group(0)))
+    for match in re.finditer(r"[ \t]{2,}\r?\n", text):
+        hits.append((match.start(), "Markdown hard break"))
+
+    # In Markdown/plain/Word prose, a single newline between two ordinary
+    # non-empty lines is a soft break. Blank lines remain normal paragraph
+    # boundaries. Structural table/list/code lines are excluded.
+    if mode != "latex":
+        lines = text.splitlines(keepends=True)
+        offset = 0
+        in_fence = False
+        for index, raw in enumerate(lines[:-1]):
+            line = raw.rstrip("\r\n")
+            next_line = lines[index + 1].rstrip("\r\n")
+            stripped = line.strip()
+            next_stripped = next_line.strip()
+            if stripped.startswith(("```", "~~~")) or next_stripped.startswith(("```", "~~~")):
+                in_fence = not in_fence
+            section_heading = lambda value: bool(re.fullmatch(
+                r"(?:#{1,6}\s*)?(?:abstract|introduction|methods?|results?|discussion|conclusion|supplement(?:ary)?|appendix)\s*:?.*",
+                value,
+                re.IGNORECASE,
+            ))
+            structural = (
+                not stripped or not next_stripped or in_fence
+                or stripped.startswith(("|", ">", "#", "- ", "* ", "+ "))
+                or next_stripped.startswith(("|", ">", "#", "- ", "* ", "+ "))
+                or section_heading(stripped)
+                or section_heading(next_stripped)
+            )
+            if not structural and raw.endswith(("\n", "\r")):
+                # A hard break was already recorded above; keep one issue per
+                # location and let the message explain the most likely cause.
+                newline_pos = offset + len(raw.rstrip("\r\n"))
+                if not any(pos == newline_pos for pos, _kind in hits):
+                    hits.append((newline_pos, "soft line break"))
+            offset += len(raw)
+
+    if not hits:
+        return []
+    kinds = sorted({kind for _pos, kind in hits})
+    return [Issue(
+        SEV_WARN,
+        "MANUAL_LINE_BREAK",
+        "正文含手动/软换行（" + ", ".join(kinds) + "）；使用正常段落边界，代码/公式/表格语法例外",
+        line=_line_of(text, hits[0][0]),
+        count=len(hits),
+        examples=[kind for _pos, kind in hits[:4]],
+    )]
+
+
+def _table_line_cells(line: str, mode: str):
+    """Return rough table cell payloads for the two supported text syntaxes."""
+    stripped = line.strip()
+    if mode in {"markdown", "plain", "word", "docx"} and "|" in stripped:
+        body = stripped[1:-1] if stripped.startswith("|") and stripped.endswith("|") else stripped
+        return [cell for cell in re.split(r"(?<!\\)\|", body)]
+    if mode == "latex" and "&" in stripped:
+        body = re.sub(r"\\\\\s*$", "", stripped)
+        return body.split("&")
+    return []
+
+
+def normalize_table_cell_whitespace(text: str, mode: str = "markdown") -> str:
+    """Trim table-cell edges without changing table delimiters or prose.
+
+    This helper is intentionally conservative: it only rewrites lines that
+    look like Markdown/LaTeX table rows. It is useful to artifact generators;
+    the linter itself reports the candidate and does not mutate user text.
+    """
+    lines = text.splitlines(keepends=True)
+    output = []
+    for raw in lines:
+        ending = ""
+        body = raw
+        if raw.endswith("\r\n"):
+            body, ending = raw[:-2], "\r\n"
+        elif raw.endswith(("\n", "\r")):
+            body, ending = raw[:-1], raw[-1]
+        if mode == "markdown" and "|" in body:
+            leading = body[: len(body) - len(body.lstrip())]
+            stripped = body.strip()
+            outer_left = stripped.startswith("|")
+            outer_right = stripped.endswith("|")
+            core = stripped[1:-1] if outer_left and outer_right else stripped
+            cells = [cell.strip() for cell in re.split(r"(?<!\\)\|", core)]
+            rebuilt = "|".join(cells)
+            if outer_left:
+                rebuilt = "|" + rebuilt
+            if outer_right:
+                rebuilt += "|"
+            output.append(leading + rebuilt + ending)
+        elif mode == "latex" and "&" in body:
+            suffix = ""
+            match = re.search(r"(\\\\\s*)$", body)
+            if match:
+                suffix = match.group(1)
+                body = body[: match.start()]
+            cells = [cell.strip() for cell in body.strip().split("&")]
+            output.append(" & ".join(cells) + suffix + ending)
+        else:
+            output.append(raw)
+    return "".join(output)
+
+
+def _check_cell_leading_whitespace(text: str, mode: str) -> list:
+    issues = []
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        cells = _table_line_cells(line, mode)
+        if not cells:
+            continue
+        # Markdown separator rows are formatting, not data cells.
+        if all(not cell.strip() or re.fullmatch(r":?-{2,}:?", cell.strip()) for cell in cells):
+            continue
+        bad_leading = [cell for cell in cells if re.match(r"^(?:\t| {2,}|　{2,})", cell)]
+        bad_trailing = [cell for cell in cells if re.search(r"[ \t　]+$", cell)]
+        if bad_leading or bad_trailing:
+            examples = [repr(cell) for cell in (bad_leading + bad_trailing)[:4]]
+            issues.append(Issue(
+                SEV_WARN,
+                "CELL_LEADING_WHITESPACE",
+                "表格单元格存在开头两个空格/全角空格/tab或尾随空白；应用 THREE_LINE_TABLE_CONTRACT 前 trim",
+                line=line_number,
+                count=len(bad_leading) + len(bad_trailing),
+                examples=examples,
+            ))
+    return issues
+
+
+def _section_for_line(lines: list[str], line_index: int) -> str:
+    current = "body"
+    for line in lines[: line_index + 1]:
+        value = line.strip().lower().rstrip(":")
+        if re.fullmatch(r"(?:abstract|introduction|methods?|results?|discussion|conclusion|supplement(?:ary)?|appendix)", value):
+            current = value
+        elif re.fullmatch(r"(?:fig(?:ure)?|table)\s*[s]?\d+.*", value):
+            current = "artifact"
+    return current
+
+
+def _check_repeated_low_value_numbers(text: str, mode: str) -> list:
+    """Warn on repeated exact numbers when no section-level allowance applies."""
+    lines = text.splitlines()
+    occurrences = {}
+    number_rx = re.compile(r"(?<![A-Za-z0-9])(?:\d{2,}(?:\.\d+)?|\d+\.\d+)(?:\s*%|\s*[A-Za-zµ²]+)?")
+    for line_index, line in enumerate(lines):
+        if mode in {"markdown", "latex"} and _table_line_cells(line, mode):
+            # Self-contained artifact rows are allowed to repeat a value.
+            continue
+        for hit in number_rx.finditer(line):
+            token = re.sub(r"\s+", "", hit.group(0)).lower()
+            occurrences.setdefault(token, []).append((line_index, hit.start()))
+
+    issues = []
+    allowed_pairs = {
+        frozenset({"abstract", "methods"}),
+        frozenset({"abstract", "results"}),
+        frozenset({"results", "discussion"}),
+        frozenset({"abstract", "methods", "results"}),
+    }
+    for token, positions in sorted(occurrences.items()):
+        if len(positions) < 2:
+            continue
+        sections = {_section_for_line(lines, index) for index, _column in positions}
+        if sections == {"artifact"}:
+            continue
+        if frozenset(sections) in allowed_pairs:
+            continue
+        examples = [f"L{index + 1}:{lines[index].strip()[:70]}" for index, _column in positions[:3]]
+        issues.append(Issue(
+            SEV_WARN,
+            "REPEATED_LOW_VALUE_NUMBER_CANDIDATE",
+            f"REPEATED_LOW_VALUE_NUMBER：精确数值 {token!r} 出现 {len(positions)} 次；核对 FACT_PLACEMENT_LEDGER，必要报告可保留",
+            line=positions[1][0] + 1,
+            count=len(positions),
+            examples=examples,
+        ))
+    return issues
+
+
+def _check_repeated_figure_citations(text: str) -> list:
+    citation_rx = re.compile(
+        r"\b(?:(supplementary)\s+)?(fig(?:ure)?|table)\.?\s*([s]?\d+)\b",
+        re.IGNORECASE,
+    )
+    grouped = {}
+    for hit in citation_rx.finditer(text):
+        prefix = "supplementary " if hit.group(1) else ""
+        key = f"{prefix}{hit.group(2).lower()} {hit.group(3).lower()}"
+        grouped.setdefault(key, []).append(hit)
+    issues = []
+    for key, hits in sorted(grouped.items()):
+        if len(hits) < 2:
+            continue
+        issues.append(Issue(
+            SEV_WARN,
+            "REPEATED_FIGURE_CITATION_CANDIDATE",
+            f"REPEATED_FIGURE_CITATION：{key} 在正文中出现 {len(hits)} 次；仅在新的 substantive claim 需要时保留后续引用",
+            line=_line_of(text, hits[1].start()),
+            count=len(hits),
+            examples=[hit.group(0) for hit in hits[:4]],
+        ))
+    return issues
+
+
+def _check_figure_table_order(text: str) -> list:
+    """Advisory first-use order check for figures and tables."""
+    citation_rx = re.compile(
+        r"\b(?:(supplementary)\s+)?(fig(?:ure)?|table)\.?\s*([s]?\d+)\b",
+        re.IGNORECASE,
+    )
+    first_seen = {"figure": [], "table": []}
+    seen_keys = set()
+    for hit in citation_rx.finditer(text):
+        kind = "figure" if hit.group(2).lower().startswith("fig") else "table"
+        raw_number = hit.group(3).lower().lstrip("s")
+        key = (kind, bool(hit.group(1)), raw_number)
+        if key in seen_keys:
+            continue
+        seen_keys.add(key)
+        try:
+            first_seen[kind].append((int(raw_number), hit))
+        except ValueError:
+            continue
+    issues = []
+    for kind, ordered in first_seen.items():
+        numbers = [number for number, _hit in ordered]
+        if numbers != sorted(numbers):
+            first_out_of_order = next(
+                index for index in range(1, len(numbers)) if numbers[index] < numbers[index - 1]
+            )
+            hit = ordered[first_out_of_order][1]
+            issues.append(Issue(
+                SEV_WARN,
+                "FIGURE_TABLE_ORDER",
+                f"{kind} first-citation order is {numbers}; check numbering and caption-text consistency",
+                line=_line_of(text, hit.start()),
+                count=len(numbers),
+                examples=[str(number) for number in numbers],
+            ))
+    return issues
+
+
+def _check_hedge_stack(text: str, lang: str) -> list:
+    """Flag multiple near-synonymous hedges in one sentence; never remove them."""
+    terms = (r"\b(?:may|might|possibly|potentially|perhaps|could|possibly)\b"
+             if lang == "en" else r"可能|或许|也许|潜在(?:地)?")
+    hits = []
+    for sentence in _split_sentences(text, lang):
+        matches = list(re.finditer(terms, sentence, re.IGNORECASE))
+        if len(matches) >= 2:
+            position = text.find(sentence)
+            hits.append((position, sentence.strip()[:100], len(matches)))
+    if not hits:
+        return []
+    return [Issue(SEV_WARN, "HEDGE_STACK", "同一句中有多个近义 hedge；保留最准确表达并维持必要不确定性",
+                  line=_line_of(text, hits[0][0]), count=sum(n for _p, _s, n in hits),
+                  examples=[s for _p, s, _n in hits[:3]])]
+
+
+def _check_repeated_causal_disclaimer(text: str) -> list:
+    patterns = (r"\b(?:cannot|can not|does not|do not)\s+(?:infer|establish|demonstrate)\s+causal(?:ity| effects?)?\b",
+                r"\bnot\s+(?:a\s+)?causal(?: claim| effect| inference)?\b",
+                r"(?:不能|无法|不可)(?:据此)?(?:推断|证明|识别)因果(?:关系|效应)?")
+    matches = [m for pattern in patterns for m in re.finditer(pattern, text, re.IGNORECASE)]
+    if len(matches) < 2:
+        return []
+    return [Issue(SEV_WARN, "REPEATED_CAUSAL_DISCLAIMER",
+                  "可能重复表达因果边界；在最相关位置保留一次，除非各处保护不同 estimand/范围",
+                  line=_line_of(text, matches[1].start()), count=len(matches),
+                  examples=[m.group(0) for m in matches[:4]])]
+
+
+def _check_internal_label_prose(text: str) -> list:
+    # Candidate-only check: underscore labels often come from code or analysis tables.
+    hits = list(re.finditer(r"(?<![A-Za-z0-9])(?:[a-z][a-z0-9]*_){1,}[a-z0-9]+(?![A-Za-z0-9])", text))
+    if not hits:
+        return []
+    return [Issue(SEV_WARN, "INTERNAL_LABEL_TO_PROSE",
+                  "疑似内部/code label 原样进入正文；核对是否应转写为自然科学语言或正式定义",
+                  line=_line_of(text, hits[0].start()), count=len(hits),
+                  examples=[m.group(0) for m in hits[:4]])]
+
+
+def _check_nonsignificant_attribution(text: str) -> list:
+    rx = re.compile(
+        r"(?:non[- ]significant|not statistically significant|不显著|未达到统计学显著性)"
+        r"[^。！？.!?;\n]{0,100}(?:because|due to|owing to|attribut(?:e|able) to|caused by|由于|归因于|因为)"
+        r"[^。！？.!?;\n]{0,100}(?:sample size|power|measurement error|model specification|样本量|统计功效|测量误差|模型设定)",
+        re.IGNORECASE,
+    )
+    hits = list(rx.finditer(text))
+    if not hits:
+        return []
+    return [Issue(SEV_WARN, "NONSIGNIFICANT_RESULT_ATTRIBUTION",
+                  "不显著结果被归因于样本量/功效/测量误差/模型设定；确认有额外证据支持该解释",
+                  line=_line_of(text, hits[0].start()), count=len(hits),
+                  examples=[m.group(0).strip()[:100] for m in hits[:3]])]
+
+
+def _check_punctuation_density(text: str, lang: str) -> list:
+    """Flag unusually dense prose punctuation as a review cue, not a replacement rule."""
+    chars = "—–;:：；（），()\"'“”‘’、"
+    issues = []
+    for sentence in _split_sentences(text, lang):
+        # Avoid triggering on short clauses and formula-heavy snippets.
+        if len(sentence) < 40:
+            continue
+        count = sum(sentence.count(ch) for ch in chars)
+        if count >= 6:
+            pos = text.find(sentence)
+            issues.append((pos, sentence.strip()[:100], count))
+    if not issues:
+        return []
+    return [Issue(SEV_WARN, "PUNCTUATION_DENSITY",
+                  "句内补充性标点密度偏高；检查是否拆句，同时保留公式、变量和引用所需符号",
+                  line=_line_of(text, issues[0][0]), count=sum(n for _p, _s, n in issues),
+                  examples=[s for _p, s, _n in issues[:3]])]
+
+
+def _check_hyphen_noun_chain(text: str) -> list:
+    # Deliberately advisory: standardized technical terms and ranges can be valid.
+    rx = re.compile(r"(?<![A-Za-z0-9])(?:[A-Za-z]{2,}-){1,}[A-Za-z]{2,}(?![A-Za-z0-9])")
+    hits = list(rx.finditer(text))
+    if not hits:
+        return []
+    return [Issue(SEV_INFO, "HYPHEN_NOUN_CHAIN",
+                  "发现连字符名词链候选；仅在非标准/非必要时改写，保留正式术语、变量、范围及引用格式",
+                  line=_line_of(text, hits[0].start()), count=len(hits),
+                  examples=[m.group(0) for m in hits[:4]])]
+
+
+# ──────────────────────────────────────────────────────────────────────────
 # 主入口
 # ──────────────────────────────────────────────────────────────────────────
 
@@ -431,6 +843,18 @@ def lint_text(text: str, mode: str = "plain", lang: str = "en") -> list:
         issues += _check_fullwidth(text)
 
     issues += _check_negative_parallel(text)
+    issues += _check_not_but_cluster(text)
+    issues += _check_manual_line_break(text, mode)
+    issues += _check_cell_leading_whitespace(text, mode)
+    issues += _check_repeated_low_value_numbers(text, mode)
+    issues += _check_repeated_figure_citations(text)
+    issues += _check_figure_table_order(text)
+    issues += _check_hedge_stack(text, lang)
+    issues += _check_repeated_causal_disclaimer(text)
+    issues += _check_internal_label_prose(text)
+    issues += _check_nonsignificant_attribution(text)
+    issues += _check_punctuation_density(text, lang)
+    issues += _check_hyphen_noun_chain(text)
     issues += _check_emdash(text, n_sent)
     issues += _check_burstiness(sents, lang)
 
