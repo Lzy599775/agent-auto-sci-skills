@@ -1,0 +1,26 @@
+{
+  "schema_version": "1",
+  "updated": "2026-10-11",
+  "capabilities": [
+    {
+      "name": "Evidence-first Top-Paper Writing Exemplar Decomposition",
+      "status": "added",
+      "owner": "agent-auto-sci-scicomm",
+      "role": "pre-drafting and pre-revision argument-architecture handoff",
+      "why_no_new_top_level_skill": "The capability extends the existing scientific-communication owner and must not collide with literature, domain-writing, or polishing ownership."
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2026-10-11",
+      "title": "Academic writing exemplar and cross-client routing V1",
+      "summary": "Added a generic evidence-first protocol, REQUIRED/AUTO/SKIP routing, read-scope rules, article and section maps, own-evidence-first drafting, anti-copying boundaries, and Codex/Web parity checks."
+    }
+  ],
+  "validation": {
+    "golden_set": "G01-G12",
+    "routing_contract": "PASS",
+    "provenance_metadata_auto_strip": "NO",
+    "top_level_skill_created": "NO"
+  }
+}

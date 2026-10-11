@@ -87,11 +87,12 @@ Apply the following precedence before matching topic keywords: route by the imme
 14. If the task is geography/remote-sensing SCI writing, especially inversion, spatiotemporal change, exposure, accessibility, or urban health manuscripts, add `geors-sci-writing-adapter`.
 15. If the task ends in text, slides, poster, or rebuttal at the argument/package level, add `agent-auto-sci-scicomm`; add `kdense-scicomm-selected` for upstream writing, citation, peer-review, slide, poster, or schematic workflows.
 16. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
-17. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
-18. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
-19. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
-20. If the task asks to create a new thinking/persona skill, use `huashu-nuwa` and keep local evidence boundaries.
-21. If the task asks for writing prompts, use `awesome-ai-research-writing` plus local sport-geography writing rules.
+17. For substantive manuscript writing, keep `agent-auto-sci-scicomm` as the argument owner and invoke `academic_writing_exemplar_protocol` only when `WRITING_EXEMPLAR_MODE` is `REQUIRED` or `AUTO`; then hand off to the Academic Prose Style Guard and `scipilot-writing-skill`.
+18. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
+19. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
+20. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
+21. If the task asks to create a new thinking/persona skill, use `huashu-nuwa` and keep local evidence boundaries.
+22. If the task asks for writing prompts, use `awesome-ai-research-writing` plus local sport-geography writing rules.
 
 ## 7. Full Pipeline Ownership
 
