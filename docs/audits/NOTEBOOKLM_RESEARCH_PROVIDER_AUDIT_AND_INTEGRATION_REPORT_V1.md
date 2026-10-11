@@ -51,7 +51,8 @@ Google authentication has not been run. When user browser login is required, sta
 - Source manifest JSON Schema and routing golden-set JSON: `PASS` (schema validates; 10 cases parse).
 - Installed helper-skill validation: `PASS`.
 - Public safety scan for private absolute paths and token-like patterns: `PASS`; no auth storage was read.
-- CI: `PENDING` until a Draft PR is available.
+- Public Draft PR: [#5](https://github.com/Lzy599775/agent-auto-sci-skills/pull/5), base `feature/agentic-research-workflow-v1`.
+- Public CI: `PASS` (both `Validate Skills` checks completed successfully).
 
 ## Companion artifacts
 
