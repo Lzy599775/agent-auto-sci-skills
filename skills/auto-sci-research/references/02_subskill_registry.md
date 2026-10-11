@@ -69,6 +69,8 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 
 ## 6. Routing Rules
 
+Optional NotebookLM synthesis is a helper provider, not a new literature/research owner. See `references/notebooklm_research_provider.md` for source-of-truth precedence, closed-corpus behavior, citation resolution, and failure fallback.
+
 1. If the task asks to update the system, start with `auto-sci-research`.
 2. If the task is a full research-to-manuscript workflow, read `08_full_research_to_manuscript_pipeline.md` and assign phase owners.
 3. If the task is large enough for multiple role-specific agents, read `09_subagent_composition_matrix.md`.

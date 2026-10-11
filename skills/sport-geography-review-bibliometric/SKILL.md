@@ -67,6 +67,10 @@ Default argument chain:
    - Make sure the final narrative does not overclaim health benefit from exposure or accessibility.
    - Read `references/07_quality_checks.md`.
 
+### Optional NotebookLM synthesis
+
+NotebookLM may assist with fixed-corpus comparison or evidence-matrix drafting only after corpus selection and source identity checks. Follow `skills/auto-sci-research/references/notebooklm_research_provider.md`: use `nlm_ask`, keep web research/source addition off, and verify important claims against original papers. Current `nlm_ask` has no source filter, so prompt-only instructions cannot isolate a subset of a larger notebook; use local source files or an explicitly approved dedicated subset notebook instead.
+
 For end-to-end projects, this skill owns literature-search reproducibility, screening, high-impact paper classification, paper-level extraction, literature matrix, evidence gap taxonomy, PRISMA records, bibliometric figures, and critical coding. Handoff stable gaps and evidence maps to `agent-auto-sci-methodology` and `agent-auto-sci-scicomm`.
 
 ## Local Corpus

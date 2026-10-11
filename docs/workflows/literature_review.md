@@ -21,6 +21,7 @@ Build a verified, deduplicated, traceable corpus and a bounded synthesis without
 9. Create claim-level records using `templates/evidence_record.md`.
 10. Run metadata, design, numeric, and citation-support QC before synthesis.
 11. Synthesize agreements, heterogeneity, mechanisms, limitations, and evidence gaps without flattening study differences.
+12. Optionally use NotebookLM for approved fixed-corpus multi-document synthesis only after corpus identity checks; use `nlm_ask`, preserve references, and resolve claims to original passages. Follow `skills/auto-sci-research/references/notebooklm_research_provider.md`; do not let provider availability, web research, or source-filter claims override this workflow.
 
 ## Zotero boundary
 
