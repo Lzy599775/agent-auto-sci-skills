@@ -274,3 +274,17 @@ Apply `ROBUSTNESS_PLACEMENT_RULE`: keep sensitivity, robustness, alternative spe
 ### Table and prose-format contracts
 
 Final tables must satisfy `THREE_LINE_TABLE_CONTRACT`: top rule, header separator, bottom rule, no vertical rules, and trimmed cell text with no leading two spaces or tab. A Markdown table in chat is `CHAT_TABLE = PREVIEW_ONLY`, not proof of a final three-line artifact. Prose must satisfy `NO_MANUAL_LINE_BREAK_IN_PROSE`: no `<br>`, soft/hard Markdown break, U+2028, U+2029, vertical tab, or Word-style manual break. Syntax-required line breaks in code, equations, and table markup are scoped exceptions.
+
+## Source-complete prose checks
+
+- **Referent-aware study wording:** In formal Chinese narration, prefer `本研究` to `本文` when referring to the current study. Do not globally replace `本文` when it refers to the manuscript as a document.
+- **Terminology and abbreviation first use:** At first use, give the full term followed by its abbreviation; use the abbreviation consistently thereafter. Audit consistency across Title, Abstract, main text, figures/tables, and Conclusion.
+- **Internal labels to prose:** Do not paste internal analysis-table titles, code labels, or operational categories into prose as if they were natural scientific language. Translate them while preserving their defined construct; retain exact labels only when needed and formally introduced.
+- **Evidence traceability:** Every major conclusion must link to a result from this study or a verified citation. `[证据边界问题]` may appear only in a working/QC draft and must be resolved and removed before submission-ready text.
+- **Hedge calibration:** Keep one most accurate hedge where needed. Flag stacked near-synonymous hedges, but do not remove uncertainty that reflects a real evidence limitation.
+- **Causal-boundary placement:** Do not mechanically append a causal disclaimer after every result. State each necessary boundary once at the location that best governs interpretation; retain distinct boundaries that protect different estimands, populations, measurements, or scopes.
+- **Non-significant results:** Do not automatically attribute a non-significant result to sample size, low power, measurement error, or model specification. Each such explanation requires additional supporting evidence.
+- **Punctuation and noun-chain density:** Review dashes, semicolons, colons, parentheses, Chinese enumeration commas, and quotation marks for overloaded density. Split layered asides when appropriate, not by global replacement. Use quotation marks for terms, direct quotations, or necessary emphasis. Flag unnecessary A-B/A-B-C noun chains while preserving established technical terms and required notation.
+- **Symbol preservation:** Editing must preserve formula, variable, and citation-format symbols.
+
+`[证据边界问题]` is never a submission-text substitute for a completed evidence review. It is a temporary QC annotation only.

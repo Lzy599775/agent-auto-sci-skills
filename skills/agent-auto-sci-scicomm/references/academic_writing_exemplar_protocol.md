@@ -71,6 +71,20 @@ whole-document consistency audit
 
 Do not accommodate an obviously false premise merely to preserve tone. Record unresolved items as `UNKNOWN`, `NOT_REPORTED`, `NOT_APPLICABLE`, or `NOT_VERIFIED` as appropriate.
 
+### Source-specific terminology, labels, and claim timing
+
+- In formal Chinese narration, prefer `本研究` over `本文` only when the sentence refers to the current study; do not apply a blind global replacement.
+- At first use, write the full English term followed by its abbreviation, then use the defined abbreviation consistently. Keep a terminology ledger across the title, abstract, text, figures/tables, and conclusion.
+- Do not write a result or conclusion before the supporting analysis has been completed and checked. A prospective expectation remains a research question or hypothesis, not a finding.
+- Do not copy an internal analysis-table title, code label, or operational category mechanically into prose. Translate it into natural scientific language while preserving the exact construct and definition; retain the raw label only when formally introduced or required for traceability.
+- Every major conclusion must point to a result from the current study or a verified citation in the claim-evidence map. `[证据边界问题]` is an internal working-draft/QC marker only; resolve it and remove the marker before submission-ready prose.
+
+The final consistency audit explicitly compares Title, Abstract, main text, figures/tables, and Conclusion for terminology, sample size, time point, effect direction, and claim strength. Resolve mismatches against evidence rather than silently harmonizing them.
+
+Use the single most accurate hedge needed for the uncertainty at issue; remove stacked near-synonyms when they express the same qualification. State a necessary causal disclaimer once in the most relevant location rather than appending it after every result. Distinct causal, estimand, measurement, population, uncertainty, and generalization boundaries must remain distinct.
+
+Do not automatically explain a non-significant result by sample size, statistical power, measurement error, or model specification. Include such an explanation only when additional evidence supports it; otherwise report the estimate and uncertainty without assigning an unsupported cause. Report core Results fully, compress secondary findings, and summarize repeated similar patterns while retaining necessary nulls, denominators, and uncertainty.
+
 ## Exemplar selection
 
 Select **3–5 function-matched papers for each substantive section by default**, rather than one fixed set for the entire manuscript. Score and document the reasons using:
@@ -263,7 +277,7 @@ OFFICIAL_JOURNAL_REQUIREMENT
   > USER_ABSTRACT_PREFERENCE
 ```
 
-When recommending journals, do not rank from Title/Abstract alone. When available, use the full manuscript plus the research field, scientific question, gap, contribution, methods, main conclusions, and overall manuscript level. Verify current publisher scope, indexing, IF/JCR/CAS only when verified, OA/APC, recent similar papers, and review time only when reliable. Do not sort by IF alone.
+When recommending journals, do not rank from Title/Abstract alone. When available, read the full manuscript and assess field, scientific question, knowledge gap, innovation, methods, main conclusions, overall manuscript level, and keywords. Verify current publisher, scope, SCI/SCIE/indexing, IF/JCR/CAS, CiteScore, OA/APC, and recent similar papers from current authoritative sources; report review time only when reliable. Mark unverified items `NOT_VERIFIED`; do not sort by IF alone.
 
 ## Preferred empirical abstract profile
 
@@ -272,11 +286,13 @@ When recommending journals, do not rank from Title/Abstract alone. When availabl
 ```yaml
 background: very short
 gap: one compact sentence
+gap_style: compact however-style contrast is preferred when natural; the literal word however is optional
 study_response: directly answers the gap
 methods: mention only one or two central methods
 results: prioritize main findings; avoid equal-weight variable-by-variable reporting
 implication: one concise final statement
 word_count: soft target only; never a hard scientific gate
+exact_sentence_or_word_count: SOFT_GUIDANCE; official journal/reporting rules take precedence
 ```
 
 The journal's official format wins over this profile. Do not delete a scientifically necessary null, uncertainty, or boundary to meet a soft length target.
@@ -456,6 +472,8 @@ Official journal structure, reporting guidelines, scientific content, and necess
 ### Hidden formatting and provenance
 
 `HIDDEN_FORMATTING_CLEANUP = AUTO` may remove accidental hidden Unicode and formatting residue as document hygiene. `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`. C2PA, XMP/EXIF provenance, authorship provenance, and source metadata must not be removed automatically or merely to evade AI/source detection. The contract does not support AI-detection evasion.
+
+Punctuation review is a density audit, not a global replacement pass: inspect dashes, semicolons, colons, parentheses, Chinese enumeration commas, and quotation marks. Split overloaded multi-level asides when useful. Use quotation marks for defined terms, direct quotations, or genuinely necessary emphasis. Preserve symbols required by formulas, variables, and citation formats. Flag unnecessary A-B/A-B-C noun chains for review while retaining standardized technical terms, intervention names, ranges, formulas, and citation syntax.
 
 ## V2 handoff sequence
 

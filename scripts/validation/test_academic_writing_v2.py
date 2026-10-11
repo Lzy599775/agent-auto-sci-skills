@@ -43,6 +43,31 @@ class AcademicWritingV2Tests(unittest.TestCase):
         issues = MODULE.LINT.lint_text("Figure 3 is introduced. Figure 2 is introduced later.", mode="plain", lang="en")
         self.assertIn("FIGURE_TABLE_ORDER", {issue.code for issue in issues})
 
+    def test_source_specific_lint_advisories(self) -> None:
+        cases = [
+            ("The result may possibly be due to a potential process.", "en", "HEDGE_STACK"),
+            ("We cannot infer causality from this result. This is not a causal effect.", "en", "REPEATED_CAUSAL_DISCLAIMER"),
+            ("The high_risk_group increased.", "en", "INTERNAL_LABEL_TO_PROSE"),
+            ("The non-significant result was due to low statistical power.", "en", "NONSIGNIFICANT_RESULT_ATTRIBUTION"),
+            ("We surveyed it; while however: the pattern was (after adjustment), notably—under constraints; and consistently, across time, space, and groups.", "en", "PUNCTUATION_DENSITY"),
+            ("This is a city-scale evidence-based planning framework.", "en", "HYPHEN_NOUN_CHAIN"),
+        ]
+        for text, lang, expected in cases:
+            with self.subTest(code=expected):
+                codes = {issue.code for issue in MODULE.LINT.lint_text(text, mode="plain", lang=lang)}
+                self.assertIn(expected, codes)
+
+    def test_source_specific_contract_preserves_valid_symbols_and_science(self) -> None:
+        text = r"The conditional average treatment effect (CATE) was estimated for x_i using \cite{source}; 95% CI was reported."
+        codes = {issue.code for issue in MODULE.LINT.lint_text(text, mode="plain", lang="en")}
+        self.assertNotIn("HEDGE_STACK", codes)
+        self.assertNotIn("NONSIGNIFICANT_RESULT_ATTRIBUTION", codes)
+
+    def test_chinese_mechanical_connectors_include_source_examples(self) -> None:
+        text = "此外，结果变化。再者，结果一致。进一步而言，范围较窄。总而言之，仍需解释。由此可见，尚有差异。"
+        codes = {issue.code for issue in MODULE.LINT.lint_text(text, mode="plain", lang="zh")}
+        self.assertIn("AI_MECH_CONNECTIVE", codes)
+
 
 if __name__ == "__main__":
     unittest.main()

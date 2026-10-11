@@ -1,14 +1,15 @@
 # User Polishing Prompt Rule Mapping V1
 
-**Task:** `ACADEMIC_WRITING_EXEMPLAR_AND_GLOBAL_WRITING_CONTRACT_INTEGRATION_V2`
+**Task:** `ACADEMIC_WRITING_SOURCE_PROMPT_FULL_RECONCILIATION_V1`
 **Mapping schema:** `SOURCE_RULE -> GENERIC_WORKFLOW_RULE -> IMPLEMENTATION_LOCATION -> TEST_CASE`
 **Status labels:** `ADOPT`, `ADAPT`, `SOFT_PREFERENCE`, `REJECT_WITH_REASON`
 
 ## Source availability and provenance
 
-The attached task text was read in full before implementation. The separately named source file `润色prompt - 副本.txt` was searched in the available workspace roots and was not found. Source-specific wording, facts, examples, and line-level claims from that absent file are therefore `NOT_VERIFIED`; this mapping uses only the rules explicitly present in the supplied task text. No missing source content is reconstructed.
+`SOURCE_PROMPT_FULLY_READ = YES`
+`SOURCE_PROMPT_LINE_COUNT = 76`
 
-The task text declares `SOURCE_PROMPT_LINE_COUNT = 76`; that declaration is retained as a task-provided expected field, while the actual line count of the unavailable named file remains `NOT_VERIFIED`.
+The user confirmed that the original `润色prompt - 副本.txt` was fully read in the active ChatGPT context. This reconciliation maps the 19 source-specific rule groups enumerated in the current task, without reproducing the private prompt, its examples, or its personal absolute-path references. The generic contract records provenance fields only; no claim is made that the original prompt text is stored in this public repository.
 
 The mapping is intentionally generic. It contains no private manuscript text, copied exemplar prose, credentials, or personal absolute paths.
 
@@ -63,11 +64,37 @@ The mapping is intentionally generic. It contains no private manuscript text, co
 | S45 | Do not modify classifier, literature monitor, scheduler, Zotero, Obsidian, doctoral state, or Dalian causal state. | Scope and safety gate rejects unrelated changes. | Execution plan; diff/safety scans | `P05` protected-path scan | ADOPT |
 | S46 | Final output must expose named contract fields and status values. | Produce an auditable completion summary with PASS/FAIL or YES/NO values and explicit unresolved source limitation. | Final response; validation output | `P06` final-field checklist | ADOPT |
 
+## Source-complete delta reconciliation
+
+The following rows reconcile the 19 source-specific rule groups. `ALREADY_COVERED` means V2 already contained an adequate implementation before this delta; `NEW_OR_COMPLETED` means this reconciliation adds an explicit contract, implementation pointer, or test. Counts are rule groups, not repository files.
+
+| ID | SOURCE_RULE | GENERIC_WORKFLOW_RULE | IMPLEMENTATION_LOCATION | TEST_CASE | DISPOSITION / DELTA |
+|---|---|---|---|---|---|
+| D01 | In formal Chinese manuscript narration, prefer `本研究` over `本文` only when the referent is the current study. | Use referent-aware terminology; do not globally replace valid references to the article/text. | Prose guard §Referent-aware wording; private profile | `SRC01` contextual wording review | SOFT_PREFERENCE / NEW_OR_COMPLETED |
+| D02 | First-use English abbreviations and technical terms use full term + abbreviation; later occurrences use the defined short form consistently. | Maintain a terminology ledger and check first-use expansion and subsequent consistency across prose and artifacts. | Protocol §Terminology and evidence contracts; SciPilot §Cross-section QC | `SRC02` first-use and consistency checklist | ADOPT / NEW_OR_COMPLETED |
+| D03 | Do not state conclusions before analysis supports them. | Draft result/conclusion claims only after the relevant analysis output and evidence record exist; mark prospective claims as questions or hypotheses. | Protocol §Preflight and own-evidence-first; guard §Evidence boundaries | `SRC03` evidence-before-conclusion check | ADOPT / ALREADY_COVERED |
+| D04 | Analysis/data-table internal labels, titles, and code labels must not be mechanically copied into manuscript prose. | Translate operational labels into natural scientific language while preserving the underlying variable/estimand definition; retain exact labels only when formally defined or required. | Guard §Internal-label-to-prose audit; SciPilot lint candidate | `SRC04` label-to-prose review | ADOPT / NEW_OR_COMPLETED |
+| D05 | Every major conclusion traces to study results or verified citations; `[证据边界问题]` is working-draft/QC-only. | Use a claim-evidence map; unresolved markers must be resolved or removed before submission prose. | Protocol §Evidence boundary; guard §Evidence traceability | `SRC05` evidence record and marker release check | ADOPT / ALREADY_COVERED |
+| D06 | Reduce mechanical `首先/其次/再次/最后`; distribute detail by importance rather than equally. | Use sequence markers only when they express real order; allocate depth by scientific importance. | Protocol §Results hierarchy; SciPilot `MECH_CONNECTIVES_ZH` and expanded set | `SRC06` connector review / lint | ADAPT / ALREADY_COVERED (expanded inventory) |
+| D07 | Check Title, Abstract, main text, figures/tables, and Conclusion for terminology, sample size, time point, effect direction, and claim strength. | Run a final cross-section/artifact consistency matrix; flag conflicts instead of normalizing without evidence. | Protocol §Cross-section consistency; SciPilot Stage 5 | `SRC07` five-dimension consistency matrix | ADOPT / ALREADY_COVERED (scope made explicit) |
+| D08 | Avoid stacked hedges; retain the single most accurate necessary hedge. | Preserve calibrated uncertainty but remove redundant hedge stacking that adds no distinct uncertainty dimension. | Guard §Hedge calibration; SciPilot lint `HEDGE_STACK` | `SRC08` stacked vs single hedge | ADAPT / NEW_OR_COMPLETED |
+| D09 | Do not mechanically repeat causal disclaimers after each result; state a necessary boundary once at the best location. | Consolidate duplicate causal boundaries while preserving distinct estimand, population, measurement, and scope limits. | Guard §Causal-boundary placement; SciPilot lint `REPEATED_CAUSAL_DISCLAIMER` | `SRC09` repeated vs distinct boundaries | ADAPT / NEW_OR_COMPLETED |
+| D10 | Reduce high-frequency empty connectors, including `此外/再者/综上所述/进一步而言/总而言之/由此可见`. | Audit function and frequency; do not ban transitions that express a necessary logical relation. | `writing_lint.py` `MECH_CONNECTIVES_ZH` | `SRC10` connector cluster fixture | ADAPT / NEW_OR_COMPLETED |
+| D11 | Reduce unnecessary short-hyphen noun chains such as A-B and A-B-C. | Flag candidate modifier chains for prose review; preserve standardized terms, ranges, formulas, and formal intervention labels. | Guard §Hyphen-chain audit; SciPilot lint `HYPHEN_NOUN_CHAIN` | `SRC11` candidate and protected-term fixtures | ADAPT / NEW_OR_COMPLETED |
+| D12 | Audit density of dash, semicolon, colon, parentheses, Chinese enumeration comma, and quotation marks; split overloaded sentences when appropriate. | Use punctuation-density flags as review prompts, not global replacement rules; retain syntax-required punctuation. | Guard §Punctuation density; SciPilot lint `PUNCTUATION_DENSITY` | `SRC12` overloaded and formula-preservation fixtures | ADAPT / NEW_OR_COMPLETED |
+| D13 | Quotation marks are for terms, direct quotations, or necessary emphasis only. | Review scare quotes and ornamental quotation marks; retain genuine terms and source quotations. | Guard §Quotation-mark function; SciPilot lint advisory | `SRC13` quotation-function review | ADAPT / NEW_OR_COMPLETED |
+| D14 | Preserve symbols required by formulas, variables, and citation formats. | Style cleanup must preserve mathematical notation, identifiers, and citation/reference syntax. | Protocol §Symbol-preservation invariant; SciPilot lint exclusions | `SRC14` formula/variable/citation preservation | ADOPT / ALREADY_COVERED (preservation made explicit) |
+| D15 | Do not attribute non-significant results to low sample size/power, measurement error, or model specification without additional evidence. | Report the result and uncertainty; present these explanations only as evidence-supported possibilities, never automatic causes. | Protocol §Null-result interpretation; guard §Non-significant-result explanation; SciPilot lint candidate | `SRC15` unsupported attribution warning | ADAPT / NEW_OR_COMPLETED |
+| D16 | Results report core findings fully, secondary findings compactly, and similar repeated findings together. | Apply importance-weighted Results hierarchy while retaining necessary denominators, nulls, uncertainty, and evidence. | Protocol §Results Argument Map; guard §Section-level selection | `SRC16` hierarchy checklist | ADOPT / ALREADY_COVERED |
+| D17 | Preserve the abstract user preference as `SOFT_PROFILE`; exact length/count is `SOFT_GUIDANCE`, subordinate to official rules. | Keep very short background, compact optional however-style gap, direct study response, 1–2 core methods, selected findings, concise implication as soft defaults. | Protocol §Preferred empirical abstract profile; private profile | `SRC17` official-rule precedence | SOFT_PREFERENCE / ALREADY_COVERED (exact-count softness explicit) |
+| D18 | Journal recommendations require full manuscript when available and assess field, question, gap, innovation, methods, conclusions, level, and keywords; current metrics/scope/OA/APC/recent papers are verified online, review time only if reliable. | Build a manuscript-fit profile first; verify current journal facts from authoritative live sources and label unavailable/unreliable values `NOT_VERIFIED`. | Protocol §Target-journal adaptation and journal recommendation; private profile | `SRC18` full-text and live-source checklist | ADAPT / ALREADY_COVERED (keywords/APC/review-time scope explicit) |
+| D19 | Do not copy private absolute paths from source cleanup instructions into public artifacts; hidden formatting residue may be cleaned; provenance stripping remains explicit opt-in only. | Store generic rules only; keep absolute personal paths out of public repo; preserve EXIF/XMP/C2PA/provenance unless explicitly opted in. | Mapping safety; protocol §Hidden formatting and provenance; safety scan | `SRC19` path scan and provenance policy check | ADAPT / ALREADY_COVERED |
+
 ## Rules intentionally adapted or rejected
 
 The following adaptations are deliberate safety and evidence controls rather than omissions:
 
-1. **Source-file absence:** The named `润色prompt - 副本.txt` cannot be treated as read because it is not available in the inspected roots. The attached task text is the only verified source used here (`NOT_VERIFIED` for anything else).
+1. **Source privacy:** The original prompt is not copied into either repository. Its 19 source-specific rule groups are represented only as generic contracts; personal absolute-path references are intentionally omitted.
 2. **Robustness placement:** Sensitivity and robustness are not the scientific storyline by default. They remain in the main text when they are necessary to establish the main claim, identification credibility, interpretation, or evaluability; otherwise details move to Supplement/Appendix.
 3. **Automatic redundancy deletion:** Repeated facts, figure citations, and defensive sentences are advisory candidates unless a deterministic structural rule proves duplication. Scientific boundaries, required Methods details, Abstract reporting, self-contained tables/figures, and necessary Discussion quantities are protected.
 4. **Provenance:** Hidden-format cleanup is allowed, but provenance/authorship metadata stripping is `EXPLICIT_OPT_IN_ONLY`; any instruction to strip it merely to evade detection is rejected.
@@ -75,7 +102,11 @@ The following adaptations are deliberate safety and evidence controls rather tha
 
 ## Coverage check
 
-- Source-rule rows: `S01–S46`
+- Previously mapped rule rows: `S01–S46`
+- Source-specific rule groups: `19` (`D01–D19`)
+- Newly added or completed mappings: `10` (`D01`, `D02`, `D04`, `D08`–`D13`, `D15`)
+- Already covered by V2: `9` (`D03`, `D05`–`D07`, `D14`, `D16`–`D19`)
+- Unresolved source-specific rule groups: `0`
 - Required implementation contracts named: `DEFAULT_ACADEMIC_WRITING_PREFERENCES`, `NOT_BUT_CONSTRUCTION_CLUSTER`, `STORY_RELEVANCE_AND_DEFENSE_AUDIT`, `ROBUSTNESS_PLACEMENT_RULE`, `THREE_LINE_TABLE_CONTRACT`, `NO_MANUAL_LINE_BREAK_IN_PROSE`, `FIGURE_TABLE_CITATION_LEDGER`, `FACT_PLACEMENT_LEDGER`, and `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`
 - Required dispositions present: `ADOPT`, `ADAPT`, `SOFT_PREFERENCE`; rejected behavior is documented under the adapted/rejected section.
 - Every row has an implementation location and executable or planned test case.

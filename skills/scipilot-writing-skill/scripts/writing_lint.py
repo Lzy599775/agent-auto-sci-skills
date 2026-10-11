@@ -120,7 +120,7 @@ AI_TELL_WORDS_ZH = [
 ]
 
 # 中文机械连接 / 罗列
-MECH_CONNECTIVES_ZH = ["此外", "另外", "更重要的是", "首先", "其次", "再者", "最后", "综上"]
+MECH_CONNECTIVES_ZH = ["此外", "另外", "更重要的是", "首先", "其次", "再次", "再者", "最后", "综上", "综上所述", "进一步而言", "总而言之", "由此可见"]
 
 # 空泛归因（英文正则）
 VAGUE_ATTR_EN = [
@@ -728,6 +728,95 @@ def _check_figure_table_order(text: str) -> list:
     return issues
 
 
+def _check_hedge_stack(text: str, lang: str) -> list:
+    """Flag multiple near-synonymous hedges in one sentence; never remove them."""
+    terms = (r"\b(?:may|might|possibly|potentially|perhaps|could|possibly)\b"
+             if lang == "en" else r"可能|或许|也许|潜在(?:地)?")
+    hits = []
+    for sentence in _split_sentences(text, lang):
+        matches = list(re.finditer(terms, sentence, re.IGNORECASE))
+        if len(matches) >= 2:
+            position = text.find(sentence)
+            hits.append((position, sentence.strip()[:100], len(matches)))
+    if not hits:
+        return []
+    return [Issue(SEV_WARN, "HEDGE_STACK", "同一句中有多个近义 hedge；保留最准确表达并维持必要不确定性",
+                  line=_line_of(text, hits[0][0]), count=sum(n for _p, _s, n in hits),
+                  examples=[s for _p, s, _n in hits[:3]])]
+
+
+def _check_repeated_causal_disclaimer(text: str) -> list:
+    patterns = (r"\b(?:cannot|can not|does not|do not)\s+(?:infer|establish|demonstrate)\s+causal(?:ity| effects?)?\b",
+                r"\bnot\s+(?:a\s+)?causal(?: claim| effect| inference)?\b",
+                r"(?:不能|无法|不可)(?:据此)?(?:推断|证明|识别)因果(?:关系|效应)?")
+    matches = [m for pattern in patterns for m in re.finditer(pattern, text, re.IGNORECASE)]
+    if len(matches) < 2:
+        return []
+    return [Issue(SEV_WARN, "REPEATED_CAUSAL_DISCLAIMER",
+                  "可能重复表达因果边界；在最相关位置保留一次，除非各处保护不同 estimand/范围",
+                  line=_line_of(text, matches[1].start()), count=len(matches),
+                  examples=[m.group(0) for m in matches[:4]])]
+
+
+def _check_internal_label_prose(text: str) -> list:
+    # Candidate-only check: underscore labels often come from code or analysis tables.
+    hits = list(re.finditer(r"(?<![A-Za-z0-9])(?:[a-z][a-z0-9]*_){1,}[a-z0-9]+(?![A-Za-z0-9])", text))
+    if not hits:
+        return []
+    return [Issue(SEV_WARN, "INTERNAL_LABEL_TO_PROSE",
+                  "疑似内部/code label 原样进入正文；核对是否应转写为自然科学语言或正式定义",
+                  line=_line_of(text, hits[0].start()), count=len(hits),
+                  examples=[m.group(0) for m in hits[:4]])]
+
+
+def _check_nonsignificant_attribution(text: str) -> list:
+    rx = re.compile(
+        r"(?:non[- ]significant|not statistically significant|不显著|未达到统计学显著性)"
+        r"[^。！？.!?;\n]{0,100}(?:because|due to|owing to|attribut(?:e|able) to|caused by|由于|归因于|因为)"
+        r"[^。！？.!?;\n]{0,100}(?:sample size|power|measurement error|model specification|样本量|统计功效|测量误差|模型设定)",
+        re.IGNORECASE,
+    )
+    hits = list(rx.finditer(text))
+    if not hits:
+        return []
+    return [Issue(SEV_WARN, "NONSIGNIFICANT_RESULT_ATTRIBUTION",
+                  "不显著结果被归因于样本量/功效/测量误差/模型设定；确认有额外证据支持该解释",
+                  line=_line_of(text, hits[0].start()), count=len(hits),
+                  examples=[m.group(0).strip()[:100] for m in hits[:3]])]
+
+
+def _check_punctuation_density(text: str, lang: str) -> list:
+    """Flag unusually dense prose punctuation as a review cue, not a replacement rule."""
+    chars = "—–;:：；（），()\"'“”‘’、"
+    issues = []
+    for sentence in _split_sentences(text, lang):
+        # Avoid triggering on short clauses and formula-heavy snippets.
+        if len(sentence) < 40:
+            continue
+        count = sum(sentence.count(ch) for ch in chars)
+        if count >= 6:
+            pos = text.find(sentence)
+            issues.append((pos, sentence.strip()[:100], count))
+    if not issues:
+        return []
+    return [Issue(SEV_WARN, "PUNCTUATION_DENSITY",
+                  "句内补充性标点密度偏高；检查是否拆句，同时保留公式、变量和引用所需符号",
+                  line=_line_of(text, issues[0][0]), count=sum(n for _p, _s, n in issues),
+                  examples=[s for _p, s, _n in issues[:3]])]
+
+
+def _check_hyphen_noun_chain(text: str) -> list:
+    # Deliberately advisory: standardized technical terms and ranges can be valid.
+    rx = re.compile(r"(?<![A-Za-z0-9])(?:[A-Za-z]{2,}-){1,}[A-Za-z]{2,}(?![A-Za-z0-9])")
+    hits = list(rx.finditer(text))
+    if not hits:
+        return []
+    return [Issue(SEV_INFO, "HYPHEN_NOUN_CHAIN",
+                  "发现连字符名词链候选；仅在非标准/非必要时改写，保留正式术语、变量、范围及引用格式",
+                  line=_line_of(text, hits[0].start()), count=len(hits),
+                  examples=[m.group(0) for m in hits[:4]])]
+
+
 # ──────────────────────────────────────────────────────────────────────────
 # 主入口
 # ──────────────────────────────────────────────────────────────────────────
@@ -760,6 +849,12 @@ def lint_text(text: str, mode: str = "plain", lang: str = "en") -> list:
     issues += _check_repeated_low_value_numbers(text, mode)
     issues += _check_repeated_figure_citations(text)
     issues += _check_figure_table_order(text)
+    issues += _check_hedge_stack(text, lang)
+    issues += _check_repeated_causal_disclaimer(text)
+    issues += _check_internal_label_prose(text)
+    issues += _check_nonsignificant_attribution(text)
+    issues += _check_punctuation_density(text, lang)
+    issues += _check_hyphen_noun_chain(text)
     issues += _check_emdash(text, n_sent)
     issues += _check_burstiness(sents, lang)
 

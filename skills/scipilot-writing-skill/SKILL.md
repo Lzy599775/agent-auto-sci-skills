@@ -151,6 +151,8 @@ Final tables obey `THREE_LINE_TABLE_CONTRACT` with `CHAT_TABLE = PREVIEW_ONLY` f
 `NO_MANUAL_LINE_BREAK_IN_PROSE`. Hidden-format cleanup is allowed, while
 `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`.
 
+Apply source-complete prose checks: prefer `本研究` only when it denotes the current study; expand each English abbreviation at first use and keep terminology consistent; translate internal table/code labels into natural prose; do not state results before supporting analysis; trace major conclusions to study results or verified citations; and resolve `[证据边界问题]` before submission text. Use one calibrated hedge, avoid repeated causal disclaimers, do not attribute non-significance to sample size/power/measurement/model causes without evidence, and keep Results detail proportional to importance. Audit punctuation density and unnecessary hyphen chains conservatively while preserving formulas, variables, and citation symbols. Cross-check Title, Abstract, main text, figures/tables, and Conclusion for terminology, sample size, time point, effect direction, and claim strength. Journal recommendations require full-manuscript reading when available and current verification; abstract length/count preferences remain soft.
+
 ### Stage 3：起草 / 改写
 
 应用 `sci_writing_principles` + `de_ai_humanize` + 对应任务剧本，产出**三段式**
@@ -168,6 +170,8 @@ python scripts/writing_lint.py <改后文本文件> --mode {latex|word|markdown|
 - exit `0` → PASS（无 FAIL/WARN），继续
 - exit `1` → 有 WARN（如破折号偏多、被动比例偏高），评估后决定是否回 Stage 3
 - exit `2` → 有 FAIL（如 Word 端残留 Markdown、LaTeX 未转义、命中重 AI 指纹），**必须回 Stage 3 修复**
+
+The lint also emits advisory candidates for stacked hedges, repeated causal disclaimers, internal/code labels in prose, unsupported explanations of non-significant results, punctuation density, and hyphen noun chains. These do not auto-rewrite text; human/model review must preserve scientific boundaries and required notation.
 
 LaTeX 专项再跑 `scripts/latex_clean.py` 核转义与 `$` 配平；需要量化节奏/被动可跑 `scripts/text_stats.py`。
 

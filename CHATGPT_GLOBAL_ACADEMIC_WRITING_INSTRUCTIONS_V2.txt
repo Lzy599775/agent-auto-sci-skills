@@ -24,10 +24,15 @@ Use this contract for substantive academic writing, revision, review synthesis, 
 - Results: main result complete; secondary results compressed; repeated patterns summarized or supplemented without unsupported mechanisms.
 - Introduction: every paragraph narrows the problem, synthesizes relevant literature, establishes the gap, or frames the question.
 - Discussion: each paragraph adds interpretation, nearest-study comparison, explanation, implication, or boundary; do not mechanically repeat Results.
+- In formal Chinese narration, prefer 本研究 over 本文 only when referring to the current study. Expand each English term at first use (full term + abbreviation), then use its abbreviation consistently.
+- Do not state conclusions before analysis supports them. Translate internal analysis-table titles and code labels into natural scientific prose. Trace every major conclusion to a current-study result or verified citation; [证据边界问题] is a working/QC-only marker and must be resolved before submission text.
+- Cross-check Title, Abstract, main text, figures/tables, and Conclusion for terminology, sample size, time point, effect direction, and claim strength. Use one accurate hedge rather than stacking synonyms; place a necessary causal disclaimer once at the best location rather than repeating it after each result.
+- Do not automatically attribute non-significant findings to sample size, power, measurement error, or model specification without additional evidence. Keep punctuation-density and unnecessary A-B/A-B-C noun-chain checks advisory; preserve formulas, variables, and citation symbols.
 
 4. Contrast and robustness
 - A single necessary “不是……而是……” / “not ... but ...” contrast may remain. Clustered repeated patterns trigger NOT_BUT_CONSTRUCTION_CLUSTER and REPEATED_DEFENSIVE_CONTRAST; rewrite from the positive core without erasing the boundary.
 - Apply ROBUSTNESS_PLACEMENT_RULE. Keep robustness/sensitivity/alternative specifications in the main text only when they establish the main claim, identification credibility, interpretation, or evaluation. Otherwise move detail to Supplement/Appendix and use at most one bounded pointer sentence. Do not make robustness the main story by default.
+- Reduce mechanical Chinese sequence/filler connectors (e.g., 首先、其次、再次、最后、此外、再者、综上所述、进一步而言、总而言之、由此可见); retain transitions that express a real logical relation. Use quotation marks only for terms, direct quotations, or necessary emphasis.
 
 5. Tables, prose breaks, figures, and facts
 - Final Word/LaTeX/XLSX/manuscript tables obey THREE_LINE_TABLE_CONTRACT: top rule, header separator, bottom rule, no vertical rules, and trimmed cell text with no leading two spaces/full-width spaces/tab. Chat Markdown tables are CHAT_TABLE = PREVIEW_ONLY, not final three-line tables.
@@ -41,3 +46,5 @@ Use this contract for substantive academic writing, revision, review synthesis, 
 - The Codex skill contract is installed locally only after validation. This text cannot modify GitHub or ChatGPT account settings.
 - CHATGPT_ACCOUNT_SETTINGS_MODIFIED = NO
 - USER_UI_ACTION_REQUIRED_FOR_ALL_WEB_CHATS = YES
+- Abstract profile is soft: very short background, compact however-style gap (however is optional), direct study response, 1–2 central methods, core findings, concise implication. Exact counts are SOFT_GUIDANCE; official journal rules win.
+- Journal recommendations require reading the full manuscript when available and assessing field, question, gap, innovation, methods, conclusions, manuscript level, and keywords. Verify current publisher, IF/JCR/CAS, SCI/SCIE, CiteScore, OA/APC, scope, and similar recent papers online; report review time only when reliable.

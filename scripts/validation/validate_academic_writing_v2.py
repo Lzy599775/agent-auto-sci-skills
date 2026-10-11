@@ -100,14 +100,21 @@ def validate_contract(repo_root: Path = ROOT) -> list[str]:
     mapping = (repo_root / "USER_POLISHING_PROMPT_RULE_MAPPING_V1.md").read_text(encoding="utf-8")
     global_text = (repo_root / "CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt").read_text(encoding="utf-8")
     for label, text, fragments in (
-        ("protocol", protocol, ("DEFAULT_ACADEMIC_WRITING_PREFERENCES", "NOT_BUT_CONSTRUCTION_CLUSTER", "STORY_RELEVANCE_AND_DEFENSE_AUDIT", "ROBUSTNESS_PLACEMENT_RULE", "THREE_LINE_TABLE_CONTRACT", "NO_MANUAL_LINE_BREAK_IN_PROSE", "FIGURE_TABLE_CITATION_LEDGER", "FACT_PLACEMENT_LEDGER", "PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY")),
-        ("guard", guard, ("NOT_BUT_CONSTRUCTION_CLUSTER", "STORY_RELEVANCE_AND_DEFENSE_AUDIT", "REDUNDANT_LOW_INCREMENT", "REPEATED_LOW_VALUE_NUMBER", "REPEATED_FIGURE_CITATION", "ROBUSTNESS_PLACEMENT_RULE")),
-        ("mapping", mapping, ("SOURCE_RULE", "GENERIC_WORKFLOW_RULE", "IMPLEMENTATION_LOCATION", "TEST_CASE", "ADOPT", "ADAPT", "SOFT_PREFERENCE", "S01", "S46")),
+        ("protocol", protocol, ("DEFAULT_ACADEMIC_WRITING_PREFERENCES", "NOT_BUT_CONSTRUCTION_CLUSTER", "STORY_RELEVANCE_AND_DEFENSE_AUDIT", "ROBUSTNESS_PLACEMENT_RULE", "THREE_LINE_TABLE_CONTRACT", "NO_MANUAL_LINE_BREAK_IN_PROSE", "FIGURE_TABLE_CITATION_LEDGER", "FACT_PLACEMENT_LEDGER", "PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY", "本研究", "full English term followed by its abbreviation", "`[证据边界问题]`", "non-significant result", "SOFT_GUIDANCE", "CiteScore")),
+        ("guard", guard, ("NOT_BUT_CONSTRUCTION_CLUSTER", "STORY_RELEVANCE_AND_DEFENSE_AUDIT", "REDUNDANT_LOW_INCREMENT", "REPEATED_LOW_VALUE_NUMBER", "REPEATED_FIGURE_CITATION", "ROBUSTNESS_PLACEMENT_RULE", "Hedge calibration", "Non-significant results", "Punctuation and noun-chain density")),
+        ("mapping", mapping, ("SOURCE_RULE", "GENERIC_WORKFLOW_RULE", "IMPLEMENTATION_LOCATION", "TEST_CASE", "ADOPT", "ADAPT", "SOFT_PREFERENCE", "S01", "S46", "D01", "D19", "SOURCE_PROMPT_FULLY_READ = YES", "SOURCE_PROMPT_LINE_COUNT = 76", "Unresolved source-specific rule groups: `0`")),
         ("global instructions", global_text, ("PREVIEW_ONLY", "NO_MANUAL_LINE_BREAK_IN_PROSE", "USER_UI_ACTION_REQUIRED_FOR_ALL_WEB_CHATS = YES", "CHATGPT_ACCOUNT_SETTINGS_MODIFIED = NO")),
     ):
         for fragment in fragments:
             if fragment not in text:
                 failures.append(f"{label} missing required fragment: {fragment}")
+
+    delta_rows = re.findall(r"^\| D\d{2} \|", mapping, re.MULTILINE)
+    if len(delta_rows) != 19:
+        failures.append(f"source-specific mapping must contain 19 rule groups, found {len(delta_rows)}")
+    delta_table = "\n".join(line for line in mapping.splitlines() if re.match(r"^\| D\d{2} \|", line))
+    if delta_table.count("NEW_OR_COMPLETED") != 10 or delta_table.count("ALREADY_COVERED") != 9:
+        failures.append("source-specific mapping coverage counts must be 10 new/completed and 9 already covered")
 
     redundancy = _load_json(repo_root / "scripts" / "validation" / "writing_redundancy_golden_set_v2.json")
     if redundancy.get("case_count") != 12 or len(redundancy.get("cases", [])) != 12:
