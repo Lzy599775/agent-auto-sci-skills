@@ -9,8 +9,8 @@ description: >-
   expand、去AI、降AI、humanize、caption、results 分析、投稿信、审稿回复，或用户上传论文/
   段落并要求改善表达、语言、可读性、学术性。核心规则：先确认任务类型、文本载体、目标期刊、
   语言方向、学科领域和修改保守度；只动表达，不改数值、方向、结论或引用；不编造数据或文献；
-  交付前按需运行 scripts/writing_lint.py 做 AI 指纹、LaTeX/Word 格式、中文标点、被动比例
-  和句长节奏检查，并报告残留问题。
+  交付前按需运行 scripts/writing_lint.py 做 AI 指纹、LaTeX/Word 格式、中文标点、被动比例、手动换行、表格单元格空白、
+  对比句式聚集、重复数字/事实和图表引用候选以及句长节奏检查，并报告残留问题。
 ---
 
 # SciPilot-writing-skill — 高水平 SCI 论文写作与润色副驾驶
@@ -129,6 +129,28 @@ argument structure and rhetorical-function maps. `scipilot-writing-skill` remain
 lint owner. Do not initiate an exemplar search for simple proofreading, grammar-only correction,
 citation-format-only work, minor typo fixes, or a single caption micro-edit.
 
+#### V2 global academic-writing contract
+
+For substantive rewriting, execute the following order before the existing final lint gate:
+
+```text
+story relevance and defense audit
+  -> academic writing exemplar protocol (REQUIRED/AUTO when applicable)
+  -> draft/polish from OUR_EVIDENCE_MAP
+  -> sentence academic increment + paragraph story contribution audit
+  -> Academic Prose Style Guard
+  -> writing_lint.py
+```
+
+Apply `DEFAULT_ACADEMIC_WRITING_PREFERENCES`, including positive-first prose when boundaries remain intact,
+Methods reproducibility preservation, Results hierarchy, Introduction relevance, Discussion nonrepetition, and
+`ROBUSTNESS_PLACEMENT_RULE`. Keep one necessary contrastive sentence but flag repeated
+`NOT_BUT_CONSTRUCTION_CLUSTER` patterns. Use a `FACT_PLACEMENT_LEDGER` and
+`FIGURE_TABLE_CITATION_LEDGER`; repeated low-value facts and citations are advisory candidates, not blind deletions.
+Final tables obey `THREE_LINE_TABLE_CONTRACT` with `CHAT_TABLE = PREVIEW_ONLY` for Markdown previews. Prose has
+`NO_MANUAL_LINE_BREAK_IN_PROSE`. Hidden-format cleanup is allowed, while
+`PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`.
+
 ### Stage 3：起草 / 改写
 
 应用 `sci_writing_principles` + `de_ai_humanize` + 对应任务剧本，产出**三段式**
@@ -212,7 +234,7 @@ LaTeX 专项再跑 `scripts/latex_clean.py` 核转义与 `$` 配平；需要量�
 ```
 
 三层防线：
-1. **机器抓确定性指纹**：`writing_lint.py` 命中即报（词表、正则、转义、Markdown 残留、全角标点）。
+1. **机器抓确定性指纹**：`writing_lint.py` 命中即报（词表、正则、转义、Markdown 残留、全角标点、手动换行、单元格空白、对比句式聚集，以及可可靠发现的重复数字/图表引用候选）。
 2. **AI 读稿抓感知/逻辑问题**：节奏是否均匀机械、是否 overclaim、悬垂 -ing、术语漂移——这些程序查不出。
 3. **诚信/一致性复核**：diff 确认未动事实，缩写/时态/拼写统一。
 

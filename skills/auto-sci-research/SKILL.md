@@ -43,6 +43,14 @@ auto-sci-research
   -> scipilot-writing-skill
 ```
 
+For every substantive academic-writing conversation, load the shared V2 academic-writing contract from
+`../agent-auto-sci-scicomm/references/academic_writing_exemplar_protocol.md` automatically. The contract adds a
+whole-document/story audit, sentence academic-increment and paragraph story-contribution audits, fact-placement and
+figure/table citation ledgers, Results/Introduction/Discussion selection rules, and the `ROBUSTNESS_PLACEMENT_RULE`.
+It preserves Methods reproducibility and scientific boundaries; it does not make robustness checks the default story.
+ChatGPT Web can consume the same contract through the generated project/account instruction text, but Codex cannot
+change Web account settings.
+
 Use `SKIP` for sentence-level proofreading, grammar-only correction, citation-format-only work, minor typo fixes, single-caption micro-edits, and pure code tasks. The exemplar protocol is a reference handoff under `agent-auto-sci-scicomm`; it is not a new top-level skill, literature owner, or polishing owner.
 
 ### Academic prose quality-control handoff
@@ -174,3 +182,5 @@ Treat a result file that conflicts with `CURRENT_STATE` on effect direction or a
 - Do not copy long text from private prompt PDFs into public skill files.
 - Do not create a new subskill when an existing subskill can be extended cleanly.
 - Do not skip the HTML evolution archive after a meaningful skill change.
+- Do not create a duplicate top-level academic-writing skill when the existing scicomm and SciPilot owners can carry
+  the contract.

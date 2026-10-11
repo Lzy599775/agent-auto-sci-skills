@@ -180,6 +180,8 @@ auto-sci-research
 
 Codex 路由与 ChatGPT Web 共用同一公共协议；跨客户端契约见 [CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1](docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md)。
 
+V2 进一步把学术写作契约扩展为可复用的全局偏好：先做 story relevance、sentence academic increment 和 paragraph contribution 审计，再做 exemplar handoff、Academic Prose Style Guard 与 SciPilot lint；保留 Methods 可复现性和因果/测量/不确定性边界。三线表、正文禁手动换行、图表引用 ledger 与 fact-placement ledger 均有可执行检查。ChatGPT Web 可复制 [CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2](CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt) 到 Project Instructions 或账户级 Custom Instructions；仓库不会声称已修改用户账户设置。
+
 ## 上游与许可证策略
 
 - `Haojae/scipilot-writing-skill`：MIT，完整封装并保留 LICENSE/NOTICE。

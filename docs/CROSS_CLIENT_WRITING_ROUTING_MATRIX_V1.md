@@ -1,9 +1,9 @@
-# Cross-Client Writing Routing Matrix V1
+# Cross-Client Writing Routing Matrix V1 + V2 Contract Extension
 
 This matrix is the parity contract for ChatGPT Web and Codex. The clients may use different retrieval and file tools, but they must preserve the same scientific contract, exemplar selection logic, read-scope claims, and anti-copying boundary.
 
 Canonical public protocol: [`skills/agent-auto-sci-scicomm/references/academic_writing_exemplar_protocol.md`](../skills/agent-auto-sci-scicomm/references/academic_writing_exemplar_protocol.md)
-Private preference profile: `Lzy599775/research-project-state-hub/shared/writing/ACADEMIC_WRITING_PROFILE_V1.md`
+Private preference profile: `Lzy599775/research-project-state-hub/shared/writing/ACADEMIC_WRITING_PROFILE_V2.md`
 
 ## Parity case
 
@@ -47,3 +47,29 @@ Both clients must:
 ## Verification notes
 
 The executable golden set is stored at `skills/agent-auto-sci-scicomm/tests/writing_exemplar_golden_set.json` and is checked by `scripts/validation/validate_writing_exemplar_routing.py`. A parity failure means the clients disagree on mode, selection logic, read-scope claims, owner handoff, or anti-copying behavior; tool differences alone are not a failure.
+
+## V2 contract extension
+
+Both clients load `DEFAULT_ACADEMIC_WRITING_PREFERENCES` automatically for substantive academic-writing routes. The shared sequence is:
+
+```text
+whole-document/story audit
+  -> OUR_EVIDENCE_MAP -> OUR_ARGUMENT_MAP
+  -> exemplar protocol (REQUIRED/AUTO; SKIP for minor proofreading)
+  -> draft from our evidence
+  -> sentence academic increment + paragraph story contribution audit
+  -> Academic Prose Style Guard
+  -> SciPilot/Web lint and final cross-section checks
+```
+
+| V2 contract | Codex | ChatGPT Web | Invariant |
+|---|---|---|---|
+| Not-but cluster | `NOT_BUT_CLUSTER` and `REPEATED_DEFENSIVE_CONTRAST` advisory lint | Same positive-first rewrite rule | One necessary contrast may remain; repeated templates are reviewed, not mechanically replaced. |
+| Story relevance | `STORY_RELEVANCE_AND_DEFENSE_AUDIT` in the prose guard | Router asks whether each sentence/paragraph adds scientific information | No boundary is removed merely to improve rhythm. |
+| Reproducibility | Methods details outrank story compression; move required detail to Supplement/Appendix | Same | Reproduction-critical content is retained. |
+| Robustness placement | `ROBUSTNESS_PLACEMENT_RULE` | Same | Main text only when needed for claim, identification, interpretation, or evaluation; otherwise supplement. |
+| Tables and prose breaks | `THREE_LINE_TABLE_CONTRACT`; `NO_MANUAL_LINE_BREAK_IN_PROSE` | Markdown tables are `PREVIEW_ONLY`; final artifacts use native rules | No vertical rules, no leading cell whitespace, and no manual prose breaks. |
+| Figure/table and fact ledgers | `FIGURE_TABLE_CITATION_LEDGER`; `FACT_PLACEMENT_LEDGER` | Same ledger fields in the response/workspace | Repeat only for a new substantive function or required reporting. |
+| Provenance | `HIDDEN_FORMATTING_CLEANUP = AUTO`; `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY` | Same | Never claim detection evasion or automatic provenance stripping. |
+
+The copy-paste Web text is [`CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt`](../CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt). It explains that project/account instructions require user UI action: the repository and this router cannot modify all ChatGPT Web conversations automatically.

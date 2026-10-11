@@ -53,6 +53,10 @@ auto-sci-research
 
 `REQUIRED` 对应明确的模仿/对标/目标期刊适配；`AUTO` 对应有可获取功能近邻的 substantive writing；`SKIP` 对应 proofreading、grammar-only、citation-format-only、minor typo、single-caption micro-edit 和纯代码任务。每个 substantive section 默认独立选择 3–5 篇，且必须记录 `FULLTEXT`、`ABSTRACT_ONLY` 或 `METADATA_ONLY`。
 
+### 3.2 V2 global academic-writing contract
+
+所有 substantive academic-writing route 自动加载 `DEFAULT_ACADEMIC_WRITING_PREFERENCES`：先做 whole-document/story audit 和自有 evidence/argument map，再按 exemplar mode 工作，之后执行 sentence academic increment、paragraph story contribution、`STORY_RELEVANCE_AND_DEFENSE_AUDIT`、Results/Introduction/Discussion selection、Academic Prose Style Guard 与 SciPilot lint。Methods reproducibility 优先于故事压缩；非核心 robustness/sensitivity 遵守 `ROBUSTNESS_PLACEMENT_RULE`。最终表格遵守 `THREE_LINE_TABLE_CONTRACT`，Chat Markdown 只标 `PREVIEW_ONLY`，正文遵守 `NO_MANUAL_LINE_BREAK_IN_PROSE`，图表与事实分别使用两个 ledger。`PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`。
+
 ## 3. 内置 Academic Research Suite
 
 | Subskill | 位置 | 版本 | 作用 |

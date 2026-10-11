@@ -1,0 +1,43 @@
+ACADEMIC WRITING CONTRACT V2
+
+Use this contract for substantive academic writing, revision, review synthesis, and journal adaptation. It is a reusable workflow preference, not a replacement for official journal requirements, reporting guidelines, verified evidence, or author judgment.
+
+1. Evidence and scope
+- Never invent data, results, analyses, mechanisms, causality, references, novelty, or contributions.
+- Check false premises, logic jumps, missing information, and section leakage before polishing.
+- Preserve causal, measurement, estimand, population, uncertainty, null, conflicting-evidence, and scope boundaries.
+- For long manuscripts use: whole-document audit -> section revision -> cross-section audit.
+- Draft from OUR_EVIDENCE_MAP -> OUR_ARGUMENT_MAP -> exemplar comparison -> OUR_DRAFT. Never use exemplar text as a synonym source.
+
+2. Exemplar handoff
+- REQUIRED for explicit imitation, benchmarking, named papers, or target-journal adaptation.
+- AUTO for substantive Introduction, Abstract, Results restructuring, Discussion, Conclusion, review synthesis, or full-manuscript revision when a function-matched source is available.
+- SKIP for typo, grammar-only, single-sentence, citation-format-only, and minor caption edits.
+- Learn topic-/question-/design-/outcome-/section-matched argument architecture, rhetorical function, evidence ordering, and figure sequencing. Do not copy distinctive wording, close paraphrase, citation chains, data, claims, causal interpretations, or novelty.
+- Record READ_SCOPE as FULLTEXT, ABSTRACT_ONLY, or METADATA_ONLY; never claim full-text structure from an abstract.
+
+3. Story and redundancy audits
+- Run STORY_RELEVANCE_AND_DEFENSE_AUDIT for defensive sentences. Delete or merge only when no real scientific boundary or new story information is protected; keep a precise causal/measurement/uncertainty/scope boundary once when needed.
+- Audit every sentence as CORE_CLAIM, EVIDENCE, METHOD_REPRODUCIBILITY, INTERPRETATION, ESSENTIAL_TRANSITION, NECESSARY_BOUNDARY, SUPPORTING_CONTEXT, or REDUNDANT_LOW_INCREMENT. Default-delete only the last class.
+- Every paragraph must advance the research question, argument/evidence chain, finding, interpretation, implication, citation synthesis, reproducibility, or a necessary boundary.
+- Methods reproducibility outranks story compression. Move required detail to a linked Supplement/Appendix rather than deleting it.
+- Results: main result complete; secondary results compressed; repeated patterns summarized or supplemented without unsupported mechanisms.
+- Introduction: every paragraph narrows the problem, synthesizes relevant literature, establishes the gap, or frames the question.
+- Discussion: each paragraph adds interpretation, nearest-study comparison, explanation, implication, or boundary; do not mechanically repeat Results.
+
+4. Contrast and robustness
+- A single necessary “不是……而是……” / “not ... but ...” contrast may remain. Clustered repeated patterns trigger NOT_BUT_CONSTRUCTION_CLUSTER and REPEATED_DEFENSIVE_CONTRAST; rewrite from the positive core without erasing the boundary.
+- Apply ROBUSTNESS_PLACEMENT_RULE. Keep robustness/sensitivity/alternative specifications in the main text only when they establish the main claim, identification credibility, interpretation, or evaluation. Otherwise move detail to Supplement/Appendix and use at most one bounded pointer sentence. Do not make robustness the main story by default.
+
+5. Tables, prose breaks, figures, and facts
+- Final Word/LaTeX/XLSX/manuscript tables obey THREE_LINE_TABLE_CONTRACT: top rule, header separator, bottom rule, no vertical rules, and trimmed cell text with no leading two spaces/full-width spaces/tab. Chat Markdown tables are CHAT_TABLE = PREVIEW_ONLY, not final three-line tables.
+- NO_MANUAL_LINE_BREAK_IN_PROSE: no soft or hard Markdown break, <br>, U+2028, U+2029, vertical tab, or Word manual line break. Normal paragraph boundaries are valid; syntax-required code/equation/table breaks are scoped exceptions.
+- Maintain FIGURE_TABLE_CITATION_LEDGER. Introduce each item fully at its first meaningful use; repeat a citation only for a new substantive claim. Check first-citation order, numbering, and caption consistency.
+- Maintain FACT_PLACEMENT_LEDGER. Warn on repeated low-value exact numbers/facts, but allow necessary Abstract, core Results, self-contained artifact, and Discussion repetitions.
+
+6. Format, provenance, and delivery
+- Hidden formatting cleanup may be automatic. PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY; never strip C2PA/XMP/EXIF/authorship/source provenance to evade detection.
+- Run the Academic Prose Style Guard after scientific content stabilizes, then SciPilot writing_lint.py. Advisory lint candidates require review; they do not auto-delete scientific content.
+- The Codex skill contract is installed locally only after validation. This text cannot modify GitHub or ChatGPT account settings.
+- CHATGPT_ACCOUNT_SETTINGS_MODIFIED = NO
+- USER_UI_ACTION_REQUIRED_FOR_ALL_WEB_CHATS = YES

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added the V2 global academic-writing contract: source-rule mapping, story-relevance and sentence-increment audits, Methods reproducibility preservation, Results/Introduction/Discussion hierarchy rules, robustness placement, three-line tables, no-manual-break prose, figure/table and fact ledgers, and conservative redundancy lint.
+- Added `CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt`, V2 redundancy/exemplar golden sets, three-line-table and no-manual-break tests, and cross-client parity updates without creating a duplicate top-level skill.
+- Preserved `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY` and documented that ChatGPT account-wide settings require user UI action.
 - Added the evidence-first academic writing exemplar decomposition protocol as a reference handoff under `agent-auto-sci-scicomm`; no new top-level skill was created.
 - Added `WRITING_EXEMPLAR_MODE` routing (`REQUIRED`/`AUTO`/`SKIP`), per-section 3–5 exemplar selection, read-scope attestations, Article/Move/Argument Maps, own-evidence-first drafting, anti-copying rules, and official-journal precedence.
 - Added the Codex/ChatGPT Web parity matrix and a 12-case executable golden set; documented optional humanizer/cleanup compatibility with provenance metadata stripping disabled.

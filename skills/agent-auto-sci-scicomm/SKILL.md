@@ -19,6 +19,7 @@ Use this subskill when the output is a manuscript, response, slide deck, poster,
 8. Translate methods and results into field value.
 9. After scientific content stabilizes, run the Academic Prose Style Guard to check positive-first framing, defensive-contrast clustering, and semantic repetition without weakening boundaries.
 10. Run reviewer-risk and citation checks.
+11. For substantive rewrites, run the V2 story-relevance, sentence-increment, paragraph-contribution, fact-placement, and figure/table-citation audits before final polishing.
 
 Keep these checks internal by default. Surface only issues that materially change scientific interpretation, estimand, sample, result, or conclusion; request author input only when safe continuation is impossible or a material scientific choice is theirs to make. Do not turn routine checks into a user-facing QC log. In manuscript prose, omit workflow/status terms such as `gate`, `guard`, `PASS`, `FAIL`, `NOT_VERIFIED`, `blocking`, `routing`, and `QC` unless they are formal research-method terms. Retain only material limitations in the manuscript and avoid repeating a boundary already stated unless the section needs it independently or the underlying judgment changes.
 
@@ -37,7 +38,23 @@ For deeper K-Dense-style encapsulation:
 
 The protocol is a pre-drafting/pre-revision handoff. Use 3–5 function-matched exemplars per substantive section, record `FULLTEXT`, `ABSTRACT_ONLY`, or `METADATA_ONLY`, and keep source facts separate from inference. Learn section function, argument ordering, evidence presentation, and figure sequencing; never copy distinctive prose, citation chains, novelty claims, causal interpretation, or unsupported result logic. Draft only after `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE` exist. Simple proofreading and minor edits remain on the ordinary prose/lint route and do not force exemplar retrieval.
 
-The canonical cross-client contract is documented in `docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md`.
+The canonical cross-client contract is documented in `docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md` and the copy-paste `CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt`.
+
+## V2 academic-writing contract handoff
+
+Load `DEFAULT_ACADEMIC_WRITING_PREFERENCES` for every substantive academic-writing route. The required order is:
+
+```text
+whole-document/story audit
+  -> OUR_EVIDENCE_MAP -> OUR_ARGUMENT_MAP
+  -> exemplar protocol (REQUIRED/AUTO; SKIP for minor proofreading)
+  -> draft/revise from our evidence
+  -> sentence academic increment + paragraph story contribution audit
+  -> Academic Prose Style Guard
+  -> SciPilot writing lint and final cross-section checks
+```
+
+The V2 contract adds advisory `NOT_BUT_CONSTRUCTION_CLUSTER`, `STORY_RELEVANCE_AND_DEFENSE_AUDIT`, repeated-fact/number checks, and figure/table citation-ledger checks. It also preserves Methods reproducibility, section boundaries, uncertainty, null/conflicting evidence, and the `ROBUSTNESS_PLACEMENT_RULE`. Final table artifacts use `THREE_LINE_TABLE_CONTRACT`; chat Markdown tables are `PREVIEW_ONLY`; ordinary prose has no manual line breaks. Hidden formatting cleanup may be automatic, but `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`.
 
 ## Related Helper Skills
 
