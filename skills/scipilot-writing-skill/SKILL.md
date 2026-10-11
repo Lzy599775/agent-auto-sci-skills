@@ -2,7 +2,7 @@
 name: scipilot-writing-skill
 description: >-
   SciPilot Skills 家族的学术论文写作与润色技能。用于中英互译润色、proofread、缩写/扩写、
-  英文或中文学术表达润色、逻辑检查、去 AI 味/humanize、Title/Abstract/Introduction/
+  英文或中文学术表达润色、作者声音与自然度优化、逻辑检查、去 AI 味/humanize、Title/Abstract/Introduction/
   Methods/Results/Discussion/Conclusion/Limitations 起草或改写、图表标题、实验结果分析、
   reviewer 视角自检、cover letter、rebuttal/response to reviewers。触发词包括：润色、
   polish、proofread、改写、帮我改这段、translate and polish、中译英、英译中、condense、
@@ -41,9 +41,9 @@ description: >-
 3. **透明可溯铁律**：**绝不静默重写**。每次改写都产出三段式——
    `Part 1 改后文本` + `Part 2 直译/回译（供核对未走样）` + `Part 3 修改日志（改了什么、为什么）`。
    用户永远能看见你动了哪里。
-4. **去 AI 味但留人味铁律**：删除 AI 指纹（堆砌高级词、机械连接词、悬垂 -ing、三点式滥用、
-   破折号泛滥、空泛归因、promotional 夸张），但**不为换词而换词**；保留作者的观点、
-   节奏与领域术语。高质量输入应判"检测通过"。
+4. **自然度与作者声音铁律**：可为清晰度、自然度、论证节奏和作者声音减少机械表达（堆砌高级词、机械连接词、
+   悬垂 -ing、三点式滥用、破折号泛滥、空泛归因、promotional 夸张），但**不以规避 AI 检测为目标，也不为换词而换词**；
+   保留作者的观点、节奏与领域术语。
 5. **格式纯净随载体铁律**：按文本载体切换规范——
    **LaTeX**：源码纯净，禁止擅自加粗/斜体，特殊字符转义（`%→\%`、`_→\_`、`&→\&`、`#→\#`），
    数学公式保留 `$`，保留 `\cite{}`/`\ref{}`/`\label{}` 等命令；
@@ -119,6 +119,15 @@ description: >-
 - 目标刊要什么 → `references/journal_styles.md`（Nature/Science/Cell/PNAS/IEEE/医学/中文核心 + 报告规范）
 - 去 AI 味怎么改 → `references/de_ai_humanize.md`（AI 指纹清单 + 中英词表 + humanize 原则）
 - 投稿信/审稿回复 → `references/cover_letter_and_rebuttal.md`
+
+#### Evidence-first exemplar handoff
+
+For substantial drafting or major rewriting, if
+`agent-auto-sci-scicomm/references/academic_writing_exemplar_protocol.md` has completed its
+`OUR_EVIDENCE_MAP`, `OUR_ARGUMENT_OUTLINE`, and (when applicable) exemplar comparison, consume only its
+argument structure and rhetorical-function maps. `scipilot-writing-skill` remains the final prose/polishing and
+lint owner. Do not initiate an exemplar search for simple proofreading, grammar-only correction,
+citation-format-only work, minor typo fixes, or a single caption micro-edit.
 
 ### Stage 3：起草 / 改写
 

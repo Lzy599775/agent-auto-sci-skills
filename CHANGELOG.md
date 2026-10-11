@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added the evidence-first academic writing exemplar decomposition protocol as a reference handoff under `agent-auto-sci-scicomm`; no new top-level skill was created.
+- Added `WRITING_EXEMPLAR_MODE` routing (`REQUIRED`/`AUTO`/`SKIP`), per-section 3–5 exemplar selection, read-scope attestations, Article/Move/Argument Maps, own-evidence-first drafting, anti-copying rules, and official-journal precedence.
+- Added the Codex/ChatGPT Web parity matrix and a 12-case executable golden set; documented optional humanizer/cleanup compatibility with provenance metadata stripping disabled.
+
 ## 0.9.0
 
 - Refreshed configured upstream checks on 2026-09-27.

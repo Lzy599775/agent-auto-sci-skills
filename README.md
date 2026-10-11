@@ -52,6 +52,7 @@ $env:USERPROFILE\.codex\skills
 | 做 EDA、统计、论文图表、文献计量图 | `agent-auto-sci-data-viz` |
 | 做机器学习、SHAP/XAI、泄漏检查、空间验证 | `agent-auto-sci-ai-ml` |
 | 组织论文 argument、投稿、审稿回复 | `agent-auto-sci-scicomm` |
+| 按目标期刊近邻论文拆解论证结构 | `agent-auto-sci-scicomm` + `academic_writing_exemplar_protocol`（参考协议，不是新顶层 skill） |
 | 做体育地理综述、文献计量、政策议程 | `sport-geography-review-bibliometric` |
 | 写体育设施/体育公园/暴露公平实证 SCI 论文 | `sport-geography-sci-writing` |
 | 判断城市暴露综述、前沿雷达、医学数据库连接路线 | `urban-exposure-review-radar-workflow` |
@@ -168,6 +169,16 @@ auto-sci-research
 -> scipilot-figure-skill
 -> agent-auto-sci-scicomm
 ```
+
+## Evidence-first 学术写作对标
+
+“对标目标期刊 / 学习顶刊写法”在本套件中不是语言模仿，而是证据优先的 exemplar decomposition：先建立 `OUR_EVIDENCE_MAP` 与 `OUR_ARGUMENT_OUTLINE`，再按每个 substantive section 选择 3–5 篇功能近邻论文，记录 `FULLTEXT`、`ABSTRACT_ONLY` 或 `METADATA_ONLY` 的阅读范围，最后从自己的证据起草并交给 Academic Prose Style Guard 和 SciPilot 做语言质控。
+
+这项能力位于 `agent-auto-sci-scicomm` 的参考协议中，不新增顶层 Skill，也不取代 literature owner、domain writing owner 或 `scipilot-writing-skill`。允许学习 section function、argument ordering、evidence presentation 和 figure sequencing；禁止复制原句、独特措辞、citation chain、novelty claim、因果解释或超出自有证据的结果逻辑。
+
+摘要偏好 `PREFERRED_EMPIRICAL_ABSTRACT_PROFILE` 仅是无更严格期刊格式且用户未另行指定时的 soft target；官方期刊要求和 reporting guideline 优先。期刊推荐也必须结合完整稿件（若可用）、研究问题、gap、contribution、methods 和 conclusions，并核验 scope、indexing、OA/APC 与近邻论文，不能只按 IF 排序。
+
+Codex 路由与 ChatGPT Web 共用同一公共协议；跨客户端契约见 [CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1](docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md)。
 
 ## 上游与许可证策略
 

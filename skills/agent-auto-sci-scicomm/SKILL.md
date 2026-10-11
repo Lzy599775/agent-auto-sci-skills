@@ -12,16 +12,19 @@ Use this subskill when the output is a manuscript, response, slide deck, poster,
 1. Define target audience and venue.
 2. Build a claim-evidence map before drafting.
 3. Choose structure: empirical IMRAD, systematic review, scoping review, bibliometric review, policy agenda, or presentation.
-4. Draft in paragraphs, not bullet lists, unless preparing an outline.
-5. Check every claim against evidence.
-6. Translate methods and results into field value.
-7. After scientific content stabilizes, run the Academic Prose Style Guard to check positive-first framing, defensive-contrast clustering, and semantic repetition without weakening boundaries.
-8. Run reviewer-risk and citation checks.
+4. For substantive writing, classify `WRITING_EXEMPLAR_MODE` and, when `REQUIRED`/`AUTO`, read `references/academic_writing_exemplar_protocol.md`.
+5. Build `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE` before comparing function-matched exemplars.
+6. Draft in paragraphs, not bullet lists, unless preparing an outline.
+7. Check every claim against evidence.
+8. Translate methods and results into field value.
+9. After scientific content stabilizes, run the Academic Prose Style Guard to check positive-first framing, defensive-contrast clustering, and semantic repetition without weakening boundaries.
+10. Run reviewer-risk and citation checks.
 
 Keep these checks internal by default. Surface only issues that materially change scientific interpretation, estimand, sample, result, or conclusion; request author input only when safe continuation is impossible or a material scientific choice is theirs to make. Do not turn routine checks into a user-facing QC log. In manuscript prose, omit workflow/status terms such as `gate`, `guard`, `PASS`, `FAIL`, `NOT_VERIFIED`, `blocking`, `routing`, and `QC` unless they are formal research-method terms. Retain only material limitations in the manuscript and avoid repeating a boundary already stated unless the section needs it independently or the underlying judgment changes.
 
 Read `references/scientific_communication_workflows.md`.
 Read `references/academic_prose_style_guard.md` whenever generating manuscript prose, review synthesis, abstracts, conclusions, rebuttals, or substantial academic interpretation.
+Read `references/academic_writing_exemplar_protocol.md` for `REQUIRED`/`AUTO` substantive writing. It supplies argument maps and rhetorical functions only; it never replaces the prose guard or SciPilot polishing owner.
 
 For full paper projects, this skill owns title, abstract, highlights, IMRAD structure, paragraph logic, figure-text narrative, journal matching, cover letter, reference/citation checks, response-to-reviewers, and final submission readiness. Use `sport-geography-sci-writing` for field-specific empirical manuscript logic.
 
@@ -29,6 +32,12 @@ For deeper K-Dense-style encapsulation:
 
 - `references/k_dense_scicomm_mapping.md`: how scientific writing, peer review, slides, schematics, and citation-management skills are adapted.
 - `references/sport_geography_communication_playbook.md`: Cities/SCS/Nature-family style positioning, claim-evidence maps, rebuttal, and presentation routes.
+
+## Writing-exemplar route
+
+The protocol is a pre-drafting/pre-revision handoff. Use 3–5 function-matched exemplars per substantive section, record `FULLTEXT`, `ABSTRACT_ONLY`, or `METADATA_ONLY`, and keep source facts separate from inference. Learn section function, argument ordering, evidence presentation, and figure sequencing; never copy distinctive prose, citation chains, novelty claims, causal interpretation, or unsupported result logic. Draft only after `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE` exist. Simple proofreading and minor edits remain on the ordinary prose/lint route and do not force exemplar retrieval.
+
+The canonical cross-client contract is documented in `docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md`.
 
 ## Related Helper Skills
 

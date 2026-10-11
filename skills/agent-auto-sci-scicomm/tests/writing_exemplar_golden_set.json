@@ -1,0 +1,97 @@
+{
+  "schema_version": "WRITING_EXEMPLAR_GOLDEN_SET_V1",
+  "case_count": 12,
+  "cases": [
+    {
+      "id": "G01",
+      "request": "润色一句话",
+      "task_kind": "sentence_proofreading",
+      "exemplar_available": false,
+      "expected": {"mode": "SKIP", "exemplar_search": false}
+    },
+    {
+      "id": "G02",
+      "request": "重写 Introduction，目标 LUP",
+      "task_kind": "introduction_rewrite",
+      "target_journal": "Landscape and Urban Planning",
+      "exemplar_available": true,
+      "expected": {"mode": "AUTO", "exemplar_search": true, "guard": true}
+    },
+    {
+      "id": "G03",
+      "request": "模仿这 4 篇论文的 Discussion 逻辑",
+      "task_kind": "explicit_exemplar_adaptation",
+      "named_exemplars": 4,
+      "exemplar_available": true,
+      "expected": {"mode": "REQUIRED", "exemplar_search": true, "anti_copying": true}
+    },
+    {
+      "id": "G04",
+      "request": "在高 IF 但问题不近的论文与领域近邻高水平论文之间选择 exemplars",
+      "task_kind": "exemplar_selection",
+      "selection_candidates": [
+        {"id": "high-if-distant", "if": 25.0, "topic_proximity": 0.2, "rq_proximity": 0.1},
+        {"id": "near-neighbor", "if": 8.0, "topic_proximity": 0.9, "rq_proximity": 0.9}
+      ],
+      "expected": {"selection_preference": "scientific_near_neighbor"}
+    },
+    {
+      "id": "G05",
+      "request": "只有 Abstract 可读，提取论文结构",
+      "task_kind": "read_scope",
+      "read_scope": "ABSTRACT_ONLY",
+      "expected": {"read_scope": "ABSTRACT_ONLY", "fulltext_structure_claim": false}
+    },
+    {
+      "id": "G06",
+      "request": "全文和补充材料均可核验",
+      "task_kind": "read_scope",
+      "read_scope": "FULLTEXT",
+      "expected": {"read_scope": "FULLTEXT", "fulltext_structure_claim": true}
+    },
+    {
+      "id": "G07",
+      "request": "exemplar 有强因果措辞，但 OUR design observational",
+      "task_kind": "claim_boundary",
+      "our_design": "observational",
+      "exemplar_claim": "causal",
+      "expected": {"causal_transfer": "prohibited", "claim_ladder_max": "association"}
+    },
+    {
+      "id": "G08",
+      "request": "Results 核心结果优先，次要结果压缩，但不删除必要结果",
+      "task_kind": "results_prioritization",
+      "expected": {"core_first": true, "compress_secondary": true, "retain_necessary": true, "mechanism_in_results": false}
+    },
+    {
+      "id": "G09",
+      "request": "期刊 structured abstract 与 user soft abstract profile 冲突",
+      "task_kind": "abstract_precedence",
+      "journal_structured_abstract": true,
+      "user_soft_profile": true,
+      "expected": {"precedence": "OFFICIAL_JOURNAL_REQUIREMENT", "profile_is_soft": true}
+    },
+    {
+      "id": "G10",
+      "request": "重写 Introduction/Discussion 的 substantive writing",
+      "task_kind": "substantive_writing",
+      "exemplar_available": true,
+      "expected": {"guard": true, "route_after_draft": "Academic Prose Style Guard"}
+    },
+    {
+      "id": "G11",
+      "request": "清理 hidden Unicode，并询问是否 strip C2PA/provenance",
+      "task_kind": "metadata_hygiene",
+      "hidden_unicode": true,
+      "provenance_strip_requested": false,
+      "expected": {"hidden_unicode_allowed": true, "provenance_auto_strip": false}
+    },
+    {
+      "id": "G12",
+      "request": "句式与原句高度接近 exemplar",
+      "task_kind": "anti_copying",
+      "source_similarity": "high",
+      "expected": {"anti_copying_flag": true, "action": "rewrite_from_our_evidence"}
+    }
+  ]
+}

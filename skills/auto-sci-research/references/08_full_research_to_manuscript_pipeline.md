@@ -17,7 +17,7 @@ This pipeline integrates the local `agent-auto-sci-*` skills, sport geography wr
 | 6. Processing and code | Can the analysis be reproduced in VS Code or notebooks? | `agent-auto-sci-geospatial`, `agent-auto-sci-ai-ml`, `agent-auto-sci-automation` | `polars`, `scikit-learn`, `statsmodels`, `shap` | scripts/notebooks, environment notes, logs, intermediate outputs |
 | 7. Analysis | Do results answer the research question? | `agent-auto-sci-data-viz`, `agent-auto-sci-methodology`, `agent-auto-sci-ai-ml` | `statistical-analysis`, `exploratory-data-analysis` | EDA report, model/statistical results, robustness checks, interpretation limits |
 | 8. Figures and tables | Does each figure support a claim? | `agent-auto-sci-data-viz`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` | `scientific-visualization`, `matplotlib`, `seaborn` | main/supplementary figure plan, export files, captions, table shells |
-| 9. Drafting | Can the evidence become a coherent manuscript? | `sport-geography-sci-writing`, `agent-auto-sci-scicomm` | `scientific-writing`, `nature-polishing` | title, highlights, abstract, IMRAD outline, section drafts |
+| 9. Drafting | Can the evidence become a coherent manuscript? | `sport-geography-sci-writing`, `agent-auto-sci-scicomm` | `academic_writing_exemplar_protocol`, `scientific-writing` | evidence map, argument outline, exemplar comparison when required/automatic, title, highlights, abstract, IMRAD outline, section drafts |
 | 10. Internal review | What would reviewers attack first? | `agent-auto-sci-methodology`, `agent-auto-sci-scicomm`, `agent-auto-sci-data-viz` | `peer-review`, `scientific-critical-thinking` | reviewer-risk scan, claim-evidence audit, revision task list |
 | 11. Formatting and submission | Does the manuscript match the target venue? | `agent-auto-sci-scicomm`, `agent-auto-sci-automation` | `venue-templates`, `citation-management`, `docx`, `pdf` | formatted manuscript, reference check, cover letter, reproducibility package |
 | 12. Revision and rebuttal | Can each reviewer concern be mapped to action? | `agent-auto-sci-scicomm`, `agent-auto-sci-methodology` | `peer-review` | response matrix, revised manuscript, location map, residual risk note |
@@ -108,6 +108,12 @@ Draft in this order:
 9. Cover letter and submission checklist.
 
 Do not polish language before the evidence trace, argument map, and paragraph synthesis contracts are stable.
+
+For substantive sections, insert the evidence-first handoff before prose QC:
+
+`OUR_EVIDENCE_MAP -> OUR_ARGUMENT_OUTLINE -> EXEMPLAR_COMPARISON (REQUIRED/AUTO) -> DRAFT -> Academic Prose Style Guard -> scipilot-writing-skill`
+
+Use `SKIP` for sentence-level proofreading, grammar-only correction, citation-format-only work, minor typo fixes, and single-caption micro-edits. Select function-matched exemplars per substantive section and record an explicit `READ_SCOPE`.
 
 ## 8. Final Quality Gate
 
