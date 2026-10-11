@@ -8,6 +8,8 @@
 
 The attached task text was read in full before implementation. The separately named source file `润色prompt - 副本.txt` was searched in the available workspace roots and was not found. Source-specific wording, facts, examples, and line-level claims from that absent file are therefore `NOT_VERIFIED`; this mapping uses only the rules explicitly present in the supplied task text. No missing source content is reconstructed.
 
+The task text declares `SOURCE_PROMPT_LINE_COUNT = 76`; that declaration is retained as a task-provided expected field, while the actual line count of the unavailable named file remains `NOT_VERIFIED`.
+
 The mapping is intentionally generic. It contains no private manuscript text, copied exemplar prose, credentials, or personal absolute paths.
 
 ## Complete rule map
