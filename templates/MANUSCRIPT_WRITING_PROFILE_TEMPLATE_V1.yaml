@@ -1,0 +1,29 @@
+schema_version: 1
+manuscript_id: ""
+project_slug: ""
+canonical_title: ""
+working_title: ""
+target_journal: ""
+research_question: ""
+study_design: ""
+data: []
+methods: []
+main_results: []
+current_stage: ""
+created_at: ""
+updated_at: ""
+exemplar_state: S0_UNINITIALIZED
+master_corpus_version: null
+core3_version: null
+project_skill_id: null
+project_skill_version: null
+approval_status: NOT_PROPOSED
+approval_decision: PENDING
+state_history: []
+candidate_pool_version: null
+section_exemplar_sets: []
+pattern_library_version: null
+identity_status: RESOLVED # RESOLVED | MANUSCRIPT_IDENTITY_UNCERTAIN
+source_pointers: []
+unknowns: []
+private_state_uri: "" # authoritative per-manuscript private record; never a public-repo path

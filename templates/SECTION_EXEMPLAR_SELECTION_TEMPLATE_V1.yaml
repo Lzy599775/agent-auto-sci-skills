@@ -1,0 +1,16 @@
+schema_version: 1
+manuscript_id: ""
+project_skill_version: ""
+section: "" # Introduction | Methods | Results | Discussion | Abstract | Conclusion
+current_writing_problem: ""
+selected_at: ""
+selection_count: null # integer; must equal list length and be 4 or 5
+selected_record_ids: []
+selection_rationale: []
+core3_candidates_considered: []
+relevant_source_sections_read: []
+paragraph_maps_restored: false
+sentence_function_maps_restored: false
+functional_lexicon_restored: false
+our_evidence_map_uri: ""
+our_argument_map_uri: ""

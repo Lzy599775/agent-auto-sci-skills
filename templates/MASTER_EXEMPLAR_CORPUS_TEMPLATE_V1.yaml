@@ -1,0 +1,54 @@
+schema_version: 1
+manuscript_id: ""
+project_slug: ""
+master_corpus_version: ""
+corpus_size: 20
+candidate_pool_size: null # recommended 40-80
+selection_status: NOT_STARTED
+selection_criteria:
+  scientific_question_proximity: null
+  object_proximity: null
+  outcome_proximity: null
+  design_proximity: null
+  method_relevance: null
+  planning_or_theoretical_function: null
+  target_journal_relevance: null
+  writing_quality: null
+  fulltext_availability: null
+impact_factor_role: AUXILIARY_ONLY
+source_truth: ZOTERO_PARENT_METADATA_AND_PRIMARY_SOURCE
+allowed_evidence_states:
+  - KNOWN
+  - SUPPORTED
+  - INFERRED
+  - UNKNOWN
+  - NOT_AVAILABLE
+  - CONFLICTING_EVIDENCE
+records:
+  - candidate_id: ""
+    source_identity: ""
+    title: ""
+    authors: []
+    year: null
+    journal: ""
+    doi: null
+    source_pointer: ""
+    document_type: ""
+    manuscript_id: "" # must equal root manuscript_id
+    selection_class: CORE # CORE | STRONG | SUPPORT | EXCLUDE
+    scientific_question: ""
+    study_design: ""
+    outcome: ""
+    source_facts: []
+    selection_rationale: ""
+    best_sections: []
+    fulltext_status: NOT_VERIFIED
+    evidence_state: UNKNOWN
+    reviewer_status: NOT_REVIEWED
+    limitations: []
+core3:
+  version: null
+  approval_status: NOT_PROPOSED
+  record_ids: []
+  author_decision: PENDING
+  decision_timestamp: null

@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "scope": "synthetic route-parity cases; tool choice may differ, workflow ownership may not",
+  "cases": [
+    {"id":"R01","input":"帮我重写这篇论文的 Discussion","expected_route":"SUBSTANTIVE_MANUSCRIPT_WRITING_WITH_PER_MANUSCRIPT_STATE_CHECK","codex_expected":"same workflow owner and state gate","chatgpt_web_expected":"same workflow owner and state gate"},
+    {"id":"R02","input":"检查这一句语法","expected_route":"LIGHTWEIGHT_PROOFREADING_SKIP_HEAVY_EXEMPLAR_INITIALIZATION","codex_expected":"same lightweight route","chatgpt_web_expected":"same lightweight route"},
+    {"id":"R03","input":"根据目标期刊重新组织 Introduction","expected_route":"TARGET_JOURNAL_MANUSCRIPT_WRITING_WITH_PER_MANUSCRIPT_STATE_CHECK","codex_expected":"same workflow owner and state gate","chatgpt_web_expected":"same workflow owner and state gate"},
+    {"id":"R04","input":"比较这几篇文献的方法","expected_route":"LITERATURE_REVIEW_WITH_OPTIONAL_NOTEBOOKLM_PROVIDER","codex_expected":"literature workflow; NotebookLM optional","chatgpt_web_expected":"literature workflow; NotebookLM optional"},
+    {"id":"R05","input":"分析空间公平模型是否有因果问题","expected_route":"METHODOLOGY_AND_CAUSAL_DESIGN_ASSESSMENT","codex_expected":"methodology workflow","chatgpt_web_expected":"methodology workflow"}
+  ]
+}

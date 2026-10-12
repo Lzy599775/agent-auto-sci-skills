@@ -13,13 +13,14 @@ Use this subskill when the output is a manuscript, response, slide deck, poster,
 2. Build a claim-evidence map before drafting.
 3. Choose structure: empirical IMRAD, systematic review, scoping review, bibliometric review, policy agenda, or presentation.
 4. For substantive writing, classify `WRITING_EXEMPLAR_MODE` and, when `REQUIRED`/`AUTO`, read `references/academic_writing_exemplar_protocol.md`.
-5. Build `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE` before comparing function-matched exemplars.
-6. Draft in paragraphs, not bullet lists, unless preparing an outline.
-7. Check every claim against evidence.
-8. Translate methods and results into field value.
-9. After scientific content stabilizes, run the Academic Prose Style Guard to check positive-first framing, defensive-contrast clustering, and semantic repetition without weakening boundaries.
-10. Run reviewer-risk and citation checks.
-11. For substantive rewrites, run the V2 story-relevance, sentence-increment, paragraph-contribution, fact-placement, and figure/table-citation audits before final polishing.
+5. For substantive manuscript drafting, major restructuring, or target-journal adaptation, check the generic per-manuscript exemplar workflow under this skill's ownership. It is an orchestration layer, not a second global writing owner.
+6. Build `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE` before comparing function-matched exemplars.
+7. Draft in paragraphs, not bullet lists, unless preparing an outline.
+8. Check every claim against evidence.
+9. Translate methods and results into field value.
+10. After scientific content stabilizes, run the Academic Prose Style Guard to check positive-first framing, defensive-contrast clustering, and semantic repetition without weakening boundaries.
+11. Run reviewer-risk and citation checks.
+12. For substantive rewrites, run the V2 story-relevance, sentence-increment, paragraph-contribution, fact-placement, and figure/table-citation audits before final polishing.
 
 Keep these checks internal by default. Surface only issues that materially change scientific interpretation, estimand, sample, result, or conclusion; request author input only when safe continuation is impossible or a material scientific choice is theirs to make. Do not turn routine checks into a user-facing QC log. In manuscript prose, omit workflow/status terms such as `gate`, `guard`, `PASS`, `FAIL`, `NOT_VERIFIED`, `blocking`, `routing`, and `QC` unless they are formal research-method terms. Retain only material limitations in the manuscript and avoid repeating a boundary already stated unless the section needs it independently or the underlying judgment changes.
 
