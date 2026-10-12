@@ -1,5 +1,7 @@
 # Literature Golden-Set Evaluation Scaffold
 
+The synthetic-only `PAPER_ARTIFACT_AND_WRITING_ROUTING_GOLDEN_SET_V1.json` covers 16 cross-client artifact discovery and per-manuscript routing cases. Run `python scripts/validation/validate_paper_artifact_and_writing_routing.py` to check the fixture and required public contracts. It performs no network requests and contains no real paper or manuscript identifiers.
+
 Do not select papers merely to fill a quota. Build a reviewed 5–8 paper golden set that represents genuine workflow risks.
 
 ## Planned cases

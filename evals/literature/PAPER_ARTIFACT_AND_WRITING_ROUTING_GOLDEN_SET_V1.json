@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "fixture_policy": "SYNTHETIC_ONLY_NO_REAL_PAPERS_NO_REAL_MANUSCRIPTS",
+  "cases": [
+    {"id":"A01","input":"ordinary synthetic literature search surfaces papers","expected":"AUTO_LEVEL_1_FOR_SURFACED_PAPERS","synthetic":true},
+    {"id":"A02","input":"completed synthetic search finds no artifact","expected":"SEARCHED_NOT_FOUND_NOT_NO_CODE_OR_NO_DATA","synthetic":true},
+    {"id":"A03","input":"synthetic same-name repository has no DOI or author match","expected":"CANDIDATE_ONLY","synthetic":true},
+    {"id":"A04","input":"synthetic publisher availability statement links a DOI-matched archive","expected":"VERIFIED_PUBLIC_WITH_EVIDENCE","synthetic":true},
+    {"id":"A05","input":"synthetic public Git repository has no license file","expected":"PUBLICLY_VIEWABLE_LICENSE_NOT_FOUND_NOT_OPEN_SOURCE","synthetic":true},
+    {"id":"A06","input":"synthetic paper code is public but data is not located","expected":"CODE_AND_DATA_STATES_INDEPENDENT","synthetic":true},
+    {"id":"A07","input":"synthetic repository hosts fail","expected":"DEGRADED_NOT_VERIFIED_DUE_TO_NETWORK","synthetic":true},
+    {"id":"A08","input":"synthetic repository implementation conflicts with paper Methods","expected":"CONFLICTING_EVIDENCE_PAPER_CLAIM_NOT_OVERRIDDEN","synthetic":true},
+    {"id":"A09","input":"synthetic unrelated paper has public code","expected":"AVAILABILITY_DOES_NOT_RAISE_EXEMPLAR_RANK","synthetic":true},
+    {"id":"A10","input":"synthetic papers enter a manuscript Master20","expected":"EVERY_MASTER20_RECORD_HAS_ARTIFACT_RECORD","synthetic":true},
+    {"id":"A11","input":"new synthetic manuscript starts substantive writing","expected":"INITIALIZE_ISOLATED_NEW_MANUSCRIPT","synthetic":true},
+    {"id":"A12","input":"synthetic manuscript B resembles manuscript A","expected":"NO_CROSS_MANUSCRIPT_CORPUS_OR_STATUS_REUSE","synthetic":true},
+    {"id":"A13","input":"synthetic active manuscript requests Discussion rewrite","expected":"SELECT_AND_REREAD_4_OR_5_LOCAL_SECTION_EXEMPLARS","synthetic":true},
+    {"id":"A14","input":"synthetic one-line grammar edit","expected":"MICRO_EDIT_SKIPS_HEAVY_INITIALIZATION","synthetic":true},
+    {"id":"A15","input":"Codex receives natural-language online paper-search request","expected":"CODEX_AUTO_ARTIFACT_ROUTE","synthetic":true},
+    {"id":"A16","input":"ChatGPT Project receives natural-language manuscript-writing request","expected":"CHATGPT_AUTO_PER_MANUSCRIPT_ROUTE_SAME_LOGIC","synthetic":true}
+  ]
+}

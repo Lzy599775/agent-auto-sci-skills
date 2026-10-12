@@ -46,6 +46,11 @@ records:
     evidence_state: UNKNOWN
     reviewer_status: NOT_REVIEWED
     limitations: []
+    paper_artifact_record:
+      schema: PAPER_ARTIFACT_RECORD_V1
+      status: REQUIRED_FOR_MASTER20_ENTRY
+      artifact_audit_level: LEVEL_2_REQUIRED_FOR_MASTER20
+      record_pointer: "" # point to the separate record, never embed private content in public templates
 core3:
   version: null
   approval_status: NOT_PROPOSED

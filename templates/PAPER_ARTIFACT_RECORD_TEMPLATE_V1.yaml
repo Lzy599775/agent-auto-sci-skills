@@ -1,0 +1,45 @@
+schema: PAPER_ARTIFACT_RECORD_V1
+artifact_audit_level: LEVEL_1 | LEVEL_2
+artifact_search_status: COMPLETE | DEGRADED
+artifact_searched_at: YYYY-MM-DD
+canonical_paper_id: NOT_VERIFIED
+title: NOT_VERIFIED
+doi: NOT_REPORTED
+authors: NOT_VERIFIED
+journal: NOT_VERIFIED
+publication_year: NOT_VERIFIED
+search_date: YYYY-MM-DD
+publisher_url: NOT_VERIFIED
+article_identifier: NOT_REPORTED
+supplement_status: NOT_CHECKED | NONE_FOUND | PUBLIC | PARTIAL | RESTRICTED | BROKEN_LINK
+supplement_urls: []
+code_status: NOT_SEARCHED | SEARCHED_NOT_FOUND | CANDIDATE_REPOSITORY_FOUND | VERIFIED_PUBLIC | PARTIALLY_PUBLIC | RESTRICTED | REQUEST_ONLY | BROKEN_LINK
+code_repository_urls: []
+data_status: NOT_SEARCHED | SEARCHED_NOT_FOUND | CANDIDATE_DATASET_FOUND | VERIFIED_PUBLIC | PARTIALLY_PUBLIC | RESTRICTED | REQUEST_ONLY | BROKEN_LINK
+data_repository_urls: []
+repository_identity: VERIFIED | PROBABLE | CANDIDATE_ONLY | REJECTED | NOT_APPLICABLE | NOT_VERIFIED
+repository_owner: NOT_VERIFIED
+repository_license: LICENSE_NOT_FOUND
+code_license: LICENSE_NOT_FOUND
+data_license: LICENSE_NOT_FOUND
+repository_license_url: NOT_VERIFIED
+citation_file_present: NOT_VERIFIED
+archive_doi: NOT_REPORTED
+release_tag: NOT_REPORTED
+last_commit_date: NOT_REPORTED
+environment_file_present: NOT_VERIFIED
+readme_present: NOT_VERIFIED
+data_manifest_present: NOT_VERIFIED
+reproducibility_status: R0_NO_PUBLIC_ARTIFACT_FOUND | R1_PUBLIC_ARTIFACT_FOUND_UNVERIFIED | R2_PAPER_LINKED_CODE_OR_DATA_VERIFIED | R3_REPRODUCTION_MATERIALS_APPEAR_COMPLETE | R4_PARTIAL_REPRODUCTION_EXECUTED | R5_TARGET_RESULT_REPRODUCED
+verification_evidence:
+  - source_id: NOT_VERIFIED
+    source_type: paper | supplement | publisher | repository | dataset | archive
+    source_location: NOT_VERIFIED
+    observed_fact: NOT_VERIFIED
+    identity_match_basis: []
+    checked_at: YYYY-MM-DD
+verification_notes: []
+queries_and_surfaces_checked: []
+network_failures: []
+conflicts: []
+limitations: []

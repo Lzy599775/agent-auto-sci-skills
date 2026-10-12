@@ -2,6 +2,8 @@
 
 For a substantive academic writing request, use the same contract as Codex:
 
+This route is automatic for substantive manuscript writing; the user does not need to name the workflow or Skill. For online literature searches that populate its candidate pool, apply `PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1` to surfaced papers, and require a `PAPER_ARTIFACT_RECORD_V1` on every Master 20 entry. Repository availability is a secondary selection attribute.
+
 1. Resolve the stable `MANUSCRIPT_ID` from explicit user input, then the active project's configured private-state path, canonical title/RQ, and source-document identity. If uncertain, mark `MANUSCRIPT_IDENTITY_UNCERTAIN`; never inherit another manuscript's skill or corpus.
 2. Read the one authoritative per-manuscript private state record. Do not reconstruct state from chat memory. Codex and ChatGPT Web must use the same record and versions.
 3. Load the shared generic workflow and the matching private project skill, if present and current. If absent/stale, initialize only this manuscript through profile -> candidate pool -> Master 20 -> Core 3 recommendation.

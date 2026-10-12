@@ -14,6 +14,7 @@ Build a verified, deduplicated, traceable corpus and a bounded synthesis without
 2. Record database-specific queries and search dates.
 3. Use Zotero for existing library search, bibliographic metadata, PDFs, and citation keys when available.
 4. Search authoritative scholarly services for missing or current literature.
+   - For every paper surfaced to the user or promoted to a shortlist, evidence table, method comparison, exemplar candidate, or synthesis, automatically run [Paper Artifact Availability Protocol V1](PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1.md). Do not deep-search unqualified raw monitor hits; apply its tiered trigger rules.
 5. Deduplicate using DOI first, then authoritative identifiers and title/author/year checks.
 6. Verify metadata against the original source or authoritative registry.
 7. Classify full-text status as available, partial, inaccessible, or not sought.
@@ -36,3 +37,4 @@ Build a verified, deduplicated, traceable corpus and a bounded synthesis without
 - Paper notes and evidence records.
 - QC findings.
 - Cross-paper synthesis with uncertainty states.
+- For each surfaced paper, a `PAPER_ARTIFACT_RECORD_V1` and a result row covering code, data, supplement, repository identity/license, and reproducibility resources. Network failure is `NOT_VERIFIED_DUE_TO_NETWORK`, not a negative availability finding.

@@ -18,6 +18,8 @@ Drafting and revision must comply with [Academic Claim Standard](../standards/ac
 
 ## Procedure
 
+Before substantive drafting, rewriting, restructuring, or target-journal adaptation, automatically follow [Per-Manuscript Writing Exemplar Workflow V1](PER_MANUSCRIPT_WRITING_EXEMPLAR_WORKFLOW_V1.md) and read the same manuscript's authoritative private state. This is the default route and does not require the user to name a Skill. Typo, grammar-only, citation-format-only, one-sentence, and minor-caption edits use the lightweight route. Any paper entering that manuscript's Master 20 must also have a `PAPER_ARTIFACT_RECORD_V1`; availability is secondary to scientific and exemplar fit.
+
 1. Define audience, article type, target venue, contribution, and required reporting standards.
 2. Build an outline tied to verified claims and artifacts.
 3. Draft from evidence records, analysis outputs, and methods documentation.

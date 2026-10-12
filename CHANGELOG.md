@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added the automatic Paper Artifact Availability Protocol and V1 record schema; surfaced literature now routes to code/data/supplement/repository/license/reproducibility discovery, with qualified monitor tiers and synthetic A01–A16 validation.
+- Added automatic cross-client per-manuscript state checks for substantive writing, a shared state contract, and a required artifact-record pointer for each Master 20 entry; updated Codex, ChatGPT Project, and global routers without implying repository changes configure ChatGPT settings.
 - Added the V2 global academic-writing contract: source-rule mapping, story-relevance and sentence-increment audits, Methods reproducibility preservation, Results/Introduction/Discussion hierarchy rules, robustness placement, three-line tables, no-manual-break prose, figure/table and fact ledgers, and conservative redundancy lint.
 - Added `CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt`, V2 redundancy/exemplar golden sets, three-line-table and no-manual-break tests, and cross-client parity updates without creating a duplicate top-level skill.
 - Preserved `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY` and documented that ChatGPT account-wide settings require user UI action.

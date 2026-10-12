@@ -24,12 +24,15 @@ Read [references/contracts.md](references/contracts.md) for input and output con
 1. Define the research question, scope, eligibility, and expected output.
 2. Inspect existing Zotero and local sources before duplicating discovery work.
 3. Search authoritative scholarly sources when the corpus is incomplete or current information matters.
+   - Automatically apply [Paper Artifact Availability Protocol V1](../../docs/workflows/PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1.md) to every paper surfaced to the user, shortlisted, entered into an evidence table, considered as an exemplar, used in method comparison, or included in synthesis. Check publisher/supplement and data/code statements plus bounded repository searches; the user need not separately request code/data. For monitors, defer Level 1 until qualification and Level 2 until reading/exemplar/reproduction use.
 4. Deduplicate by DOI or authoritative identifier, then title/author/year evidence.
 5. Verify metadata and full-text availability.
 6. Extract only source-supported fields.
 7. Create claim-level evidence traces.
 8. Run metadata, method, numeric, and claim-support quality checks.
 9. Synthesize agreements, differences, limitations, and uncertainty without erasing study context.
+
+Repository identity, licenses, and code/data availability are separate verified fields. Search/retrieval failures remain `NOT_VERIFIED_DUE_TO_NETWORK`; do not call them absent. Artifact availability affects reproducibility utility, not scientific relevance, causal credibility, result validity, or journal quality.
 
 Use the detailed pipeline in `docs/workflows/literature_review.md` and the evidence schema in `docs/standards/evidence_trace.md`.
 

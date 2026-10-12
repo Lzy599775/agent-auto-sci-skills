@@ -51,6 +51,8 @@ It preserves Methods reproducibility and scientific boundaries; it does not make
 ChatGPT Web can consume the same contract through the generated project/account instruction text, but Codex cannot
 change Web account settings.
 
+As a mandatory companion route, every online paper search automatically uses `docs/workflows/PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1.md` for surfaced papers (publisher/supplement, code, data, repository identity, license, and reproducibility status). Monitor audits are tiered; raw unqualified candidates do not receive deep repository search. Every Master 20 candidate receives an artifact record, but availability remains secondary to scientific/story/writing fit. Every substantive writing request automatically checks the manuscript's isolated authoritative state; micro-edits remain exempt from heavy initialization. These behaviors do not require users to name a Skill.
+
 Use `SKIP` for sentence-level proofreading, grammar-only correction, citation-format-only work, minor typo fixes, single-caption micro-edits, and pure code tasks. The exemplar protocol is a reference handoff under `agent-auto-sci-scicomm`; it is not a new top-level skill, literature owner, or polishing owner.
 
 ### Academic prose quality-control handoff

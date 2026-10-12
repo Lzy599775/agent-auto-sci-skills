@@ -32,6 +32,11 @@ Infer one primary route from the intended decision or deliverable:
 
 Do not require the user to name the workflow. Load the selected file under `docs/workflows/`, then only the standards and specialist Skills required to complete the task.
 
+## Automatic companion routes
+
+- Online paper search automatically invokes `PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1` for user-facing, qualified, shortlisted, evidence-table, exemplar, method-comparison, and synthesis papers. Raw monitor discovery does not trigger deep search; qualified candidates get Level 1, and reading/exemplar/reproduction records get Level 2. Network failure is not a negative finding.
+- Substantive manuscript writing automatically invokes the isolated per-manuscript workflow under the unique `agent-auto-sci-scicomm` owner. Read that manuscript's authoritative private state and versions; never infer from memory or reuse another manuscript's corpus/artifact status. Micro-edits skip heavy initialization.
+
 ## Execute with evidence discipline
 
 Apply these minimal fallback invariants on every surface:

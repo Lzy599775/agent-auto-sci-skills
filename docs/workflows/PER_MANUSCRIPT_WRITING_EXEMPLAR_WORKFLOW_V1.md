@@ -6,17 +6,19 @@
 
 ## Contract
 
-The workflow engine is shared; every manuscript has an independent `MANUSCRIPT_ID`, profile, candidate pool, Master 20, Core 3, section exemplar sets, pattern library, and project skill. No fixed global corpus or Core 3 exists. One manuscript must not read another manuscript's private exemplar state unless the user explicitly requests a cross-project comparison.
+The workflow engine is shared; every manuscript has an independent `MANUSCRIPT_ID`, profile, candidate pool, Master 20, Core 3, section exemplar sets, pattern library, and project skill. No fixed global corpus or Core 3 exists. One manuscript must not read another manuscript's private exemplar state unless the user explicitly requests a cross-project comparison. Cross-client field names and invariants are defined in [the state contract template](../../templates/CROSS_CLIENT_MANUSCRIPT_STATE_CONTRACT_V1.yaml); the template is a schema, not storage for live state.
 
 Public repository content is limited to generic workflow, schema, templates, routing, and synthetic tests. Bibliographic facts continue to come from Zotero parent records and primary sources. Derived notes are not substitutes for source text. NotebookLM is an optional full-text synthesis helper, never a required dependency or source of bibliographic/evidence truth.
 
 ## Entry routing
 
+This is the automatic companion route for every substantive manuscript-writing request. Invoke it without requiring a named Skill when the user asks to draft/rewrite a substantive section, restructure a manuscript, or adapt it to a journal. In online literature search used to build the candidate pool, apply the paper artifact protocol to all surfaced/shortlisted papers; every Master 20 record must carry a current-enough Level 2 `PAPER_ARTIFACT_RECORD_V1`. Repository/code/data availability is a secondary selection attribute only.
+
 For substantive academic writing, resolve identity in this order: explicit `MANUSCRIPT_ID`; matching private project-state record; canonical title and research question; source-document identity. A chat title, filename, or title string alone is not a durable identity. If identity is ambiguous, set `MANUSCRIPT_IDENTITY_UNCERTAIN`, do not inherit a project skill, and ask only for the minimum disambiguating information after routing.
 
 Substantive triggers include full manuscript work; substantive Introduction, Methods, Results, Discussion, Conclusion, or Abstract drafting/rewrite; target-journal adaptation; major revision; and response-driven restructuring. Typo, grammar-only, citation-format-only, single-sentence micro-edit, and minor caption tasks bypass heavy initialization; an existing project's lightweight style constraints may still be read.
 
-After identity resolution, read that manuscript's one authoritative private state record. Codex and ChatGPT Web must use the same configured state hub/path and the same `MANUSCRIPT_ID`, corpus/Core 3 versions, approval state, and skill version. Never infer a corpus or approval from chat memory. If the state record cannot be read, report the limitation and do not proceed as though the skill were active.
+After identity resolution, read that manuscript's one authoritative private state record. The shared state contract is `MANUSCRIPT_ID`, `EXEMPLAR_STATE`, `MASTER20_VERSION`, `CORE3_VERSION`, `PROJECT_SKILL_VERSION`, and `PAPER_ARTIFACT_RECORDS`, namespaced to one manuscript. Codex and ChatGPT Web/Desktop must use the same configured authoritative private state store and versions. Never infer a corpus, artifact status, or approval from chat memory. If the state record cannot be read, report the limitation and do not proceed as though the skill were active.
 
 ## Initialization lifecycle
 

@@ -14,6 +14,7 @@ Use this subskill when the output is a manuscript, response, slide deck, poster,
 3. Choose structure: empirical IMRAD, systematic review, scoping review, bibliometric review, policy agenda, or presentation.
 4. For substantive writing, classify `WRITING_EXEMPLAR_MODE` and, when `REQUIRED`/`AUTO`, read `references/academic_writing_exemplar_protocol.md`.
 5. For substantive manuscript drafting, major restructuring, or target-journal adaptation, check the generic per-manuscript exemplar workflow under this skill's ownership. It is an orchestration layer, not a second global writing owner.
+   - This state check and workflow are automatic for substantive manuscript writing; do not wait for the user to name a Skill. Read the same manuscript's authoritative private state, including `MANUSCRIPT_ID`, `EXEMPLAR_STATE`, `MASTER20_VERSION`, `CORE3_VERSION`, `PROJECT_SKILL_VERSION`, and `PAPER_ARTIFACT_RECORDS`. Never infer state from chat memory or another manuscript. Micro-edits bypass heavy initialization.
 6. Build `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE` before comparing function-matched exemplars.
 7. Draft in paragraphs, not bullet lists, unless preparing an outline.
 8. Check every claim against evidence.
@@ -40,6 +41,8 @@ For deeper K-Dense-style encapsulation:
 The protocol is a pre-drafting/pre-revision handoff. Use 3–5 function-matched exemplars per substantive section, record `FULLTEXT`, `ABSTRACT_ONLY`, or `METADATA_ONLY`, and keep source facts separate from inference. Learn section function, argument ordering, evidence presentation, and figure sequencing; never copy distinctive prose, citation chains, novelty claims, causal interpretation, or unsupported result logic. Draft only after `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE` exist. Simple proofreading and minor edits remain on the ordinary prose/lint route and do not force exemplar retrieval.
 
 The canonical cross-client contract is documented in `docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md` and the copy-paste `CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt`.
+
+When literature search supports a manuscript's candidate pool, automatically apply `docs/workflows/PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1.md` to surfaced papers and require a `PAPER_ARTIFACT_RECORD_V1` for every Master 20 paper. Artifact availability is a secondary attribute, never a shortcut to Core 3 selection.
 
 ## V2 academic-writing contract handoff
 

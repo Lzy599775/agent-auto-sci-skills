@@ -1,6 +1,6 @@
 # Workflow Version
 
-- `workflow_version`: `1.1.0-rc.2`
+- `workflow_version`: `1.1.0-rc.3`
 - `contract_schema_version`: `1`
 - `stable_branch_after_merge`: `main`
 - `current_validation_ref`: `feature/research-os-writing-production-v1`
