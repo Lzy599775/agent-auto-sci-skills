@@ -6,10 +6,10 @@
 
 ## Source availability and provenance
 
-`SOURCE_PROMPT_FULLY_READ = YES`
-`SOURCE_PROMPT_LINE_COUNT = 76`
+`SOURCE_PROMPT_FULLY_READ = NOT_VERIFIED`
+`SOURCE_PROMPT_LINE_COUNT = NOT_VERIFIED`
 
-The user confirmed that the original `润色prompt - 副本.txt` was fully read in the active ChatGPT context. This reconciliation maps the 19 source-specific rule groups enumerated in the current task, without reproducing the private prompt, its examples, or its personal absolute-path references. The generic contract records provenance fields only; no claim is made that the original prompt text is stored in this public repository.
+The original `润色prompt - 副本.txt` was not available to this integration audit. This reconciliation maps the source-specific rule groups enumerated in the current task and existing V2 mapping, without reproducing the private prompt, examples, or personal absolute-path references. The listed safeguards can be checked against the contract, but mapping them does not establish that the original source was fully read or that its line count was verified. The generic contract records provenance fields only; the original prompt text is not stored in this public repository.
 
 The mapping is intentionally generic. It contains no private manuscript text, copied exemplar prose, credentials, or personal absolute paths.
 
