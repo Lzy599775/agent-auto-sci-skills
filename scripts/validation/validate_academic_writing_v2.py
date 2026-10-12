@@ -102,7 +102,7 @@ def validate_contract(repo_root: Path = ROOT) -> list[str]:
     for label, text, fragments in (
         ("protocol", protocol, ("DEFAULT_ACADEMIC_WRITING_PREFERENCES", "NOT_BUT_CONSTRUCTION_CLUSTER", "STORY_RELEVANCE_AND_DEFENSE_AUDIT", "ROBUSTNESS_PLACEMENT_RULE", "THREE_LINE_TABLE_CONTRACT", "NO_MANUAL_LINE_BREAK_IN_PROSE", "FIGURE_TABLE_CITATION_LEDGER", "FACT_PLACEMENT_LEDGER", "PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY", "本研究", "full English term followed by its abbreviation", "`[证据边界问题]`", "non-significant result", "SOFT_GUIDANCE", "CiteScore")),
         ("guard", guard, ("NOT_BUT_CONSTRUCTION_CLUSTER", "STORY_RELEVANCE_AND_DEFENSE_AUDIT", "REDUNDANT_LOW_INCREMENT", "REPEATED_LOW_VALUE_NUMBER", "REPEATED_FIGURE_CITATION", "ROBUSTNESS_PLACEMENT_RULE", "Hedge calibration", "Non-significant results", "Punctuation and noun-chain density")),
-        ("mapping", mapping, ("SOURCE_RULE", "GENERIC_WORKFLOW_RULE", "IMPLEMENTATION_LOCATION", "TEST_CASE", "ADOPT", "ADAPT", "SOFT_PREFERENCE", "S01", "S46", "D01", "D19", "SOURCE_PROMPT_FULLY_READ = YES", "SOURCE_PROMPT_LINE_COUNT = 76", "Unresolved source-specific rule groups: `0`")),
+        ("mapping", mapping, ("SOURCE_RULE", "GENERIC_WORKFLOW_RULE", "IMPLEMENTATION_LOCATION", "TEST_CASE", "ADOPT", "ADAPT", "SOFT_PREFERENCE", "S01", "S46", "D01", "D19", "SOURCE_PROMPT_FULLY_READ = NOT_VERIFIED", "SOURCE_PROMPT_LINE_COUNT = NOT_VERIFIED", "Unresolved source-specific rule groups: `0`")),
         ("global instructions", global_text, ("PREVIEW_ONLY", "NO_MANUAL_LINE_BREAK_IN_PROSE", "USER_UI_ACTION_REQUIRED_FOR_ALL_WEB_CHATS = YES", "CHATGPT_ACCOUNT_SETTINGS_MODIFIED = NO")),
     ):
         for fragment in fragments:
