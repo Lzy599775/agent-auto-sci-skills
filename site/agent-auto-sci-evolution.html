@@ -34,14 +34,14 @@
     <header>
       <h1>Agent Auto Sci 进化档案</h1>
       <p class="subtitle">记录本地科研 skill 套件如何从体育地理工作流，逐步扩展到城市暴露、遥感、机器学习、图件、写作润色、证据优先 exemplar 拆解、上游精选封装和 ARS 通用科研管线。</p>
-      <p><a href="index.html">返回本地介绍页</a> · <a href="../docs/upstream-update-20260927.md">查看 2026-09-27 上游检查</a></p>
+      <p><a href="index.html">返回本地介绍页</a> · <a href="../docs/upstream-update-20261012.md">查看 2026-10-12 上游检查</a></p>
     </header>
 
     <section class="stats">
       <div class="stat"><strong>17</strong><span>顶层可安装 skill</span></div>
       <div class="stat"><strong>1</strong><span>内置 ARS 子 skill</span></div>
       <div class="stat"><strong>6</strong><span>任务分类入口</span></div>
-      <div class="stat"><strong>0.9.0</strong><span>当前整理版本</span></div>
+      <div class="stat"><strong>1.0.0</strong><span>当前整理版本</span></div>
     </section>
 
     <h2>来源脉络</h2>
@@ -49,7 +49,7 @@
       <article class="card"><span class="pill">本地原创</span><h3>体育地理与城市暴露</h3><p>围绕绿地公园可达性、体育设施暴露、空间公平和城市健康机制，形成领域判断与写作路线。</p></article>
       <article class="card"><span class="pill">精选封装</span><h3>K-Dense Scientific Agent Skills</h3><p>只保留 ML/AI、数据可视化、GIS/RS、科学交流四类高相关 playbook，避免全量仓库过载。</p></article>
       <article class="card"><span class="pill">写作扩展</span><h3>SciPilot 与 GeoRS</h3><p>SciPilot 用于图件和语言最后一公里；GeoRS 以原创适配方式服务地理/遥感 SCI 写作。</p></article>
-      <article class="card"><span class="pill">研究管线</span><h3>Academic Research Suite</h3><p>作为隔离子 skill 放在城市暴露 workflow 下，处理深度研究、论文管线和审稿模拟。</p></article>
+      <article class="card"><span class="pill">研究管线</span><h3>Academic Research Suite</h3><p>作为隔离子 skill 放在城市暴露 workflow 下，处理深度研究、论文管线和审稿模拟；<code>sr-screener</code> 只在明确要求筛选时调用。</p></article>
       <article class="card"><span class="pill">工作流灵感</span><h3>AutoSci</h3><p>吸收长期科研记忆、idea pipeline 和失败恢复思路，但不直接 vendoring 当前仓库。</p></article>
       <article class="card"><span class="pill">安全边界</span><h3>公开仓库规则</h3><p>所有封装都保留许可证说明，未授权上游不复制正文，密钥、私有 PDF 和付费导出不进入仓库。</p></article>
     </section>
@@ -61,13 +61,14 @@
       <article class="card"><h3>GIS、遥感与暴露</h3><p><code>agent-auto-sci-geospatial</code>、<code>kdense-geospatial-rs-selected</code>、<code>geors-sci-writing-adapter</code></p></article>
       <article class="card"><h3>数据、图表与模型</h3><p><code>agent-auto-sci-data-viz</code>、<code>agent-auto-sci-ai-ml</code>、<code>kdense-data-viz-selected</code>、<code>kdense-ml-ai-selected</code>、<code>scipilot-figure-skill</code></p></article>
       <article class="card"><h3>写作、投稿与审稿</h3><p><code>agent-auto-sci-scicomm</code>、<code>sport-geography-sci-writing</code>、<code>scipilot-writing-skill</code>、<code>kdense-scicomm-selected</code></p></article>
-      <article class="card"><h3>内置研究套件</h3><p><code>academic-research-suite</code> 当前为 <code>3.22.0</code>，由父 workflow 控制调用范围。</p></article>
+      <article class="card"><h3>内置研究套件</h3><p><code>academic-research-suite</code> 当前为 <code>3.23.0</code>，由父 workflow 控制调用范围；筛选工作流为 explicit-only。</p></article>
     </section>
 
     <h2>版本事件</h2>
     <section class="timeline">
       <article class="event"><h3>Writing Exemplar V1 - 2026-10-11</h3><p>在 <code>agent-auto-sci-scicomm</code> 下加入 evidence-first writing exemplar decomposition protocol，建立 <code>REQUIRED/AUTO/SKIP</code> 路由、逐 section 近邻论文选择、read-scope 记录、own-evidence-first 和 anti-copying contract；未新增顶层 Skill，并加入 Codex/ChatGPT Web parity matrix 与 G01–G12 golden set。</p></article>
       <article class="event"><h3>Global Academic Writing Contract V2 - 2026-10-11</h3><p>加入 source-rule mapping、story relevance 与 sentence academic increment 审计、Methods 可复现性保护、robustness placement、三线表、正文禁手动换行、figure/table 与 fact ledgers、R01–R12/E01–E06 golden set，以及可复制到 ChatGPT Web 的全局 instructions。</p></article>
+      <article class="event"><h3>1.0.0 - 2026-10-12</h3><p>同步 ARS Codex 包到 <code>v3.23.0</code>，引入 explicit-only <code>sr-screener</code> 边界；将 K-Dense 27 个精选目录更新到 <code>92ace75</code>，复核 AutoSci、SciPilot Figure、SciPilot Writing 和 GeoRS，并刷新来源审计、版本登记和本地导航页。</p></article>
       <article class="event"><h3>0.9.0 - 2026-09-27</h3><p>同步 ARS Codex 包到 <code>v3.22.0</code>，复核 K-Dense、AutoSci、SciPilot Figure、SciPilot Writing 和 GeoRS 的最新提交，并刷新来源审计、版本登记和本地导航页。</p></article>
       <article class="event"><h3>0.8.1 - 2026-09-13</h3><p>更新 K-Dense 精选封装中的 <code>geomaster</code>、<code>scientific-slides</code> 和 <code>umap-learn</code>，复核 AutoSci 依赖变化，并刷新来源审计、版本登记和本地导航页。</p></article>
       <article class="event"><h3>0.7.0 - 2026-08-01</h3><p>同步 ARS 到 <code>v0.1.22</code>，将 K-Dense 精选封装更新到 <code>v2.62.0</code>，并刷新中英文介绍、技能地图和来源审计。</p></article>

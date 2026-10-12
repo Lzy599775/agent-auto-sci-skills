@@ -47,7 +47,7 @@ def test_spanish_upstream_boundary_fixtures(fixture, workflow, mode):
         ("Planificar un artículo de revisión bibliográfica.", "academic-paper", "lit-review"),
         ("Quiero escribir un artículo sobre educación, sin una pregunta de investigación clara.", "deep-research", "socratic"),
         ("Quiero escribir un artículo sobre educación. Pregunta de investigación: ¿Cómo influye la tutoría en la retención?", "academic-paper", "plan"),
-        ("Revisión del presupuesto del viaje.", "academic-paper", "plan"),
+        ("Revisión del presupuesto del viaje.", None, None),
     ],
 )
 def test_spanish_compounds_keep_route_boundaries(task_request, workflow, mode):

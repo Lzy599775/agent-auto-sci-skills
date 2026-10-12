@@ -8,6 +8,14 @@
 - Added the evidence-first academic writing exemplar decomposition protocol as a reference handoff under `agent-auto-sci-scicomm`; no new top-level skill was created.
 - Added `WRITING_EXEMPLAR_MODE` routing (`REQUIRED`/`AUTO`/`SKIP`), per-section 3–5 exemplar selection, read-scope attestations, Article/Move/Argument Maps, own-evidence-first drafting, anti-copying rules, and official-journal precedence.
 - Added the Codex/ChatGPT Web parity matrix and a 12-case executable golden set; documented optional humanizer/cleanup compatibility with provenance metadata stripping disabled.
+## 1.0.0
+
+- Refreshed configured upstream checks on 2026-10-12.
+- Updated ARS Codex package to `v3.23.0` (`52228e8`), locking vendored ARS content to `6ab4b03`.
+- Added the explicit-only ARS `sr-screener` boundary and documented run-ledger, acronym, and citation-locale quality capabilities.
+- Synchronized 27 selected K-Dense directories to main `92ace75`.
+- Rechecked AutoSci at `f5c2fe0`; retained it as a reference source without overwriting the local router.
+- Updated README, skill map, HTML pages, notices, and the upstream audit.
 
 ## 0.9.0
 

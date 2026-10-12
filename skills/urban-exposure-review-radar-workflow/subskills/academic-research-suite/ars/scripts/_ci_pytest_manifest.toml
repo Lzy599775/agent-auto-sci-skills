@@ -25,6 +25,14 @@
 #      locally before opening a PR.
 
 [[pytest]]
+id = "857-command-skill-dispatch"
+path = "scripts/test_check_command_skill_dispatch.py"
+
+[[pytest]]
+id = "864-skill-description-length"
+path = "scripts/test_check_skill_description_length.py"
+
+[[pytest]]
 id = "v3.7.1-sha-gate"
 path = "scripts/test_check_v3_6_8_pattern_protection.py"
 
@@ -51,6 +59,26 @@ path = "scripts/test_check_v3_9_0_triangulation.py"
 [[pytest]]
 id = "v3.10-firm-rules-sync"
 path = "scripts/test_check_firm_rules_sync.py"
+
+[[pytest]]
+id = "892-routing-core-sync"
+path = "scripts/test_check_routing_core_sync.py"
+
+[[pytest]]
+id = "916-method-weaknesses-sync"
+path = "scripts/test_check_method_weaknesses_sync.py"
+
+[[pytest]]
+id = "921-review-form-note-sync"
+path = "scripts/test_check_review_form_note_sync.py"
+
+[[pytest]]
+id = "923-shared-marker-block"
+path = "scripts/test_skill_lint_marker_block.py"
+
+[[pytest]]
+id = "915-experiment-alignment-overclaim-fixtures"
+path = "scripts/test_experiment_alignment_overclaim_fixtures.py"
 
 [[pytest]]
 id = "v3.10-policy-layer"
@@ -679,3 +707,23 @@ path = "scripts/test_file_lock.py"
 [[pytest]]
 id = "862-output-language-pair-contract"
 path = "scripts/test_output_language_pair.py"
+
+[[pytest]]
+id = "887-run-ledger"
+path = "scripts/test_run_ledger.py"
+
+[[pytest]]
+id = "849-acronym-check"
+path = "scripts/test_check_acronyms.py"
+
+[[pytest]]
+id = "927-standing-constraint-entry-schema"
+path = "scripts/test_standing_constraint_entry_schema.py"
+
+[[pytest]]
+id = "936-excluded-source-entry-schema"
+path = "scripts/test_excluded_source_entry_schema.py"
+
+[[pytest]]
+id = "sr-screener-pipeline"
+path = "scripts/test_sr_screener_pipeline.py"

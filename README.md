@@ -6,16 +6,15 @@
 
 `Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让 ChatGPT 与 Codex 知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
 
-当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-09-27**：
 ## 持久科研工作流
 
 仓库根目录的 [AGENTS.md](AGENTS.md) 提供精简的长期规则和路由入口；详细架构、工作流、证据标准、Research Vault、模板与评估体系从 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/index.md](docs/index.md) 进入。核心原则是：给 agent 一张可导航的地图，而不是把全部规则塞进一个巨大提示词。
 
-当前仓库包含 **19 个可安装 skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-08-01**：
+当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-10-12**：
 
-- ARS Codex 包已同步到 `v3.22.0` (`3c37ef8`)，上游 ARS 内容锁定到 `3c546bc`。
-- K-Dense 已检查到 main `49c6e97`；自上次精选目录同步后，当前封装范围没有新的文件变化。
-- AutoSci 已检查到 `cf88930`，上游此前的 `requests` 依赖指针已恢复为 PyPI 版本。
+- ARS Codex 包已同步到 `v3.23.0` (`52228e8`)，上游 ARS 内容锁定到 `6ab4b03`；新增 `sr-screener`、run ledger、缩写检查和 citation-locale evals。
+- K-Dense 已检查到 main `92ace75`，本轮同步 27 个已登记精选目录。
+- AutoSci 已检查到 `f5c2fe0`；其新实验/工具内容仍作为参考，不覆盖本地原创 router。
 - SciPilot Figure 仍为 `v2.1.0-1-g43098dd`。
 - SciPilot Writing 仍为 `v1.0.0` (`51c5fd3`)。
 - GeoRS SCI Writing Adapter 仍基于 `xiangyu-Ge/sci-writing-geors` 的公开仓库说明做原创适配；上游仍未检测到明确 LICENSE，因此不复制上游正文。
@@ -64,6 +63,7 @@ $env:USERPROFILE\.codex\skills
 | 写体育设施/体育公园/暴露公平实证 SCI 论文 | `sport-geography-sci-writing` |
 | 判断城市暴露综述、前沿雷达、医学数据库连接路线 | `urban-exposure-review-radar-workflow` |
 | 需要通用深度研究、论文管线、审稿模拟 | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` |
+| 明确要求筛选已有文献记录、制定纳排标准或生成排除审计 | ARS `sr-screener`（仅显式调用） |
 | 不知道数据该画什么图，或要投稿级图件 QA | `scipilot-figure-skill` |
 | 润色、翻译、去 AI 味、写 cover letter/rebuttal | `scipilot-writing-skill` |
 | 写地理/遥感 SCI 的标题、摘要、IMRAD、cover letter | `geors-sci-writing-adapter` |
@@ -119,9 +119,9 @@ $env:USERPROFILE\.codex\skills
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `skills/urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.22.0` | 通用深度研究、文献综述、论文写作、同行评审模拟、完整 research-to-paper pipeline、实验规划、本地 PDF 阅读完整性预检和引用完整性检查。 |
+| `academic-research-suite` | `skills/urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.23.0` | 通用深度研究、文献综述、论文写作、同行评审模拟、research-to-paper pipeline、实验规划、PDF/引用检查；`sr-screener` 只处理用户明确要求的记录筛选、纳排标准、pilot、冲突裁决和排除审计。 |
 
-ARS 只在父 skill 判定需要“通用科研生产管线”时调用。城市暴露、体育地理、暴露/可达性定义、因果语言和正式语料库规则仍由父 skill 把关。
+ARS 只在父 skill 判定需要“通用科研生产管线”时调用。`sr-screener` 不会因为用户提到“综述”或“系统综述”而自动触发；只有用户明确要求筛选已有记录、纳排标准、筛选 pilot、冲突裁决、排除审计或筛选报告时才使用。城市暴露、体育地理、暴露/可达性定义、因果语言和正式语料库规则仍由父 skill 把关。
 
 ## 推荐组合工作流
 
@@ -195,11 +195,11 @@ V2 进一步把学术写作契约扩展为可复用的全局偏好：先做 stor
 
 - `Haojae/scipilot-writing-skill`：MIT，完整封装并保留 LICENSE/NOTICE。
 - `Haojae/scipilot-figure-skill`：MIT，已封装为图件顾问。
-- `Imbad0202/academic-research-skills-codex`：ARS Codex 包，已同步到 `v3.22.0`；许可证和来源见 subskill 内 `LICENSE`、`NOTICE.md`、`manifest.json`。
+- `Imbad0202/academic-research-skills-codex`：ARS Codex 包，已同步到 `v3.23.0`；许可证和来源见 subskill 内 `LICENSE`、`NOTICE.md`、`manifest.json`。
 - `K-Dense-AI/scientific-agent-skills`：只保留 4 个与本研究方向强相关的精选 wrapper，不全量引入。
 - `xiangyu-Ge/sci-writing-geors`：未检测到明确 LICENSE，因此只做原创 Codex 适配，不复制上游参考全文。
 
-详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20260801.md](docs/upstream-update-20260801.md)。
+详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20261012.md](docs/upstream-update-20261012.md)。
 
 ## 公开安全原则
 

@@ -1,6 +1,6 @@
 # Claude Code를 위한 Academic Research Skills
 
-[![Version](https://img.shields.io/badge/version-v3.22.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.22.0)
+[![Version](https://img.shields.io/badge/version-v3.23.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.23.0)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
@@ -18,7 +18,7 @@
 
 그런 다음 `/ars-plan`을 실행해 소크라테스식 대화로 논문 구조를 짜보거나, 사전 요건과 전통적인 심볼릭 링크 방식을 보려면 [빠른 설치](#빠른-설치)로 이동하세요.
 
-> **AI는 부조종사이지 조종사가 아닙니다.** 이 도구는 논문을 대신 써 주지 않습니다. 참고문헌 탐색, 인용 형식 정리, 데이터 검증, 논리적 일관성 점검과 같은 반복적이고 소모적인 작업을 지원하여, 실제로 사람의 판단이 필요한 부분 — 질문 정의, 방법 선택, 데이터가 의미하는 바의 해석, 그리고 "나는 ~라고 주장한다" 다음에 오는 문장을 쓰는 일 — 에 집중할 수 있게 합니다.
+> **AI는 부조종사이지 조종사가 아닙니다.** 이 도구는 글의 초안을 쓸 수 있고, full 모드에서는 논문 전체의 초안도 씁니다. 하지만 결정은 사용자가 내리며, 파이프라인은 모든 단계에서 사용자의 확인을 기다립니다. 참고문헌 탐색, 인용 형식 정리, 데이터 검증, 논리적 일관성 점검과 같은 반복적이고 소모적인 작업을 지원하여, 실제로 사람의 판단이 필요한 부분(질문 정의, 방법 선택, 데이터가 의미하는 바의 해석, 그리고 "나는 ~라고 주장한다" 다음에 무엇을 쓸지 정하는 일)에 집중할 수 있게 합니다. 저자는 사용자이며, 제출하는 모든 주장에 대한 책임도 사용자에게 있습니다.
 >
 > 휴머나이저(humanizer)와 달리, 이 도구는 AI를 사용했다는 사실을 숨기도록 돕지 않습니다. 더 잘 쓰도록 돕습니다. Style Calibration은 과거 작업에서 사용자의 문체를 학습합니다. Writing Quality Check는 기계가 생성한 듯한 느낌을 주는 패턴을 잡아냅니다. 목표는 품질이지 부정행위가 아닙니다.
 
@@ -30,7 +30,7 @@ ARS는 **AI의 지원을 받는 인간 연구자가 인간이나 AI가 단독으
 
 [**Zhao et al.**](https://arxiv.org/abs/2605.07723) (2026-05)은 arXiv, bioRxiv, SSRN, PMC의 250만 편 논문에 걸친 1억 1,100만 건의 참고문헌을 대규모로 점검했습니다. 이들의 보수적 추정치는 2025년 한 해에만 146,932건의 환각된 인용이며, 2024년 중반에 변곡점이 관찰되었습니다. bioRxiv-to-PMC 쌍에 대해서는 85.3%의 preprint-to-published 지속성을 보고합니다. 이 논문은 "인용된 참고문헌이 실제로는 뒷받침하지 않는 주장을 지지하기 위해 배치된 진짜 인용"을 미해결 과제로 기술합니다. ARS v3.7.1은 출처 provenance를 위한 trust-chain frontmatter를 추가했고, v3.7.3은 향후 주장 수준 감사를 위한 locator 인프라(3계층 인용 앵커)를 추가하고 인용 시점에 참고용 위험 신호를 표시합니다(ARS는 이 주장-충실성 격차를 내부적으로 "L3"로 라벨링합니다. 이는 ARS 용어이며 논문의 용어가 아닙니다). v3.7.x는 Zhao et al.의 코퍼스 규모 발견에 동기를 두며, ARS 자체에 대한 코퍼스 규모 평가는 향후 과제로 남아 있습니다.
 
-v3.8은 L3 격차의 나머지 절반을 메웁니다. v3.7.3은 모든 인용이 locator 앵커를 갖도록 했고, v3.8은 각 앵커에 대해 인용된 출처를 가져와 주장이 실제로 뒷받침되는지 판단하는 옵트인 감사 패스(`ARS_CLAIM_AUDIT=1`)를 추가합니다. 다섯 개의 새로운 HIGH-WARN 클래스(claim-not-supported, negative-constraint-violation, fabricated-reference, anchorless, constraint-violation-uncited)의 출력을 formatter terminal hard gate가 거부합니다. 캘리브레이션은 FNR<0.15 + FPR<0.10 합격 임계값을 갖는 20개 항목으로 구성된 골드셋으로 제공됩니다. 단계적 활성화 계획은 v3.8 명세 §5에 따라 캘리브레이션 후 증거가 나올 때까지 보류됩니다.
+v3.8은 L3 격차의 나머지 절반을 메웁니다. v3.7.3은 모든 인용이 locator 앵커를 갖도록 했고, v3.8은 각 앵커에 대해 인용된 출처를 가져와 주장이 실제로 뒷받침되는지 판단하는 옵트인 감사 패스(`ARS_CLAIM_AUDIT=1`)를 추가합니다. 다섯 개의 새로운 HIGH-WARN 클래스(claim-not-supported, negative-constraint-violation, fabricated-reference, anchorless, constraint-violation-uncited)의 출력을 formatter terminal hard gate가 거부합니다. 캘리브레이션 러너는 25개 항목의 합성 골드셋과 FNR<0.15 + FPR<0.10 합격 임계값과 함께 제공됩니다. 함께 제공되는 테스트는 골드 레이블을 그대로 돌려주는 스텁 심판으로 러너를 실행하므로, 검증 대상은 도구 자체이지 실제 심판이 아닙니다. 실제 심판의 캘리브레이션 결과는 아직 기록되지 않았으며, 단계적 활성화 계획은 v3.8 명세 §5에 따라 그 결과를 기다립니다.
 
 v3.3은 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018) (Song, Song, Pfister & Yoon, 2026, Google)에서 영감을 받았습니다: Semantic Scholar API 검증, anti-leakage 프로토콜, VLM 그림 검증, 수정 궤적 추적. 현재 ARS는 수치 델타 대신 기준별 증거 기반 서술형 회귀 점검을 수행하며, typed trajectory carrier는 아직 구현되지 않았습니다.
 
@@ -66,7 +66,7 @@ v3.3은 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018) (Song, Song, Pfis
 
 **👉 [docs/DATA_FLOWS.md](docs/DATA_FLOWS.md)** — 어떤 데이터가 기기 밖으로 나가는지(서지 resolver, 명시적 동의가 필요한 선택적 교차 모델 호출, 업데이트 확인), 로컬 캐시에 무엇이 얼마나 저장되는지, 각 경로를 끄는 방법. (영어)
 
-**Claude Science를 사용하시나요?** 네 개의 스킬을 바로 가져올 수 있습니다: **Skills → Import from GitHub**에서 `https://github.com/Imbad0202/academic-research-skills`를 붙여넣고 **Preview** → **Import 4 skills**(이 저장소 v3.14.0+ 필요 — 가져오기 도구는 marketplace manifest에 명시된 스킬 경로를 읽습니다). 가져오기는 특정 시점의 스냅샷입니다: ARS 업데이트 후에는 다시 가져오세요. 가져온 스킬은 ARS 방법론(연구/작성/리뷰 프로토콜)을 담습니다. Claude Code 전용 메커니즘 — slash commands, hooks, 서브에이전트 오케스트레이션 — 은 이전되지 않습니다. 자세한 내용은 [docs/SETUP.md](docs/SETUP.md) Method 5를 참조하세요.
+**Claude Science를 사용하시나요?** 다섯 개의 스킬을 바로 가져올 수 있습니다: **Skills → Import from GitHub**에서 `https://github.com/Imbad0202/academic-research-skills`를 붙여넣고 **Preview** → **Import**(이 저장소 v3.14.0+ 필요 — 가져오기 도구는 marketplace manifest에 명시된 스킬 경로를 읽습니다). 가져오기는 특정 시점의 스냅샷입니다: ARS 업데이트 후에는 다시 가져오세요. 가져온 스킬은 ARS 방법론(연구/작성/리뷰 프로토콜)을 담습니다. Claude Code 전용 메커니즘 — slash commands, hooks, 서브에이전트 오케스트레이션 — 은 이전되지 않습니다. 자세한 내용은 [docs/SETUP.md](docs/SETUP.md) Method 5를 참조하세요.
 
 **Pi를 사용하시나요?** `pi install git:github.com/Imbad0202/academic-research-skills`로 저장소 내 커뮤니티 유지보수 wrapper를 설치할 수 있습니다. 원본 ARS 콘텐츠를 기준으로 유지하며 Pi 전용 오케스트레이션 및 hook 제한을 문서화합니다. 자세한 내용은 [`pi/README.md`](pi/README.md)를 참조하세요.
 
@@ -74,7 +74,7 @@ v3.3은 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018) (Song, Song, Pfis
 
 ## 성능 & 비용
 
-**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — 모드별 토큰 예산, 전체 파이프라인 추정치(15,000 단어 논문 기준 약 $4–6), 권장 Claude Code 설정(Auto 모드. Agent Team 선택).
+**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — 모드별 토큰 예산, 전체 파이프라인 추정치(15,000 단어 논문 기준, 2026-09 정가로 약 US$3–7, 캐시 할인 전), 권장 Claude Code 설정(Auto 모드. Agent Team 선택).
 
 ## 가이드 & 글
 
@@ -89,6 +89,7 @@ v3.3은 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018) (Song, Song, Pfis
 - **Academic Paper** — Style Calibration, Writing Quality Check, LaTeX 하드닝, 시각화, 수정 코칭, 인용 변환, anti-leakage 프로토콜, VLM 그림 검증을 갖춘 12개 에이전트 논문 작성.
 - **Academic Paper Reviewer** — 기준별 증거에 연결된 서술형 판단(Journal-Fit Reviewer + 동적 리뷰어 3명 + Devil's Advocate), 양보 임계값 프로토콜, 공격 강도 보존, 선택적 교차 모델 DA 비평 / 캘리브레이션, R&R 추적 매트릭스, 읽기 전용 제약을 갖춘 7개 에이전트 다관점 동료 심사. 현재 live review는 항상 `NOT_CALIBRATED`이며, full calibration은 제한된 candidate profile만 만들고 live review 적용은 아직 연결되지 않았습니다.
 - **Academic Pipeline** — 적응형 체크포인트, 주장 검증, Material Passport, 선택적 `repro_lock`, 선택적 교차 모델 무결성 검증, 대화 중 강화, 기준별 서술형 회귀 점검을 갖춘 10단계 파이프라인 오케스트레이터(typed trajectory carrier는 아직 미구현).
+- **SR-Screener** — 체계적·범위·신속 문헌고찰을 위한, 사용자가 확정한 프로토콜 기반 문헌 선별: 눈가림된 AI 심사자 2명과 제3 심사자의 조정, 순서가 정해진 제외 코드, 기본값 판정 없음, 재개 가능한 배치 실행, QC(시드 연구, 근접 제외 재검토, kappa와 PABAK), PRISMA 2020 수치, EndNote/Zotero용 RIS 그룹, `academic-paper`로 넘기는 `literature_corpus[]`. AI 판정은 의사결정 보조이며 최종 확인은 연구팀이 합니다.
 - **Data Access Level Metadata** (v3.3.2+) — 모든 스킬이 `data_access_level`(`raw` / `redacted` / `verified_only`)을 선언하며, `scripts/check_data_access_level.py`로 강제됩니다. Anthropic의 automated-w2s-researcher (2026)에서 패턴을 차용했습니다. 자세한 내용은 [`shared/ground_truth_isolation_pattern.md`](shared/ground_truth_isolation_pattern.md)를 참조하세요.
 - **Task Type Annotation** (v3.3.2+) — 모든 스킬이 `task_type`(`open-ended` 또는 `outcome-gradable`)을 선언합니다. 현재 모든 ARS 스킬은 `open-ended`입니다.
 - **Benchmark Report Schema** (v3.3.5+) — 정직한 벤치마크 비교를 위한 JSON Schema와 린트입니다. 자세한 내용은 [`shared/benchmark_report_pattern.md`](shared/benchmark_report_pattern.md)를 참조하세요.
@@ -101,7 +102,9 @@ v3.3은 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018) (Song, Song, Pfis
 
 ## 쇼케이스: 실제 파이프라인 출력
 
-실제 10단계 파이프라인 실행에서 나온 완전한 산출물 — 동료 심사 보고서, 무결성 검증 보고서, 최종 논문 — 을 확인하세요:
+실제 파이프라인 실행에서 나온 완전한 산출물(동료 심사 보고서, 무결성 검증 보고서, 최종 논문)을 확인하세요:
+
+> **2026년 3월의 기록이며, 현재 성능이 아닙니다.** 이 실행(2026-03-07~03-08)은 academic-pipeline v2.3으로 이루어졌으며, ARS가 v3.3에서 Semantic Scholar 대조를, v3.11에서 결정론적 4개 인덱스 인용 게이트를 추가하기 전입니다. 여기의 수치는 그 버전을 나타내며, 현재 게이트는 이 논문에서 아직 측정되지 않았습니다. 저자란이 Claude(Anthropic)로 되어 있는 것은 연구자가 이 실험 중에 그렇게 요청했기 때문입니다. 이 논문은 Anthropic의 출판물이 아니며, ARS는 도구가 연구자를 대신하지 않고 저자권을 주장하지도 않는다는 입장입니다([POSITIONING.md](POSITIONING.md#what-this-is-not) 참조).
 
 **[모든 파이프라인 산출물 둘러보기 →](examples/showcase/)**
 
@@ -109,13 +112,13 @@ v3.3은 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018) (Song, Song, Pfis
 |---|---|
 | [Final Paper (EN)](examples/showcase/full_paper_apa7.pdf) | APA 7.0 형식, LaTeX 컴파일 |
 | [Final Paper (ZH)](examples/showcase/full_paper_zh_apa7.pdf) | 중국어 버전, APA 7.0 |
-| [Integrity Report — Pre-Review](examples/showcase/integrity_report_stage2.5.pdf) | Stage 2.5: 날조된 참고문헌 15건 + 통계 오류 3건 적발 |
+| [Integrity Report — Pre-Review](examples/showcase/integrity_report_stage2.5.pdf) | Stage 2.5: 문제 있는 참고문헌 15건(서지 오류 8건, 날조 의심 6~8건) + 통계 오류 3건 지적 |
 | [Integrity Report — Final](examples/showcase/integrity_report_stage4.5.pdf) | Stage 4.5: 회귀 없음 확인 |
 | [Peer Review Round 1](examples/showcase/stage3_review_report.pdf) | Journal-Fit Reviewer + 리뷰어 3명 + Devil's Advocate |
 | [Re-Review](examples/showcase/stage3prime_rereview_report.pdf) | 수정 후 검증 |
 | [Peer Review Round 2](examples/showcase/stage3_review_report_r2.pdf) | 후속 심사 |
 | [Response to Reviewers](examples/showcase/response_to_reviewers_r2.pdf) | 항목별 저자 응답 |
-| [Post-Publication Audit Report](examples/showcase/post_publication_audit_2026-03-09.pdf) | 독립적 전체 참고문헌 감사: 3회의 무결성 점검이 놓친 21/68 문제 발견 |
+| [Post-Publication Audit Report](examples/showcase/post_publication_audit_2026-03-09.pdf) | Claude Code + WebSearch로 별도 수행한 전체 참고문헌 감사: 3회의 무결성 점검 후에도 최종 참고문헌 68건 중 21건에 문제가 남아 있음 |
 
 ---
 
@@ -214,6 +217,19 @@ You: "status"
 
 > 파이프라인은 **Stage 6: Process Summary**로 끝납니다 — 6차원 협업 품질 평가(1–100 점수)와 함께 논문 작성 과정 기록을 자동 생성합니다.
 
+#### SR-Screener (8개 모드)
+
+```
+"Turn my proposal into a screening protocol"          → protocol 모드
+"Is this abstract eligible for my review?"            → quick 모드 (단일 심사자 분류)
+"Pilot the screening with my seed studies"            → pilot 모드
+"Screen these database exports"                       → ta-screen 모드
+"Screen the full texts of the advanced records"       → ft-screen 모드
+"Adjudicate the conflicts in my Rayyan export"        → adjudicate 모드
+"Double-check my exclusions"                          → audit 모드
+"Give me the PRISMA numbers for the screening"        → report 모드
+```
+
 ### 지원 언어
 
 - **번체중국어**(繁體中文) — 사용자가 중국어로 작성할 때 기본값
@@ -259,9 +275,13 @@ You: "status"
 
 기준별 증거에 연결된 **서술형 판단**을 수행하는 7개 에이전트 다관점 심사. 모드: full, re-review, quick, methodology-focus, guided, calibration. 현재 live review와 Schema 6 package는 항상 `NOT_CALIBRATED`이며, full calibration은 제한된 candidate profile만 만들고 live review 적용은 아직 연결되지 않았습니다. 고정 총점을 Accept / Minor Revision / Major Revision / Reject에 매핑하지 않습니다. 1차 심사 패널 대 계약 기반 re-review 디스패치 경계: ARCHITECTURE.md §3 Stage 3 / Stage 3' 참조.
 
-### Academic Pipeline (v3.22.0)
+### Academic Pipeline (v3.23.0)
 
-무결성 검증, 2단계 심사, 소크라테스식 코칭, 협업 평가를 갖춘 10단계 오케스트레이터. 파이프라인 보장: 모든 단계는 사용자 확인 체크포인트를 요구하며, 무결성 검증(Stage 2.5 + 4.5)은 MANDATORY이며 기록 없는 우회 경로가 없고(모든 오버라이드는 Stage 6를 위해 사용자 사유 기록을 요구), R&R Traceability Matrix(Schema 11)는 저자의 수정 주장을 독립적으로 검증합니다. v3.4는 Stage 2.5 / 4.5에 Compliance Agent(PRISMA-trAIce + RAISE)를 추가했습니다. v3.5는 모든 FULL/SLIM 체크포인트와 파이프라인 완료 시점에 **Collaboration Depth Observer**(`collaboration_depth_agent`, 자문 전용 — 절대 차단하지 않음)를 추가합니다. 필수(MANDATORY) 무결성 게이트(2.5 / 4.5)는 컴플라이언스 점검이 희석되지 않도록 observer를 명시적으로 건너뜁니다. Wang & Zhang (2026), IJETHE 23:11에 기반합니다. 에이전트·산출물·게이트를 포함한 단계별 매트릭스: ARCHITECTURE.md §3 참조.
+무결성 검증, 2단계 심사, 소크라테스식 코칭, 협업 평가를 갖춘 10단계 오케스트레이터. 파이프라인 규칙(에이전트가 따르는 프로토콜이며 실행 시 보장이 아님): 모든 단계는 사용자 확인 체크포인트를 요구하며, 무결성 검증(Stage 2.5 + 4.5)은 MANDATORY이며 기록 없는 우회 경로가 없고(모든 오버라이드는 Stage 6를 위해 사용자 사유 기록을 요구), R&R Traceability Matrix(Schema 11)는 각 심사 의견을 저자의 수정 주장에 대응시키고 재심사에서 그것이 검증되었는지를 기록합니다. v3.4는 Stage 2.5 / 4.5에 Compliance Agent(PRISMA-trAIce + RAISE)를 추가했습니다. v3.5는 모든 FULL/SLIM 체크포인트와 파이프라인 완료 시점에 **Collaboration Depth Observer**(`collaboration_depth_agent`, 자문 전용 — 절대 차단하지 않음)를 추가합니다. 필수(MANDATORY) 무결성 게이트(2.5 / 4.5)는 컴플라이언스 점검이 희석되지 않도록 observer를 명시적으로 건너뜁니다. Wang & Zhang (2026), IJETHE 23:11에 기반합니다. 에이전트·산출물·게이트를 포함한 단계별 매트릭스: ARCHITECTURE.md §3 참조.
+
+### SR-Screener (v1.0.0)
+
+`deep-research`(질문, 프로토콜, 검색)와 `academic-paper`(고찰 논문 작성) 사이를 맡는 4개 에이전트의 문헌 선별. 모드: protocol, quick, pilot, ta-screen, ft-screen, adjudicate, audit, report. 눈가림된 두 심사자 subagent(Read와 Grep만 사용)가 사용자가 확정한 프로토콜로 모든 레코드를 판정하고, 제3 심사자가 "진행 vs. 제외" 불일치를 조정합니다. 표준 라이브러리만 쓰는 Python 스크립트가 RIS / PubMed .nbib / Web of Science / CSV 내보내기 파일을 파싱하고 중복 제거, 배치 구성, 병합을 한 뒤 선별 기록, RIS 그룹, PRISMA 2020 수치, `[TO COMPLETE]` 칸이 있는 방법 섹션 초안, `literature_corpus[]` 파일을 만듭니다. 에이전트가 따르는 규칙(실행 시 보장이 아님): 사용자가 프로토콜을 확정하기 전에는 선별하지 않고, 실패한 호출을 기본 "제외"로 처리하지 않으며, 수치를 보고하기 전에 연구팀이 판정을 확인합니다. 자세한 내용은 [`sr-screener/WORKFLOW.md`](sr-screener/WORKFLOW.md).
 
 ---
 
@@ -350,14 +370,14 @@ https://github.com/Imbad0202/academic-research-skills
 
 여기에는 최근 3개 릴리스만 실려 있습니다. 전체 변경 이력은 영어판 [CHANGELOG.md](CHANGELOG.md)를 참조하세요. v3.21.2까지의 한국어 릴리스 요약은 [docs/changelog-archive/ko-KR.md](docs/changelog-archive/ko-KR.md)에 동결 보관되며 이후 갱신되지 않습니다.
 
-### v3.22.0 (2026-09-16) — 출력 언어 쌍 계약, 로케일 트랙, plugin eval 스위트, Windows/전송 수정
+### v3.23.0 (2026-10-03) — 다섯 번째 skill `sr-screener`, 파이프라인 지상 점검에 따른 수정, 증거와 원장 강화
 
-> **추가되는 것은 구조, 증거는 범위 제한 유지:** v3.22.0에서는 레지스트리 키 기반 Schema 4 필드로 한 번의 실행이 출력 언어 쌍을 선언할 수 있으며, 필드가 없으면 기존 파일이 그대로 재현됩니다(#862 Phase 1, PR #869). 그 주위에 로케일 트랙을 세웠습니다: @didacrios가 기여한 es-ES README와 보수적인 트리거 문구, 커뮤니티가 유지하는 로케일 팩 정책과 단독 소유자 잠정 신청 경로입니다. 두 `claude plugin eval` 스위트(revision-coach, citation-check)와 reviewer-calibration harness는 회귀 가드와 dispatch 기반으로만 출하되며, 측정된 향상이나 보정값을 주장하지 않습니다. 수정: `/ars-mark-read`와 나머지 다섯 잠금 지점이 공용 `msvcrt` 백엔드로 Windows에서 동작, OpenAI 요청은 GPT-6 Astra가 거부하는 매개변수를 보내지 않음, 격리된 Codex 전송은 `effort=ultra`를 거부, 감사 출처는 실제 판정자 신원을 기록, 소크라테스 경로 F6은 방향을 미리 고르지 않음, 근거 없는 주장은 hedge로 구제되지 않음. README는 최근 3개 릴리스만 유지하고, Gartenberg 외와 Wang, Li 외가 human-in-the-loop 앵커에 합류했습니다. Roadmap Phase 4(단계별 증거 상한)는 이번 릴리스에서 제공되지 않으며 기간은 이월됩니다.
+> **skill 하나를 추가하고 전체 파이프라인 실행을 처음부터 끝까지 읽으며 찾은 동작 문제를 수정, 프롬프트 수준 변경은 효과 미측정, `sr-screener`는 스크리닝 정확도를 주장하지 않음:** v3.23.0은 다섯 번째 skill `sr-screener`를 추가합니다(#919, @erfanz97 기여). 리뷰 프로토콜을 사용자가 확인한 적격 기준으로 바꾸고, 서로의 판단을 모르는 두 리뷰어 subagent와 판정자 한 명이 제목·초록과 전문을 스크리닝합니다. 테스트는 합성 레코드를 사용하며, 스프레드시트 내보내기는 수식 텍스트를 무력화합니다(#951). 기본 파이프라인 실행을 지상에서 따라가 본 점검(#925~#929) 이후 기본 실행이 다음과 같이 바뀌었습니다. v3.6.7 Audit Artifact Gate는 선택 사항이 되었고, 논문이 연구자 자신의 실험을 보고하는지 한 번만 묻고, 실행 전체에 설정한 제약은 사용자의 원문 그대로 보존되어 이후 적용되는 각 디스패치에 인용되며(심사 단계에서는 체크포인트에서 적용), 무결성 게이트는 한 가지 규칙을 따르고 유료 장벽 뒤의 출처는 메모로 표시하며, Stage 5와 6은 요청한 파일만 만들고, 선택 스위치는 Stage 5에서 거부될 항목을 Stage 4.5에서 미리 드러냅니다. Stage 2.5와 4.5 체크포인트는 orchestrator가 지정한 폴더에서 증거 행을 재생하고(#933, #947, #948), 게이트가 조작으로 판정한 출처는 이후 수정에 들어가지 않으며(#936), 원장 읽기 프로그램은 파일 내용을 인용하지 않고 구문 분석 오류를 보고합니다(#898, #945). 작은 변경: 읽기 산출물이 개별 출처의 방법이 어떤 조건에서 결과를 왜곡하는지 밝힘(#916), 문헌 리뷰 형식은 저자가 정한다는 고정 시점 안내(#921), 생성 측과 맞춘 Schema 1(#938), session 모델을 따르는 `/ars-citation-check`(#912).
 
-### v3.21.2 (2026-09-06) — 모델 현황 정렬(Fable 5.1 / GPT-6 Astra), 체크포인트 결정 출처, CJK 제목 매칭 수정
+### v3.22.2 (2026-09-25) — 실행 원장과 인계 점검, 약어 검사, instruction/data 경계 확대, 라우팅 및 첫 페이지 수정
 
-> **새 기능이 아니라 현황 정렬과 출처 명시:** v3.21.2는 2026년 9월에 나온 두 벤더 system card에 스위트를 정렬합니다. `gpt-6-astra`는 두 전송 경로 모두에서 provisional로 교차 모델 표에 들어가며, 세대 현황 정책에 따라 권장 OpenAI 검증 모델이 됩니다. `gpt-5.6-sol`은 ChatGPT 구독 인용 전송 경로에서의 validated 상태를 유지하며, 새로운 bakeoff 결과는 주장하지 않습니다. 격리된 Codex 전송 경로의 reasoning-effort 집합에 `ultra`가 추가됩니다. 두 가지 가드레일을 추가하되 둘 다 프롬프트 수준이며 ARS 측정이 아닌 벤더 문서에 근거합니다. 체크포인트 결정 출처(사용자 턴만 결정으로 간주하고, 결정은 서브에이전트에 그대로 재전달. 위험 R11), 그리고 제공자 측 모니터링이나 안전 개입을 전송 실패로 다루고 결코 판정으로 보지 않는 규정입니다. 두 카드에 대한 harness-retirement 감사는 아무것도 폐기하지 않았습니다(프롬프트 문구 폐기 0건. keep-as-debt 8건에 카드 인용 추가). 수정: CJK 제목이 네 인덱스 리졸버의 정확 제목 게이트에서 더 이상 실패하지 않으며(#798), 바깥 괄호는 하나의 균형 잡힌 단위를 이룰 때만 제거합니다(#800). autolink 왕복 테스트가 의존성을 선언하고(#801), `check_surface_form_parity`는 매니페스트 대신 깨진 환경을 지목하며, skill 목록 일치 lint를 추가하고(#809), R10 잔여 격차를 최신화하고(#813), MLA 규칙 한 줄을 바로잡았습니다(#805). 스위트/pipeline → v3.21.2; deep-research → v2.12.1; academic-paper → v3.3.1; academic-paper-reviewer → v1.11.1.
+> **두 결정론적 검사는 합성 테스트로 고정, 프롬프트 수준 변경은 효과 미측정:** v3.22.2는 실행 원장을 추가합니다(#887). 파이프라인에 passport 파일이 있으면 orchestrator가 사용자의 초기 지시, 각 체크포인트의 질문과 사용자의 원문 답변, 단계 영수증, 파일 해시를 passport 옆의 로컬 원장에 덧붙입니다. compaction, 재개, subagent 반환 뒤에는 `scripts/run_ledger.py report`가 원장과 요약 또는 보고서의 주장을 대조해 차이를 나열합니다. 이제 이 스크립트가 인계 점검을 영어 또는 번체 중국어로 직접 출력하고, 항목을 기록할 때 그 항목이 가리키는 파일의 해시를 계산합니다(#898). 원장에는 사용자의 원문이 저장되므로 `docs/DATA_FLOWS.md`에 이 파일과 삭제 방법을 적어 두었습니다. 이번 릴리스는 `scripts/check_acronyms.py`도 추가합니다(#849, @reiropke 제안). 모델을 호출하지 않고 정의되지 않은 약어, 처음 사용한 뒤에 정의된 약어, 두 번 정의된 약어를 보고합니다. 프롬프트는 호출 측이 저장된 초안과 초록에 이를 실행하도록 하고, 심사에서는 보고서를 Editorial Decision Letter 끝에 참고용 첨부로 붙입니다. 심사 결정, 수정 로드맵, 재심사 기준은 이 첨부를 근거로 삼지 않습니다. 두 스크립트는 합성 테스트로 고정되어 있지만, 실제 실행에서 원장이 기록되는지와 검사가 호출되는지는 측정되지 않았습니다. instruction/data 경계는 디스패치와 passport 가져오기에 들어 있는 제3자 텍스트(#890), 수신 측이 자신의 도구 호출로 읽는 텍스트, 각 skill의 메인 session(#894)으로 넓어졌습니다. lint가 모든 사본을 고정하지만 효과는 측정되지 않았습니다(선택형 claim-audit 판정 프롬프트도 함께 바뀌어 이전 프롬프트의 캐시 판정은 재사용되지 않습니다). 수정: 라우팅 핵심이 plugin 및 skills 복사 설치에도 전달됩니다(#892). 모드의 일반적인 입력이 없어도 명시적 요청은 명시적으로 유지됩니다(#889). `/ars-lit-review`는 진행 중인 실행을 다른 워크플로로 안내하지 않습니다(#897). 수정 코치는 동료 심사를 위원회 서신 변형으로 보내지 않습니다(#854). orchestrator는 "권위 있는" skill 출력의 의미를 산출물 소유로 한정합니다(#888). 첫 페이지와 showcase의 서술이 출처와 일치합니다(#908). 라우팅 결과는 fixture마다 session 하나로 한 초기 확인이며 비율이 아닙니다. 원장을 기술하는 schema 하나가 추가되었고, 기존 schema, 명령 모델, 추론 강도 설정은 바뀌지 않았습니다.
 
-### v3.21.1 (2026-08-24) — 범위가 제한된 워크플로 기반, 봉인된 bakeoff, 전송 강화
+### v3.22.1 (2026-09-23) — 모델 현황 정렬(Opus 5.5), citation-check 로딩 및 중국어 APA 7 수정, Pi 래퍼 수정
 
-> **명시된 항목만 측정되었으며 나머지는 범위가 제한됨:** v3.21.1은 codex-cli 0.147.0용으로 격리된 ChatGPT 구독 인용 transport를 복구하고 첫 Promotion Bakeoff를 기록합니다. `gpt-5.6-sol`은 이 구독 transport에서만 validated이며 first-party API 경로에서는 여전히 provisional입니다. 향후 bakeoff에는 봉인된 사전등록이 필요합니다. 또한 default-off 연구 워크플로 profile 기반(오프라인 결정론적 conformance만 제공하며 pipeline hook과 연구 계열별 출시 profile은 없음), opt-in inquiry-ledger alpha(`ARS_INQUIRY_LEDGER=1`), 아직 구현되지 않은 design-only alternative register를 추가합니다. 이들의 행동 증거는 `NOT_RUN`이며 사용성, 복구, novelty, 정확성 또는 연구 성과 개선을 주장하지 않습니다. 리뷰 기준 registry에는 출처에 근거한 예시용 MSR 2027 exact-profile proving set 하나가 추가되지만, 투고 대상(학술지·학회) 및 학문 분야 범위, 실제 저자 attest 또는 constructive-review 증거를 뜻하지 않으며 필요한 독립적 인간 평가도 아직 완료되지 않았습니다. 그 밖에 `data_access_level` 정렬, markdown lint 문법 통합, guard launcher degradation 등록, 비보증·비추천 커뮤니티 통합으로 OrcaRouter 등재가 포함됩니다. 스위트／pipeline → v3.21.1；deep-research → v2.12.1；academic-paper → v3.3.1；academic-paper-reviewer → v1.11.1.
+> **모델 현황 정렬과 수리, 새 프롬프트 수준 방어는 효과 미측정:** v3.22.1은 두 모델이 각각 Opus 5.5 system card 전문을 읽은 감사를 거쳐 Claude Opus 5.5를 Claude Fable 5.1과 나란히 지원 session 모델로 지정합니다. 감사에서 퇴역한 가드레일은 없습니다(#883). 문서에는 추론 강도(effort) 지침(Claude Code는 Opus 5.5를 `medium`으로 시작하므로 무거운 작업에는 `high` 이상을 권장), 두 모델을 함께 다루는 정가 환산, 그리고 계층 설명(사다리 순서는 벤더의 제품 라인업 순서이지 능력 순위가 아님)을 추가했습니다. card에 따르면 Opus 5.5는 이전 모델보다 붙여넣은 텍스트 속 지시를 더 자주 따르므로, revision coach는 이제 붙여넣은 심사위원·위원회 텍스트를 데이터로 취급하며 lint로 고정됩니다. 이 프롬프트 수준 방어의 효과는 아직 측정되지 않았습니다. 모드 로딩과 인용 검사도 수리했습니다: 13개 plugin 모드 명령이 네임스페이스가 붙은 핵심 skill을 직접 호출하고 번들된 참조 파일을 plugin 루트에서 찾아 citation-check 로딩을 복구합니다(#857). 중국어 APA 7 검사는 본문 저자 약칭 누락을 잡아내고, 모호성 예외와 참고문헌 목록의 저자 필드를 온전히 보존하며, 획수 순서 역전의 근거가 있을 때만 재정렬을 제안합니다(#882). 인용 검사 전반도 눈에 보이는 구문 오류와 검증되지 않은 해석·출처 주장을 구분합니다(#882). 영어·번체 중국어·한국어 트리거 문구를 추가해 citation-check로 안내하며, CI가 각 skill 설명을 1,024 코드 포인트 이내로 제한합니다(#858, #864). Pi 래퍼는 문자열 배열 형태의 system prompt를 받아들입니다(#880). 스키마, 명령 모델, effort 설정 변경은 없습니다.

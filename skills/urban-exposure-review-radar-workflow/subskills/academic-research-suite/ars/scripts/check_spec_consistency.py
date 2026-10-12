@@ -204,7 +204,7 @@ def check_relative_markdown_links(rel_path: str) -> None:
 def check_mode_registry() -> None:
     rel_path = "MODE_REGISTRY.md"
     text = read(rel_path)
-    expect_contains(rel_path, "Last updated: v3.22.0 (2026-09-16)")
+    expect_contains(rel_path, "Last updated: v3.23.0 (2026-10-03)")
     for heading in (
         "## deep-research (8 modes)",
         "## academic-paper (11 modes)",
@@ -221,7 +221,7 @@ def check_claude_md() -> None:
         return
     expect_contains(rel_path, "integrity check (Stage 2.5)")
     expect_contains(rel_path, "final integrity check (Stage 4.5)")
-    expect_contains(rel_path, "**Suite version**: 3.22.0")
+    expect_contains(rel_path, "**Suite version**: 3.23.0")
     for forbidden in (
         "6th independent reviewer",
         "Peer review gains 6th independent reviewer",
@@ -447,9 +447,9 @@ def check_architecture_component_version() -> None:
 # drop the oldest) — the lint fails on any extra `### v` heading so the section
 # cannot silently regrow (2026-09-15 README slimming).
 README_CHANGELOG_KEEP = (
-    ("3.22.0", "2026-09-16"),
-    ("3.21.2", "2026-09-06"),
-    ("3.21.1", "2026-08-24"),
+    ("3.23.0", "2026-10-03"),
+    ("3.22.2", "2026-09-25"),
+    ("3.22.1", "2026-09-23"),
 )
 README_CHANGELOG_LINK = "CHANGELOG.md"
 _README_RELEASE_HEADING_RE = re.compile(r"^### v[^\n]*$", re.M)
@@ -460,8 +460,8 @@ def check_readme_changelog_section(
 ) -> None:
     """The README changelog section carries exactly README_CHANGELOG_KEEP.
 
-    `paren` is "ascii" (`### v3.22.0 (2026-09-16)`, en / ja / ko / es) or
-    "fullwidth" (`### v3.22.0（2026-09-16）`, zh-TW / zh-CN). The section must
+    `paren` is "ascii" (`### vX.Y.Z (YYYY-MM-DD)`, en / ja / ko / es) or
+    "fullwidth" (`### vX.Y.Z（YYYY-MM-DD）`, zh-TW / zh-CN). The section must
     link to CHANGELOG.md and, for translated READMEs, to the frozen archive.
     Fenced code and HTML comments are stripped first, so a commented-out or
     fenced copy of the section neither satisfies nor trips the checks.
@@ -506,8 +506,8 @@ def check_readme_sections() -> None:
     rel_path = "README.md"
     text = read(rel_path)
 
-    expect_contains(rel_path, "version-v3.22.0-blue")
-    expect_contains(rel_path, "releases/tag/v3.22.0")
+    expect_contains(rel_path, "version-v3.23.0-blue")
+    expect_contains(rel_path, "releases/tag/v3.23.0")
     check_readme_changelog_section(rel_path, text, "## Changelog", "ascii")
     for heading in (
         "#### Deep Research (8 modes)",
@@ -516,7 +516,7 @@ def check_readme_sections() -> None:
         "### Deep Research (v2.12.1)",
         "### Academic Paper (v3.3.1)",
         "### Academic Paper Reviewer (v1.11.1)",
-        "### Academic Pipeline (v3.22.0)",
+        "### Academic Pipeline (v3.23.0)",
     ):
         if heading not in text:
             fail(f"{rel_path}: missing heading {heading!r}")
@@ -565,8 +565,8 @@ def check_readme_ja_sections() -> None:
     rel_path = "README.ja-JP.md"
     text = read(rel_path)
 
-    expect_contains(rel_path, "version-v3.22.0-blue")
-    expect_contains(rel_path, "releases/tag/v3.22.0")
+    expect_contains(rel_path, "version-v3.23.0-blue")
+    expect_contains(rel_path, "releases/tag/v3.23.0")
     check_readme_changelog_section(rel_path, text, "## Changelog", "ascii", archive="docs/changelog-archive/ja-JP.md")
     for heading in (
         "#### Deep Research（8 モード）",
@@ -576,7 +576,7 @@ def check_readme_ja_sections() -> None:
         "### Deep Research（v2.12.1）",
         "### Academic Paper（v3.3.1）",
         "### Academic Paper Reviewer（v1.11.1）",
-        "### Academic Pipeline（v3.22.0）",
+        "### Academic Pipeline（v3.23.0）",
     ):
         if heading not in text:
             fail(f"{rel_path}: missing heading {heading!r}")
@@ -610,8 +610,8 @@ def check_readme_ko_sections() -> None:
     rel_path = "README.ko-KR.md"
     text = read(rel_path)
 
-    expect_contains(rel_path, "version-v3.22.0-blue")
-    expect_contains(rel_path, "releases/tag/v3.22.0")
+    expect_contains(rel_path, "version-v3.23.0-blue")
+    expect_contains(rel_path, "releases/tag/v3.23.0")
     check_readme_changelog_section(rel_path, text, "## 변경 이력", "ascii", archive="docs/changelog-archive/ko-KR.md")
     for heading in (
         "#### Deep Research (8개 모드)",
@@ -621,7 +621,7 @@ def check_readme_ko_sections() -> None:
         "### Deep Research (v2.12.1)",
         "### Academic Paper (v3.3.1)",
         "### Academic Paper Reviewer (v1.11.1)",
-        "### Academic Pipeline (v3.22.0)",
+        "### Academic Pipeline (v3.23.0)",
     ):
         if heading not in text:
             fail(f"{rel_path}: missing heading {heading!r}")
@@ -646,7 +646,7 @@ ZH_README_CONFIGS = (
             "### Deep Research (v2.12.1)",
             "### Academic Paper (v3.3.1)",
             "### Academic Paper Reviewer (v1.11.1)",
-            "### Academic Pipeline (v3.22.0)",
+            "### Academic Pipeline (v3.23.0)",
         ),
         "paper_start": "#### Academic Paper（學術論文撰寫，11 種模式）",
         "reviewer_start": "#### Academic Paper Reviewer（論文審查，6 種模式）",
@@ -665,7 +665,7 @@ ZH_README_CONFIGS = (
             "### Deep Research (v2.12.1)",
             "### Academic Paper (v3.3.1)",
             "### Academic Paper Reviewer (v1.11.1)",
-            "### Academic Pipeline (v3.22.0)",
+            "### Academic Pipeline (v3.23.0)",
         ),
         "paper_start": "#### Academic Paper（学术论文撰写，11 种模式）",
         "reviewer_start": "#### Academic Paper Reviewer（论文审查，6 种模式）",
@@ -683,8 +683,8 @@ def check_readme_zh_sections() -> None:
         rel_path = config["rel_path"]
         text = read(rel_path)
 
-        expect_contains(rel_path, "version-v3.22.0-blue")
-        expect_contains(rel_path, "releases/tag/v3.22.0")
+        expect_contains(rel_path, "version-v3.23.0-blue")
+        expect_contains(rel_path, "releases/tag/v3.23.0")
         check_readme_changelog_section(
             rel_path, text, config["changelog_h2"], "fullwidth", archive=config["archive"]
         )
@@ -742,8 +742,8 @@ def check_readme_es_sections() -> None:
     rel_path = "README.es-ES.md"
     text = read(rel_path)
 
-    expect_contains(rel_path, "version-v3.22.0-blue")
-    expect_contains(rel_path, "releases/tag/v3.22.0")
+    expect_contains(rel_path, "version-v3.23.0-blue")
+    expect_contains(rel_path, "releases/tag/v3.23.0")
     check_readme_changelog_section(rel_path, text, "## Registro de cambios", "ascii", archive="docs/changelog-archive/es-ES.md")
     for heading in (
         "#### Deep Research (8 modos)",
@@ -753,7 +753,7 @@ def check_readme_es_sections() -> None:
         "### Deep Research (v2.12.1)",
         "### Academic Paper (v3.3.1)",
         "### Academic Paper Reviewer (v1.11.1)",
-        "### Academic Pipeline (v3.22.0)",
+        "### Academic Pipeline (v3.23.0)",
     ):
         if heading not in text:
             fail(f"{rel_path}: missing heading {heading!r}")

@@ -310,7 +310,7 @@ def check_manifest() -> list[str]:
         "provenance",
     }
     allowed_parity = {"full", "near", "partial", "exploratory"}
-    local_runners = {"manifest", "router", "fixture", "topology-experiment", "hook-safety"}
+    local_runners = {"manifest", "router", "root-router", "fixture", "topology-experiment", "hook-safety"}
     gate_ids: set[str] = set()
     active_upstream_paths: set[Path] = set()
     for index, gate in enumerate(manifest.get("quality_gates", [])):

@@ -65,13 +65,15 @@ auto-sci-research
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.22.0` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、本地 PDF 阅读预检、实验规划 |
+| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.23.0` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、本地 PDF 阅读预检、实验规划；`sr-screener` 仅在明确要求筛选时调用 |
 
 使用原则：
 
 1. 先由 `urban-exposure-review-radar-workflow` 判断是否需要 ARS。
 2. 默认只读 ARS 根 `SKILL.md` 和一个必要的 `WORKFLOW.md`。
 3. 城市暴露、体育地理、正式语料库、可达性/使用区分和因果语言仍由父 skill 决定。
+
+`sr-screener` 的边界：只有用户明确提出“筛选已有记录”“制定/执行纳入排除标准”“筛选 pilot”“冲突裁决”“排除审计”或“生成筛选报告”时才使用。普通文献综述、系统综述路线设计和检索策略不会自动转入筛选工作流。
 
 ## 4. 常见工作流
 
@@ -98,3 +100,4 @@ auto-sci-research
 - 任务是体育地理实证论文：用 `sport-geography-sci-writing`。
 - 任务是城市暴露综述或前沿雷达：用 `urban-exposure-review-radar-workflow`。
 - 任务是目标期刊近邻论文驱动的 substantive writing：先建自有 evidence/argument map，再按 exemplar protocol 选择功能近邻；不要把它宣传成 AI imitation 或一键生成顶刊论文。
+- 任务是对已有记录做正式筛选或排除审计：在父 skill 路由后显式使用 ARS `sr-screener`。

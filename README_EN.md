@@ -8,12 +8,11 @@
 
 The repository contains **19 installable skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: **2026-09-27**.
+Latest upstream refresh: **2026-10-12**.
 
-- ARS Codex package updated to `v3.22.0` (`3c37ef8`), locking ARS content to `3c546bc`.
-- K-Dense checked at `49c6e97`; no selected packaged directory changed after the previous synchronization.
-- AutoSci checked at `cf88930`; its temporary GitHub-hosted `requests` dependency pointer was reverted upstream.
-- The previous K-Dense synchronization at `c1ed16d` changed `geomaster`, `scientific-slides`, and `umap-learn`; the current `49c6e97` check found no further selected-directory changes.
+- ARS Codex package updated to `v3.23.0` (`52228e8`), locking ARS content to `6ab4b03`; it adds `sr-screener`, run-ledger, acronym, and citation-locale checks.
+- K-Dense checked at `92ace75`; 27 registered selected directories were synchronized.
+- AutoSci checked at `f5c2fe0`; new experiment/tool content remains reference-only and does not overwrite the local original router.
 - SciPilot Figure remains `v2.1.0-1-g43098dd`.
 - SciPilot Writing remains `v1.0.0` (`51c5fd3`).
 - GeoRS SCI Writing Adapter remains an original adapter because the checked upstream source still has no explicit LICENSE file.
@@ -62,6 +61,7 @@ Before public release:
 | Design sport geography reviews and bibliometric manuscripts | `sport-geography-review-bibliometric` |
 | Route urban exposure reviews, radar scans, and health database linkage | `urban-exposure-review-radar-workflow` |
 | Use a full academic research and paper pipeline | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` |
+| Explicitly screen existing records, define eligibility, resolve conflicts, or audit exclusions | ARS `sr-screener` (explicit invocation only) |
 | Decide what chart to use and produce publication-grade figures | `scipilot-figure-skill` |
 | Polish, translate, humanize, write cover letters, or rebut reviews | `scipilot-writing-skill` |
 | Write geography/remote-sensing SCI sections | `geors-sci-writing-adapter` |
@@ -94,6 +94,7 @@ Before public release:
 | `sport-geography-review-bibliometric` | Domain review | Sport geography reviews and bibliometrics | Search strategy, PRISMA, coding table | Bibliometrics must support a framework |
 | `sport-geography-sci-writing` | Domain writing | Sport facilities, sport parks, spatial equity empirical papers | Journal positioning, IMRAD sections | Start from the public problem, not only metrics |
 | `urban-exposure-review-radar-workflow` | Domain workflow | Urban exposure reviews, formal corpus, frontier radar | Route decision, journal gate, radar handoff | Formal corpus and radar candidates stay separate |
+| `academic-research-suite` | Research pipeline | Deep research, paper pipeline, review simulation, citation/PDF checks | Research route, workflow artifacts, audit outputs | `sr-screener` is only for explicitly requested screening; it is not an automatic consequence of a review request |
 | `kdense-ml-ai-selected` | Upstream wrapper | ML/AI technical playbooks | Model and training guidance | Technical reference only |
 | `kdense-data-viz-selected` | Upstream wrapper | EDA, statistics, plotting, large tables | Library-level route and code guidance | Does not design manuscript claims |
 | `kdense-geospatial-rs-selected` | Upstream wrapper | GeoPandas, GeoMaster, GIS/RS details | Spatial processing guidance | Does not bypass CRS/scale audit |
@@ -147,11 +148,11 @@ V2 adds a reusable global academic-writing contract: story-relevance, sentence-i
 
 - `Haojae/scipilot-writing-skill`: MIT, fully packaged with LICENSE and NOTICE.
 - `Haojae/scipilot-figure-skill`: MIT, packaged as a figure-advisor skill.
-- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v3.22.0`.
+- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v3.23.0`.
 - `K-Dense-AI/scientific-agent-skills`: selected wrappers only, not a full import.
 - `xiangyu-Ge/sci-writing-geors`: no explicit LICENSE detected, so this repo keeps only attribution and an original adapter.
 
-See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20260801.md](docs/upstream-update-20260801.md).
+See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20261012.md](docs/upstream-update-20261012.md).
 
 ## ChatGPT and Codex cross-surface use
 

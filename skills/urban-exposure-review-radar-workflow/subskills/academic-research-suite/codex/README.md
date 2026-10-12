@@ -74,6 +74,12 @@ closed. No experiment changes the native adaptive policy or writes routing state
 The adapter cannot promise byte-for-byte Claude Code Agent Team behavior.
 Instead it provides an explicit Codex orchestration contract:
 
+- six local workflows share one registered router: five upstream ARS workflows
+  plus the separately pinned experiment-agent;
+- explicit study screening uses the eight sr-screener modes and preserves the
+  confirmed protocol, human pilot, concrete cost approval, QC, and human final
+  verification gates; native execution uses emitted prompts and fresh blinded
+  workers, with disclosed quick triage when isolation is unavailable;
 - reviewer panels produce independent reviewer sections before synthesis;
 - synthesis preserves minority and dissenting findings unless resolved by
   evidence and severity;
@@ -82,7 +88,7 @@ Instead it provides an explicit Codex orchestration contract:
   `medium` for routine work and `xhigh` for complex judgement, preserves explicit
   choices, and distinguishes requested settings from observed execution;
   upstream `sonnet` hints do not select a Codex model;
-- ARS v3.22.0 retains model tiering as advisory metadata; it is applied only
+- ARS v3.23.0 retains model tiering as advisory metadata; it is applied only
   when a Codex runtime provides explicit per-dispatch model selection;
 - canonical cross-model handoffs are validated and transported by the
   dispatching context, not by least-privilege owner roles;

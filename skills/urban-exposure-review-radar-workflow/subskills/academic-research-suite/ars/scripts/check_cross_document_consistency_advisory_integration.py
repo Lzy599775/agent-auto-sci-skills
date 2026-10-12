@@ -78,8 +78,12 @@ LEGACY_HASHES = {
         "02f4fc4e32658249e7065724f1cb5c2f9dcec3f599f86a1a7ffee726ae422f5a",
     Path("shared/contracts/evidence/evidence_row_v1_1.schema.json"):
         "ab7fdb15b8845bcf898fef5177c636b8ca43f2785c3b79bf284fa04a4ede14b9",
+    # Re-pinned for #933: the CLI gained --source-dir and reaches contract
+    # validation for malformed row fields; and for #947: the CLI refuses
+    # evidence-row/1.1 rows. The replay, build, validate, and render
+    # functions this advisory reproduces are unchanged.
     Path("scripts/evidence_rows.py"):
-        "eccfa0a5cfe9b438aac9c4ec85cd6c2ca07052de7eb521cfc1e7f799a971d7e3",
+        "b3510133914b23115d7cd285f657450ff8de75f3ea678d843e4101634b6b8e9e",
     Path("shared/contracts/passport/claim_intent_manifest.schema.json"):
         "d6c4fd060812dc2a2b2dd73b6d9e77e366fcc0803486d5f38b4def6893d70cec",
     Path("shared/contracts/revision/claim_surface_manifest.schema.json"):

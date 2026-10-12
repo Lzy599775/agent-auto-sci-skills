@@ -46,6 +46,9 @@ jobs:
       - name: Run spec consistency check
         run: python3 scripts/check_spec_consistency.py
 
+      - name: Check skill description length (#864)
+        run: python3 scripts/check_skill_description_length.py
+
       - name: Lint CI pytest manifest (#156)
         # Drift guard for scripts/_ci_pytest_manifest.toml — verifies entry
         # path existence, id/(path,args) uniqueness, args shape, and that
@@ -91,7 +94,7 @@ jobs:
         run: python3 scripts/check_data_access_level.py
 
       - name: Check skill-inventory parity (#809)
-        # Top-level <name>/SKILL.md dirs == skills/ symlinks == CLAUDE.md
+        # Top-level <name>/WORKFLOW.md dirs == skills/ symlinks == CLAUDE.md
         # Skills Overview rows == marketplace.json plugins[].skills, plus the
         # "N skills" count claims in plugin/marketplace descriptions. The pytest
         # companion `test_check_skill_inventory_parity.py` runs via the unified
@@ -171,7 +174,7 @@ jobs:
         # runs via the unified manifest.
         run: python3 scripts/check_390_revision_patch_discipline.py
 
-      - name: Check version consistency (CLAUDE.md / SKILL.md / CHANGELOG)
+      - name: Check version consistency (CLAUDE.md / WORKFLOW.md / CHANGELOG)
         env:
           PYTHONPATH: scripts
         run: python3 scripts/check_version_consistency.py
@@ -390,6 +393,27 @@ jobs:
           PYTHONPATH: .
         run: python scripts/check_firm_rules_sync.py
 
+      - name: Routing-core sync lint (#892)
+        # Every copy of shared/references/routing_core.md (that file lists its
+        # carriers) must match it byte for byte.
+        env:
+          PYTHONPATH: .
+        run: python scripts/check_routing_core_sync.py
+
+      - name: Method-weaknesses sync lint (#916)
+        # Every surface listed in shared/references/per_source_method_weaknesses.md
+        # must carry its block byte for byte.
+        env:
+          PYTHONPATH: .
+        run: python scripts/check_method_weaknesses_sync.py
+
+      - name: Review-form note sync lint (#921)
+        # Every surface listed in shared/references/review_form_note.md must
+        # carry its block byte for byte, and the note's options stay unranked.
+        env:
+          PYTHONPATH: .
+        run: python scripts/check_review_form_note_sync.py
+
       - name: Judge-prompt-version drift guard (#361)
         # Recomputes the SHA-256 of the canonical judge-prompt section (between
         # the JUDGE-PROMPT-CANONICAL markers in claim_ref_alignment_audit_agent.md)
@@ -459,7 +483,7 @@ jobs:
 
       - name: Run #528 pipeline boundary-semantics defrift lock
         # Pins the four Mode-A-replay resolutions (#529 items 1-2 + #528
-        # items 3-4) across academic-pipeline SKILL.md / orchestrator /
+        # items 3-4) across academic-pipeline WORKFLOW.md / orchestrator /
         # state machine / process_summary_protocol: Methodology Blueprint
         # in the Stage 1->2 handoff, Stage 3' Minor never triggers
         # coaching, the Stage 5 MANDATORY boundary is the entry gate
