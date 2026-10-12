@@ -28,6 +28,12 @@ Latest upstream check: [`docs/upstream-update-20260801.md`](upstream-update-2026
 | [bionoob7/nlr-workflow](https://github.com/bionoob7/nlr-workflow) | Narrative literature review workflow discipline. | Reference only. |
 | [limi124/remote-sensing-research-radar](https://github.com/limi124/remote-sensing-research-radar) | Remote-sensing and Geospatial AI frontier radar reference. | Reference only. |
 
+## Optional Runtime Providers
+
+| Provider | Pinned audit | License/dependencies | Role and boundary |
+|---|---|---|---|
+| [claude-world/notebooklm-skill](https://github.com/claude-world/notebooklm-skill) | `dc38bd8106a2c5f23557fc03bf895c53fb19f67e` (`1.3.0`) | MIT; `notebooklm-py[browser]`, FastMCP, Playwright/browser and declared Python dependencies. See `docs/audits/NOTEBOOKLM_RESEARCH_PROVIDER_AUDIT_AND_INTEGRATION_REPORT_V1.md`. | Optional derived-evidence synthesis provider using NotebookLM's unofficial web API. Not vendored. Zotero/original papers remain authoritative; fixed-corpus ask has no per-source filter. |
+
 ## Packaging Rules
 
 1. Check license before copying files.
@@ -36,3 +42,4 @@ Latest upstream check: [`docs/upstream-update-20260801.md`](upstream-update-2026
 4. Prefer selected wrappers over wholesale importing when the upstream project is broad.
 5. Treat external APIs/cloud tools as optional and disabled unless the user explicitly configures them.
 6. If a repository has no explicit license, do not vendor its text or code into the public repo; create an original adapter and link to the source instead.
+7. Treat NotebookLM and similar external knowledge services as opt-in providers; do not send local/user sources without explicit content approval.

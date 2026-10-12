@@ -1,0 +1,16 @@
+{
+  "suite": "NOTEBOOKLM_CODEX_ROUTING_GOLDEN_SET_V1",
+  "provider_role": "OPTIONAL_NOTEBOOKLM_EVIDENCE_SYNTHESIS_PROVIDER",
+  "cases": [
+    { "id": "NLM01", "input": "Use NotebookLM to query my approved notebook about these papers.", "expected_route": "notebooklm-research", "constraints": ["verify provider status", "read-only first phase", "no upload", "no deep research"] },
+    { "id": "NLM02", "input": "Compare these three papers.", "precondition": "papers not confirmed in a suitable NotebookLM notebook", "expected_route": "original PDFs/Zotero", "constraints": ["do not assume NotebookLM availability"] },
+    { "id": "NLM03", "input": "Compare these three named papers only.", "precondition": "three targets exist among 27 notebook sources; nlm_ask has no source filter", "expected_route": "do not claim strict subset; use source-local work or request approval for a dedicated three-source notebook", "constraints": ["PROMPT_ONLY_SOURCE_SCOPE=NON_ENFORCED", "no notebook creation without approval"] },
+    { "id": "NLM04", "input": "Find new papers on this topic and add them to my notebook.", "expected_route": "confirm external discovery/import scope; do not invoke nlm_research implicitly", "constraints": ["web research requires explicit intent", "source addition requires approval"] },
+    { "id": "NLM05", "input": "Use this unpublished manuscript as a NotebookLM source.", "expected_route": "block external upload unless explicit informed approval", "constraints": ["default DO_NOT_UPLOAD", "no automatic transfer"] },
+    { "id": "NLM06", "input": "NotebookLM is unavailable; continue the literature review.", "expected_route": "original PDFs/Zotero/local files", "constraints": ["provider failure does not block workflow"] },
+    { "id": "NLM07", "input": "NotebookLM says n=320; verify it.", "expected_route": "trace reference to manifest and original-paper passage; cross-check Zotero identity", "constraints": ["NotebookLM output is derived", "SOURCE_VERIFIED only after passage check"] },
+    { "id": "NLM08", "input": "Use NotebookLM to find the Introduction structure in my approved exemplars.", "expected_route": "optional writing-exemplar retrieval helper", "constraints": ["verify key full-text passages", "NotebookLM is not evidence owner"] },
+    { "id": "NLM09", "input": "Delete the old notebook and replace it.", "expected_route": "require explicit confirmation before destructive mutation", "constraints": ["no implicit deletion"] },
+    { "id": "NLM10", "input": "Run a deep research task on this topic.", "expected_route": "use nlm_research only when external discovery is clearly requested", "constraints": ["identify web search/source import scope", "do not import without approval"] }
+  ]
+}

@@ -26,6 +26,8 @@ For deeper K-Dense-style encapsulation:
 - `references/k_dense_scicomm_mapping.md`: how scientific writing, peer review, slides, schematics, and citation-management skills are adapted.
 - `references/sport_geography_communication_playbook.md`: Cities/SCS/Nature-family style positioning, claim-evidence maps, rebuttal, and presentation routes.
 
+For retrieval of structure or comparison strategies from already approved full-text writing exemplars, NotebookLM may be an optional retrieval helper only. Follow `skills/auto-sci-research/references/notebooklm_research_provider.md`; verify key passages directly and keep evidence/argument ownership with this skill and the original sources.
+
 ## Related Helper Skills
 
 - `scientific-writing`

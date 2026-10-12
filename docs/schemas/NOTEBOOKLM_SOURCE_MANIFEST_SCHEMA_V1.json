@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-auto-sci-skills.example/schemas/notebooklm-source-manifest-v1.json",
+  "title": "NOTEBOOKLM_SOURCE_MANIFEST_V1",
+  "description": "Maps NotebookLM references to verified bibliography and original source identity. Store no source content, auth state, cookies, or tokens.",
+  "type": "object",
+  "required": ["manifest_version", "entries"],
+  "properties": {
+    "manifest_version": { "const": "NOTEBOOKLM_SOURCE_MANIFEST_V1" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["notebook_id", "notebook_title", "notebook_source_id", "source_title", "source_type", "ingested_at", "ingestion_status", "source_processing_status"],
+        "properties": {
+          "notebook_id": { "type": "string", "minLength": 1 },
+          "notebook_title": { "type": "string", "minLength": 1 },
+          "notebook_source_id": { "type": "string", "minLength": 1 },
+          "source_title": { "type": "string", "minLength": 1 },
+          "source_type": { "type": "string", "minLength": 1 },
+          "zotero_item_key": { "type": ["string", "null"] },
+          "doi": { "type": ["string", "null"], "description": "Populate only after verification." },
+          "openalex_id": { "type": ["string", "null"], "description": "Populate only after verification." },
+          "local_file_name": { "type": ["string", "null"], "description": "Name only; no private absolute paths in public manifests." },
+          "file_sha256": { "type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$", "description": "Only where lawful and locally available." },
+          "ingested_at": { "type": "string", "format": "date-time" },
+          "ingestion_status": { "type": "string", "enum": ["pending", "succeeded", "partial", "failed", "unknown"] },
+          "source_processing_status": { "type": "string", "enum": ["ready", "processing", "partial", "failed", "unknown"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

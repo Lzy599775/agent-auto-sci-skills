@@ -42,6 +42,7 @@ Use this skill first when the task spans multiple research stages or asks to imp
 | Sport geography empirical SCI manuscript writing | `sport-geography-sci-writing` |
 | Sport geography review, systematic review, bibliometrics | `sport-geography-review-bibliometric` |
 | Web-based autonomous deep research | `gpt-researcher` |
+| Optional NotebookLM synthesis for an already approved fixed corpus | `references/notebooklm_research_provider.md` and the installed `notebooklm-research` helper; never the source-of-truth owner |
 | Full academic research suite and ARS workflows | `academic-research-suite` |
 | Long-running improve/verify loops | `codex-autoresearch` |
 | Local PDF library reading and HTML notes | `codex-paper-reader` |
