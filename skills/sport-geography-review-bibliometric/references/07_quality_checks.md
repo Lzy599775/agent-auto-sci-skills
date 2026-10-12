@@ -47,6 +47,19 @@ Use this reference before finalising a review or bibliometric manuscript.
 - Are accessibility, exposure, quality, and use separated?
 - Are equality, equity, and justice separated?
 
+## 7. Evidence Synthesis Contract Checks
+
+- Does every major synthesis claim have an `Argument_ID`?
+- Does every `Argument_ID` trace to one or more `Evidence_ID`s?
+- Does every `Evidence_ID` trace to a paper and a source locator with section/page/table/figure/supplement detail where available?
+- Are supporting and contradictory evidence both retained?
+- Are `most studies`, `consensus`, `widely established`, and `consistent evidence` supported by a traceable corpus-level comparison rather than impression?
+- Is every abstract-only record labelled `ABSTRACT_ONLY` and prevented from supplying fabricated full-text locations?
+- Is method similarity kept separate from empirical agreement?
+- Are bibliometric patterns, SHAP, feature importance, and correlation prevented from becoming mechanisms or causal claims?
+- Does the paragraph synthesis contract pass for every factual or synthesis paragraph?
+- Does each citation support the paragraph's exact claim rather than merely its topic?
+
 ## 7. Skill Output Checks
 
 When using this skill to create reusable materials:
@@ -56,5 +69,4 @@ When using this skill to create reusable materials:
 - put templates in `assets/`;
 - put repeatable scripts in `scripts/`;
 - update the local corpus README/change log whenever files move or outputs are regenerated.
-
 

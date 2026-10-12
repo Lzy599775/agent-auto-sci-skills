@@ -19,6 +19,19 @@ For full paper projects, use the expanded route:
 
 Use this skill first when the task spans multiple research stages or asks to improve the user's local skills.
 
+### Deliverable-first precedence
+
+Route by the current deliverable, not by topic keywords alone. Green exposure, heat exposure, urban health, spatial equity, accessibility, and SHAP can occur in either a literature review or an empirical manuscript, so they do not select the writing owner by themselves.
+
+- External literature synthesis, review corpus construction, paper-level extraction, Evidence Trace, cross-paper synthesis, conflicting evidence, heterogeneity, literature gaps, review coding, or review drafting routes to `sport-geography-review-bibliometric`. If the review type or domain route is still undecided, place `urban-exposure-review-radar-workflow` before it.
+- The user's own data/method/results manuscript drafting or revision routes to `sport-geography-sci-writing`. Add geospatial, ML, data-viz, methodology, or scicomm helpers only when the immediate deliverable requires them.
+- For mixed tasks, choose the owner for the current handoff. A frozen empirical Results/Discussion remains owned by `sport-geography-sci-writing` even when it cites literature; review skills may be helpers and must not take over. Do not load both domain owners merely because the topic contains literature and empirical terms; make a later handoff explicit when the deliverable changes.
+- If the immediate deliverable is only review evidence structure and explicitly says not to write prose, do not add `sport-geography-sci-writing`, `scipilot-writing-skill`, or `agent-auto-sci-scicomm` as primary owners.
+
+### Academic prose quality-control handoff
+
+Any route that produces manuscript prose, Discussion, Introduction, Conclusion, Abstract, review synthesis prose, rebuttal prose, or substantial academic interpretation must invoke the shared `agent-auto-sci-scicomm/references/academic_prose_style_guard.md` after claims and evidence are stable. This is a writing QC handoff, not a primary research router; it preserves causal, conditional, uncertainty, null, conflicting, and reviewer-relevant boundaries while reducing repetitive defensive contrast.
+
 | Task | Use |
 |---|---|
 | Full workflow from topic selection to final manuscript | Start here, then read `references/08_full_research_to_manuscript_pipeline.md` |
@@ -60,6 +73,14 @@ Read `references/02_subskill_registry.md` when choosing among skills.
 5. Never store secrets in skill files, HTML, markdown logs, or committed examples.
 6. Every major skill change must update the evolution archive HTML.
 
+### QC visibility protocol
+
+Keep quality control strict internally and quiet externally. Run routine checks—citation and terminology consistency, basic causal-language review, figure/table alignment, routine support checks, style lint, and minor uncertainty checks—silently; do not list each check or announce that work must “pass a gate.” Report a finding only when it could change the current scientific interpretation, estimand, sample, result, or conclusion. Pause for author input only when safe continuation is impossible or a material scientific choice belongs to the author. Present ordinary work in the order `answer -> evidence -> interpretation -> material limitation -> next step`, not as a gate or warning log.
+
+Once a boundary has been stated for the current task, do not repeat it unless new evidence changes it, the current section must independently contain it, or the user requests a full audit.
+
+Treat a result file that conflicts with `CURRENT_STATE` on effect direction or another conclusion-determining fact as a blocking issue: stop interpretation and ask the author to resolve the authoritative value before proceeding.
+
 ## Workflow
 
 1. **Scope the task**
@@ -78,9 +99,9 @@ Read `references/02_subskill_registry.md` when choosing among skills.
    - For full manuscript projects, progress phase by phase and keep handoffs explicit.
    - For large tasks, compose subagents instead of creating new standalone skills by default.
 
-4. **Gate quality**
+4. **Check quality**
    - Verify files, scripts, outputs, citations, figures, and assumptions.
-   - For manuscripts, run claim-evidence checks and reviewer-risk scans.
+   - For manuscripts, run claim-evidence checks and reviewer-risk scans internally; surface only findings that materially affect interpretation or require author judgment.
    - For data or models, run EDA, leakage checks, baselines, sensitivity, and reproducibility checks.
 
 5. **Update evolution records**

@@ -33,7 +33,10 @@ description: "地理学与遥感 SCI 写作适配 skill。用于地理/遥感/�
 3. 选择章节 playbook：标题/摘要/引言/方法/结果/讨论/结论/投稿信分别处理。
 4. 写作或改写：保留事实、数值、方向、引用键和方法边界；只改善结构、逻辑和表达。
 5. 自检：检查因果语言、空间尺度、暴露/可达性/可用性/使用混淆、期刊定位、图表与 claim 的对应关系。
-6. 交付：给出改后文本、修改理由、仍需用户确认的数据/文献/期刊规范。
+6. 科学内容稳定后，调用共享 `agent-auto-sci-scicomm/references/academic_prose_style_guard.md`，检查正向优先表达、防御性对照 cluster 和同一边界的语义重复；不得因此弱化方法、因果或不确定性边界。
+7. 交付：给出改后文本、修改理由、仍需用户确认的数据/文献/期刊规范。
+
+Academic Prose Style Guard 是写作 QC，不是 primary research router。它适用于本文 skill 生成的 manuscript prose、Discussion、Introduction、Conclusion、Abstract、rebuttal 和 substantial academic interpretation。
 
 ## 参考文件
 

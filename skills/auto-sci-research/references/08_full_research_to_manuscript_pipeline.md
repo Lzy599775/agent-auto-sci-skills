@@ -12,7 +12,7 @@ This pipeline integrates the local `agent-auto-sci-*` skills, sport geography wr
 | 1. Topic selection | Is the topic meaningful, feasible, and publishable? | `agent-auto-sci-methodology` | `scientific-brainstorming`, `scholar-evaluation` | candidate topic matrix, novelty/risk table, minimal viable paper |
 | 2. Research question | Can the topic become a measurable question? | `agent-auto-sci-methodology` | `hypothesis-generation` | SMART questions, concepts, variables, hypotheses, scope exclusions |
 | 3. Literature search | Can the literature search be reproduced? | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` | `paper-lookup`, `research-lookup`, `codex-paper-reader` | keyword table, Boolean strings, database plan, inclusion/exclusion criteria |
-| 4. Literature synthesis | What is known, contested, and still missing? | `sport-geography-review-bibliometric`, `agent-auto-sci-methodology` | `academic-research-suite` | literature matrix, evidence map, gap taxonomy, theory/conceptual framework |
+| 4. Literature synthesis | What is known, contested, and still missing? | `sport-geography-review-bibliometric`, `agent-auto-sci-methodology` | `academic-research-suite` | literature matrix, evidence trace, cross-paper argument map, gap taxonomy, conceptual/theory framework, paragraph synthesis contract |
 | 5. Data plan | What data are needed and what can be legally used? | `agent-auto-sci-automation`, `agent-auto-sci-geospatial` | `geopandas`, `geomaster`, `pyzotero` | data inventory, download plan, license/ethics note, versioning rule |
 | 6. Processing and code | Can the analysis be reproduced in VS Code or notebooks? | `agent-auto-sci-geospatial`, `agent-auto-sci-ai-ml`, `agent-auto-sci-automation` | `polars`, `scikit-learn`, `statsmodels`, `shap` | scripts/notebooks, environment notes, logs, intermediate outputs |
 | 7. Analysis | Do results answer the research question? | `agent-auto-sci-data-viz`, `agent-auto-sci-methodology`, `agent-auto-sci-ai-ml` | `statistical-analysis`, `exploratory-data-analysis` | EDA report, model/statistical results, robustness checks, interpretation limits |
@@ -43,9 +43,15 @@ Before committing to a topic, require:
 
 If any item fails, use `agent-auto-sci-methodology` to narrow the question before collecting more data.
 
-## 4. Claim-Evidence Workflow
+## 4. Evidence-to-Drafting Handoff
 
-Maintain a claim-evidence map from Phase 4 onward.
+The review handoff is sequential. Do not move from search completion directly to an Introduction draft:
+
+`search -> screening -> paper-level extraction -> evidence trace -> cross-paper argument map -> gap/contradiction/boundary adjudication -> paragraph synthesis contract -> drafting -> citation/claim QC`
+
+The `sport-geography-review-bibliometric` skill owns paper-level extraction, Evidence Trace, Cross-paper Argument Map, and review synthesis QC. It hands stable synthesis claims and boundaries to `agent-auto-sci-methodology` for appraisal and to `agent-auto-sci-scicomm` for paragraph planning and drafting.
+
+Maintain the claim-evidence map from Phase 4 onward, but treat it as an index over the richer trace and argument records rather than as a substitute for them.
 
 | Claim type | Evidence requirement | Typical owner |
 |---|---|---|
@@ -57,6 +63,10 @@ Maintain a claim-evidence map from Phase 4 onward.
 | Policy implication | evidence-supported action, target actor, boundary condition | `agent-auto-sci-scicomm` |
 
 Any paragraph with a strong claim but no evidence pointer must be revised or softened.
+
+Before Phase 9 drafting, each factual or synthesis paragraph must have a paragraph synthesis contract that records its academic function, target claim, Argument_IDs, Evidence_IDs, agreement or conflict, required qualification, allowed inference, forbidden escalation, and citation-audit status. A factual paragraph with no Evidence_ID cannot be `Ready_to_Draft = YES`; a purely structural navigation paragraph must state that it carries no factual claim.
+
+For an argument with conflicting evidence, the contract must preserve the conflict and cannot authorize consensus language. A contextual citation cannot be used as direct support for an exact claim. Policy paragraphs must record the target actor, evidence basis, and boundary condition.
 
 ## 5. Data And Code Standards
 
@@ -97,7 +107,7 @@ Draft in this order:
 8. Abstract, title, highlights, keywords.
 9. Cover letter and submission checklist.
 
-Do not polish language before the claim-evidence map is stable.
+Do not polish language before the evidence trace, argument map, and paragraph synthesis contracts are stable.
 
 ## 8. Final Quality Gate
 

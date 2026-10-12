@@ -5,11 +5,90 @@ from pathlib import Path
 import argparse
 
 from openpyxl import Workbook
+from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.styles import Font, PatternFill, Alignment
 
 
 HEADER_FILL = PatternFill("solid", fgColor="D9EAF7")
 REQUIRED_FILL = PatternFill("solid", fgColor="FFF2CC")
+
+
+CONTROLLED_VOCABULARY = {
+    "Full_Text_Status": [
+        "FULLTEXT_VERIFIED",
+        "ABSTRACT_ONLY",
+        "PARTIAL_TEXT",
+        "NOT_AVAILABLE",
+        "NOT_VERIFIED",
+    ],
+    "Evidence_State": [
+        "SOURCE_REPORTED_FACT",
+        "DERIVED_RESULT",
+        "INFERENCE",
+        "UNKNOWN",
+        "NOT_AVAILABLE",
+        "NOT_VERIFIED",
+        "CONFLICTING_EVIDENCE",
+    ],
+    "Support_Type": [
+        "DIRECT_SUPPORT",
+        "PARTIAL_SUPPORT",
+        "CONTEXTUAL_SUPPORT",
+        "CONTRADICTORY",
+        "NOT_SUPPORTED",
+        "NOT_VERIFIED",
+    ],
+    "Contradiction_Status": [
+        "NONE",
+        "POTENTIAL_CONTRADICTION",
+        "CONFIRMED_CONTRADICTION",
+        "NOT_ASSESSED",
+    ],
+    "Evidence_Consistency": [
+        "CONVERGENT",
+        "MIXED",
+        "HETEROGENEOUS",
+        "CONFLICTING",
+        "NOT_ASSESSED",
+    ],
+    "Reviewer_Status": [
+        "NOT_REVIEWED",
+        "IN_REVIEW",
+        "REVIEWED",
+        "ADJUDICATED",
+    ],
+    "Paragraph_Function": [
+        "ESTABLISHED_KNOWLEDGE",
+        "CONCEPT_SYNTHESIS",
+        "METHOD_SYNTHESIS",
+        "EMPIRICAL_PATTERN",
+        "COMPARISON",
+        "CONFLICT",
+        "LIMITATION",
+        "EVIDENCE_GAP",
+        "RESEARCH_AGENDA",
+        "PLANNING_IMPLICATION",
+    ],
+    "Citation_Audit_Status": [
+        "NOT_RUN",
+        "PASS",
+        "FAIL",
+        "NOT_APPLICABLE",
+    ],
+    "Ready_to_Draft": ["YES", "NO", "NOT_APPLICABLE"],
+}
+
+
+REQUIRED_SHEETS = {
+    "PRISMA筛选记录",
+    "文献批判性编码",
+    "Claim-Evidence Map",
+    "Evidence Trace",
+    "跨论文论证地图",
+    "段落Synthesis Contract",
+    "期刊定位",
+    "图表规划",
+}
 
 
 def style_sheet(ws):
@@ -28,6 +107,24 @@ def add_rows(ws, headers, rows):
     for row in rows:
         ws.append(row)
     style_sheet(ws)
+
+
+def add_controlled_validations(ws, headers):
+    """Apply schema-level dropdowns without making scientific judgements."""
+    header_to_col = {header: index + 1 for index, header in enumerate(headers)}
+    for field, values in CONTROLLED_VOCABULARY.items():
+        column = header_to_col.get(field)
+        if column is None:
+            continue
+        formula = '"' + ",".join(values) + '"'
+        validation = DataValidation(type="list", formula1=formula, allow_blank=True)
+        validation.error = "Select a value from the controlled vocabulary."
+        validation.errorTitle = "Invalid controlled value"
+        validation.prompt = "Use the controlled vocabulary; leave blank when not yet assessed."
+        validation.promptTitle = "Controlled vocabulary"
+        ws.add_data_validation(validation)
+        letter = ws.cell(row=1, column=column).column_letter
+        validation.add(f"{letter}2:{letter}1000")
 
 
 def build_workbook(out_path):
@@ -73,19 +170,110 @@ def build_workbook(out_path):
     )
 
     ws = wb.create_sheet("Claim-Evidence Map")
-    add_rows(
-        ws,
-        [
-            "核心主张",
-            "证据来源",
-            "支持图表",
-            "解释逻辑",
-            "边界条件",
-            "可写入章节",
-            "风险/需核验",
-        ],
-        [],
-    )
+    claim_headers = [
+        "核心主张",
+        "证据来源",
+        "支持图表",
+        "解释逻辑",
+        "边界条件",
+        "可写入章节",
+        "风险/需核验",
+        "Claim_ID",
+        "Claim_Type",
+        "Evidence_IDs",
+        "Argument_IDs",
+        "Evidence_State",
+        "Permitted_Strength",
+        "Citation_Audit_Status",
+        "Reviewer_Status",
+        "Notes",
+    ]
+    add_rows(ws, claim_headers, [])
+    add_controlled_validations(ws, claim_headers)
+
+    ws = wb.create_sheet("Evidence Trace")
+    evidence_headers = [
+        "Evidence_ID",
+        "Paper_ID",
+        "Citation_Key_or_DOI",
+        "Paper_Title",
+        "Full_Text_Status",
+        "Claim_or_Finding",
+        "Evidence_State",
+        "Source_Locator",
+        "Source_Section",
+        "Source_Page",
+        "Source_Table",
+        "Source_Figure",
+        "Source_Supplement",
+        "Study_Design",
+        "Study_Context",
+        "Population",
+        "Exposure_or_Concept",
+        "Outcome_or_Target",
+        "Method",
+        "Effect_or_Direction",
+        "Uncertainty",
+        "Support_Type",
+        "Boundary_Conditions",
+        "Contradiction_Status",
+        "Reviewer_Status",
+        "Permitted_Use",
+        "Notes",
+    ]
+    add_rows(ws, evidence_headers, [])
+    add_controlled_validations(ws, evidence_headers)
+
+    ws = wb.create_sheet("跨论文论证地图")
+    argument_headers = [
+        "Argument_ID",
+        "Review_Question",
+        "Synthesis_Claim",
+        "Supporting_Evidence_IDs",
+        "Contradictory_Evidence_IDs",
+        "Relevant_Contexts",
+        "Methodological_Heterogeneity",
+        "Population_Heterogeneity",
+        "Exposure_or_Concept_Differences",
+        "Spatial_Scale_Differences",
+        "Temporal_Differences",
+        "Boundary_Conditions",
+        "Evidence_Consistency",
+        "Evidence_Strength",
+        "Alternative_Explanation",
+        "Unresolved_Gap",
+        "Target_Section",
+        "Reviewer_Status",
+        "Notes",
+    ]
+    add_rows(ws, argument_headers, [])
+    add_controlled_validations(ws, argument_headers)
+
+    ws = wb.create_sheet("段落Synthesis Contract")
+    paragraph_headers = [
+        "Paragraph_ID",
+        "Section",
+        "Paragraph_Function",
+        "Research_Question_Link",
+        "Target_Synthesis_Claim",
+        "Argument_IDs",
+        "Evidence_IDs",
+        "Source_Coverage",
+        "Agreement_or_Conflict",
+        "Required_Qualification",
+        "Allowed_Inference",
+        "Forbidden_Escalation",
+        "Expected_Citation_Role",
+        "Gap_or_Boundary",
+        "Policy_Target_Actor",
+        "Policy_Evidence_Basis",
+        "Policy_Boundary_Condition",
+        "Citation_Audit_Status",
+        "Ready_to_Draft",
+        "Draft_Notes",
+    ]
+    add_rows(ws, paragraph_headers, [])
+    add_controlled_validations(ws, paragraph_headers)
 
     ws = wb.create_sheet("期刊定位")
     add_rows(
@@ -127,5 +315,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 

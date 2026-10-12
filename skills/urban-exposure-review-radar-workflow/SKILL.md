@@ -53,6 +53,8 @@ If the user asks for an executable setup, create or recommend a project scaffold
 5. **Synthesize by argument, not by paper order**
    - Organize by concept, measurement, method, population, exposure pathway, equity dimension, and planning implication.
    - Use bibliometric maps and radar scans as supporting evidence, not as the sole contribution.
+   - Once a formal review corpus or evidence-synthesis route is selected, hand off to `sport-geography-review-bibliometric`; do not hand off to `sport-geography-sci-writing` merely because the topic concerns green/heat exposure, urban health, or spatial equity.
+   - Keep `sport-geography-sci-writing` for the separate empirical-manuscript route based on the user's own data, methods, and results.
 
 6. **Gate before writing**
    - Confirm enough evidence exists for the selected route.
@@ -127,7 +129,7 @@ Routing rule:
 
 Source and license:
 
-- The subskill vendors the Codex-native package `Imbad0202/academic-research-skills-codex` v0.1.15, which is the Codex sibling distribution of `Imbad0202/academic-research-skills`.
+- The subskill vendors the Codex-native package `Imbad0202/academic-research-skills-codex` v3.22.0, which is the Codex sibling distribution of `Imbad0202/academic-research-skills`.
 - Upstream ARS content recorded in `subskills/academic-research-suite/manifest.json` tracks `Imbad0202/academic-research-skills@17c518b286e48bbcd19fa7d05ec4f7d2aeb01641`.
 - The vendored package is licensed under CC BY-NC 4.0. Preserve `subskills/academic-research-suite/LICENSE`, attribution, non-commercial limitation, and modification notes when copying or sharing.
 

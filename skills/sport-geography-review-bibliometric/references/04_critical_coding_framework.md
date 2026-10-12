@@ -114,4 +114,14 @@ Use the matrix to find:
 - gaps between measurement and policy;
 - opportunities for a new review contribution.
 
+## 5. Evidence-to-Argument Conversion
+
+Convert paper-level coding in four explicit steps:
+
+1. **Paper-level evidence**: record the source-reported finding, full-text status, exact source locator, design, context, population, exposure/concept, outcome, method, direction, uncertainty, and boundary conditions in the Evidence Trace.
+2. **Comparable dimensions**: compare only dimensions that are substantively aligned. Keep accessibility, exposure, availability, quality, and use as separate concepts; keep equality, equity, and justice as separate concepts.
+3. **Cross-paper relation**: link Evidence IDs in the Cross-paper Argument Map as supporting, contradictory, contextual, partial, or not supported. Record heterogeneity in population, context, exposure/concept, outcome, scale, time, design, confounding adjustment, and measurement before labelling evidence as convergent or conflicting.
+4. **Synthesis claim**: state the narrowest claim supported by the relation map, including uncertainty, competing explanations, boundary conditions, and unresolved gaps. Evidence strength is a reasoned narrative judgement based on design, data quality, comparability, uncertainty, consistency, and competing evidence; it is not a count or score.
+
+Do not turn correlation, feature importance, RF/SHAP output, or bibliometric co-occurrence into a causal mechanism. An abstract-only record remains `ABSTRACT_ONLY` and cannot supply a fabricated full-text locator.
 

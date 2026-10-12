@@ -86,4 +86,16 @@ Do not introduce new results. State:
 - practical agenda;
 - boundary conditions.
 
+## 7. Paragraph Synthesis Contract Gate
+
+Before drafting any factual or synthesis paragraph, create one row in `段落Synthesis Contract` with its paragraph function, research-question link, target synthesis claim, Argument_IDs, Evidence_IDs, source coverage, agreement or conflict, required qualification, allowed inference, forbidden escalation, expected citation role, and gap or boundary.
+
+- `Ready_to_Draft` cannot be `YES` when a factual or synthesis paragraph has no Evidence_ID.
+- A structural navigation paragraph may omit Evidence_IDs only when its notes explicitly state that it makes no factual claim.
+- An argument with conflicting evidence cannot be drafted as field consensus.
+- A contextual citation cannot be used as direct support for an exact claim.
+- Policy implications must identify the target actor, evidence basis, and boundary condition.
+- Results and Discussion must synthesize by concept, method, population, context, scale, or planning implication. `one paper = one sentence` is permitted only when the paragraph's explicit function is a case comparison.
+
+Language polishing occurs after the contract and citation audit pass; it cannot repair missing evidence or upgrade association into causation.
 

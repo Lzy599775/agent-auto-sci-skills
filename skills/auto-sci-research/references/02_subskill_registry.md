@@ -69,14 +69,16 @@ These are installed locally under `<codex-skills-dir>` and are part of the wider
 
 ## 6. Routing Rules
 
+Apply the following precedence before matching topic keywords: route by the immediate deliverable. Review evidence construction takes precedence over empirical writing when the user is working on external literature; empirical writing takes precedence only when the current deliverable is the user's own manuscript.
+
 1. If the task asks to update the system, start with `auto-sci-research`.
 2. If the task is a full research-to-manuscript workflow, read `08_full_research_to_manuscript_pipeline.md` and assign phase owners.
 3. If the task is large enough for multiple role-specific agents, read `09_subagent_composition_matrix.md`.
 4. If the task asks to reuse prompt-library logic or the local academic prompt PDF, read `10_prompt_workflow_from_academic_pdf.md` and avoid copying long text.
 5. If the task asks to integrate the user's local Sportpark writing/figure memories, read `11_sportpark_skill_integration_notes.md` and keep source files untouched unless the user explicitly asks otherwise.
-6. If the task is a concrete empirical sport-geography manuscript, use `sport-geography-sci-writing`.
-7. If the task asks to decide among review types, add `urban-exposure-review-radar-workflow` before detailed review planning.
-8. If the task is a focused sport-geography review or bibliometric paper, use `sport-geography-review-bibliometric`.
+6. If the task concerns external literature synthesis, a review corpus, PRISMA/systematic/scoping review, Evidence Trace, cross-paper argument mapping, conflicting evidence, heterogeneity synthesis, unresolved literature gaps, review coding, or a review synthesis contract, use `sport-geography-review-bibliometric`.
+7. If the task asks to decide among review types or the formal review/domain route is not yet settled, add `urban-exposure-review-radar-workflow` before detailed review planning and then hand off to `sport-geography-review-bibliometric` once the route is selected.
+8. If the immediate deliverable is the user's own empirical sport-geography manuscript or its Results/Discussion/figures/method chain, use `sport-geography-sci-writing`.
 9. If the task asks for recent remote-sensing, Geospatial AI, CV-to-RS, heat/green exposure radar, use `urban-exposure-review-radar-workflow` plus `agent-auto-sci-geospatial`.
 10. If the task involves spatial data or maps, add `agent-auto-sci-geospatial`.
 11. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`; add `kdense-ml-ai-selected` when upstream package-level technical playbooks are needed.
