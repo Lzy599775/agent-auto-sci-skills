@@ -1,5 +1,7 @@
 # Academic Prose Style Guard
 
+**Contract version:** V2
+
 ## Purpose and boundary
 
 Run this guard after the scientific content is stable and before final prose or reviewer-risk QC. It applies to manuscript prose, Introduction, Methods interpretation, Results interpretation, Discussion, Conclusion, Abstract, review synthesis, rebuttal prose, and substantial academic interpretation.
@@ -220,3 +222,69 @@ Before accepting a rewrite, verify that it has not:
 - removed a reviewer-relevant caveat.
 
 If a positive-first rewrite cannot preserve the evidence boundary, retain the negative statement and explain why it is necessary. The guard improves discourse function; it does not optimize away scientific caution.
+
+## V2 story and redundancy audits
+
+The following audits are required for substantial rewriting after the evidence map is stable. They are advisory unless a structural violation is deterministic; they must never erase a necessary scientific boundary.
+
+### `NOT_BUT_CONSTRUCTION_CLUSTER`
+
+The guard treats `不是……而是……`, `并非……而是……`, `不在于……而在于……`, `并不是……`, `而不是……`, `not ... but ...`, `rather than`, `is not ...; instead ...`, `does not ... but ...`, and `not simply ... but ...` as contrastive-template signals. A single necessary contrast is acceptable. Flag a cluster when two occur in one paragraph, two occur in a three-sentence window, the same underlying boundary is repeated across adjacent paragraphs, or the draft develops a document-level fixed template. The action is `WARN/REWRITE`, not mechanical replacement: state the positive core first and retain one precise contrast only when it protects a real comparison, estimand, causal, measurement, uncertainty, or scope boundary.
+
+### `STORY_RELEVANCE_AND_DEFENSE_AUDIT`
+
+For every defensive or qualifying sentence, record:
+
+```yaml
+protects_real_boundary: true | false
+deletion_changes_estimand_causal_status_population_measurement_scope_or_claim_strength: true | false
+already_expressed_nearby: true | false
+adds_story_information: true | false
+action: KEEP_ONCE | MERGE | DELETE | MOVE_TO_LIMITATION_OR_SUPPLEMENT
+```
+
+If a sentence protects no real boundary, changes no scientific interpretation, repeats a nearby boundary, and adds no story information, it is a deletion candidate. If it protects causal status, measurement meaning, uncertainty, conflicting evidence, population, estimand, or decision-use scope, keep the clearest formulation once. This is a review record, not an instruction to make a manuscript sound more confident.
+
+### Sentence academic increment
+
+Classify each sentence or smallest meaning unit as `CORE_CLAIM`, `EVIDENCE`, `METHOD_REPRODUCIBILITY`, `INTERPRETATION`, `ESSENTIAL_TRANSITION`, `NECESSARY_BOUNDARY`, `SUPPORTING_CONTEXT`, or `REDUNDANT_LOW_INCREMENT`. Default deletion applies only to the last category. Preserve nulls, denominators, uncertainty, conflicts, required Methods details, and any caveat that changes how a reader evaluates the result. When a low-increment sentence is removed or moved, record the reason in the transparent change log.
+
+### Paragraph story contribution
+
+Every paragraph must identify at least one contribution to the research question, argument chain, evidence chain, main finding, interpretation, planning/scientific implication, citation synthesis, reproducibility, or necessary boundary. A paragraph that can be removed without changing the scientific story and that carries none of the protected functions is `DELETE` or `MOVE_TO_SUPPLEMENT`. The story audit is subordinate to Methods reproducibility: quiet but reproducibility-critical details stay in Methods or move to a linked supplement.
+
+### Section-level selection
+
+- **Results:** report the main result completely, including necessary numbers, denominators, statistical/spatial evidence, and limited factual orientation; compress secondary results and summarize repeated patterns without adding mechanisms.
+- **Introduction:** remove encyclopedic background, ordinary facts, and literature that do not narrow the problem, synthesize the relevant stream, establish the gap, or frame the question.
+- **Discussion:** require interpretation, nearest-study comparison, evidence-supported explanation, implication, or a necessary boundary. Do not mechanically replay each Results paragraph.
+
+### Repeated facts and numbers
+
+Use a `FACT_PLACEMENT_LEDGER` to identify the canonical narrative location of sample sizes, counts, time ranges, thresholds, radii, parameters, and effect sizes. Emit `REPEATED_LOW_VALUE_NUMBER` or `REPEATED_FACT_CANDIDATE` when a second occurrence adds no new function, but allow necessary repetition in an Abstract, core Results, self-contained table/figure, or Discussion interpretation. Semantic duplicates with different wording require review; do not equate every repeated number with an error.
+
+### Figure/table citation ledger and order
+
+Maintain a `FIGURE_TABLE_CITATION_LEDGER` with first meaningful introduction, supported claim, and subsequent citations. Remove a later citation when it adds no substantive use (`REPEATED_FIGURE_CITATION = REMOVE`); retain it when a new claim requires the reader to inspect the item again. Check first-citation order, numbering, and caption-text consistency. Figure/table citations are not a substitute for explaining the result.
+
+### Robustness placement
+
+Apply `ROBUSTNESS_PLACEMENT_RULE`: keep sensitivity, robustness, alternative specification, bandwidth, and secondary diagnostic details in the main text only when they are necessary for the main claim, identification credibility, interpretation, or reader evaluation. Otherwise move detail to Supplementary Materials/Appendix and use at most one bounded pointer sentence; omit the pointer if it adds no academic increment. This check must not turn robustness into the paper's central story.
+
+### Table and prose-format contracts
+
+Final tables must satisfy `THREE_LINE_TABLE_CONTRACT`: top rule, header separator, bottom rule, no vertical rules, and trimmed cell text with no leading two spaces or tab. A Markdown table in chat is `CHAT_TABLE = PREVIEW_ONLY`, not proof of a final three-line artifact. Prose must satisfy `NO_MANUAL_LINE_BREAK_IN_PROSE`: no `<br>`, soft/hard Markdown break, U+2028, U+2029, vertical tab, or Word-style manual break. Syntax-required line breaks in code, equations, and table markup are scoped exceptions.
+
+## Source-complete prose checks
+
+- **Referent-aware study wording:** In formal Chinese narration, prefer `本研究` to `本文` when referring to the current study. Do not globally replace `本文` when it refers to the manuscript as a document.
+- **Terminology and abbreviation first use:** At first use, give the full term followed by its abbreviation; use the abbreviation consistently thereafter. Audit consistency across Title, Abstract, main text, figures/tables, and Conclusion.
+- **Internal labels to prose:** Do not paste internal analysis-table titles, code labels, or operational categories into prose as if they were natural scientific language. Translate them while preserving their defined construct; retain exact labels only when needed and formally introduced.
+- **Evidence traceability:** Every major conclusion must link to a result from this study or a verified citation. `[证据边界问题]` may appear only in a working/QC draft and must be resolved and removed before submission-ready text.
+- **Hedge calibration:** Keep one most accurate hedge where needed. Flag stacked near-synonymous hedges, but do not remove uncertainty that reflects a real evidence limitation.
+- **Causal-boundary placement:** Do not mechanically append a causal disclaimer after every result. State each necessary boundary once at the location that best governs interpretation; retain distinct boundaries that protect different estimands, populations, measurements, or scopes.
+- **Non-significant results:** Do not automatically attribute a non-significant result to sample size, low power, measurement error, or model specification. Each such explanation requires additional supporting evidence.
+- **Punctuation and noun-chain density:** Review dashes, semicolons, colons, parentheses, Chinese enumeration commas, and quotation marks for overloaded density. Split layered asides when appropriate, not by global replacement. Use quotation marks for terms, direct quotations, or necessary emphasis. Flag unnecessary A-B/A-B-C noun chains while preserving established technical terms and required notation.
+- **Symbol preservation:** Editing must preserve formula, variable, and citation-format symbols.
+
+`[证据边界问题]` is never a submission-text substitute for a completed evidence review. It is a temporary QC annotation only.

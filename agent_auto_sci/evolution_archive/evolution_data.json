@@ -1,0 +1,40 @@
+{
+  "schema_version": "1",
+  "updated": "2026-10-11",
+  "capabilities": [
+    {
+      "name": "Evidence-first Top-Paper Writing Exemplar Decomposition",
+      "status": "added",
+      "owner": "agent-auto-sci-scicomm",
+      "role": "pre-drafting and pre-revision argument-architecture handoff",
+      "why_no_new_top_level_skill": "The capability extends the existing scientific-communication owner and must not collide with literature, domain-writing, or polishing ownership."
+    },
+    {
+      "name": "Global Academic Writing Contract V2",
+      "status": "added",
+      "owner": "agent-auto-sci-scicomm + scipilot-writing-skill",
+      "role": "cross-client story, redundancy, table, line-break, figure/table citation, and fact-placement contract",
+      "why_no_new_top_level_skill": "V2 extends existing writing owners and keeps Web routing as a copy-paste profile rather than a duplicate skill."
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2026-10-11",
+      "title": "Academic writing exemplar and cross-client routing V1",
+      "summary": "Added a generic evidence-first protocol, REQUIRED/AUTO/SKIP routing, read-scope rules, article and section maps, own-evidence-first drafting, anti-copying boundaries, and Codex/Web parity checks."
+    },
+    {
+      "date": "2026-10-11",
+      "title": "Global academic writing contract V2",
+      "summary": "Added source-rule mapping, story relevance and academic-increment audits, reproducibility-preserving section rules, conservative redundancy lint, three-line-table and no-manual-break contracts, figure/table and fact ledgers, and copy-paste Web instructions."
+    }
+  ],
+  "validation": {
+    "golden_set": "G01-G12; R01-R12; E01-E06",
+    "routing_contract": "PASS",
+    "provenance_metadata_auto_strip": "NO",
+    "provenance_metadata_stripping": "EXPLICIT_OPT_IN_ONLY",
+    "v2_contract": "PASS",
+    "top_level_skill_created": "NO"
+  }
+}

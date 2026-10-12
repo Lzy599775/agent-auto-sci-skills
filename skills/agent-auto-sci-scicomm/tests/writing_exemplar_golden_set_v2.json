@@ -1,0 +1,12 @@
+{
+  "schema_version": "WRITING_EXEMPLAR_GOLDEN_SET_V2",
+  "case_count": 6,
+  "cases": [
+    {"id": "E01", "request": "明确要求对标四篇论文的 Discussion 逻辑", "task_kind": "explicit_exemplar_adaptation", "expected_mode": "REQUIRED"},
+    {"id": "E02", "request": "按目标期刊重写 Introduction", "task_kind": "introduction_rewrite", "expected_mode": "AUTO"},
+    {"id": "E03", "request": "只改一句语法", "task_kind": "sentence_proofreading", "expected_mode": "SKIP"},
+    {"id": "E04", "request": "只有摘要可读", "task_kind": "read_scope", "read_scope": "ABSTRACT_ONLY", "expected_read_scope": "ABSTRACT_ONLY"},
+    {"id": "E05", "request": "直接复制 exemplar citation chain", "task_kind": "anti_copying", "source_similarity": "high", "expected_action": "BLOCK"},
+    {"id": "E06", "request": "模仿 exemplar 独特措辞", "task_kind": "anti_copying", "source_similarity": "distinctive", "expected_action": "REWRITE_GENERICALLY"}
+  ]
+}
