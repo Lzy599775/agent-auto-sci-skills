@@ -73,7 +73,10 @@
           "unmark-read",
           "cache-invalidate"
         ],
-        "experiment-agent": []
+        "experiment-agent": [],
+        "sr-screener": [
+          "report"
+        ]
       },
       "capability_evidence": {
         "source": "Codex model catalog and generated app-server schema",
@@ -152,6 +155,28 @@
       ],
       "external_call_authority": false,
       "outcome_claims": "none"
+    },
+    "screening": {
+      "activation": "explicit_screening_request_only",
+      "automatic_pipeline_stage": false,
+      "native_execution": "emitted_prompts_with_fresh_blinded_workers",
+      "generated_claude_workflow_executable": false,
+      "reviewer_context": "fresh_no_parent_history_or_peer_outputs",
+      "reviewer_tools": [
+        "Read",
+        "Grep"
+      ],
+      "model_mapping": "preserve_supported_user_or_runtime_choice_and_record_actual_model",
+      "claude_model_defaults": "metadata_not_codex_selection",
+      "required_user_gates": [
+        "confirmed_protocol",
+        "pilot_approval_or_recorded_override",
+        "concrete_cost_approval",
+        "final_human_verification"
+      ],
+      "required_qc": "joint_exclusion_and_near_miss_rechecks",
+      "missing_decisions": "pending_never_default_exclude",
+      "without_isolated_workers": "quick_single_reviewer_triage_only"
     }
   },
   "commands": [
@@ -213,7 +238,7 @@
       "recipe": "ars/commands/ars-citation-check.md",
       "workflow": "academic-paper",
       "mode": "citation-check",
-      "model_hint": "sonnet"
+      "model_hint": "inherit"
     },
     {
       "aliases": [
@@ -428,6 +453,27 @@
         "study_manager_agent.md",
         "code_runner_agent.md"
       ]
+    },
+    "sr-screener": {
+      "workflow_path": "ars/sr-screener/WORKFLOW.md",
+      "modes": [
+        "protocol",
+        "quick",
+        "pilot",
+        "ta-screen",
+        "ft-screen",
+        "adjudicate",
+        "audit",
+        "report"
+      ],
+      "default_mode": "protocol",
+      "agent_template": "codex/agents/sr-screener-team.md",
+      "agent_prompts": [
+        "protocol_architect_agent.md",
+        "screening_reviewer_agent.md",
+        "qc_auditor_agent.md",
+        "reporter_agent.md"
+      ]
     }
   },
   "agent_team_rules": {
@@ -470,7 +516,8 @@
     "claim_standing_pipeline": "After an eligible Stage 2.5/4.5 Claim Registry row, only offer the advisory view. Eligibility never dispatches. Require the v3.21 query-plan consent surface and affirmative digest-bound receipt, then preserve freshness checks and exact transmission accounting; absent, cancelled, invalidated, or stale consent produces no call.",
     "research_workflow_profile": "The v3.21.1 profile substrate is default-off and manuscript-blind. Record only an explicit selection or the visible field_general fallback; no planner or pipeline hook is implied, and corrections append receipts plus stale marks without rewriting scholar-owned artifacts. Behavioral evidence remains NOT_RUN.",
     "inquiry_branch_ledger": "ARS_INQUIRY_LEDGER=1 enables only the local opt-in alpha. Preserve author-owned append events, second-branch publication, bounded checkpoint summaries, path/lock/recovery guards, and individually visible stale causes. The flag grants no external call authority and no novelty, correctness, value, recovery-benefit, or usability claim.",
-    "data_access_metadata": "Workflow and agent data_access_level annotations are declarative dirtiest-input metadata. They do not create a sandbox, runtime permission, declassification, or transport authority."
+    "data_access_metadata": "Workflow and agent data_access_level annotations are declarative dirtiest-input metadata. They do not create a sandbox, runtime permission, declassification, or transport authority.",
+    "screening_independence": "Explicit-only sr-screener work uses the emitted-prompt path and fresh blinded workers without inherited history. Preserve Read/Grep-only reviewer scope, user-confirmed protocol, human pilot, concrete model/cost approval, required QC and final human verification. Never simulate dual review inline or execute the generated Claude Workflow script in Codex."
   },
   "quality_gates": [
     {
@@ -915,6 +962,97 @@
       "runner": "upstream:ars/scripts/test_build_calibration_measurement_row.py",
       "parity": "partial",
       "execution": "hermetic"
+    },
+    {
+      "id": "v3222_routing_core_sync",
+      "kind": "routing",
+      "runner": "upstream:ars/scripts/check_routing_core_sync.py",
+      "parity": "near"
+    },
+    {
+      "id": "v3222_command_skill_dispatch",
+      "kind": "routing",
+      "runner": "upstream:ars/scripts/check_command_skill_dispatch.py",
+      "parity": "near"
+    },
+    {
+      "id": "v3222_skill_description_length",
+      "kind": "packaging",
+      "runner": "upstream:ars/scripts/check_skill_description_length.py",
+      "parity": "near"
+    },
+    {
+      "id": "v3222_instruction_data_boundary",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/check_instruction_data_boundary.py",
+      "parity": "near"
+    },
+    {
+      "id": "v3222_run_ledger",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/test_run_ledger.py",
+      "parity": "near",
+      "execution": "hermetic"
+    },
+    {
+      "id": "v3222_check_acronyms",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/test_check_acronyms.py",
+      "parity": "near",
+      "execution": "hermetic"
+    },
+    {
+      "id": "v3222_root_router_contract",
+      "kind": "routing",
+      "runner": "root-router",
+      "parity": "near"
+    },
+    {
+      "id": "v323_sr_screener_pipeline",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/test_sr_screener_pipeline.py",
+      "parity": "near",
+      "execution": "hermetic"
+    },
+    {
+      "id": "v323_standing_constraint_entry_schema",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/test_standing_constraint_entry_schema.py",
+      "parity": "near",
+      "execution": "hermetic"
+    },
+    {
+      "id": "v323_excluded_source_entry_schema",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/test_excluded_source_entry_schema.py",
+      "parity": "near",
+      "execution": "hermetic"
+    },
+    {
+      "id": "v323_review_form_note_sync",
+      "kind": "routing",
+      "runner": "upstream:ars/scripts/test_check_review_form_note_sync.py",
+      "parity": "near",
+      "execution": "hermetic"
+    },
+    {
+      "id": "v323_method_weaknesses_sync",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/test_check_method_weaknesses_sync.py",
+      "parity": "near",
+      "execution": "hermetic"
+    },
+    {
+      "id": "v323_review_form_note_sync_contract",
+      "kind": "routing",
+      "runner": "upstream:ars/scripts/check_review_form_note_sync.py",
+      "parity": "near"
+    },
+    {
+      "id": "v323_method_weaknesses_sync_contract",
+      "kind": "integrity",
+      "runner": "upstream:ars/scripts/check_method_weaknesses_sync.py",
+      "parity": "near"
     }
   ],
   "known_degradations": [
@@ -929,6 +1067,10 @@
     "Claude agent tools allowlists are preserved as least-privilege role boundaries, but actual Codex tool availability remains controlled by the active runtime and task permissions.",
     "Unlike upstream script-backed pipeline wiring, an ars-full request in ARS-Codex does not by itself launch the four bibliographic resolver clients. Programmatic citation verification remains explicit, while mandatory integrity checkpoints use the default Codex browsing route unless separately authorized.",
     "The v3.21.1 research-workflow profile substrate has no automatic planner or pipeline hook, and the inquiry branch ledger remains disabled unless ARS_INQUIRY_LEDGER=1 is explicitly selected; neither metadata surface creates runtime authority.",
-    "The vendored snapshot preserves sealed promotion-bakeoff contracts, audit artifacts, and hermetic tests, but cannot independently re-prove upstream seal/reveal chronology because it does not contain the complete canonical upstream Git history."
+    "The vendored snapshot preserves sealed promotion-bakeoff contracts, audit artifacts, and hermetic tests, but cannot independently re-prove upstream seal/reveal chronology because it does not contain the complete canonical upstream Git history.",
+    "The v3.23.0 routing core is embedded in the single registered Codex router and core WORKFLOW.md files; the upstream Claude SessionStart announce remains inactive. Static routing tests and byte equality are not live-model activation measurements.",
+    "The v3.22.2 run ledger depends on the calling session recording exact user wording, tool receipts, counters, and paths. Missing or stale provenance cannot support an affected decision or step; hashes do not establish semantic completeness or resist deliberate rewriting or rollback.",
+    "The v3.22.2 acronym checker reports advisory coverage over saved drafts and abstracts. Its final review attachment is outside editorial decisions, revision roadmaps, re-review criteria, and integrity gates; unavailable or partial output is not a clean result.",
+    "The v3.23 sr-screener scripts and hermetic fixtures do not establish screening accuracy or live Codex reviewer independence. Codex uses emitted prompts with fresh native workers; generated Claude workflows and Sonnet/Opus config defaults are not Codex execution. Without isolated workers only disclosed quick single-reviewer triage is supported."
   ]
 }

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0
+
+- Refreshed configured upstream checks on 2026-10-12.
+- Updated ARS Codex package to `v3.23.0` (`52228e8`), locking vendored ARS content to `6ab4b03`.
+- Added the explicit-only ARS `sr-screener` boundary and documented run-ledger, acronym, and citation-locale quality capabilities.
+- Synchronized 27 selected K-Dense directories to main `92ace75`.
+- Rechecked AutoSci at `f5c2fe0`; retained it as a reference source without overwriting the local router.
+- Updated README, skill map, HTML pages, notices, and the upstream audit.
+
 ## 0.9.0
 
 - Refreshed configured upstream checks on 2026-09-27.

@@ -37,6 +37,7 @@ _CORE_WORKFLOWS = {
     "academic-paper",
     "academic-paper-reviewer",
     "academic-pipeline",
+    "sr-screener",
 }
 _EXTERNAL_WORKFLOWS = {"experiment-agent"}
 _REQUIRED_WORKFLOWS = _CORE_WORKFLOWS | _EXTERNAL_WORKFLOWS
@@ -238,7 +239,7 @@ def test_command_model_hints_match_upstream_frontmatter_semantics() -> None:
         for command in manifest["commands"]
     }
 
-    for alias in ("ars-full", "ars-reviewer", "ars-revision-coach"):
+    for alias in ("ars-full", "ars-reviewer", "ars-revision-coach", "ars-citation-check"):
         assert hints.pop(alias) == "inherit"
     assert hints
     assert set(hints.values()) == {"sonnet"}
@@ -661,7 +662,7 @@ def test_single_root_inventory_matches_all_codex_surfaces(
 ) -> None:
     gates = _inventory_gate_fixture(tmp_path, monkeypatch)
     messages = gates.check_single_root_skill()
-    assert any("4 core workflows match" in message for message in messages)
+    assert any("5 core workflows match" in message for message in messages)
     assert any("1 separately sourced workflow" in message for message in messages)
 
 
@@ -712,7 +713,7 @@ def test_single_root_inventory_allows_separately_sourced_trace_workflow(
         external_names=_EXTERNAL_WORKFLOWS | {"trace-addon"},
     )
     messages = gates.check_single_root_skill()
-    assert any("4 core workflows match" in message for message in messages)
+    assert any("5 core workflows match" in message for message in messages)
     assert any("2 separately sourced workflow" in message for message in messages)
 
 
@@ -841,4 +842,4 @@ def test_model_tiering_lint_accepts_separately_vendored_experiment_agents() -> N
         capture_output=True,
         text=True,
     )
-    assert "39 agents classified" in result.stdout
+    assert "43 agents classified" in result.stdout

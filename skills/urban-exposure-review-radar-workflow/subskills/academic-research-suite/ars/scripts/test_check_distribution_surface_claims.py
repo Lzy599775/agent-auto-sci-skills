@@ -10,6 +10,7 @@ if str(REPO_ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from check_distribution_surface_claims import run  # noqa: E402
+from _skill_lint import _uses_codex_workflow_overlay  # noqa: E402
 
 CLEAN_PLUGIN = {
     "name": "fixture",
@@ -47,8 +48,18 @@ def _fires(errors: list[str], fragment: str) -> None:
     )
 
 
-def test_shipped_manifests_pass():
-    assert run(REPO_ROOT) == []
+def test_shipped_manifests_match_distribution_contract():
+    if _uses_codex_workflow_overlay(REPO_ROOT):
+        # Claude distribution manifests are deliberately omitted from the
+        # vendored Codex workflow tree. Keep the upstream lint fail-closed;
+        # the outer Codex package validates its own distribution metadata.
+        assert not (REPO_ROOT / ".claude-plugin").exists()
+        errors = run(REPO_ROOT)
+        assert len(errors) == 2
+        for name in ("plugin.json", "marketplace.json"):
+            _fires(errors, f"/.claude-plugin/{name} is missing")
+    else:
+        assert run(REPO_ROOT) == []
 
 
 def test_clean_synthetic_manifests_pass(tmp_path):
@@ -180,7 +191,7 @@ def test_unbindable_count_spelling_fires_d4(tmp_path):
 def test_plugin_exposed_count_drift_fires_d5(tmp_path):
     _write(tmp_path, plugin={
         "name": "f",
-        "description": "39 prompt roles (4 plugin-exposed agents).",
+        "description": "39 prompt roles (5 plugin-exposed agents).",
     })
     _fires(run(tmp_path), "D5")
 
@@ -188,7 +199,7 @@ def test_plugin_exposed_count_drift_fires_d5(tmp_path):
 def test_plugin_exposed_count_matching_passes(tmp_path):
     assert run(_write(tmp_path, plugin={
         "name": "f",
-        "description": "39 prompt roles (3 plugin-exposed agents).",
+        "description": "39 prompt roles (4 plugin-exposed agents).",
     })) == []
 
 
@@ -204,7 +215,7 @@ def test_percentage_case_variant_fires_d3(tmp_path):
 def test_plugin_exposed_case_variant_fires_d5(tmp_path):
     _write(tmp_path, plugin={
         "name": "f",
-        "description": "39 prompt roles (4 Plugin-Exposed agents).",
+        "description": "39 prompt roles (5 Plugin-Exposed agents).",
     })
     _fires(run(tmp_path), "D5")
 

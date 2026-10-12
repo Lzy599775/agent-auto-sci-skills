@@ -42,6 +42,7 @@ const skillLocations = new Set(
 
 // Upstream SKILL.md files stay unmodified, so hide their exact Pi listings while ARS is inactive.
 function hideArsSkills(systemPrompt) {
+  if (Array.isArray(systemPrompt)) return systemPrompt.map(hideArsSkills);
   return systemPrompt.replace(
     /(?:\r?\n)?[ \t]*<skill>(?:(?!<skill>)[\s\S])*?<\/skill>/g,
     (block) => {
@@ -188,6 +189,7 @@ export default function (pi) {
 
   pi.on("before_agent_start", (event) => {
     if (!arsActive) return { systemPrompt: hideArsSkills(event.systemPrompt) };
-    return { systemPrompt: `${event.systemPrompt}\n${compatibility}` };
+    const sp = event.systemPrompt;
+    return { systemPrompt: Array.isArray(sp) ? [...sp, compatibility] : `${sp}\n${compatibility}` };
   });
 }

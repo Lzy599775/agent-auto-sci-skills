@@ -41,17 +41,22 @@ does not support.
   (`scripts/verify_passport.py`, `scripts/verification_gate/__init__.py`) with opt-in
   terminal policies (`shared/contracts/passport/terminal_policies.schema.json`);
   locator-bearing citation emission (`scripts/check_v3_7_3_three_layer_citation.py`);
-  Phase E claim verification for the supports-the-claim half.
+  Phase E claim verification for the supports-the-claim half; the passport list
+  that keeps a reference an integrity gate judged `NOT_FOUND` off later writer
+  dispatches (`shared/contracts/passport/excluded_source_entry.schema.json`, #936).
 - **Evidence status**: `NOT_RUN` (capability matrix row `retrieval.citation_existence_gate`);
   `NOT_RUN` (capability matrix row `integrity_check.claim_verification`).
 - **Residual gap**: no measured hallucinated-citation catch rate — that needs an
   independently-authored ground-truth set, not one derived from the gate's own
   reducer; the Claim Registry's semantic completeness is unknown by contract. No
-  open issue schedules either measurement yet. The vendor's own evaluation of the
-  current session model reports fabricated references as rare and misrepresented
-  findings or conclusions as the residual error class that needs domain
-  familiarity to catch (Claude Fable 5.1 system card §2.2.4), which moves the
-  weight of this row onto the supports-the-claim half — exactly the unmeasured
+  open issue schedules either measurement yet. The vendor evaluations of both
+  supported session models point the same way. The Claude Fable 5.1 system card
+  (§2.2.4) reports fabricated references as rare and misrepresented findings or
+  conclusions as the residual error class that needs domain familiarity to catch;
+  the Claude Opus 5.5 system card reports reliance on abstracts over full papers
+  and partial checks described as full reads (mapped in
+  `audits/harness-retirement-2026-09-opus-5-5.md` DM-015). Both move the weight of
+  this row onto the supports-the-claim half — exactly the unmeasured
   claim-verification row above.
 
 ### R2 — Silent claim-strength drift in revision
@@ -68,11 +73,27 @@ A revision round strengthens or weakens a claim without an authorizing roadmap i
 
 ### R3 — Indirect prompt injection via retrieved content
 
-Text retrieved from a source carries instructions that an agent follows as if they
-came from the user.
+Third-party text, whether an agent retrieves it or the user pastes it, carries
+instructions that an agent follows as if they came from the user.
 
 - **Existing controls**: the retrieved-content instruction/data boundary as a
-  standing principle (#367); the offline structural probe
+  standing principle (#367), inlined verbatim in the deep-research retrieval
+  agents; since #883, in the revision coach that ingests pasted reviewer
+  comments and decision letters; and since #890, in twelve agents on the
+  dispatch and passport-import paths (the pipeline orchestrator, the integrity
+  gates, literature intake, reviewer Phase 0 and the editorial synthesis,
+  systematic-review risk of bias, temporal extraction, and deep-research
+  `review` mode) and in two prompts a model receives without the agent file,
+  the claim-audit judge prompt and the cross-model devil's advocate prompt;
+  since #894, in five agents that read third-party text through their own tool
+  calls (the formatter, citation compliance, and the three citation emitters),
+  in the single-reference verification prompt the integrity gates send to a
+  cross-model verifier on the API route, and in the four `WORKFLOW.md` files,
+  which every install path loads when a skill runs
+  (`scripts/check_instruction_data_boundary.py` lists each);
+  the reviewer-side untrusted-materials rule (`academic-paper-reviewer/WORKFLOW.md`)
+  and its manuscript fence in the five panel agents (pinned by
+  `scripts/check_reviewer_data_fences.py`); the offline structural probe
   (`scripts/run_indirect_prompt_injection_probe.py`), which by design never
   dispatches a model.
 - **Evidence status**: `DESIGNED` (asserted here; no capability-matrix row) — the
@@ -81,6 +102,28 @@ came from the user.
   ([#675](https://github.com/Imbad0202/academic-research-skills/issues/675));
   structural instruction/data isolation at the task-envelope boundary is design work
   ([#676](https://github.com/Imbad0202/academic-research-skills/issues/676)).
+  The Claude Opus 5.5 system card reports a regression on the pasted channel: the
+  model acts on instructions planted in text the user pasted into their own
+  message, but acted on them in 0 of 105 attempts when the same text arrived as a
+  tool result (§6.5.1; rates and product-side caveats in
+  `audits/harness-retirement-2026-09-opus-5-5.md` DG-1). The #675 scenarios
+  include pasted reviewer and committee comments. The prompt-level boundary,
+  including the interim #890 and #894 extensions, is trust-based; its effect on
+  this regression is unmeasured, and #676 stays open with its structural
+  requirements unmet. The inventories, ranking, and placement are in
+  `docs/design/2026-09-23-890-instruction-data-boundary-extension.md` (#890)
+  and `docs/design/2026-09-24-894-instruction-data-boundary-tool-calls.md`
+  (#894). Surfaces they leave uncovered: agents whose dispatch carries
+  third-party text only as quotations inside artifacts from covered agents
+  (for example `meta_analysis_agent` and `argument_builder_agent`); agents
+  whose input is the user's own text or dialogue; the advisory
+  collaboration-depth observer and monitoring agent; the cross-model result at
+  the design-freeze checkpoint; requests a fallback model serves; the
+  ChatGPT-subscription transport's instructions to the verifier; and the
+  routing decision a session makes before it loads a `WORKFLOW.md`. The #675 seed
+  runs one generic guided prompt rather than any agent's prompt, so as seeded
+  it evaluates none of these paths; a measured claim for a path needs a #675
+  scenario that loads that agent's assembled prompt.
 
 ### R4 — Unpublished-content exposure via cross-model transport
 
@@ -108,18 +151,21 @@ described.
 
 - **Existing controls**: commit-frozen measurement rows re-measured per change; the
   matrix staleness rule (`stale_after_days`); periodic harness-retirement audits
-  (`audits/harness-retirement-2026-09-model-update.md` is the most recent
-  completed report, run on the Fable 5 → Fable 5.1 and GPT-5.6 Sol → GPT-6 Astra
-  change).
+  (`audits/harness-retirement-2026-09-opus-5-5.md` is the most recent completed
+  report, run when Claude Opus 5.5 joined Claude Fable 5.1 as a supported session
+  model; `audits/harness-retirement-2026-09-model-update.md` covers the Fable 5 →
+  Fable 5.1 and GPT-5.6 Sol → GPT-6 Astra change).
 - **Evidence status**: `NOT_RUN` (asserted here; no capability-matrix row) — no
   measurement of cross-version drift itself exists.
 - **Residual gap**: measured rows are model- and time-specific by contract;
   re-running them on a model change is a manual maintainer action, not automated.
-  The session model can also change per request without a version change: the
-  runtime's classifier-triggered fallback is invisible to the suite
-  (`shared/model_tiering.md`, the declared-model note under Resolving a tier at
-  dispatch time), so every "session model" in a provenance record is the declared
-  model, not a per-call attestation.
+  The session model can also change mid-run without a version change: a
+  classifier-triggered fallback moves a Claude Code session onto the fallback
+  model until the user runs `/model`, with a transcript notice the user sees and
+  the suite never reads (`shared/model_tiering.md`, the declared-model note under
+  Resolving a tier at dispatch time; vendor specifics in
+  `audits/harness-retirement-2026-09-opus-5-5.md` DM-005), so every "session
+  model" in a provenance record is the declared model, not a per-call attestation.
 
 ### R6 — Correlated same-family model error
 
@@ -212,5 +258,38 @@ subagent as a broader authorization than was given.
   deterministic authorization inputs are CI-pinned; the prompt-level rule is not
   measured on any session model.
 - **Residual gap**: the failure class is vendor-documented, not ARS-measured
-  (evidence mapped in `audits/harness-retirement-2026-09-model-update.md` G-1);
-  the prompt rule is trust-based.
+  (evidence mapped in `audits/harness-retirement-2026-09-model-update.md` G-1 for
+  Fable 5.1 and `audits/harness-retirement-2026-09-opus-5-5.md` DM-013 for Opus
+  5.5); the prompt rule is trust-based.
+
+### R12 — Handoff loss across compaction and subagent returns
+
+Context compaction or a subagent return drops a pending checkpoint decision, the
+researcher's exact words, a partly collected answer, a step's outcome, or a transient
+input, and the run continues as if its record were complete. Loss and fabrication fail
+differently: fabricating a decision is R11's risk; this row covers losing one.
+
+- **Existing controls**: the run ledger beside the passport and its deterministic
+  report (`scripts/run_ledger.py`, schema
+  `shared/contracts/passport/run_ledger.schema.json`); the orchestrator's run-ledger
+  and handoff-check rules (`academic-pipeline/agents/pipeline_orchestrator_agent.md`)
+  and the state machine's run-ledger rule
+  (`academic-pipeline/references/pipeline_state_machine.md`); the SessionStart
+  reminder after a compaction or resume (`scripts/announce-ars-loaded.sh`); the opt-in
+  passport reset for MANDATORY decisions
+  (`academic-pipeline/references/passport_as_reset_boundary.md`); the user-confirmed
+  `standing_constraints[]` passport list that later dispatches quote
+  (`shared/contracts/passport/standing_constraint_entry.schema.json`, #927).
+- **Evidence status**: `NOT_RUN` (asserted here; no capability-matrix row) — how the
+  report reads a ledger is CI-pinned by six synthetic scenarios, the `show` read that
+  prints only entries before a break by synthetic tests, and the handoff-check block the
+  report renders in English and Traditional Chinese by line-exact tests (#898,
+  `scripts/test_run_ledger.py`); whether the orchestrator writes the entries, reads the
+  ledger only through the script, and inserts the block unchanged is not measured on any
+  session model.
+- **Residual gap**: anything lost before its entry is written cannot be recovered; the
+  hashes catch accidental damage, not deliberate edits, a lost tail, or a restored older
+  copy of the ledger
+  (`docs/design/2026-09-23-887-handoff-integrity-design.md`, section 6); the
+  collaboration observer still needs the original turns; outside the plugin channel the
+  reminder runs only if the user wires the hook (`docs/CONTROL_AVAILABILITY.md`, note 3).

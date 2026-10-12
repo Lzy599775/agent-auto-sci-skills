@@ -1,6 +1,6 @@
 # Academic Research Skills for Claude Code
 
-[![Version](https://img.shields.io/badge/version-v3.22.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.22.0)
+[![Version](https://img.shields.io/badge/version-v3.23.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.23.0)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
@@ -18,7 +18,7 @@
 
 裝完跑 `/ars-plan`，ARS 會用蘇格拉底對話幫你規劃章節結構。需要前置條件或傳統 symlink 安裝請看 [快速安裝](#快速安裝)。
 
-> **AI 是你的副駕駛，不是機長。** 這工具不會幫你寫論文。它處理苦工 — 搜文獻、排格式、驗數據、查邏輯一致性 — 讓你專注在真正需要你腦子的事：定義問題、選方法、詮釋數據的意義、寫出「我認為」後面那句話。
+> **AI 是你的副駕駛，不是機長。** 它可以起草文字，full mode 甚至會起草整篇論文；但決定權在你，pipeline 每個階段都會停下來等你確認。它處理苦工（搜文獻、排格式、驗數據、查邏輯一致性），讓你專注在真正需要你腦子的事：定義問題、選方法、詮釋數據的意義、決定「我認為」後面要接什麼。作者是你，送出的每一個主張都由你負責。
 >
 > 跟 humanizer 不同，這工具不是幫你隱藏用 AI 協作的事實，而是幫你把關文章品質。風格校準從你過去的文章學習你的聲音，寫作品質檢查抓出讓文字讀起來像機器產的模式。目標是品質，不是遮掩。
 
@@ -30,7 +30,7 @@ ARS 建立在這個前提上：**人類研究者 + AI 的組合，比純自動�
 
 [**Zhao 等人**](https://arxiv.org/abs/2605.07723)（2026-05）盤點了 arXiv、bioRxiv、SSRN、PMC 上 250 萬篇論文裡的 1.11 億筆引用，保守估計 2025 年單年就有 146,932 筆幻覺引用，並觀察到 2024 年中是上升的拐點；bioRxiv-to-PMC 這條配對的「預印本進到正式發表」幻覺存活率達 85.3%。他們把「真實引用被用來支撐被引文獻其實沒有提出的主張」描述為當前未解的問題。ARS v3.7.1 為來源 provenance 加上 trust-chain frontmatter，v3.7.3 為未來的 claim-level 稽核鋪上 locator 基礎建設（三層引用 anchor），並在引用時段帶出 advisory 風險訊號（ARS 內部把這條 claim-faithfulness 缺口標記為「L3」，此為 ARS 的用詞，不是論文的用詞）。v3.7.x 的設計動機來自 Zhao 等人的 corpus-scale 發現；ARS 本身的 corpus-scale 評估仍是未來工作。
 
-v3.8 補上 L3 缺口的另一半。v3.7.3 讓每一筆引用都帶 locator anchor，v3.8 在這個基礎上加一道 opt-in 稽核（`ARS_CLAIM_AUDIT=1`）：抓回每一個 anchor 指向的原始文本，判斷論文裡的 claim 是否真有被該引用支撐。五類新的 HIGH-WARN annotation（claim-not-supported、negative-constraint-violation、fabricated-reference、anchorless、constraint-violation-uncited）會在 formatter terminal hard gate 直接攔下輸出。Calibration 隨 release 出 20 筆 gold set，採 FNR<0.15、FPR<0.10 雙閾值；正式放大投入前要先有 calibration 證據（v3.8 spec §5）。
+v3.8 補上 L3 缺口的另一半。v3.7.3 讓每一筆引用都帶 locator anchor，v3.8 在這個基礎上加一道 opt-in 稽核（`ARS_CLAIM_AUDIT=1`）：抓回每一個 anchor 指向的原始文本，判斷論文裡的 claim 是否真有被該引用支撐。五類新的 HIGH-WARN annotation（claim-not-supported、negative-constraint-violation、fabricated-reference、anchorless、constraint-violation-uncited）會在 formatter terminal hard gate 直接攔下輸出。Calibration runner 隨 release 附一組 25 筆的合成 gold set，採 FNR<0.15、FPR<0.10 雙閾值。隨附的測試用的是直接回傳標準答案的替身裁判，所以它驗證的是工具本身，不是真正的 AI 裁判；目前還沒有真裁判的 calibration 結果，正式放大投入要等這份證據（v3.8 spec §5）。
 
 [**Ren 等人**](https://arxiv.org/abs/2607.13104)（2026，*Self-Improvements in Modern Agentic Systems: A Survey*）補上第三個、survey 層級的錨點。其科學發現章節的綜合結論（§7.4）指出：發現型 agent 難以自行驗證 novelty、正確性與可重現性，反而可能鑽弱代理指標的漏洞；證據管理必須跨異質工具與文獻維持；並帶有治理疑慮——「證據薄弱時，科學寫作也會放大錯誤資訊」。其生成迴圈章節（§5.1–§5.2）把人工稽核與保留人類標註列為自生成評估迴圈的實務防護；歷史章節（§2.2）則記下同一課題最早的版本：Lenat 的 EURISKO 的實務成功高度依賴使用者充當外部評估訊號、修剪無效的 heuristic 漂移——survey 明言此限制延續到現代 agentic 系統。ARS 引用這篇 survey 作為 human-in-the-loop 立場的設計依據，而非「人機協作必然勝過全自動」的實證證明；survey 對 ARS 可落地的增量記錄在 #539–#541 與 #547–#550。
 
@@ -71,7 +71,7 @@ v3.3 的靈感來自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 
 **👉 [docs/DATA_FLOWS.md](docs/DATA_FLOWS.md)** — 哪些資料會離開你的電腦（書目 resolver、選用且需明確同意的跨模型呼叫、更新檢查）、本機快取存什麼與存多久、每條路徑怎麼關閉。（英文）
 
-**使用 Claude Science？** 四個 skill 可直接匯入：**Skills → Import from GitHub**，貼上 `https://github.com/Imbad0202/academic-research-skills`，按 **Preview**，再按 **Import 4 skills**（需本 repo v3.14.0+——匯入器讀取 marketplace manifest 中明列的 skill 路徑）。匯入是單次快照：ARS 更新後需重新匯入。匯入的 skill 承載 ARS 方法論（研究／寫作／審查協定）；Claude Code 專屬機制——slash commands、hooks、subagent 編排——不會轉移。細節見 [docs/SETUP.zh-TW.md](docs/SETUP.zh-TW.md) 方法五。
+**使用 Claude Science？** 五個 skill 可直接匯入：**Skills → Import from GitHub**，貼上 `https://github.com/Imbad0202/academic-research-skills`，按 **Preview**，再按 **Import**（需本 repo v3.14.0+——匯入器讀取 marketplace manifest 中明列的 skill 路徑）。匯入是單次快照：ARS 更新後需重新匯入。匯入的 skill 承載 ARS 方法論（研究／寫作／審查協定）；Claude Code 專屬機制——slash commands、hooks、subagent 編排——不會轉移。細節見 [docs/SETUP.zh-TW.md](docs/SETUP.zh-TW.md) 方法五。
 
 **使用 Pi？** 執行 `pi install git:github.com/Imbad0202/academic-research-skills` 安裝 repo 內的社群維護 wrapper。它持續以原始 ARS 內容為準，並記錄 Pi 在編排與 hooks 方面的限制。詳見 [`pi/README.md`](pi/README.md)。
 
@@ -79,7 +79,7 @@ v3.3 的靈感來自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 
 ## 效能與費用
 
-**👉 [docs/PERFORMANCE.zh-TW.md](docs/PERFORMANCE.zh-TW.md)** — 各模式 token 預算、完整 pipeline 估算（一篇 15k 字論文約 ~$4–6），以及建議的 Claude Code 設定（Auto 模式；Agent Team 選用）。
+**👉 [docs/PERFORMANCE.zh-TW.md](docs/PERFORMANCE.zh-TW.md)** — 各模式 token 預算、完整 pipeline 估算（一篇 15k 字論文，以 2026-09 牌價計約 US$3–7，未計 cache 折扣），以及建議的 Claude Code 設定（Auto 模式；Agent Team 選用）。
 
 ## 使用指南與文章
 
@@ -94,11 +94,12 @@ v3.3 的靈感來自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 - **Academic Paper** — 12 個 Agent 的論文撰寫團隊，含風格校準、寫作品質檢查、LaTeX 輸出強化、視覺化、修訂教練、引用格式轉換、反洩漏協議、VLM 圖表驗證。
 - **Academic Paper Reviewer** — 7 個 Agent 的多視角同儕審查，採逐準則、證據錨定的敘事判斷（Journal-Fit Reviewer + 3 位動態審查者 + 魔鬼代言人），含讓步門檻協議、攻擊強度保持、可選跨模型 DA critique / calibration、R&R 追溯矩陣、唯讀約束。目前 live review 一律為 `NOT_CALIBRATED`；完整 calibration 只產生有界候選 profile，尚未接上 live review。
 - **Academic Pipeline** — 10 階段全流程調度器，含自適應 checkpoint、宣稱驗證、素材護照、可選 `repro_lock`、可選跨模型誠信驗證、中途強化機制，以及逐項準則的敘事退步檢查（typed trajectory 尚未實作）。
+- **SR-Screener** — 系統性、範圍與快速回顧的研究篩選，依使用者確認的篩選規則執行：兩位盲審 AI 審查者加第三位裁決者、有固定順序的排除代碼、不預設任何決定、可續跑的批次、品質檢查（種子研究、近似排除複查、kappa 與 PABAK）、PRISMA 2020 數字、EndNote/Zotero RIS 分組，以及交給 `academic-paper` 的 `literature_corpus[]`。AI 的決定只是輔助，最終由研究團隊查核。
 - **資料存取層級標註**（v3.3.2+）— 每個 skill 宣告 `data_access_level`（`raw` / `redacted` / `verified_only`），由 `scripts/check_data_access_level.py` 強制執行。設計靈感來自 Anthropic 的 automated-w2s-researcher（2026）。詳見 [`shared/ground_truth_isolation_pattern.md`](shared/ground_truth_isolation_pattern.md)。
 - **任務類型標註**（v3.3.2+）— 每個 skill 宣告 `task_type`（`open-ended` 或 `outcome-gradable`）。目前 ARS 所有 skills 皆為 `open-ended`。
 - **Benchmark 報告 Schema**（v3.3.5+）— JSON Schema + lint script，要求誠實的 benchmark 比較報告。詳見 [`shared/benchmark_report_pattern.md`](shared/benchmark_report_pattern.md)。
 - **Artifact 可重現性 Lockfile**（v3.3.5+）— Material Passport 新增可選 `repro_lock` 子區塊。**是設定文件化，不是重播保證** — LLM 輸出不是位元可重現。詳見 [`shared/artifact_reproducibility_pattern.md`](shared/artifact_reproducibility_pattern.md)。
-- **實驗來源憑證登錄**（#260）— Material Passport 可選的 `experiment_provenance[]` 記錄研究者在**外部**跑過的實驗（ARS 從不執行實驗），論文宣稱透過 `claim_intent_manifest.planned_experiment_ids[]` 與之 join。誠信 gate（Stage 2.5/4.5）逐條比對實驗支撐型宣稱與登錄憑證 — `ALIGNED` / `OVERSTATED` / `NOT_SUPPORTED_BY_PROVENANCE` / `PROVENANCE_INSUFFICIENT` — **但不判定實驗本身是否正確**。fail-closed 的 `experiment_intake_declaration` 讓「有沒有跑實驗」成為 Stage 1 明確決定。詳見 [`shared/handoff_schemas.md`](shared/handoff_schemas.md)。
+- **實驗來源憑證登錄**（#260）— Material Passport 可選的 `experiment_provenance[]` 記錄研究者在**外部**跑過的實驗（ARS 從不執行實驗），論文宣稱透過 `claim_intent_manifest.planned_experiment_ids[]` 與之 join。誠信 gate（Stage 2.5/4.5）逐條比對實驗支撐型宣稱與登錄憑證 — `ALIGNED` / `OVERSTATED` / `NOT_SUPPORTED_BY_PROVENANCE` / `PROVENANCE_INSUFFICIENT` — **但不判定實驗本身是否正確**。fail-closed 的 `experiment_intake_declaration` 讓「有沒有跑實驗」成為研究者明確回答的問題：Stage 1 結束後詢問，從後段進入的執行則在進入時詢問。詳見 [`shared/handoff_schemas.md`](shared/handoff_schemas.md)。
 
 **誠信與驗證邊界：**ARS 檢查的是論文與被報告的研究過程，包括引用是否存在、宣稱與來源是否一致、所述方法、已登錄實驗結果與論文宣稱的一致性、圖表忠實度，以及報告／流程／提交包的一致性；部分檢查採抽樣或由 LLM 判斷。ARS **不能**證明程序確實執行、原始資料真實，或結果可重現；若捏造內容被前後一致地報告，仍可能通過這些檢查。詳見 [POSITIONING.md〈Integrity checks and the empirical-work boundary〉](POSITIONING.md#integrity-checks-and-the-empirical-work-boundary)。
 
@@ -106,7 +107,9 @@ v3.3 的靈感來自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 
 ## 實際產出展示
 
-查看完整 10 階段 pipeline 的實際產出 — 包含**同儕審查報告、誠信驗證報告、完稿論文**：
+查看一次完整 pipeline 執行的實際產出，包含**同儕審查報告、誠信驗證報告、完稿論文**：
+
+> **這是 2026 年 3 月的紀錄，不代表現在的表現。** 這次執行（2026-03-07 至 03-08）用的是 academic-pipeline v2.3，當時 ARS 還沒有在 v3.3 加入 Semantic Scholar 核對，也還沒有在 v3.11 加入確定性的四索引引用閘門。這裡的數字描述的是那個版本，現行閘門還沒有在這篇論文上量過。作者欄寫 Claude（Anthropic），是因為研究者在這次實驗中這樣要求。這篇論文不是 Anthropic 的出版品；ARS 的定位是工具不取代研究者，也不主張作者身分（見 [POSITIONING.md](POSITIONING.md#what-this-is-not)）。
 
 **[瀏覽所有 pipeline 產出 →](examples/showcase/)**
 
@@ -114,13 +117,13 @@ v3.3 的靈感來自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 |---|---|
 | [完稿論文（英文）](examples/showcase/full_paper_apa7.pdf) | APA 7.0 格式，LaTeX 編譯 |
 | [完稿論文（中文）](examples/showcase/full_paper_zh_apa7.pdf) | 中文版，APA 7.0 |
-| [誠信報告 — 審稿前](examples/showcase/integrity_report_stage2.5.pdf) | Stage 2.5：抓出 15 個虛構引用 + 3 個統計錯誤 |
+| [誠信報告 — 審稿前](examples/showcase/integrity_report_stage2.5.pdf) | Stage 2.5：標出 15 筆有問題的引用（8 筆書目錯誤、6–8 筆疑似虛構）+ 3 個統計錯誤 |
 | [誠信報告 — 最終](examples/showcase/integrity_report_stage4.5.pdf) | Stage 4.5：確認零回歸 |
 | [同儕審查第一輪](examples/showcase/stage3_review_report.pdf) | Journal-Fit Reviewer + 3 審查者 + 魔鬼代言人 |
 | [複審](examples/showcase/stage3prime_rereview_report.pdf) | 修訂後驗證審查 |
 | [同儕審查第二輪](examples/showcase/stage3_review_report_r2.pdf) | 追蹤審查 |
 | [回覆審查意見](examples/showcase/response_to_reviewers_r2.pdf) | 逐點回覆 |
-| [出版後稽核報告](examples/showcase/post_publication_audit_2026-03-09.pdf) | 獨立全引用稽核：發現 21/68 篇問題，通過了 3 輪誠信審查仍漏網 |
+| [出版後稽核報告](examples/showcase/post_publication_audit_2026-03-09.pdf) | 另行以 Claude Code + WebSearch 稽核全部引用：經過 3 輪誠信審查後，最後 68 筆引用中仍有 21 筆有問題 |
 
 ---
 
@@ -213,6 +216,19 @@ ARS Stage 2 寫作      →  用驗證過的實驗結果撰寫論文
 
 > Pipeline 結束時自動產出 **Stage 6：過程紀錄** — 含論文創建過程紀錄與 6 維度協作品質評估（1–100 分）。
 
+#### SR-Screener（研究篩選，8 種模式）
+
+```
+"把我的計畫書轉成篩選規則"                    → protocol mode
+"這篇摘要符合我的回顧納入條件嗎？"            → quick mode（單一審查者初篩）
+"先用種子研究試跑篩選"                        → pilot mode
+"篩選這些資料庫匯出檔"                        → ta-screen mode
+"篩選晉級紀錄的全文"                          → ft-screen mode
+"裁決我 Rayyan 匯出檔中的衝突"                → adjudicate mode
+"幫我複查排除的紀錄"                          → audit mode
+"給我這次篩選的 PRISMA 數字"                  → report mode
+```
+
 ### 支援語言
 
 - **繁體中文** — 使用者以中文對話時預設使用
@@ -258,9 +274,13 @@ ARS Stage 2 寫作      →  用驗證過的實驗結果撰寫論文
 
 7 個 Agent 的多視角審查，採 **逐準則、證據錨定的敘事判斷**。模式：full、re-review、quick、methodology-focus、guided、calibration。目前 live review 與 Schema 6 package 一律為 `NOT_CALIBRATED`；完整 calibration 可產生有界候選 profile，但尚未接上 live review。不得以固定總分對照接受、小修、大修或退稿。第一輪審查面板 vs. 契約治理再審派送的分界：見 ARCHITECTURE.md §3 Stage 3 / Stage 3'。
 
-### Academic Pipeline (v3.22.0)
+### Academic Pipeline (v3.23.0)
 
-10 階段調度器，含誠信驗證、兩階段審查、蘇格拉底指導、協作品質評估。Pipeline 保證：每個階段都需使用者確認 checkpoint；誠信驗證（Stage 2.5 + 4.5）為 MANDATORY 且沒有不留紀錄的繞過路徑（所有覆寫都須記錄使用者理由、供 Stage 6 使用）；R&R 追溯矩陣（Schema 11）獨立驗證作者修訂宣稱。v3.4 新增 Compliance Agent（PRISMA-trAIce + RAISE）於 Stage 2.5 / 4.5。v3.5 新增 **協作深度觀察員**（`collaboration_depth_agent`，僅諮詢性質、永不阻擋流程）於每一次 FULL/SLIM checkpoint 與 pipeline 完成時。MANDATORY 誠信閘門（2.5 / 4.5）明確跳過觀察員，避免稀釋合規檢查。理論基礎：Wang & Zhang (2026), IJETHE 23:11。逐階段矩陣（agent、產出物、閘門）：見 ARCHITECTURE.md §3。
+10 階段調度器，含誠信驗證、兩階段審查、蘇格拉底指導、協作品質評估。Pipeline 規則（由 agent 依流程遵守，不是執行期保證）：每個階段都需使用者確認 checkpoint；誠信驗證（Stage 2.5 + 4.5）為 MANDATORY 且沒有不留紀錄的繞過路徑（所有覆寫都須記錄使用者理由、供 Stage 6 使用）；R&R 追溯矩陣（Schema 11）把每一項審查意見對應到作者的修訂宣稱，並記錄複審是否驗證通過。v3.4 新增 Compliance Agent（PRISMA-trAIce + RAISE）於 Stage 2.5 / 4.5。v3.5 新增 **協作深度觀察員**（`collaboration_depth_agent`，僅諮詢性質、永不阻擋流程）於每一次 FULL/SLIM checkpoint 與 pipeline 完成時。MANDATORY 誠信閘門（2.5 / 4.5）明確跳過觀察員，避免稀釋合規檢查。理論基礎：Wang & Zhang (2026), IJETHE 23:11。逐階段矩陣（agent、產出物、閘門）：見 ARCHITECTURE.md §3。
+
+### SR-Screener (v1.0.0)
+
+4 個 agent 的研究篩選，位於 `deep-research`（問題、計畫書、檢索）與 `academic-paper`（撰寫回顧）之間。模式：protocol、quick、pilot、ta-screen、ft-screen、adjudicate、audit、report。兩位盲審的審查者 subagent（只能用 Read 與 Grep）依使用者確認的篩選規則審每一筆紀錄，第三位審查者裁決「晉級 vs. 排除」的衝突；只用標準函式庫的 Python 腳本負責解析 RIS / PubMed .nbib / Web of Science / CSV 匯出檔、去重、分批、合併，並產出篩選紀錄表、RIS 分組、PRISMA 2020 數字、含 `[TO COMPLETE]` 欄位的方法段草稿，以及 `literature_corpus[]` 檔案。Agent 遵守的規則（不是執行期保證）：使用者確認篩選規則前不篩任何紀錄、失敗的呼叫不會被當成預設「排除」、數字發表前由研究團隊查核決定。詳見 [`sr-screener/WORKFLOW.md`](sr-screener/WORKFLOW.md)。
 
 ---
 
@@ -326,14 +346,14 @@ https://github.com/Imbad0202/academic-research-skills
 
 這裡只列最近三個版本。完整更新紀錄在英文版 [CHANGELOG.md](CHANGELOG.md)。到 v3.21.2 為止的繁體中文版本摘要已凍結存放於 [docs/changelog-archive/zh-TW.md](docs/changelog-archive/zh-TW.md)，之後不再更新。
 
-### v3.22.0（2026-09-16）— 輸出語言對契約、語系軌、plugin eval 套件與 Windows／傳輸修復
+### v3.23.0（2026-10-03）— 第五個 skill `sr-screener`、pipeline 紙上走查修復，以及證據與紀錄檔強化
 
-> **加的是結構，證據維持有界：**v3.22.0 讓一次執行可以透過登錄表鍵控的 Schema 4 欄位宣告輸出語言對，欄位缺席時舊有檔案逐字重現（#862 Phase 1、PR #869），並圍繞它建立語系軌：@didacrios 貢獻的 es-ES README 與保守的觸發詞、社群維護的語系包政策，以及單一 owner 的暫定申請路徑。兩套 `claude plugin eval` 套件（revision-coach、citation-check）與 reviewer-calibration harness 只作為回歸防線與派送基底出貨，皆不宣稱量測到的提升或校準值。修復：`/ars-mark-read` 與其餘五個鎖點透過一個共用的 `msvcrt` 後端在 Windows 可用、OpenAI 請求不再送出 GPT-6 Astra 拒收的參數、受限的 Codex 傳輸拒絕 `effort=ultra`、稽核來源記錄實際的判官身分、蘇格拉底路徑 F6 不再預選方向、無來源支撐的宣稱不能再靠 hedge 過關。README 只留最近三版；Gartenberg 等人與 Wang、Li 等人加入 human-in-the-loop 錨點。Roadmap Phase 4（階段級證據天花板）本版未交付，視窗順延。
+> **新增一個 skill，並修正把一次完整 pipeline 執行從頭讀到尾時發現的行為問題；提示層級變更的效果尚未量測，`sr-screener` 不宣稱篩選準確度：**v3.23.0 新增第五個 skill `sr-screener`（#919，由 @erfanz97 貢獻）。它把回顧研究的計畫書轉成使用者確認過的納入與排除規則，再由兩個彼此不知道對方判斷的審查 subagent 加上一位裁決者，篩選標題摘要與全文；測試使用合成資料，試算表匯出會讓公式文字失效（#951）。紙上走查一次預設 pipeline 執行（#925 至 #929）之後，預設執行的行為有這些改變：v3.6.7 Audit Artifact Gate 改為選用；只問學者一次論文是否報告自己做的實驗；使用者為整次執行設定的限制以原話保存，並引述給之後適用的每一次派工（審查階段改在 checkpoint 套用）；誠信關卡遵循同一套規則，付費牆後的來源改列為附註；Stage 5 與 6 只產出使用者要的檔案；選用開關會在 Stage 4.5 就提出 Stage 5 會拒絕的項目。Stage 2.5 與 4.5 checkpoint 改從 orchestrator 指定的資料夾重播證據列（#933、#947、#948），關卡判定為捏造的來源不會再進入之後的修訂（#936），紀錄檔讀取程式回報解析錯誤時不再引用檔案內容（#898、#945）。較小的變更：閱讀產出會說明單一來源的方法在什麼情況下會失準（#916）、在固定時點提醒文獻回顧的形式由作者決定（#921）、Schema 1 與產出端對齊（#938），以及 `/ars-citation-check` 改為沿用 session 模型（#912）。
 
-### v3.21.2（2026-09-06）— 模型現況對齊（Fable 5.1 / GPT-6 Astra）、檢查點決策來源與 CJK 標題比對修復
+### v3.22.2（2026-09-25）— 執行紀錄與交接檢查、縮寫檢查、擴大 instruction/data 界線，以及路由與首頁修復
 
-> **對齊現況與決策來源，不是新能力：**v3.21.2 依兩份 2026 年 9 月的廠商 system card 對齊套件。`gpt-6-astra` 以 provisional 身分進入跨模型表（兩條傳輸皆然），並依世代現況政策成為建議的 OpenAI 驗證模型；`gpt-5.6-sol` 保留其在 ChatGPT 訂閱引用傳輸上的 validated 身分，本版不宣稱任何新的 bakeoff 結果。受限的 Codex 傳輸 reasoning-effort 集合新增 `ultra`。新增兩道 guardrail，皆為 prompt 層、由廠商文件而非 ARS 量測所驅動：檢查點決策來源（只有使用者回合算決策；決策逐字轉交子代理；風險 R11），以及供應商端監控或安全介入一律視為傳輸失敗、永遠不是判定。針對兩份卡片的 harness 汰除審計沒有汰除任何東西（0 條 prompt 文字汰除；8 條 keep-as-debt 項目補上卡片引註）。修復：CJK 標題不再在四個索引解析器的精確標題閘失敗（#798），外層引號只在構成單一平衡單位時才剝除（#800）；autolink round-trip 測試明示其相依套件（#801）；`check_surface_form_parity` 改為指名壞掉的環境而非 manifest；新增 skill 清單一致性 lint（#809）；R10 殘餘缺口去過時化（#813）；修正一行 MLA 規則（#805）。套件／pipeline → v3.21.2；deep-research → v2.12.1；academic-paper → v3.3.1；academic-paper-reviewer → v1.11.1。
+> **兩個確定性檢查由合成測試釘住；提示層級變更的效果尚未量測：**v3.22.2 新增執行紀錄（#887）。pipeline 有 passport 檔時，orchestrator 會把使用者的初始指示、每個 checkpoint 的提問與使用者原話的回答、步驟收據與檔案雜湊，附加到 passport 旁的本機紀錄檔。發生 compaction、續跑或 subagent 回傳之後，`scripts/run_ledger.py report` 會比對紀錄與摘要或報告的宣稱，列出差異；現在它會自己以英文或繁體中文印出這份交接檢查，並在寫入紀錄時計算該筆紀錄所指檔案的雜湊（#898）。紀錄檔保存使用者的原話，`docs/DATA_FLOWS.md` 列出這個檔案與刪除方式。本版也新增 `scripts/check_acronyms.py`（#849，由 @reiropke 提議），不呼叫模型，回報未定義、先用後定義或重複定義的縮寫；提示會讓呼叫端在存好的草稿與摘要上執行它，審稿時則把報告附在 Editorial Decision Letter 最後，當作參考附件，審稿決定、修訂路線圖與複審準則都不引用它。兩支腳本都由合成測試釘住；實際執行時是否寫入紀錄、是否呼叫檢查，尚未量測。instruction/data 界線現在涵蓋派工與 passport 匯入中的第三方文字（#890）、接收端透過自己的工具呼叫讀到的文字，以及每個 skill 的主 session（#894）；lint 釘住每一份副本，效果尚未量測（選用的 claim-audit 裁判提示也隨之改變，舊提示的快取判定不再沿用）。修復：路由核心現在也送到 plugin 與 skills 複製安裝（#892）；模式慣用的輸入缺席時，明確的請求仍視為明確（#889）；`/ars-lit-review` 不再把進行中的執行導向別的流程（#897）；修訂教練不再把同儕審查導入委員會往來變體（#854）；orchestrator 把「權威」skill 產出限定為交付物的歸屬（#888）；首頁與 showcase 的說法與來源一致（#908）。路由結果來自每個 fixture 一個 session，只是初步驗證，不代表比率。新增一個描述紀錄檔的 schema；沒有任何既有 schema、指令模型或推理強度設定的變更。
 
-### v3.21.1（2026-08-24）— 有界工作流程基礎、封存式 bakeoff 與傳輸強化
+### v3.22.1（2026-09-23）— 模型現況對齊（Opus 5.5）、引用檢查載入與中文 APA 7 修復、Pi 包裝器修正
 
-> **有明示量測才視為量測，其餘維持有界：**v3.21.1 修復 codex-cli 0.147.0 下受限的 ChatGPT 訂閱引用傳輸，並記錄第一次 Promotion Bakeoff：`gpt-5.6-sol` 僅在該訂閱傳輸上取得 validated，first-party API 路徑仍為 provisional；往後的 bakeoff 則必須採用封存式預註冊。本版也新增 default-off 的研究工作流程 profile 基礎（只有離線、確定性的 conformance；沒有 pipeline hook，也未提供特定研究家族的成品 profile）、opt-in 的 inquiry-ledger alpha（`ARS_INQUIRY_LEDGER=1`），以及尚未實作、僅凍結設計的 alternative register。其行為證據維持 `NOT_RUN`，不宣稱可用性、復原、創新性、正確性或研究成果效益。審查準則 registry 新增一組有來源支持、僅供示範的 MSR 2027 exact-profile proving set；這不代表投稿期刊／會議與學科覆蓋、真實作者 attest，亦非 constructive-review 證據，所需的獨立人類評估仍未完成。其他變更包含對齊 `data_access_level`、整併 markdown lint 文法、登錄 guard launcher 的降級路徑，以及在不背書的前提下把 OrcaRouter 列為社群整合。套件／pipeline → v3.21.1；deep-research → v2.12.1；academic-paper → v3.3.1；academic-paper-reviewer → v1.11.1。
+> **模型現況對齊與修復，新增提示層級防線的效果尚未量測：**v3.22.1 在兩個模型各自通讀 Opus 5.5 system card 的審計之後，把 Claude Opus 5.5 與 Claude Fable 5.1 並列為支援的 session 模型，審計沒有退役任何防護（#883）。文件新增推理強度建議（Claude Code 讓 Opus 5.5 以 `medium` 起跑，重度任務應使用 `high` 以上）、兩個模型共用的一段牌價換算，以及分層說明：階梯順序是原廠的產品排序，不是能力排序。card 指出 Opus 5.5 比先前的模型更常照做貼上文字裡的指令，因此修訂教練現在把貼上的審稿與委員會文字當成資料處理，並由 lint 釘住；這道提示層級防線的效果尚未量測。本版也修復模式載入與引用檢查：13 個 plugin 模式指令直接呼叫其命名空間下的核心 skill，並從 plugin 根目錄解析附帶的參考檔，恢復引用檢查的載入（#857）；中文 APA 7 檢查會抓出內文缺少的作者簡稱，保留歧義例外與完整的參考文獻作者欄位，只在有筆畫排序顛倒的證據時才建議重排（#882）；引用檢查整體也把可見的語法錯誤與未經查證的解析或來源宣稱分開（#882）；新增的英文、繁體中文與韓文觸發詞會把請求導向引用檢查，CI 也把每份 skill 描述限制在 1,024 個 code point 內（#858、#864）。Pi 包裝器可接受字串陣列形式的 system prompt（#880）。沒有任何 schema、指令模型或推理強度設定的變更。
