@@ -21,3 +21,10 @@ Evaluate the pinned `claude-world/notebooklm-skill` release and integrate it as 
 4. Install into an isolated Windows environment; register the Codex skill/MCP only after checking for conflicts. Completed: package 1.3.0, Playwright Chromium, Codex skill, and stdio MCP registration.
 5. Run non-authenticated checks, repository validation, routing/evidence tests, and public safety scans. Offline checks passed. Pause for user Google login before read-only live NotebookLM validation.
 6. Review diffs and report exact completed/deferred states; do not merge.
+
+## Gemini Notebook host-migration follow-up (2026-10-12)
+
+- Confirmed the old 0.7.3 host gate and five-minute login false-negative; current upstream 0.8.4 accepts the new and legacy personal hosts.
+- Installed current upstream only in a separate venv. Reused the existing browser profile without `--fresh`; passive auth-network check, notebook listing, and all source listings passed.
+- Local private inventory files contain notebook/source IDs and titles; do not copy them into this repository or PR.
+- No existing notebook met the approved research-corpus criterion. Keep summary, ask, and citation-trace gates open; request a suitable existing notebook before proceeding. Do not mutate the production runtime or MCP configuration.

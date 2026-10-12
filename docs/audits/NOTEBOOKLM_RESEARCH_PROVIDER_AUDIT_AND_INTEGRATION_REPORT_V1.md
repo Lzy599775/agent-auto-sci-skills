@@ -1,6 +1,6 @@
 # NotebookLM Research Provider Audit and Integration Report
 
-**Task:** `NOTEBOOKLM_RESEARCH_PROVIDER_AUDIT_SAFE_INSTALL_AND_WORKFLOW_INTEGRATION_V1`
+**Task:** `NOTEBOOKLM_GEMINI_NOTEBOOK_HOST_MIGRATION_AND_LIVE_READONLY_ACCEPTANCE_V1` (follow-up to `NOTEBOOKLM_RESEARCH_PROVIDER_AUDIT_SAFE_INSTALL_AND_WORKFLOW_INTEGRATION_V1`)
 
 **Workflow:** `literature_review` (`1.1.0-rc.2`)
 **Repository ref:** `analysis/notebooklm-provider-integration-v1`
@@ -35,7 +35,9 @@ The upstream Bash installer is not used in PowerShell. `nlm_ask` is implemented 
 
 The machine exposes Python 3.13.9 through base Conda, no `py` launcher, and `uv` 0.10.9. The canonical worktree was not used for installation. An isolated runtime is installed at `%LOCALAPPDATA%\Programs\notebooklm-skill\venv`, pinned to upstream `1.3.0`; Playwright Chromium and its browser support files installed after one transient network retry. CLI versions and the static MCP registry were verified (`MCP_TOOL_COUNT = 13`). The narrow `notebooklm-research` Codex helper is installed, and `codex mcp get notebooklm-research` confirms an enabled stdio registration pointing to the isolated executable.
 
-Google authentication has not been run. When user browser login is required, state `USER_ACTION_REQUIRED = GOOGLE_LOGIN` and pause. Never read, show, copy, log, commit, or include storage state, cookies, or tokens. No notebook/source query or authenticated account access has occurred.
+The old runtime remains unchanged. A separate `notebooklm-py==0.8.4` environment with `browser,mcp` extras was installed at `%LOCALAPPDATA%\Programs\notebooklm-py-current\venv`. The current upstream login reused the existing persistent default profile without `--fresh`; auth storage was created and `auth check --test --passive` passed. Never read, show, copy, log, commit, or include storage state, cookie values, or tokens.
+
+The live read-only listing returned two notebooks and 17 ready sources (zero processing and zero failed). The two notebooks did not meet the task's criterion of at least three ready academic/research sources. Their titles, IDs, and source names are retained only in local private inventory files outside this repository; this report contains aggregate counts only. No summary or ask was issued, and no notebook/source mutation or external research was performed.
 
 ## Tests and current status
 
@@ -44,8 +46,11 @@ Google authentication has not been run. When user browser login is required, sta
 - `CODEX_MCP_CONFIGURED`: `YES`; transport `STDIO`; Codex CLI confirms enabled registration.
 - Source-filter capability: `NO`.
 - Prompt-only source-scope enforcement: `NO`.
-- Citation resolution/coverage and 5–10-claim verification: `NOT_TESTED` (requires user login and an approved existing notebook plus original source texts).
-- Read-only account acceptance (`auth verify`, list notebooks, list sources, summary, ask): `NOT_TESTED` pending user login.
+- Host migration diagnosis: `CONFIRMED` (old 0.7.3 default and accepted personal host were `notebooklm.google.com`; login detection waited on that host; observed landing was `notebook.google.com`; current 0.8.4 supports both).
+- Auth storage creation and passive network test: `PASS` (storage-file existence only; auth check exit code 0).
+- Read-only account acceptance: notebook listing `PASS` (2); source listing `PASS` (17 total, 17 ready, 0 processing, 0 failed); summary and ask `NOT_TESTED` because no eligible approved research notebook was present.
+- Citation resolution/coverage and 10-claim verification: `NOT_TESTED` pending an approved research notebook and access to its original source texts.
+- Provider decision: `NOT_READY`; preserve the production 1.3.0 wrapper/runtime and current Codex MCP configuration until the ask/reference/source-trace gate passes.
 - No notebooks were created; no sources uploaded/imported; no research/deep research, deletion, or artifact overwrite was performed.
 - Repository workflow validation: `PASS` (`scripts/validation/validate_research_workflow.py`).
 - Source manifest JSON Schema and routing golden-set JSON: `PASS` (schema validates; 10 cases parse).
@@ -56,6 +61,7 @@ Google authentication has not been run. When user browser login is required, sta
 
 ## Companion artifacts
 
+- `docs/audits/NOTEBOOKLM_073_TO_CURRENT_COMPATIBILITY_AUDIT_V1.md`
 - `skills/auto-sci-research/references/notebooklm_research_provider.md`
 - `docs/schemas/NOTEBOOKLM_SOURCE_MANIFEST_SCHEMA_V1.json`
 - `docs/audits/NOTEBOOKLM_CITATION_VERIFICATION_TEST_V1.md`
@@ -65,4 +71,4 @@ Google authentication has not been run. When user browser login is required, sta
 
 ## Deferred gate
 
-Controlled live use requires isolated runtime verification, Codex stdio registration/skill setup, repository validation, user-driven Google login, and read-only live testing against an approved existing notebook. No PR merge is authorized.
+Controlled use remains gated on an approved existing academic/research notebook with at least three ready sources, a read-only summary/ask test, runtime reference mapping, and claim-level checks against original passages. The isolated login, passive auth test, notebook/source inventory, and host-migration diagnosis passed. No PR merge is authorized.

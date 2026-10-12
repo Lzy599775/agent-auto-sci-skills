@@ -25,3 +25,11 @@ Access date for all sources below: **2026-08-23**.
 - OpenAI-curated Zotero skill version `0.1.2`; its helper exposes status, inventory, search, collections, tags, BibTeX, citations, children, full text, file URLs, and explicitly gated imports.
 
 Only decision-relevant evidence is recorded here; source pages are not copied into the repository.
+
+## External package sources (2026-10-12)
+
+| Title | Organization | URL | Architectural decision supported |
+|---|---|---|---|
+| `notebooklm-py` repository | GitHub (`teng-lin`) | https://github.com/teng-lin/notebooklm-py | Verify current upstream implementation for personal-host acceptance, browser login detection, profile layout, CLI/API, citation references, and MCP capabilities. |
+| `notebooklm-py` 0.8.4 release | GitHub (`teng-lin`) | https://github.com/teng-lin/notebooklm-py/releases/tag/v0.8.4 | Pin the current upstream version and release commit used in the isolated compatibility test. |
+| `notebooklm-py` 0.8.4 package metadata | PyPI | https://pypi.org/project/notebooklm-py/0.8.4/ | Verify the published package version, Python requirement, and browser/MCP extras before isolated installation. |
