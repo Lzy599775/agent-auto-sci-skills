@@ -19,7 +19,7 @@ Use this subskill when the output is a manuscript, response, slide deck, poster,
 7. Draft in paragraphs, not bullet lists, unless preparing an outline.
 8. Check every claim against evidence.
 9. Translate methods and results into field value.
-10. After scientific content stabilizes, run the Academic Prose Style Guard to check positive-first framing, defensive-contrast clustering, and semantic repetition without weakening boundaries.
+10. After scientific content stabilizes, resolve `DEFAULT_ACADEMIC_WRITING_PREFERENCES` from the Academic Writing Exemplar Protocol (the sole authority; `ACADEMIC_WRITING_PROFILE_V2` is compatibility-only), then run the Academic Prose Style Guard to check positive-first framing, bilingual contrast-overuse clusters, paragraph rhythm, and semantic repetition without weakening boundaries.
 11. Run reviewer-risk and citation checks.
 12. For substantive rewrites, run the V2 story-relevance, sentence-increment, paragraph-contribution, fact-placement, and figure/table-citation audits before final polishing.
 
@@ -58,7 +58,7 @@ whole-document/story audit
   -> SciPilot writing lint and final cross-section checks
 ```
 
-The V2 contract adds advisory `NOT_BUT_CONSTRUCTION_CLUSTER`, `STORY_RELEVANCE_AND_DEFENSE_AUDIT`, repeated-fact/number checks, and figure/table citation-ledger checks. It also preserves Methods reproducibility, section boundaries, uncertainty, null/conflicting evidence, and the `ROBUSTNESS_PLACEMENT_RULE`. Final table artifacts use `THREE_LINE_TABLE_CONTRACT`; chat Markdown tables are `PREVIEW_ONLY`; ordinary prose has no manual line breaks. Hidden formatting cleanup may be automatic, but `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`.
+The V2 contract adds advisory `NOT_BUT_CONSTRUCTION_CLUSTER`, bilingual `_contrast_matches`/`AI_NEG_PARALLEL`, `AI_PARAGRAPH_RHYTHM`, `STORY_RELEVANCE_AND_DEFENSE_AUDIT`, repeated-fact/number checks, and figure/table citation-ledger checks. It also preserves Methods reproducibility, section boundaries, uncertainty, null/conflicting evidence, and the `ROBUSTNESS_PLACEMENT_RULE`. Final table artifacts use `THREE_LINE_TABLE_CONTRACT` with trimmed cell edges and OOXML verification for Word; chat Markdown tables are `PREVIEW_ONLY`; ordinary prose has no manual line breaks, and generated DOCX body text must contain no manual line breaks. Hidden formatting cleanup may be automatic, but `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`.
 
 ## Related Helper Skills
 

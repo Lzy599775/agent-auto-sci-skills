@@ -9,7 +9,7 @@
   },
   "supply_mode": "synthetic_fixture",
   "snapshot_schema_version": "tortured-phrase-snapshot/1.0",
-  "snapshot_sha256": "962879909bfdd338047dc4569ff42188c4200fcd56a0a459b0e0f9169f2446c4",
+  "snapshot_sha256": "2a085972ba78efc8e45a8cef0002995b71f0d24b9fdbbcfc45a78c1109ac3c5c",
   "grammar_profile": "ars-tortured-phrase-canonical-ast/1.0",
   "normalizer_profile": "ars-nfkc-casefold-token/1.0",
   "preprocessor": {

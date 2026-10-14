@@ -12,6 +12,8 @@ import importlib.util
 import json
 import re
 import sys
+import zipfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +25,60 @@ assert SPEC and SPEC.loader
 LINT = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = LINT
 SPEC.loader.exec_module(LINT)
+
+W_NS = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+
+
+def validate_docx_manual_line_breaks(path: Path) -> list[str]:
+    """Return violations for body-prose manual breaks in a DOCX."""
+    with zipfile.ZipFile(path) as archive:
+        root = ET.fromstring(archive.read("word/document.xml"))
+    failures = []
+    for paragraph in root.findall(f".//{W_NS}body/{W_NS}p"):
+        for br in paragraph.findall(f".//{W_NS}br"):
+            kind = br.attrib.get(f"{W_NS}type", "textWrapping")
+            if kind in {"textWrapping", "line", ""}:
+                failures.append("MANUAL_LINE_BREAK")
+        for text in paragraph.findall(f".//{W_NS}t"):
+            if "\x0b" in (text.text or ""):
+                failures.append("MANUAL_LINE_BREAK")
+    return sorted(set(failures))
+
+
+def validate_docx_three_line_table(path: Path) -> list[str]:
+    """Check semantic three-line borders in the first DOCX table."""
+    with zipfile.ZipFile(path) as archive:
+        root = ET.fromstring(archive.read("word/document.xml"))
+    table = root.find(f".//{W_NS}tbl")
+    if table is None:
+        return ["NO_TABLE"]
+    rows = table.findall(f"{W_NS}tr")
+    if not rows:
+        return ["NO_ROWS"]
+    failures = []
+    for cell in table.findall(f".//{W_NS}tc"):
+        text = "".join(node.text or "" for node in cell.findall(f".//{W_NS}t"))
+        if text != text.strip():
+            failures.append("CELL_WHITESPACE")
+    borders = table.find(f"{W_NS}tblPr/{W_NS}tblBorders")
+    if borders is None:
+        return ["MISSING_BORDERS"]
+    def val(edge):
+        node = borders.find(f"{W_NS}{edge}")
+        return None if node is None else node.attrib.get(f"{W_NS}val")
+    if val("top") not in {"single", "thick", "double"}:
+        failures.append("MISSING_TOP_RULE")
+    if val("bottom") not in {"single", "thick", "double"}:
+        failures.append("MISSING_BOTTOM_RULE")
+    for edge in ("insideH", "insideV", "left", "right", "vertical"):
+        if val(edge) not in {None, "nil", "none"}:
+            failures.append("UNEXPECTED_VERTICAL_OR_BODY_RULE")
+    header_cells = rows[0].findall(f"{W_NS}tc")
+    for cell in header_cells:
+        tc_borders = cell.find(f"{W_NS}tcPr/{W_NS}tcBorders")
+        if tc_borders is None or tc_borders.find(f"{W_NS}bottom") is None:
+            failures.append("MISSING_HEADER_BOTTOM_RULE")
+    return sorted(set(failures))
 
 
 def classify_exemplar(case: dict[str, Any]) -> dict[str, Any]:

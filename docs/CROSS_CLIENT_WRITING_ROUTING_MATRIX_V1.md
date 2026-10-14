@@ -11,7 +11,7 @@ Private preference profile: `Lzy599775/research-project-state-hub/shared/writing
 
 | Contract step | Codex expected route | ChatGPT Web expected route | Required invariant |
 |---|---|---|---|
-| 1. Load preferences | `auto-sci-research` reads the shared profile when available | Project router loads `ACADEMIC_WRITING_PROFILE_V1` | Profile is a cross-project preference, not project scientific state. |
+| 1. Load preferences | `auto-sci-research` reads the shared profile when available | Project router loads `ACADEMIC_WRITING_PROFILE_V2` | Profile is a cross-project prose preference, not project scientific state. |
 | 2. Select owner | `agent-auto-sci-scicomm`, plus a domain writing helper when applicable | Project writing router with the same communication owner | Domain owner may add evidence context but cannot become the polishing owner. |
 | 3. Select mode | Explicit target-journal adaptation => `REQUIRED` | Same => `REQUIRED` | Explicit user intent wins over automatic classification. |
 | 4. Build our maps | `OUR_EVIDENCE_MAP -> OUR_ARGUMENT_OUTLINE` | Same sequence in the Web response/workspace | No draft begins from exemplar prose. |
@@ -50,7 +50,7 @@ The executable golden set is stored at `skills/agent-auto-sci-scicomm/tests/writ
 
 ## V2 contract extension
 
-Both clients load `DEFAULT_ACADEMIC_WRITING_PREFERENCES` automatically for substantive academic-writing routes. The shared sequence is:
+Both clients resolve the sole `DEFAULT_ACADEMIC_WRITING_PREFERENCES` authority in the Academic Writing Exemplar Protocol automatically for substantive academic-writing routes. `ACADEMIC_WRITING_PROFILE_V2` is compatibility-only and cannot diverge. The shared sequence is:
 
 ```text
 whole-document/story audit
@@ -68,7 +68,7 @@ whole-document/story audit
 | Story relevance | `STORY_RELEVANCE_AND_DEFENSE_AUDIT` in the prose guard | Router asks whether each sentence/paragraph adds scientific information | No boundary is removed merely to improve rhythm. |
 | Reproducibility | Methods details outrank story compression; move required detail to Supplement/Appendix | Same | Reproduction-critical content is retained. |
 | Robustness placement | `ROBUSTNESS_PLACEMENT_RULE` | Same | Main text only when needed for claim, identification, interpretation, or evaluation; otherwise supplement. |
-| Tables and prose breaks | `THREE_LINE_TABLE_CONTRACT`; `NO_MANUAL_LINE_BREAK_IN_PROSE` | Markdown tables are `PREVIEW_ONLY`; final artifacts use native rules | No vertical rules, no leading cell whitespace, and no manual prose breaks. |
+| Tables and prose breaks | `THREE_LINE_TABLE_CONTRACT`; `NO_MANUAL_LINE_BREAK_IN_PROSE` | Markdown tables are `PREVIEW_ONLY`; final artifacts use native rules and Word OOXML border checks | No vertical rules, no leading/trailing cell whitespace, and no manual body-prose breaks. |
 | Figure/table and fact ledgers | `FIGURE_TABLE_CITATION_LEDGER`; `FACT_PLACEMENT_LEDGER` | Same ledger fields in the response/workspace | Repeat only for a new substantive function or required reporting. |
 | Provenance | `HIDDEN_FORMATTING_CLEANUP = AUTO`; `PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY` | Same | Never claim detection evasion or automatic provenance stripping. |
 

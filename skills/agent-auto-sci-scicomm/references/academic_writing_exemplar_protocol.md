@@ -356,6 +356,22 @@ OFFICIAL_JOURNAL_REQUIREMENT
 DEFAULT_ACADEMIC_WRITING_PREFERENCES:
   claim_forward: true
   positive_first_when_boundary_preserved: true
+  prose_defaults:
+    claim_first_prose: true
+    direct_result_reporting: true
+    evidence_led_explanation: true
+    natural_sentence_variation: true
+    low_template_density: true
+  contrast_overuse_review:
+    chinese_patterns: [不是…而是…, 并非…而是…, 不能只…还…, 不仅…还…, 不仅仅…更…, 与其…不如…, 不应只…还应…, 没有…反而…]
+    english_patterns: [not ... but ..., not merely ... but also ..., not only ... but also ..., rather than ..., instead of ...]
+    review_scope: local_paragraph_and_adjacent_paragraph_clusters
+    single_valid_contrast: allow
+    sentence_quotas: prohibited
+    mechanical_replacement: prohibited
+  paragraph_rhythm_review: repeated_openings_contrast_shells_transitions_summaries_and_sentence_rhythm
+  preserve_scientific_negation: true
+  exemplar_pattern_learning: positive_first_claims_direct_results_comparisons_evidence_interpretation_summaries_qualifications
   preserve_causal_measurement_uncertainty_scope_boundaries: true
   long_document_order: whole_document_audit -> section_revision -> cross_section_audit
   own_evidence_order: OUR_EVIDENCE_MAP -> OUR_ARGUMENT_MAP -> EXEMPLAR_COMPARISON -> OUR_DRAFT -> PROSE_STYLE_GUARD -> POLISHING
@@ -438,13 +454,13 @@ For sensitivity analysis, robustness checks, alternative specifications, bandwid
 
 ### THREE_LINE_TABLE_CONTRACT
 
-For final Word, LaTeX, XLSX, or manuscript artifacts, every table has exactly the semantic equivalent of a top rule, a header separator rule, and a bottom rule, with no vertical rules. LaTeX should prefer `\toprule`, `\midrule`, and `\bottomrule` from `booktabs`. Word should keep only the table top border, header bottom border, and table bottom border. Cell text is trimmed at both ends; a cell may not begin with two half-width spaces, two full-width spaces, or a tab.
+For final Word, LaTeX, XLSX, or manuscript artifacts, every formal research table has exactly the semantic equivalent of a top rule, a header separator rule, and a bottom rule, with no vertical rules or body-row rules. LaTeX should prefer `\toprule`, `\midrule`, and `\bottomrule` from `booktabs`. Word OOXML must encode the table top border, header-row bottom border, and table bottom border, with other borders absent. Cell text is trimmed at both ends, including a single accidental leading whitespace character; meaningful internal spacing, units, signs, subscripts, superscripts, and formulas are preserved. Chat Markdown tables are `PREVIEW_ONLY`; Markdown rendering cannot be claimed to guarantee publication-grade borders. For a formal artifact, use a controlled native document/table format when the renderer cannot enforce the three-line layout.
 
 Chat Markdown tables are `CHAT_TABLE = PREVIEW_ONLY`: they preview row/column semantics and cannot be claimed to be publication-grade three-line tables. When a DOCX/LaTeX/XLSX/manuscript artifact is requested, convert to its native three-line contract.
 
 ### NO_MANUAL_LINE_BREAK_IN_PROSE
 
-Generated prose paragraphs must not contain soft line breaks, manual line breaks, `<br>`, Markdown hard breaks (two trailing spaces followed by a newline), U+2028, U+2029, or vertical tab. Word Shift+Enter equivalents are also prohibited. Normal paragraph boundaries are valid. LaTeX commands, code, equations, and table syntax may contain line breaks required by their grammar; the exception does not apply to ordinary prose text.
+Generated prose paragraphs must not contain soft line breaks, manual line breaks, `<br>`, Markdown hard breaks (two trailing spaces followed by a newline), U+2028, U+2029, or vertical tab. Word body text must use actual paragraph elements; `w:br` with no type or `w:type="textWrapping"` and vertical-tab text are prohibited in body prose. Paragraph boundaries are valid. Correct page/column breaks, pagination controls, and table-cell structures are not prose line breaks and must not be removed to satisfy this check. For generated final DOCX files, body manual-line-break count must equal zero. Existing source documents require a context review before any change to special layout.
 
 ### FIGURE_TABLE_CITATION_LEDGER
 

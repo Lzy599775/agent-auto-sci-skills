@@ -256,18 +256,9 @@ def _check_superficial_ing(text: str) -> list:
 
 
 def _check_negative_parallel(text: str) -> list:
-    out = []
-    for p, m in [
-        (r"\bnot\s+only\b[^.;]{1,60}?\bbut\s+(?:also\s+)?", "not only … but also"),
-        (r"\bit'?s\s+not\s+just\b[^.;]{1,40}?\bit'?s\b", "it's not just … it's"),
-        (r"不仅[^。；]{1,30}?(?:而且|还|也)", "不仅……而且……"),
-    ]:
-        hits = list(re.finditer(p, text, re.IGNORECASE))
-        if hits:
-            out.append(Issue(SEV_WARN, "AI_NEG_PARALLEL",
-                             f"否定式平行 '{m}' ×{len(hits)}，AI 高频句式，建议直陈",
-                             line=_line_of(text, hits[0].start()), count=len(hits)))
-    return out
+    # Kept as a compatibility hook; bilingual contrast detection is centralized
+    # in _contrast_matches/_check_contrast_overuse so one valid contrast is quiet.
+    return []
 
 
 def _check_emdash(text: str, sentences: int) -> list:
@@ -417,6 +408,25 @@ def _check_fullwidth(text: str) -> list:
 # V2 academic-writing contract checks (advisory unless noted)
 # ──────────────────────────────────────────────────────────────────────────
 
+_CONTRAST_PATTERNS_ZH = (
+    ("不是…而是…", r"不是[^。！？；\n]{0,80}而是"),
+    ("并非…而是…", r"并非[^。！？；\n]{0,80}而是"),
+    ("不能只…还…", r"不能只[^。！？；\n]{0,50}(?:还|也)"),
+    ("不仅…还…", r"不仅[^。！？；\n]{0,50}(?:还|也|而且)"),
+    ("不仅仅…更…", r"不仅仅[^。！？；\n]{0,50}更"),
+    ("与其…不如…", r"与其[^。！？；\n]{0,50}不如"),
+    ("不应只…还应…", r"不应只[^。！？；\n]{0,50}还应"),
+    ("没有…反而…", r"没有[^。！？；\n]{0,60}反而"),
+)
+
+_CONTRAST_PATTERNS_EN = (
+    ("not ... but ...", r"\bnot\b[^.!?;\n]{1,100}\bbut\b"),
+    ("not merely ... but also ...", r"\bnot\s+merely\b[^.!?;\n]{1,100}\bbut\s+also\b"),
+    ("not only ... but also ...", r"\bnot\s+only\b[^.!?;\n]{1,100}\bbut\s+also\b"),
+    ("rather than", r"\brather\s+than\b"),
+    ("instead of", r"\binstead\s+of\b"),
+)
+
 _NOT_BUT_PATTERNS = (
     ("不是…而是…", r"不是[^。！？；\n]{0,80}而是"),
     ("并非…而是…", r"并非[^。！？；\n]{0,80}而是"),
@@ -429,6 +439,44 @@ _NOT_BUT_PATTERNS = (
     ("does not ... but ...", r"\bdoes\s+not\b[^.!?;\n]{1,80}\bbut\b"),
     ("not simply ... but ...", r"\bnot\s+simply\b[^.!?;\n]{1,80}\bbut\b"),
 )
+
+
+def _contrast_matches(text: str, lang: str = "en") -> list[dict]:
+    """Return normalized contrast matches for the bilingual contract."""
+    patterns = _CONTRAST_PATTERNS_ZH if lang == "zh" else _CONTRAST_PATTERNS_EN
+    matches = []
+    for name, pattern in patterns:
+        for hit in re.finditer(pattern, text, re.IGNORECASE):
+            matches.append({"start": hit.start(), "end": hit.end(), "name": name, "text": hit.group(0)})
+    # Prefer the most specific/longest match at the same start (e.g. not only
+    # ... but also should not also count as generic not ... but ...).
+    matches.sort(key=lambda item: (item["start"], -(item["end"] - item["start"])))
+    selected = []
+    for item in matches:
+        if selected and item["start"] < selected[-1]["end"]:
+            continue
+        selected.append(item)
+    return selected
+
+
+def _check_paragraph_rhythm(text: str, lang: str) -> list:
+    """Flag repeated sentence openings/summary shells across adjacent paragraphs."""
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
+    if len(paragraphs) < 2:
+        return []
+    openings = []
+    for paragraph in paragraphs:
+        sentences = _split_sentences(paragraph, lang)
+        if not sentences:
+            continue
+        first = re.sub(r"[^A-Za-z\u4e00-\u9fff ]", " ", sentences[0]).lower()
+        words = first.split()
+        openings.append((" ".join(words[:2]), bool(re.search(r"\b(?:overall|in summary|taken together)\b|总体|总体而言|综上", paragraph, re.I))))
+    repeated_opening = len(openings) >= 2 and openings[0][0] and openings[0][0] == openings[1][0]
+    repeated_summary = sum(1 for _opening, summary in openings if summary) >= 2
+    if not (repeated_opening or repeated_summary):
+        return []
+    return [Issue(SEV_WARN, "AI_PARAGRAPH_RHYTHM", "相邻段落重复使用相似句首或总结结构；请自然化节奏并保留必要科学边界", count=2)]
 
 
 def _check_not_but_cluster(text: str) -> list:
@@ -479,6 +527,22 @@ def _check_not_but_cluster(text: str) -> list:
             examples=examples,
         ))
     return out
+
+
+def _check_contrast_overuse(text: str, lang: str) -> list:
+    matches = _contrast_matches(text, lang)
+    if len(matches) < 2:
+        return []
+    positions = [m["start"] for m in matches]
+    sentence_indexes = [len(re.findall(r"[.!?。！？；]", text[:pos])) for pos in positions]
+    paragraph_counts = {}
+    for pos in positions:
+        paragraph_counts[text.count("\n\n", 0, pos)] = paragraph_counts.get(text.count("\n\n", 0, pos), 0) + 1
+    clustered = any(sentence_indexes[i + 1] - sentence_indexes[i] <= 2 for i in range(len(sentence_indexes) - 1))
+    clustered = clustered or any(count >= 2 for count in paragraph_counts.values()) or len(matches) >= 3
+    if not clustered:
+        return []
+    return [Issue(SEV_WARN, "AI_NEG_PARALLEL", "否定—对照句式在局部聚集；优先正面陈述并保留必要科学对照", line=_line_of(text, positions[0]), count=len(matches), examples=[m["text"] for m in matches[:4]])]
 
 
 def _check_manual_line_break(text: str, mode: str) -> list:
@@ -844,6 +908,8 @@ def lint_text(text: str, mode: str = "plain", lang: str = "en") -> list:
 
     issues += _check_negative_parallel(text)
     issues += _check_not_but_cluster(text)
+    issues += _check_contrast_overuse(text, lang)
+    issues += _check_paragraph_rhythm(text, lang)
     issues += _check_manual_line_break(text, mode)
     issues += _check_cell_leading_whitespace(text, mode)
     issues += _check_repeated_low_value_numbers(text, mode)

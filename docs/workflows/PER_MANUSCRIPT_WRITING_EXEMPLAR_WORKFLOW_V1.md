@@ -6,6 +6,8 @@
 
 ## Contract
 
+Pattern libraries record positive-first claim patterns, direct result reporting, comparisons, evidence-to-interpretation transitions, summaries, and qualifications; frequency is never a quality mandate.
+
 The workflow engine is shared; every manuscript has an independent `MANUSCRIPT_ID`, profile, candidate pool, Master 20, Core 3, section exemplar sets, pattern library, and project skill. No fixed global corpus or Core 3 exists. One manuscript must not read another manuscript's private exemplar state unless the user explicitly requests a cross-project comparison. Cross-client field names and invariants are defined in [the state contract template](../../templates/CROSS_CLIENT_MANUSCRIPT_STATE_CONTRACT_V1.yaml); the template is a schema, not storage for live state.
 
 Public repository content is limited to generic workflow, schema, templates, routing, and synthetic tests. Bibliographic facts continue to come from Zotero parent records and primary sources. Derived notes are not substitutes for source text. NotebookLM is an optional full-text synthesis helper, never a required dependency or source of bibliographic/evidence truth.

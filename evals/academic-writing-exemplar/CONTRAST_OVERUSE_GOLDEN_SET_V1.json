@@ -1,0 +1,82 @@
+{
+  "version": "1.0.0",
+  "fixture_policy": "SYNTHETIC_ONLY_NO_REAL_MANUSCRIPTS_NO_SCIENTIFIC_RESULT_CLAIMS",
+  "cases": [
+    {
+      "id": "P01",
+      "context": "Chinese academic writing",
+      "lang": "zh",
+      "text": "结果不是模型无效，而是验证范围有限。解释并非效应不存在，而是样本结果未能确定方向。",
+      "expected_contrast": "WARN_CLUSTER",
+      "preserve_scientific_negation": true
+    },
+    {
+      "id": "P02",
+      "context": "English Results",
+      "lang": "en",
+      "text": "The estimate was not simply larger but also more precise. The association is not merely present but also stronger in the eastern region.",
+      "expected_contrast": "WARN_CLUSTER",
+      "preserve_scientific_negation": true
+    },
+    {
+      "id": "P03",
+      "context": "English Discussion across adjacent paragraphs",
+      "lang": "en",
+      "text": "The mechanism is not established but remains plausible.\n\nThe implication is not universal but applies to dense districts.",
+      "expected_contrast": "WARN_CLUSTER",
+      "preserve_scientific_negation": true
+    },
+    {
+      "id": "P04",
+      "context": "General information answer",
+      "lang": "en",
+      "text": "This route is not only shorter but also easier to follow.",
+      "expected_contrast": "NO_WARNING_SINGLE_VALID_CONTRAST",
+      "preserve_scientific_negation": true
+    },
+    {
+      "id": "P05",
+      "context": "Methodological review and boundary",
+      "lang": "en",
+      "text": "We did not infer causality from the cross-sectional association. The model estimates adjusted differences.",
+      "expected_contrast": "NO_WARNING_NECESSARY_BOUNDARY",
+      "preserve_scientific_negation": true
+    },
+    {
+      "id": "P06",
+      "context": "Literature-review synthesis paragraph rhythm",
+      "lang": "en",
+      "text": "Across the studies, tree canopy was linked to cooler daytime conditions. The association varied by season and spatial unit. Overall, evidence was strongest in neighborhoods.\n\nAcross the studies, park access was associated with more frequent activity. Effects varied by age group and travel mode. Overall, evidence was mixed across settings.",
+      "expected_contrast": "NO_CONTRAST_PARAGRAPH_RHYTHM_WARN",
+      "expected_rhythm": "WARN_CLUSTER",
+      "preserve_scientific_negation": true
+    },
+    {
+      "id": "P07",
+      "context": "Non-academic explanation",
+      "lang": "en",
+      "text": "It's not the route but the timing that matters.",
+      "expected_contrast": "NO_WARNING_SINGLE_VALID_CONTRAST",
+      "preserve_scientific_negation": true
+    }
+  ],
+  "pattern_coverage": {
+    "zh": [
+      "不是风险消失而是风险转移。",
+      "并非样本不足而是时间窗不同。",
+      "不能只报告显著性，还应报告效应量。",
+      "不仅测量绿量，还记录其空间分布。",
+      "不仅仅比较均值，更检验组间差异。",
+      "与其推断因果，不如报告相关性。",
+      "不应只强调精度，还应说明适用范围。",
+      "没有观察到效应，反而出现方向相反的估计。"
+    ],
+    "en": [
+      "The result is not absent but uncertain.",
+      "The result is not merely present but also precise.",
+      "Rather than infer causation, we report association.",
+      "Instead of assuming equivalence, we test the contrast.",
+      "The method is not only accurate but also calibrated."
+    ]
+  }
+}

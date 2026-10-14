@@ -2,6 +2,8 @@
 
 **Contract version:** V2
 
+**Global profile:** `ACADEMIC_WRITING_PROFILE_V2` (see `docs/standards/academic_writing_profile_v2.md`). Default to claim-first/positive-first prose, direct result reporting, evidence-led explanation, natural sentence variation, and low template density. Treat contrast-pattern and paragraph-rhythm signals as local review prompts, not sentence quotas.
+
 ## Purpose and boundary
 
 Run this guard after the scientific content is stable and before final prose or reviewer-risk QC. It applies to manuscript prose, Introduction, Methods interpretation, Results interpretation, Discussion, Conclusion, Abstract, review synthesis, rebuttal prose, and substantial academic interpretation.
