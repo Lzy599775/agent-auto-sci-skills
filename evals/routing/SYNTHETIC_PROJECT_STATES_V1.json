@@ -1,0 +1,23 @@
+{
+  "fixture_policy": "SYNTHETIC_ONLY_NO_PRIVATE_DATA",
+  "PROJECT_A": {
+    "MANUSCRIPT_ID": "SYNTHETIC_A",
+    "RESEARCH_QUESTION": "Synthetic material precision question",
+    "PROJECT_STATE": "S8_ACTIVE_FOR_WRITING",
+    "MASTER20_VERSION": "A-master-v1",
+    "CORE3_VERSION": "A-core-v1",
+    "CORE3_APPROVED": true,
+    "DATA_SOURCE": "synthetic-alloy.csv",
+    "RESULTS_LEDGER": ["A-synthetic-result"]
+  },
+  "PROJECT_B": {
+    "MANUSCRIPT_ID": "SYNTHETIC_B",
+    "RESEARCH_QUESTION": "Synthetic survey measurement question",
+    "PROJECT_STATE": "S4_CORE_3_PENDING_AUTHOR_APPROVAL",
+    "MASTER20_VERSION": "B-master-v3",
+    "CORE3_VERSION": "B-core-v2",
+    "CORE3_APPROVED": false,
+    "DATA_SOURCE": "synthetic-survey.csv",
+    "RESULTS_LEDGER": ["B-synthetic-result"]
+  }
+}

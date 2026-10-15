@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "scope": "Deliverable decision contract; interpreted semantic intent is input. This is not a natural-language classifier or an installed runtime router.",
+  "default_domain": null,
+  "private_state_default": "deny",
+  "zotero_write_default": false,
+  "intents": {
+    "causal_identification": {
+      "primary_route": "methodology",
+      "specialist": "agent-auto-sci-methodology",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "statistical_design": {
+      "primary_route": "methodology",
+      "specialist": "agent-auto-sci-methodology",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "bias_appraisal": {
+      "primary_route": "methodology",
+      "specialist": "agent-auto-sci-methodology",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "sampling_measurement": {
+      "primary_route": "methodology",
+      "specialist": "agent-auto-sci-methodology",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "model_suitability": {
+      "primary_route": "methodology",
+      "specialist": "agent-auto-sci-methodology",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "data_execution": {
+      "primary_route": "data_analysis",
+      "specialist": "agent-auto-sci-data-viz",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "predictive_validation": {
+      "primary_route": "data_analysis",
+      "specialist": "agent-auto-sci-ai-ml",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "figure_creation": {
+      "primary_route": "figure_workflow",
+      "specialist": "agent-auto-sci-data-viz",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "substantive_writing": {
+      "primary_route": "manuscript_writing",
+      "specialist": "agent-auto-sci-scicomm",
+      "companions": [
+        "PER_MANUSCRIPT_WRITING_EXEMPLAR_WORKFLOW_V1"
+      ],
+      "private_state": "identity_then_approval",
+      "mode": "standard"
+    },
+    "language_micro_edit": {
+      "primary_route": "manuscript_writing",
+      "specialist": "agent-auto-sci-scicomm",
+      "companions": [],
+      "private_state": "none",
+      "mode": "lightweight"
+    },
+    "published_result_reproduction": {
+      "primary_route": "paper_reproduction",
+      "specialist": null,
+      "companions": [
+        "PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1"
+      ],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "artifact_identity": {
+      "primary_route": "literature_review",
+      "specialist": "literature",
+      "companions": [
+        "PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1"
+      ],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "resource_preflight": {
+      "primary_route": "data_analysis",
+      "specialist": null,
+      "companions": [],
+      "private_state": "none",
+      "mode": "preflight_only"
+    },
+    "novelty_feasibility": {
+      "primary_route": "research_idea_evaluation",
+      "specialist": "agent-auto-sci-methodology",
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "literature_synthesis": {
+      "primary_route": "literature_review",
+      "specialist": "literature",
+      "companions": [
+        "PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1"
+      ],
+      "private_state": "none",
+      "mode": "standard"
+    },
+    "citation_support": {
+      "primary_route": "citation_claim_audit",
+      "specialist": null,
+      "companions": [],
+      "private_state": "none",
+      "mode": "standard"
+    }
+  }
+}

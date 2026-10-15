@@ -18,7 +18,7 @@ The plugin marketplace metadata in this repository is local to Codex. `LOCAL_PLU
 4. Confirm the GitHub app is connected to ChatGPT and is available in Project chats.
 5. Do not add or describe the GitHub repository as a persistent Project source unless the current ChatGPT UI explicitly supports it.
 6. Create a new chat inside the same Project.
-7. Test with: `帮我评估一个新的绿地暴露研究选题。`
+7. `SYNTHETIC_EXAMPLE`: test with a domain-neutral new-topic novelty/feasibility question.
 
 Expected: ChatGPT applies the Project instructions, recognizes a research task, retrieves `Lzy599775/agent-auto-sci-skills` through the GitHub app when needed, selects research idea evaluation, and reports the workflow ref/version used.
 
@@ -35,7 +35,10 @@ Only if the account exposes personal Skill creation/upload:
 5. Start a completely ordinary new chat outside the Project.
 6. Test with: `帮我检查一篇论文的方法是否足以支持其因果结论。`
 
-Expected: Research Orchestrator is applicable, routes to method/evidence and citation-claim review, and retrieves the GitHub workflow backend when needed.
+Expected: Research Orchestrator is applicable, selects `methodology` with
+`agent-auto-sci-methodology`, and retrieves `docs/workflows/methodology.md` from the same
+reviewed ref as the bootstrap. Citation audit accompanies it only if claim-source support
+is part of the actual deliverable. This synthetic example is not a default research topic.
 
 If the personal Skills controls are absent, record:
 

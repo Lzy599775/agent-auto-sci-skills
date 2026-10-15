@@ -5,10 +5,27 @@
 The authoritative workflow repository is `Lzy599775/agent-auto-sci-skills`.
 
 - Stable ref after V1 merge: `main`.
-- Current Draft PR validation ref: `feature/research-os-writing-production-v1`.
+- Historical PR #6 validation ref (merged; not the current source): `feature/research-os-writing-production-v1`.
 - Current version record: [docs/version.md](../version.md).
 
 ChatGPT and Codex must not independently maintain divergent copies of research principles, workflow routing, evidence standards, reproducibility rules, citation rules, or Zotero boundaries. Those rules remain versioned in GitHub.
+
+## Generic routing parity
+
+All surfaces follow [the canonical router](../workflows/index.md) and its
+[decision contract](../workflows/ROUTING_DECISION_CONTRACT_V1.json). Design/identification,
+bias, measurement/sampling validity, and model-suitability judgments select `methodology`
+with `agent-auto-sci-methodology`; execution selects `data_analysis`. Methods critique
+and prose rewriting have different deliverables. Published-result replication selects
+`paper_reproduction`, novelty selects `research_idea_evaluation`. Literature, citation,
+figure and artifact routes remain available. Route by deliverable, not keywords.
+
+No discipline, paper, or test case is a default. Project questions, sources, data, methods,
+results, figures, manuscript state, Master20 and Core3 remain private and isolated.
+Resolve identity before state access. Method consultation and micro-edits do not initialize
+exemplar state. Resource safety and the shared scientific table/Word contracts apply.
+Contract tests and matching distribution hashes do not prove actual Skill activation.
+New Codex and ChatGPT Web/Desktop chats require a separate black-box acceptance run.
 
 ## Surface responsibilities
 

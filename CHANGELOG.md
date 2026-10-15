@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Candidate `1.1.0-rc.4`: added a discipline-neutral methodology/research-design primary route,
+  deliverable-based separation from data-analysis execution, cross-domain synthetic routing
+  cases, and cross-project private-state isolation tests. Updated Codex/plugin/ChatGPT routing
+  mirrors; no client installation or ChatGPT settings change is implied.
+
 - Added the automatic Paper Artifact Availability Protocol and V1 record schema; surfaced literature now routes to code/data/supplement/repository/license/reproducibility discovery, with qualified monitor tiers and synthetic A01–A16 validation.
 - Added automatic cross-client per-manuscript state checks for substantive writing, a shared state contract, and a required artifact-record pointer for each Master 20 entry; updated Codex, ChatGPT Project, and global routers without implying repository changes configure ChatGPT settings.
 - Added the V2 global academic-writing contract: source-rule mapping, story-relevance and sentence-increment audits, Methods reproducibility preservation, Results/Introduction/Discussion hierarchy rules, robustness placement, three-line tables, no-manual-break prose, figure/table and fact ledgers, and conservative redundancy lint.

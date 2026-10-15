@@ -1,5 +1,13 @@
 # Data Analysis Workflow
 
+Use for data cleaning/QC, model execution, statistics, and predictive validation. For a
+judgment about design, identification assumptions, or model suitability, select
+[Methodology / Research Design](methodology.md) instead. Published-result reproduction
+uses [Paper reproduction](paper_reproduction.md). Select by deliverable, not a model name.
+
+Perform the applicable lightweight resource preflight before local execution. A standalone
+preflight stops after reporting disk/RAM, estimated output, and path; it does not authorize a job.
+
 ## Procedure
 
 1. Define the research question, outcome, unit of analysis, estimand, and decision criteria.

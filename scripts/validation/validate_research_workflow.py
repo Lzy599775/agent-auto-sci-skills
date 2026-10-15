@@ -27,6 +27,8 @@ REQUIRED_FILES = [
     "docs/workflows/literature_review.md",
     "docs/workflows/paper_reproduction.md",
     "docs/workflows/data_analysis.md",
+    "docs/workflows/methodology.md",
+    "docs/workflows/ROUTING_DECISION_CONTRACT_V1.json",
     "docs/workflows/manuscript_writing.md",
     "docs/workflows/citation_claim_audit.md",
     "docs/workflows/figure_workflow.md",
@@ -374,6 +376,8 @@ def main() -> int:
     check_plugin_mirror(errors)
     check_plugin_metadata(errors)
     check_placeholders(errors)
+    from validate_generic_research_routing import validate_contract as validate_generic_routing
+    errors.extend(validate_generic_routing(ROOT))
 
     if errors:
         print("Research workflow validation: FAIL")
