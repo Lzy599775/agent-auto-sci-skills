@@ -141,9 +141,9 @@ RESEARCH_OS_ROUTER_PARITY_AUDIT.md
 
 The Draft PR #7 candidate is `1.1.0-rc.4`: it adds a methodology primary route and clarifies
 boundaries while retaining all existing workflows, writing owner, state schema, and approval
-rules. Existing `1.1.0-rc.3` remains the main/released version until an authorized merge. After
-merge, update `current_validation_ref` to `main`; the candidate branch must not become the stable
-source by implication.
+rules. Existing `1.1.0-rc.3` remains the main/released version until an authorized merge. The
+release metadata already names `main` as `current_validation_ref`; the PR7 branch is retained only
+as `candidate_review_ref` and must not become the stable source by implication.
 
 The 13 cross-domain cases are `SEMANTIC_INTENT_CONTRACT_TEST` evidence and the eight project
 cases are `SYNTHETIC_STATE_ISOLATION_TEST` evidence. They do not prove natural-language intent
@@ -151,8 +151,8 @@ recognition, Skill loading, or fresh Codex/ChatGPT client activation.
 
 ## Separate follow-up issues
 
-- After author-approved merge, update the candidate validation ref in `docs/version.md` to
-  `main`; do not leave the Draft PR branch identified as a stable source.
+- After author-approved merge, verify that `docs/version.md` still names `main` as the stable and
+  current validation ref; keep the PR7 branch only as historical candidate-review provenance.
 - ChatGPT account/Project UI limits and Skill availability remain unverified; installing the
   repository or matching hashes does not prove account-level routing. Preserve existing user
   instructions and check the actual field limits before a later installation.
