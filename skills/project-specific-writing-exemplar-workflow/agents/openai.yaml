@@ -1,0 +1,3 @@
+display_name: Project-specific Writing Exemplars
+short_description: Select and route manuscript-specific writing exemplars
+default_prompt: Build or route a manuscript-specific exemplar corpus while preserving evidence boundaries and the Core 3 approval gate.

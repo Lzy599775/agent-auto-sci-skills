@@ -24,9 +24,36 @@ Use this skill first when the task spans multiple research stages or asks to imp
 Route by the current deliverable, not by topic keywords alone. Green exposure, heat exposure, urban health, spatial equity, accessibility, and SHAP can occur in either a literature review or an empirical manuscript, so they do not select the writing owner by themselves.
 
 - External literature synthesis, review corpus construction, paper-level extraction, Evidence Trace, cross-paper synthesis, conflicting evidence, heterogeneity, literature gaps, review coding, or review drafting routes to `sport-geography-review-bibliometric`. If the review type or domain route is still undecided, place `urban-exposure-review-radar-workflow` before it.
-- The user's own data/method/results manuscript drafting or revision routes to `sport-geography-sci-writing`. Add geospatial, ML, data-viz, methodology, or scicomm helpers only when the immediate deliverable requires them.
-- For mixed tasks, choose the owner for the current handoff. A frozen empirical Results/Discussion remains owned by `sport-geography-sci-writing` even when it cites literature; review skills may be helpers and must not take over. Do not load both domain owners merely because the topic contains literature and empirical terms; make a later handoff explicit when the deliverable changes.
+- The user's own data/method/results manuscript drafting or revision routes through `agent-auto-sci-scicomm` as the argument owner, with `sport-geography-sci-writing` added as the domain writing helper when applicable. Add geospatial, ML, data-viz, or methodology helpers only when the immediate deliverable requires them.
+- For mixed tasks, choose the owner for the current handoff. A frozen empirical Results/Discussion remains scientifically bounded by `sport-geography-sci-writing` when applicable, while `agent-auto-sci-scicomm` coordinates the argument handoff; review skills may be helpers and must not take over. Do not load both domain owners merely because the topic contains literature and empirical terms; make a later handoff explicit when the deliverable changes.
 - If the immediate deliverable is only review evidence structure and explicitly says not to write prose, do not add `sport-geography-sci-writing`, `scipilot-writing-skill`, or `agent-auto-sci-scicomm` as primary owners.
+
+### Evidence-first writing exemplar handoff
+
+For substantive academic manuscript writing, keep the existing owners and insert the argument-architecture handoff only when its mode is `REQUIRED` or `AUTO`:
+
+```text
+auto-sci-research
+  -> agent-auto-sci-scicomm
+  -> domain writing skill when applicable
+  -> OUR_EVIDENCE_MAP -> OUR_ARGUMENT_OUTLINE
+  -> academic_writing_exemplar_protocol (REQUIRED/AUTO)
+  -> draft from our evidence
+  -> Academic Prose Style Guard
+  -> scipilot-writing-skill
+```
+
+For every substantive academic-writing conversation, load the shared V2 academic-writing contract from
+`../agent-auto-sci-scicomm/references/academic_writing_exemplar_protocol.md` automatically. The contract adds a
+whole-document/story audit, sentence academic-increment and paragraph story-contribution audits, fact-placement and
+figure/table citation ledgers, Results/Introduction/Discussion selection rules, and the `ROBUSTNESS_PLACEMENT_RULE`.
+It preserves Methods reproducibility and scientific boundaries; it does not make robustness checks the default story.
+ChatGPT Web can consume the same contract through the generated project/account instruction text, but Codex cannot
+change Web account settings.
+
+As a mandatory companion route, every online paper search automatically uses `docs/workflows/PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1.md` for surfaced papers (publisher/supplement, code, data, repository identity, license, and reproducibility status). Monitor audits are tiered; raw unqualified candidates do not receive deep repository search. Every Master 20 candidate receives an artifact record, but availability remains secondary to scientific/story/writing fit. Every substantive writing request automatically checks the manuscript's isolated authoritative state; micro-edits remain exempt from heavy initialization. These behaviors do not require users to name a Skill.
+
+Use `SKIP` for sentence-level proofreading, grammar-only correction, citation-format-only work, minor typo fixes, single-caption micro-edits, and pure code tasks. The exemplar protocol is a reference handoff under `agent-auto-sci-scicomm`; it is not a new top-level skill, literature owner, or polishing owner.
 
 ### Academic prose quality-control handoff
 
@@ -124,6 +151,7 @@ Treat a result file that conflicts with `CURRENT_STATE` on effect direction or a
 - `references/09_subagent_composition_matrix.md`: role-specific subagent combinations and handoff schema.
 - `references/10_prompt_workflow_from_academic_pdf.md`: private PDF-derived prompt workflow structure, adapted without copying long text.
 - `references/11_sportpark_skill_integration_notes.md`: Sportpark writing/figure lessons, duplicate handling, and Darwin-style evaluation boundary.
+- `../agent-auto-sci-scicomm/references/academic_writing_exemplar_protocol.md`: evidence-first exemplar selection, article maps, anti-copying contract, and cross-client writing handoff.
 - `../urban-exposure-review-radar-workflow/references/workflow_playbook.md`: route-specific workflow for reviews, bibliometrics, urban exposure, remote sensing radar, and health database linkage.
 - `../kdense-ml-ai-selected/SKILL.md`: selected K-Dense ML/AI package and upstream subskills.
 - `../kdense-data-viz-selected/SKILL.md`: selected K-Dense data analysis and visualization package.
@@ -156,3 +184,5 @@ Treat a result file that conflicts with `CURRENT_STATE` on effect direction or a
 - Do not copy long text from private prompt PDFs into public skill files.
 - Do not create a new subskill when an existing subskill can be extended cleanly.
 - Do not skip the HTML evolution archive after a meaningful skill change.
+- Do not create a duplicate top-level academic-writing skill when the existing scicomm and SciPilot owners can carry
+  the contract.

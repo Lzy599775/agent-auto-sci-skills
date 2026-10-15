@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Orchestrator"
+  short_description: "Route evidence-first research workflows"
+  default_prompt: "Use $research-orchestrator to route and execute this research task from the current workflow source of truth."

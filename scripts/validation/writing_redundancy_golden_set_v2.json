@@ -1,0 +1,18 @@
+{
+  "schema_version": "WRITING_REDUNDANCY_GOLDEN_SET_V2",
+  "case_count": 12,
+  "cases": [
+    {"id": "R01", "rule": "Methods number repeated in Results without new meaning", "input": "Methods\nThe study included 2050 blocks.\nResults\nThe analysis covered 2050 blocks again.", "expected": "WARN_REPEATED_LOW_VALUE_NUMBER"},
+    {"id": "R02", "rule": "Abstract and Methods both need sample size", "input": "Abstract\nWe analyzed 2050 blocks.\nMethods\nThe sample comprised 2050 blocks.", "expected": "ALLOW_REQUIRED_REPETITION"},
+    {"id": "R03", "rule": "Figure 1 repeated without a new claim", "input": "Results\nFigure 1 shows the study area.\nDiscussion\nFigure 1 provides the study area again.", "expected": "WARN_REPEATED_FIGURE_CITATION"},
+    {"id": "R04", "rule": "Figure 5 cited again for a new explanation", "input": "Results\nFigure 5 summarizes SHAP values.\nDiscussion\nFigure 5 supports the new interpretation of the dominant predictor.", "expected": "REVIEW_ALLOWED_NEW_CLAIM"},
+    {"id": "R05", "rule": "Non-core sensitivity analysis moves to Supplement", "input": "Sensitivity analysis confirms the scale result and does not change the main conclusion.", "expected": "SUPPLEMENT_DETAILS"},
+    {"id": "R06", "rule": "Core identification robustness stays in main text", "input": "The identification claim depends on the prespecified robustness analysis.", "expected": "KEEP_MAIN_TEXT"},
+    {"id": "R07", "rule": "One necessary not-but clarification", "input": "The estimate is associational rather than causal.", "expected": "PASS_SINGLE_CONTRAST"},
+    {"id": "R08", "rule": "Repeated not-but templates", "input": "The study is not a causal experiment but an observational analysis.\nThe result is not a universal effect but a conditional association.", "expected": "WARN_NOT_BUT_CLUSTER"},
+    {"id": "R09", "rule": "Defensive sentence adds no new boundary", "input": "The estimate describes the conditional response. This does not describe the conditional response.", "expected": "DELETE_DUPLICATE_DEFENSE"},
+    {"id": "R10", "rule": "Defense protects causal interpretation", "input": "The estimate is associational and should not be interpreted as an intervention effect.", "expected": "KEEP_ONCE"},
+    {"id": "R11", "rule": "Methods reproducibility detail has low story increment", "input": "Methods\nThe preprocessing used the prespecified 30 m buffer and fixed coordinate reference system.", "expected": "KEEP_OR_MOVE_SUPPLEMENT"},
+    {"id": "R12", "rule": "Repeated exact number has no new function", "input": "The threshold was 500 m. The results used the same 500 m threshold without adding interpretation.", "expected": "WARN_REPEATED_LOW_VALUE_NUMBER"}
+  ]
+}

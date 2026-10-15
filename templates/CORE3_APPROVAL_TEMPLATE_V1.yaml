@@ -1,0 +1,23 @@
+schema_version: 1
+manuscript_id: ""
+master_corpus_version: ""
+core3_version: ""
+approval_status: CORE_3_RECOMMENDED # CORE_3_RECOMMENDED | APPROVED | REPLACEMENT_REQUESTED | REJECTED
+approval_required: true
+decision:
+  status: PENDING # PENDING | APPROVED | REPLACE_ONE | REPLACE_TWO | REJECTED
+  approved_record_ids: []
+  replaced_record_ids: []
+  selected_alternative_ids: []
+  author_approval_evidence: ""
+  decided_at: null
+recommendations:
+  - corpus_record_id: ""
+    scientific_proximity: ""
+    structural_value: ""
+    sections_best_for: []
+    limitations_as_exemplar: []
+alternates: []
+gate_effect:
+  while_pending: BLOCK_DEEP_ANALYSIS_AND_MAJOR_REWRITE
+  on_explicit_approval: AUTO_CONTINUE_TO_S6_DEEP_ANALYSIS

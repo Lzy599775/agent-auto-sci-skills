@@ -4,7 +4,11 @@
 
 > 面向 Codex 的科研 skill 套件，聚焦地理学、体育学、城市健康、GIS/遥感、绿色暴露、体育公园/体育设施、空间公平、文献综述、文献计量、机器学习、论文图件和 SCI 写作。
 
-`Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的本地科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让你在 Codex 里知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
+`Auto-sci-research` 不是“一键写论文”按钮，而是一套可审计、可扩展、可复用的科研工作台。它把选题、文献、数据、GIS/遥感、统计和机器学习、图表、写作、投稿、审稿回复、长期项目记忆拆成清晰的子 skill，让 ChatGPT 与 Codex 知道“现在该用哪个、为什么用、产出什么、边界在哪里”。
+
+## 持久科研工作流
+
+仓库根目录的 [AGENTS.md](AGENTS.md) 提供精简的长期规则和路由入口；详细架构、工作流、证据标准、Research Vault、模板与评估体系从 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/index.md](docs/index.md) 进入。核心原则是：给 agent 一张可导航的地图，而不是把全部规则塞进一个巨大提示词。
 
 当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-10-12**：
 
@@ -45,13 +49,16 @@ $env:USERPROFILE\.codex\skills
 
 | 你现在要做什么 | 先用哪个 skill |
 |---|---|
+| 在 ChatGPT/Codex 中自动识别并路由综合科研目标 | `research-orchestrator` |
 | 不知道整个科研任务怎么拆 | `auto-sci-research` |
+| 搜索、核验、提取、综合文献或审计 citation–claim | `literature` |
 | 建文献库、source manifest、checkpoint、长期记忆 | `agent-auto-sci-automation` |
 | 把模糊选题变成研究问题、机制和假设 | `agent-auto-sci-methodology` |
 | 做 GIS、遥感、可达性、暴露、空间公平 | `agent-auto-sci-geospatial` |
 | 做 EDA、统计、论文图表、文献计量图 | `agent-auto-sci-data-viz` |
 | 做机器学习、SHAP/XAI、泄漏检查、空间验证 | `agent-auto-sci-ai-ml` |
 | 组织论文 argument、投稿、审稿回复 | `agent-auto-sci-scicomm` |
+| 按目标期刊近邻论文拆解论证结构 | `agent-auto-sci-scicomm` + `academic_writing_exemplar_protocol`（参考协议，不是新顶层 skill） |
 | 做体育地理综述、文献计量、政策议程 | `sport-geography-review-bibliometric` |
 | 写体育设施/体育公园/暴露公平实证 SCI 论文 | `sport-geography-sci-writing` |
 | 判断城市暴露综述、前沿雷达、医学数据库连接路线 | `urban-exposure-review-radar-workflow` |
@@ -68,7 +75,9 @@ $env:USERPROFILE\.codex\skills
 
 | Skill | 作用 | 输入 | 输出 | 边界 |
 |---|---|---|---|---|
+| `research-orchestrator` | ChatGPT/Codex 跨表面薄型入口。读取 GitHub 当前 workflow ref，判断任务类型，加载必要标准并交给专项 skill。 | 科研目标、已有材料、期望产出。 | workflow route、使用的 ref/version、专项 skill、QC。 | 不复制完整规则；GitHub 不可用时必须报告 fallback。 |
 | `auto-sci-research` | 总控 router。判断任务属于选题、综述、GIS、数据、ML、图件、写作还是投稿，并安排子 skill 顺序。 | 任务描述、项目目标、已有材料、当前阶段。 | 路线图、子 skill 调用顺序、质量门控、进化记录。 | 不替代具体分析或写作子 skill。 |
+| `literature` | 证据可追溯的通用文献 workflow V0。 | 研究问题、seed papers、Zotero/DOI/引用或待核查 claim。 | 检索与去重记录、paper note、evidence trace、citation-support 结论。 | 先手工 workflow 与 golden set，不自动猜测缺失字段。 |
 | `agent-auto-sci-automation` | 长期项目自动化、source manifest、checkpoint、失败恢复和公开安全边界。 | 数据源、文献源、项目目录、API/密钥边界。 | manifest、状态表、恢复点、失败日志、目录规范。 | 不提交密钥、私有 PDF、付费导出或未发表正文。 |
 
 ### B. 方法论与综述路线
@@ -170,6 +179,18 @@ auto-sci-research
 -> agent-auto-sci-scicomm
 ```
 
+## Evidence-first 学术写作对标
+
+“对标目标期刊 / 学习顶刊写法”在本套件中不是语言模仿，而是证据优先的 exemplar decomposition：先建立 `OUR_EVIDENCE_MAP` 与 `OUR_ARGUMENT_OUTLINE`，再按每个 substantive section 选择 3–5 篇功能近邻论文，记录 `FULLTEXT`、`ABSTRACT_ONLY` 或 `METADATA_ONLY` 的阅读范围，最后从自己的证据起草并交给 Academic Prose Style Guard 和 SciPilot 做语言质控。
+
+这项能力位于 `agent-auto-sci-scicomm` 的参考协议中，不新增顶层 Skill，也不取代 literature owner、domain writing owner 或 `scipilot-writing-skill`。允许学习 section function、argument ordering、evidence presentation 和 figure sequencing；禁止复制原句、独特措辞、citation chain、novelty claim、因果解释或超出自有证据的结果逻辑。
+
+摘要偏好 `PREFERRED_EMPIRICAL_ABSTRACT_PROFILE` 仅是无更严格期刊格式且用户未另行指定时的 soft target；官方期刊要求和 reporting guideline 优先。期刊推荐也必须结合完整稿件（若可用）、研究问题、gap、contribution、methods 和 conclusions，并核验 scope、indexing、OA/APC 与近邻论文，不能只按 IF 排序。
+
+Codex 路由与 ChatGPT Web 共用同一公共协议；跨客户端契约见 [CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1](docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md)。
+
+V2 进一步把学术写作契约扩展为可复用的全局偏好：先做 story relevance、sentence academic increment 和 paragraph contribution 审计，再做 exemplar handoff、Academic Prose Style Guard 与 SciPilot lint；保留 Methods 可复现性和因果/测量/不确定性边界。三线表、正文禁手动换行、图表引用 ledger 与 fact-placement ledger 均有可执行检查。ChatGPT Web 可复制 [CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2](CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt) 到 Project Instructions 或账户级 Custom Instructions；仓库不会声称已修改用户账户设置。
+
 ## 上游与许可证策略
 
 - `Haojae/scipilot-writing-skill`：MIT，完整封装并保留 LICENSE/NOTICE。
@@ -183,6 +204,10 @@ auto-sci-research
 ## 公开安全原则
 
 本仓库不应包含 API key、token、cookie、私有 PDF、WoS/Scopus 原始导出、未发表论文正文、审稿意见原文、私人数据集、个人绝对路径或无授权第三方内容。发现泄露时应立即移除跟踪、更新忽略规则，并轮换相关密钥。
+
+## ChatGPT 与 Codex 跨表面使用
+
+从 [docs/chatgpt/index.md](docs/chatgpt/index.md) 获取 ChatGPT Project 的一次性 instructions、普通新聊天的 Skill/Plugin 路线、GitHub source-of-truth 合约和测试协议。详细科研规则仍只在版本化仓库中维护。
 
 ## License
 

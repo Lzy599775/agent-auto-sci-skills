@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "fixture_policy": "SYNTHETIC_ONLY_NO_REAL_PAPERS_NO_REAL_MANUSCRIPT_IDENTIFIERS",
+  "cases": [
+    {"id":"G01","input":"substantive request for synthetic manuscript A; no skill","expected":"INITIALIZE_A","state":"S0_UNINITIALIZED","synthetic":true},
+    {"id":"G02","input":"synthetic manuscript B has current active skill","expected":"LOAD_B_ONLY","state":"S8_ACTIVE_FOR_WRITING","synthetic":true},
+    {"id":"G03","input":"synthetic manuscripts A and B have similar topics","expected":"NO_CROSS_CORPUS_READ","state":"S8_ACTIVE_FOR_WRITING","synthetic":true},
+    {"id":"G04","input":"Master 20 ready; Core 3 approval pending; substantive rewrite requested","expected":"BLOCK_DEEP_ANALYSIS_AND_REWRITE","state":"S4_CORE_3_PENDING_AUTHOR_APPROVAL","synthetic":true},
+    {"id":"G05","input":"explicit Core 3 approval recorded","expected":"AUTO_CONTINUE_DEEP_ANALYSIS","state":"S5_CORE_3_APPROVED","synthetic":true},
+    {"id":"G06","input":"Discussion substantive writing with active synthetic skill","expected":"SELECT_4_OR_5_DISCUSSION_EXEMPLARS","state":"S8_ACTIVE_FOR_WRITING","synthetic":true},
+    {"id":"G07","input":"Results substantive writing with active synthetic skill","expected":"SELECT_4_OR_5_RESULTS_EXEMPLARS_MAY_DIFFER_FROM_G06","state":"S8_ACTIVE_FOR_WRITING","synthetic":true},
+    {"id":"G08","input":"target journal changed materially","expected":"SET_REFRESH_REQUIRED","state":"S9_REFRESH_REQUIRED","synthetic":true},
+    {"id":"G09","input":"single sentence grammar-only micro-edit","expected":"SKIP_HEAVY_WORKFLOW","state":"S8_ACTIVE_FOR_WRITING","synthetic":true},
+    {"id":"G10","input":"NotebookLM unavailable","expected":"FALLBACK_TO_AUTHORIZED_PRIMARY_FULLTEXT","state":"S6_CORPUS_DEEP_ANALYSIS_COMPLETE","synthetic":true},
+    {"id":"G11","input":"Codex and Web request same synthetic manuscript","expected":"READ_SAME_AUTHORITATIVE_PRIVATE_RECORD_AND_VERSIONS","state":"S8_ACTIVE_FOR_WRITING","synthetic":true},
+    {"id":"G12","input":"new synthetic manuscript C resembles A","expected":"DO_NOT_INHERIT_A_SKILL","state":"S0_UNINITIALIZED","synthetic":true},
+    {"id":"G13","input":"new version of same synthetic manuscript; framing stable","expected":"KEEP_CURRENT_SKILL_AFTER_IDENTITY_AND_FRESHNESS_CHECK","state":"S8_ACTIVE_FOR_WRITING","synthetic":true},
+    {"id":"G14","input":"research question materially changed","expected":"SET_REFRESH_REQUIRED_AND_REASSESS","state":"S9_REFRESH_REQUIRED","synthetic":true},
+    {"id":"G15","input":"legacy pilot labels appear in a fixture lookup request","expected":"NEVER_GLOBALIZE_OR_SELECT_REAL_EXEMPLARS","state":"S0_UNINITIALIZED","synthetic":true}
+  ]
+}
