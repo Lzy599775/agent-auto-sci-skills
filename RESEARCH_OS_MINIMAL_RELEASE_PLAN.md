@@ -15,24 +15,31 @@ private data, caches, or generated research outputs are in scope.
 3. Review the Orchestrator mirrors and ChatGPT parity documents.
 4. Re-run the listed validators in `RESEARCH_OS_GENERIC_ROUTING_TEST_REPORT.md`.
 5. Perform real fresh-client tests with no Skill-name prompt and record file/tool evidence.
-6. Only after author approval, choose a release version/commit and open a Draft PR.
+6. The reviewed allowlist was committed as `20c0ab7825a2d5bd9e5ed8b19219dfb9e0d7f950`, pushed
+   normally, and opened as Draft PR #7. Author merge approval remains pending.
 
-## Not authorized in this candidate
+## Historical candidate-scope restrictions
 
-No commit, push, merge, installer refresh, ChatGPT settings update, production monitor/classifier
-change, Zotero/Obsidian write, worktree deletion, cache cleanup, or destructive Git operation.
+At the time this plan was written, commit, push, merge, installer refresh, ChatGPT settings
+update, production monitor/classifier change, Zotero/Obsidian write, worktree deletion, cache
+cleanup, and destructive Git operations were outside the authorized scope. The later author
+authorization allowed only the reviewed commit, normal push, and Draft PR creation. No merge,
+installer refresh, ChatGPT settings update, production monitor/classifier change, Zotero/Obsidian
+write, worktree deletion, cache cleanup, or destructive Git operation has occurred.
 
 ## Rollback
 
-The patch is uncommitted. Leave this isolated worktree intact if review finds a conflict and
-prepare a corrected patch here; do not reset or clean either original checkout. After a future
-approved release, rollback should be a separately reviewed revert commit.
+The candidate is committed and published on PR #7. Leave this isolated worktree intact if review
+finds a conflict; prepare a corrected commit without rewriting history or force-pushing. Do not
+reset or clean either protected checkout. After a future approved release, rollback should be a
+separately reviewed revert commit.
 
 ## Exact allowlist and source identity
 
 Base and final remote-main query both returned
 `d5e913f07f9b7ea8d3666cb28fcacc0232c912fa`. An intermediate query had a connection reset;
-a later read-only retry succeeded. There was no fetch, branch update, commit or push.
+a later read-only retry succeeded. The subsequent controlled release commit and normal push are
+recorded by PR #7; no fetch-based working-tree update, merge, or force-push was performed.
 
 ```text
 .agents/plugins/plugins/agentic-research-workflow/skills/research-orchestrator/references/source-retrieval.md
@@ -130,12 +137,17 @@ RESEARCH_OS_MINIMAL_RELEASE_PLAN.md
 RESEARCH_OS_ROUTER_PARITY_AUDIT.md
 ```
 
-## Release proposal, not an applied version change
+## Release candidate status
 
-The Draft PR candidate is `1.1.0-rc.4`: it adds a methodology primary route and clarifies
+The Draft PR #7 candidate is `1.1.0-rc.4`: it adds a methodology primary route and clarifies
 boundaries while retaining all existing workflows, writing owner, state schema, and approval
-rules. Existing `1.1.0-rc.3` remains the main/released version until an authorized merge.
-After merge, a release metadata update must set the stable validation ref to `main`.
+rules. Existing `1.1.0-rc.3` remains the main/released version until an authorized merge. After
+merge, update `current_validation_ref` to `main`; the candidate branch must not become the stable
+source by implication.
+
+The 13 cross-domain cases are `SEMANTIC_INTENT_CONTRACT_TEST` evidence and the eight project
+cases are `SYNTHETIC_STATE_ISOLATION_TEST` evidence. They do not prove natural-language intent
+recognition, Skill loading, or fresh Codex/ChatGPT client activation.
 
 ## Separate follow-up issues
 
@@ -157,7 +169,9 @@ preserved. Its status-list SHA-256 is
 and tracked-diff SHA-256 is
 `4C3B37AB942B6606FA5AEAE1B5EE6E91A5E2FAAE0CA01E10B1C1FADA2616E379`;
 both match the pre-development snapshots. Untracked private contents were not read or hashed.
-The protected PR6 release checkout remains clean at the base commit.
+The protected PR6 release checkout was not modified by this task. Its current pre-existing
+working-tree state must be audited separately; this report does not label it clean without a
+matching read-only baseline.
 
 Only one new development worktree was created, for the explicitly required isolation.
 No persistent compute job was launched; validation commands completed. Temporary test files

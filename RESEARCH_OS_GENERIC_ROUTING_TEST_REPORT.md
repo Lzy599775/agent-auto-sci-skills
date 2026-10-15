@@ -68,7 +68,7 @@ Full unittest/pytest runs assigned `tempfile.tempdir` to the unique D: root insi
 `-p no:cacheprovider` and a fresh `--basetemp` child for each run. No worktree Python
 bytecode or pytest caches were created; DOCX fixtures were generated in temporary directories.
 
-Core tested source hashes (uncommitted source, not a newly released commit):
+Core tested source hashes (PR7 candidate commit, not yet merged into the released `main`):
 
 ```text
 docs/workflows/ROUTING_DECISION_CONTRACT_V1.json
