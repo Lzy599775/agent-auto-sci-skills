@@ -11,7 +11,7 @@ Use this Skill as a thin cross-surface router. Retrieve current rules from GitHu
 
 Use `Lzy599775/agent-auto-sci-skills` as the authoritative workflow repository.
 
-- During validation of Draft PR #2, use `feature/agentic-research-workflow-v1`.
+- During validation of the current Draft PR, use `feature/research-os-writing-production-v1` unless another reviewed ref is explicitly requested.
 - After the validated work is merged, use `main` as the stable ref.
 - Retrieve `docs/version.md`, `AGENTS.md`, `ARCHITECTURE.md`, and `docs/workflows/index.md` at the start of a substantive workflow.
 - Report the workflow version and ref used.

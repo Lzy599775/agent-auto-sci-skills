@@ -13,7 +13,7 @@ Retrieve in this order:
 5. the selected workflow
 6. only the relevant standards and specialist Skill files
 
-During Draft PR #2 validation, use `feature/agentic-research-workflow-v1`. After merge, use `main` unless the user explicitly selects another reviewed ref.
+During validation of the current Draft PR, use `feature/research-os-writing-production-v1` unless the user explicitly selects another reviewed ref. After the validated changes are merged, use `main` unless the user explicitly selects another reviewed ref.
 
 ## Access versus instruction
 

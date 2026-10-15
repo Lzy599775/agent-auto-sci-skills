@@ -5,7 +5,7 @@
 The authoritative workflow repository is `Lzy599775/agent-auto-sci-skills`.
 
 - Stable ref after V1 merge: `main`.
-- Current Draft PR validation ref: `feature/agentic-research-workflow-v1`.
+- Current Draft PR validation ref: `feature/research-os-writing-production-v1`.
 - Current version record: [docs/version.md](../version.md).
 
 ChatGPT and Codex must not independently maintain divergent copies of research principles, workflow routing, evidence standards, reproducibility rules, citation rules, or Zotero boundaries. Those rules remain versioned in GitHub.
