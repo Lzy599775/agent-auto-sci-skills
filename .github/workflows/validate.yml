@@ -19,3 +19,5 @@ jobs:
           find skills -maxdepth 2 -name SKILL.md -print
       - name: Validate agentic research workflow
         run: python scripts/validation/validate_research_workflow.py
+      - name: Validate generic routing and synthetic project isolation
+        run: python -B -m unittest discover -s scripts/validation -p 'test_generic_research_routing.py' -v

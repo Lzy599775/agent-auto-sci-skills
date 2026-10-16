@@ -13,7 +13,7 @@ Retrieve in this order:
 5. the selected workflow
 6. only the relevant standards and specialist Skill files
 
-During validation of the current Draft PR, use `feature/research-os-writing-production-v1` unless the user explicitly selects another reviewed ref. After the validated changes are merged, use `main` unless the user explicitly selects another reviewed ref.
+Use `main` for released work. Use an unmerged candidate only when the user explicitly selects that reviewed ref; report it as a candidate.
 
 ## Access versus instruction
 

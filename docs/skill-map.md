@@ -2,6 +2,12 @@
 
 本页按“什么时候用哪个 skill”组织，而不是按文件夹字母顺序组织。优先从任务类型出发，再进入具体 skill。
 
+Research OS 是通用科研工作流；领域专长按需加载，不预设城市暴露、体育地理或任何论文。
+设计、识别、偏倚与模型适切性判断走 `methodology` 主路由及 `agent-auto-sci-methodology`；
+数据清理、拟合与预测验证执行走 `data_analysis`。Methods 科学审查与章节重写按交付物区分，
+复现与选题分别保留自身主路由。详见 [通用路由](workflows/index.md)。
+普通方法咨询和单句修改不初始化 Master20/Core3；项目私有状态不跨项目继承。
+
 ## 1. 七层架构
 
 | 层级 | 目的 | Skills |

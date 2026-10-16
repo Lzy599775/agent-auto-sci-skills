@@ -2,6 +2,16 @@
 
 Use the canonical workflows in the public [`agent-auto-sci-skills`](https://github.com/Lzy599775/agent-auto-sci-skills) repository; do not duplicate their full instructions here. Route from the requested deliverable, then select the relevant specialist workflow/Skill.
 
+Use `docs/workflows/index.md` and `ROUTING_DECISION_CONTRACT_V1.json`: design, identification,
+bias, inference assumptions, and model-suitability judgments -> `methodology` with
+`agent-auto-sci-methodology`; cleaning/fitting/predictive evaluation -> `data_analysis`.
+Methods critique -> methodology; prose rewriting -> `manuscript_writing`; published-result
+replication -> `paper_reproduction`; novelty -> `research_idea_evaluation`. Preserve literature,
+citations, figures, and artifact routes. Choose by deliverable, not keywords or domain.
+No discipline or example is a default. Method consultation and micro-edits do not read
+exemplar state. Project questions, data, methods, results and corpora stay private and isolated;
+resolve identity before private-state access. Apply resource safety before supported local execution.
+
 Automatic routes (no Skill-name prompt required): every online paper search applies `PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1` to surfaced, qualified, shortlisted, evidence-table, method-comparison, exemplar, and synthesis papers; monitor audits remain tiered. Every substantive manuscript writing task invokes the per-manuscript workflow and reads that manuscript's authoritative private state. Micro-edits skip heavy initialization. Each Master 20 entry requires a paper artifact record, while availability remains secondary to scientific and writing fit.
 
 For substantive manuscript writing, preserve the unique chain `auto-sci-research -> agent-auto-sci-scicomm -> per-manuscript exemplar workflow when applicable -> Academic Prose Style Guard -> SciPilot/final writing QC`. Resolve `MANUSCRIPT_ID` and read that manuscript's single authoritative private state record from the configured private research-project state hub. Codex and ChatGPT Web must use the same record and versions. Do not infer project identity, Master 20, Core 3, approval, or skill status from chat history or another manuscript. If no current project skill exists, initialize only the generic workflow and stop for explicit Core 3 author approval before deep analysis or major rewriting. Micro-edits skip heavy initialization.

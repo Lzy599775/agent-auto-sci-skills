@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "fixture_policy": "SYNTHETIC_ONLY_NO_PRIVATE_DATA",
+  "evaluation_scope": "Deterministic decision-contract checks over reviewed semantic intents; prompt paraphrases and neighbors are human/LLM black-box acceptance inputs, not executable keyword classification.",
+  "cases": [
+    {
+      "id": "A",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "public health",
+      "TASK_INPUT": "Does the vaccination policy design identify a heterogeneous intervention effect?",
+      "DELIVERABLE": "methods appraisal",
+      "INTERPRETED_INTENT": "causal_identification",
+      "EXPECTED_PRIMARY_ROUTE": "methodology",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-methodology",
+      "paraphrases": [
+        "Can rollout timing support an intervention-effect interpretation?"
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Run the supplied policy regression and report estimates.",
+        "INTERPRETED_INTENT": "data_execution",
+        "EXPECTED_PRIMARY_ROUTE": "data_analysis"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "B",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "materials science",
+      "TASK_INPUT": "Appraise randomization, replication and precision in a proposed alloy experiment.",
+      "DELIVERABLE": "design review",
+      "INTERPRETED_INTENT": "statistical_design",
+      "EXPECTED_PRIMARY_ROUTE": "methodology",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-methodology",
+      "paraphrases": [
+        "Are specimen allocation and uncertainty estimation defensible?"
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Clean the alloy CSV and fit its regression.",
+        "INTERPRETED_INTENT": "data_execution",
+        "EXPECTED_PRIMARY_ROUTE": "data_analysis"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "C",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "ecology",
+      "TASK_INPUT": "Review selection and unmeasured confounding in observational species monitoring.",
+      "DELIVERABLE": "bias audit",
+      "INTERPRETED_INTENT": "bias_appraisal",
+      "EXPECTED_PRIMARY_ROUTE": "methodology",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-methodology",
+      "paraphrases": [
+        "Which threats to validity remain in these observational comparisons?"
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Assess whether this entirely new ecology direction is novel and feasible.",
+        "INTERPRETED_INTENT": "novelty_feasibility",
+        "EXPECTED_PRIMARY_ROUTE": "research_idea_evaluation"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "D",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "social science",
+      "TASK_INPUT": "Assess survey sampling and construct measurement validity before fieldwork.",
+      "DELIVERABLE": "validity review",
+      "INTERPRETED_INTENT": "sampling_measurement",
+      "EXPECTED_PRIMARY_ROUTE": "methodology",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-methodology",
+      "paraphrases": [
+        "Would the sample frame and questionnaire support the target population claim?"
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Rewrite the survey Methods paragraph without changing facts.",
+        "INTERPRETED_INTENT": "substantive_writing",
+        "EXPECTED_PRIMARY_ROUTE": "manuscript_writing"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "E",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "generic tabular data",
+      "TASK_INPUT": "Clean this synthetic CSV, audit missing values and execute the planned regression.",
+      "DELIVERABLE": "analysis execution",
+      "INTERPRETED_INTENT": "data_execution",
+      "EXPECTED_PRIMARY_ROUTE": "data_analysis",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-data-viz",
+      "paraphrases": [
+        "Deduplicate the supplied table, check ranges, then fit the specified model."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Can the regression design identify a causal effect?",
+        "INTERPRETED_INTENT": "causal_identification",
+        "EXPECTED_PRIMARY_ROUTE": "methodology"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "F",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "predictive machine learning",
+      "TASK_INPUT": "Evaluate the fitted model's predictive accuracy using held-out synthetic data.",
+      "DELIVERABLE": "prediction evaluation",
+      "INTERPRETED_INTENT": "predictive_validation",
+      "EXPECTED_PRIMARY_ROUTE": "data_analysis",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-ai-ml",
+      "paraphrases": [
+        "Calculate calibration and out-of-sample prediction error."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Is this model appropriate for our scientific estimand before fitting?",
+        "INTERPRETED_INTENT": "model_suitability",
+        "EXPECTED_PRIMARY_ROUTE": "methodology"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "G",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "generic scientific communication",
+      "TASK_INPUT": "Create a figure of the supplied synthetic results with uncertainty intervals.",
+      "DELIVERABLE": "figure creation",
+      "INTERPRETED_INTENT": "figure_creation",
+      "EXPECTED_PRIMARY_ROUTE": "figure_workflow",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-data-viz",
+      "paraphrases": [
+        "Visualize these supplied estimates and their intervals."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Audit the inferential assumptions behind these intervals.",
+        "INTERPRETED_INTENT": "statistical_design",
+        "EXPECTED_PRIMARY_ROUTE": "methodology"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "H",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "generic manuscript",
+      "TASK_INPUT": "Review and reorganize the argument structure of this manuscript Discussion.",
+      "DELIVERABLE": "substantive structure revision",
+      "INTERPRETED_INTENT": "substantive_writing",
+      "EXPECTED_PRIMARY_ROUTE": "manuscript_writing",
+      "EXPECTED_COMPANION": [
+        "PER_MANUSCRIPT_WRITING_EXEMPLAR_WORKFLOW_V1"
+      ],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-scicomm",
+      "paraphrases": [
+        "Reorder the Discussion paragraphs to support the evidence-based argument."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Appraise the causal identification assumptions in its Methods, without rewriting prose.",
+        "INTERPRETED_INTENT": "causal_identification",
+        "EXPECTED_PRIMARY_ROUTE": "methodology"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "I",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "generic language edit",
+      "TASK_INPUT": "Polish the grammar of this one academic sentence without changing its meaning.",
+      "DELIVERABLE": "micro-edit",
+      "INTERPRETED_INTENT": "language_micro_edit",
+      "EXPECTED_PRIMARY_ROUTE": "manuscript_writing",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-scicomm",
+      "paraphrases": [
+        "Correct a single sentence's tense and articles only."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Restructure the whole Introduction for a target journal.",
+        "INTERPRETED_INTENT": "substantive_writing",
+        "EXPECTED_PRIMARY_ROUTE": "manuscript_writing"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "J",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "published research reproduction",
+      "TASK_INPUT": "Reproduce a published model result using its released code and synthetic test inputs.",
+      "DELIVERABLE": "reproduction",
+      "INTERPRETED_INTENT": "published_result_reproduction",
+      "EXPECTED_PRIMARY_ROUTE": "paper_reproduction",
+      "EXPECTED_COMPANION": [
+        "PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1"
+      ],
+      "EXPECTED_SPECIALIST_SKILL": null,
+      "paraphrases": [
+        "Replicate the reported computation and attribute discrepancies."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Only verify whether the repository belongs to this paper; do not execute it.",
+        "INTERPRETED_INTENT": "artifact_identity",
+        "EXPECTED_PRIMARY_ROUTE": "literature_review"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "K",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "paper artifacts",
+      "TASK_INPUT": "Verify that this claimed code and data repository belongs to the named paper.",
+      "DELIVERABLE": "artifact identity",
+      "INTERPRETED_INTENT": "artifact_identity",
+      "EXPECTED_PRIMARY_ROUTE": "literature_review",
+      "EXPECTED_COMPANION": [
+        "PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1"
+      ],
+      "EXPECTED_SPECIALIST_SKILL": "literature",
+      "paraphrases": [
+        "Check the article-to-repository link and license, without running code."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Run the released code to reproduce the reported result.",
+        "INTERPRETED_INTENT": "published_result_reproduction",
+        "EXPECTED_PRIMARY_ROUTE": "paper_reproduction"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "L",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "local compute safety",
+      "TASK_INPUT": "Before any scientific computation, report disk and RAM risk without starting the job.",
+      "DELIVERABLE": "preflight only",
+      "INTERPRETED_INTENT": "resource_preflight",
+      "EXPECTED_PRIMARY_ROUTE": "data_analysis",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": null,
+      "paraphrases": [
+        "Check target output capacity and memory headroom; perform no analysis."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "Clean the supplied CSV and perform the requested regression after preflight.",
+        "INTERPRETED_INTENT": "data_execution",
+        "EXPECTED_PRIMARY_ROUTE": "data_analysis"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    },
+    {
+      "id": "M",
+      "fixture_policy": "SYNTHETIC_EXAMPLE",
+      "domain": "generic research planning",
+      "TASK_INPUT": "Evaluate the novelty and feasibility of this new research direction.",
+      "DELIVERABLE": "idea evaluation",
+      "INTERPRETED_INTENT": "novelty_feasibility",
+      "EXPECTED_PRIMARY_ROUTE": "research_idea_evaluation",
+      "EXPECTED_COMPANION": [],
+      "EXPECTED_SPECIALIST_SKILL": "agent-auto-sci-methodology",
+      "paraphrases": [
+        "Assess whether this proposed topic has a defensible gap and feasible scope."
+      ],
+      "near_neighbor": {
+        "TASK_INPUT": "The topic is fixed; critique the proposed design's identification assumptions.",
+        "INTERPRETED_INTENT": "causal_identification",
+        "EXPECTED_PRIMARY_ROUTE": "methodology"
+      },
+      "ACTUAL_ROUTE": "NOT_EXECUTED_IN_FIXTURE",
+      "PASS_OR_FAIL": "NOT_EXECUTED_IN_FIXTURE"
+    }
+  ]
+}

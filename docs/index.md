@@ -4,6 +4,7 @@
 
 - [Architecture](../ARCHITECTURE.md)
 - [Workflow router](workflows/index.md)
+- [Methodology / research design](workflows/methodology.md)
 - [Research principles](research/research_principles.md)
 - [Source hierarchy](research/source_hierarchy.md)
 - [Uncertainty policy](research/uncertainty_policy.md)
