@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>project-specific-writing-exemplar-workflow | Auto-sci-research</title>
+  <style>body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;color:#17211f;background:#f6f7f4;line-height:1.75}main{max-width:980px;margin:0 auto;padding:42px 20px 70px}a{color:#0f766e}.back{display:inline-flex;margin-bottom:24px;text-decoration:none;color:#5a6863}header{padding:28px 0 30px;border-bottom:1px solid #dce4df}h1{font-size:clamp(34px,6vw,58px);line-height:1.08;margin:0;overflow-wrap:anywhere}.lead{font-size:18px;color:#5a6863;max-width:760px}.pill{display:inline-flex;padding:4px 10px;border-radius:999px;background:#eef1f7;color:#295f9f;font-size:13px;font-weight:800;margin-bottom:14px}section{padding:30px 0;border-bottom:1px solid #dce4df}h2{font-size:26px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:#fff;border:1px solid #dce4df;border-radius:8px;padding:18px}.card h3{margin:0 0 8px}.card p,.card li{color:#5a6863}pre{overflow:auto;background:#14211e;color:#ecf4ef;border-radius:8px;padding:16px;line-height:1.55}@media(max-width:760px){.grid{grid-template-columns:1fr}}</style>
+</head>
+<body><main>
+  <a class="back" href="../index.html">Back to showcase</a>
+  <header><span class="pill">Private manuscript exemplar lifecycle</span><h1>project-specific-writing-exemplar-workflow</h1>
+    <p class="lead">为单篇稿件建立隔离的 exemplar profile、Master 20 和 Core 3 作者审批门，用于实质性写作、结构重写和目标期刊适配。</p>
+  </header>
+  <section><h2>适合什么时候用</h2><div class="grid">
+    <div class="card"><h3>实质性写作与大修</h3><p>当 Introduction、Methods、Results、Discussion、Abstract 或整体稿件需要重写时使用。</p></div>
+    <div class="card"><h3>期刊近邻对标</h3><p>当需要从功能近邻论文学习论证结构、证据链和段落功能，而不是复制语言时使用。</p></div>
+  </div></section>
+  <section><h2>典型输入</h2><pre>使用 project-specific-writing-exemplar-workflow，为 MANUSCRIPT_ID=urban-green-exposure-01 建立私有 exemplar profile，先提出 Master 20 和 Core 3，等待作者审批后再进入 Discussion 重写。</pre></section>
+  <section><h2>生命周期</h2><p><code>S0_UNINITIALIZED -> S1_MANUSCRIPT_PROFILED -> S2_CANDIDATE_POOL_READY -> S3_MASTER_20_SELECTED -> S4_CORE_3_PENDING_AUTHOR_APPROVAL -> S5_CORE_3_APPROVED -> S8_ACTIVE_FOR_WRITING</code></p><p>Core 3 审批是唯一作者 gate。审批前不得进行段落、句子或词频分析，也不得修改稿件。</p></section>
+  <section><h2>边界</h2><p>项目状态、稿件事实、论文库和审批记录必须保存在对应项目的私有状态中，不得跨项目继承。禁止保存长段来源原文、独特措辞、citation chain、因果解释或超出自有证据的结果逻辑。</p><p><a href="https://github.com/Lzy599775/agent-auto-sci-skills/tree/main/skills/project-specific-writing-exemplar-workflow">查看 GitHub 文件</a></p></section>
+</main></body></html>

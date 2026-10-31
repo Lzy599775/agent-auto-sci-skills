@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>literature | Auto-sci-research</title>
+  <style>body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;color:#17211f;background:#f6f7f4;line-height:1.75}main{max-width:980px;margin:0 auto;padding:42px 20px 70px}a{color:#0f766e}.back{display:inline-flex;margin-bottom:24px;text-decoration:none;color:#5a6863}header{padding:28px 0 30px;border-bottom:1px solid #dce4df}h1{font-size:clamp(34px,6vw,58px);line-height:1.08;margin:0}.lead{font-size:18px;color:#5a6863;max-width:760px}.pill{display:inline-flex;padding:4px 10px;border-radius:999px;background:#eef1f7;color:#295f9f;font-size:13px;font-weight:800;margin-bottom:14px}section{padding:30px 0;border-bottom:1px solid #dce4df}h2{font-size:26px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:#fff;border:1px solid #dce4df;border-radius:8px;padding:18px}.card h3{margin:0 0 8px}.card p,.card li{color:#5a6863}pre{overflow:auto;background:#14211e;color:#ecf4ef;border-radius:8px;padding:16px;line-height:1.55}@media(max-width:760px){.grid{grid-template-columns:1fr}}</style>
+</head>
+<body><main>
+  <a class="back" href="../index.html">Back to showcase</a>
+  <header><span class="pill">Evidence-traceable literature workflow</span><h1>literature</h1>
+    <p class="lead">用于检索、去重、核验 DOI/metadata、提取论文证据、建立 paper notes，并审计 citation 是否支持具体 claim。</p>
+  </header>
+  <section><h2>适合什么时候用</h2><div class="grid">
+    <div class="card"><h3>文献发现与核验</h3><p>研究问题、seed papers、Zotero、DOI 或当前研究版图需要系统整理时使用。</p></div>
+    <div class="card"><h3>证据与引用审计</h3><p>需要判断某篇论文是否支持一个句子、提取方法参数或构建可追溯综述语料时使用。</p></div>
+  </div></section>
+  <section><h2>典型输入</h2><pre>使用 literature，围绕城市热暴露与绿色暴露不平等建立去重后的文献表，核验 DOI 和全文状态，并为每个核心 claim 记录证据支持等级。</pre></section>
+  <section><h2>推荐流程</h2><ol><li>明确研究问题、范围、纳入条件和预期交付物。</li><li>检查已有 Zotero 和本地来源，再检索权威学术来源。</li><li>按 DOI 或权威标识符去重，核验题名、作者、年份和全文状态。</li><li>只提取来源支持的字段，生成 evidence trace 和 citation-support 分类。</li></ol></section>
+  <section><h2>边界</h2><p>它不替代数据分析、模型训练或稿件整体写作；缺失的 DOI、全文、方法参数和因果证据必须标记为 `NOT_VERIFIED`，不得猜测补全。</p><p><a href="https://github.com/Lzy599775/agent-auto-sci-skills/tree/main/skills/literature">查看 GitHub 文件</a></p></section>
+</main></body></html>

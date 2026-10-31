@@ -101,9 +101,9 @@
         <h2 class="section-title">快速选择</h2>
         <p class="section-note">先看当前任务属于哪类，再进入对应 skill。复杂任务从总控开始，单点任务直接进入专项 skill。</p>
         <div class="quick-grid">
-          <article class="quick"><span class="tag">总控</span><h3><code>research-orchestrator</code></h3><p>在 ChatGPT/Codex 中读取当前 workflow source，识别科研目标并交给合适的专项 skill。</p></article>
+          <article class="quick"><span class="tag">总控</span><h3><a href="skills/research-orchestrator.html"><code>research-orchestrator</code></a></h3><p>在 ChatGPT/Codex 中读取当前 workflow source，识别科研目标并交给合适的专项 skill。</p></article>
           <article class="quick"><span class="tag">复杂任务</span><h3><code>auto-sci-research</code></h3><p>任务跨越选题、文献、数据、分析、绘图、写作和投稿时，先让它拆路线。</p></article>
-          <article class="quick"><span class="tag">文献证据</span><h3><code>literature</code></h3><p>检索、去重、核验 DOI/metadata、提取证据并审计 citation-claim 支持关系。</p></article>
+          <article class="quick"><span class="tag">文献证据</span><h3><a href="skills/literature.html"><code>literature</code></a></h3><p>检索、去重、核验 DOI/metadata、提取证据并审计 citation-claim 支持关系。</p></article>
           <article class="quick"><span class="tag">空间</span><h3><code>agent-auto-sci-geospatial</code></h3><p>GIS、遥感、可达性、绿色/热暴露、空间公平、地图合规都先走这里。</p></article>
           <article class="quick"><span class="tag">图件</span><h3><code>agent-auto-sci-data-viz</code></h3><p>从数据质量、统计口径到投稿级图件和 caption，先明确每张图要支持的 claim。</p></article>
           <article class="quick"><span class="tag">写作</span><h3><code>agent-auto-sci-scicomm</code></h3><p>论文论证、结构重写、投稿信、rebuttal、slides 和最后一公里表达审计。</p></article>
@@ -120,16 +120,16 @@
       <div class="bands">
         <div class="band"><div class="wrap band-grid"><div><h3>总控与自动化</h3><p>拆任务、保留项目记忆、控制安全边界。</p></div><div class="skill-grid">
           <article class="skill"><h3><code>auto-sci-research</code></h3><p>科研管线总控和 router。</p><dl><dt>输入</dt><dd>任务目标、材料、研究阶段。</dd><dt>输出</dt><dd>子 skill 顺序、路线图、质量门控。</dd><dt>边界</dt><dd>不替代具体分析和写作。</dd></dl></article>
-          <article class="skill"><h3><code>research-orchestrator</code></h3><p>ChatGPT/Codex 跨表面薄型科研路由。</p><dl><dt>输入</dt><dd>科研目标、已有材料、期望交付物。</dd><dt>输出</dt><dd>workflow route、ref/version、专项 skill、QC。</dd><dt>边界</dt><dd>不复制完整规则；GitHub 不可用时必须报告 fallback。</dd></dl></article>
+          <article class="skill"><h3><a href="skills/research-orchestrator.html"><code>research-orchestrator</code></a></h3><p>ChatGPT/Codex 跨表面薄型科研路由。</p><dl><dt>输入</dt><dd>科研目标、已有材料、期望交付物。</dd><dt>输出</dt><dd>workflow route、ref/version、专项 skill、QC。</dd><dt>边界</dt><dd>不复制完整规则；GitHub 不可用时必须报告 fallback。</dd></dl></article>
           <article class="skill"><h3><code>agent-auto-sci-automation</code></h3><p>source manifest、checkpoint、失败恢复和公开安全。</p><dl><dt>输入</dt><dd>数据源、文献源、目录结构、API 边界。</dd><dt>输出</dt><dd>manifest、状态表、恢复点、失败日志。</dd><dt>边界</dt><dd>不提交密钥、私有 PDF 或付费导出。</dd></dl></article>
         </div></div></div>
 
         <div class="band"><div class="wrap band-grid"><div><h3>方法论与综述路线</h3><p>决定研究问题、证据等级、综述类型和期刊门槛。</p></div><div class="skill-grid">
           <article class="skill"><h3><code>agent-auto-sci-methodology</code></h3><p>研究问题、机制、假设、偏倚和因果语言审计。</p><dl><dt>输入</dt><dd>选题、变量、草稿、结果。</dd><dt>输出</dt><dd>RQ 矩阵、机制图、证据分级、限制。</dd><dt>边界</dt><dd>不把相关结果写成因果。</dd></dl></article>
           <article class="skill"><h3><code>urban-exposure-review-radar-workflow</code></h3><p>城市暴露、体育地理、遥感热环境和公共健康连接的路线判别。</p><dl><dt>输入</dt><dd>主题、目标期刊、语料来源、数据类型。</dd><dt>输出</dt><dd>route decision、journal gate、formal corpus/radar handoff。</dd><dt>边界</dt><dd>正式综述语料和前沿雷达候选必须分开。</dd></dl></article>
-          <article class="skill"><h3><code>literature</code></h3><p>证据可追溯的通用文献 workflow。</p><dl><dt>输入</dt><dd>研究问题、seed papers、Zotero/DOI、待核查 claim。</dd><dt>输出</dt><dd>verified corpus、paper notes、evidence trace、citation-support 结论。</dd><dt>边界</dt><dd>先手工 workflow 与 golden set，不猜测缺失字段。</dd></dl></article>
+          <article class="skill"><h3><a href="skills/literature.html"><code>literature</code></a></h3><p>证据可追溯的通用文献 workflow。</p><dl><dt>输入</dt><dd>研究问题、seed papers、Zotero/DOI、待核查 claim。</dd><dt>输出</dt><dd>verified corpus、paper notes、evidence trace、citation-support 结论。</dd><dt>边界</dt><dd>先手工 workflow 与 golden set，不猜测缺失字段。</dd></dl></article>
           <article class="skill"><h3><code>sport-geography-review-bibliometric</code></h3><p>体育地理系统综述、scoping review 和文献计量。</p><dl><dt>输入</dt><dd>主题、数据库、关键词、目标期刊。</dd><dt>输出</dt><dd>检索式、PRISMA、编码表、图表计划、政策议程。</dd><dt>边界</dt><dd>文献计量必须服务机制框架或政策议程。</dd></dl></article>
-          <article class="skill"><h3><code>academic-research-suite</code></h3><p>ARS 子 skill，处理深度研究、论文管线、审稿模拟、PDF 阅读预检和引用完整性。</p><dl><dt>位置</dt><dd><code>urban-exposure-review-radar-workflow/subskills</code></dd><dt>版本</dt><dd><code>3.24.0</code></dd><dt>新增</dt><dd>面向 v3.24 的研究管线、质量门和审计能力更新。</dd><dt>边界</dt><dd><code>sr-screener</code> 仅在用户明确要求记录筛选、纳排标准、冲突裁决或排除审计时调用。</dd></dl></article>
+          <article class="skill"><h3><a href="skills/academic-research-suite.html"><code>academic-research-suite</code></a></h3><p>ARS 子 skill，处理深度研究、论文管线、审稿模拟、PDF 阅读预检和引用完整性。</p><dl><dt>位置</dt><dd><code>urban-exposure-review-radar-workflow/subskills</code></dd><dt>版本</dt><dd><code>3.24.0</code></dd><dt>新增</dt><dd>面向 v3.24 的研究管线、质量门和审计能力更新。</dd><dt>边界</dt><dd><code>sr-screener</code> 仅在用户明确要求记录筛选、纳排标准、冲突裁决或排除审计时调用。</dd></dl></article>
         </div></div></div>
 
         <div class="band"><div class="wrap band-grid"><div><h3>GIS、遥感与暴露</h3><p>空间数据处理、暴露/可达性定义、遥感写作和技术 playbook。</p></div><div class="skill-grid">
@@ -147,7 +147,7 @@
         <div class="band"><div class="wrap band-grid"><div><h3>写作、投稿与审稿</h3><p>文本最后一公里、论文论证、投稿信、审稿回复和展示材料。</p></div><div class="skill-grid">
           <article class="skill"><h3><code>agent-auto-sci-scicomm</code></h3><p>论文结构、claim-evidence map、投稿信、rebuttal、PPT 和海报。</p><dl><dt>输入</dt><dd>草稿、结果、目标期刊、审稿意见。</dd><dt>输出</dt><dd>IMRAD 大纲、审稿风险、回复矩阵。</dd><dt>边界</dt><dd>语言润色不能改变证据强度。</dd></dl></article>
           <article class="skill"><h3><code>sport-geography-sci-writing</code></h3><p>体育设施、体育公园、暴露公平和城市健康实证论文写作。</p><dl><dt>输入</dt><dd>研究问题、方法、结果、目标期刊。</dd><dt>输出</dt><dd>期刊定位、gap chain、结果叙事、讨论和政策启示。</dd><dt>边界</dt><dd>先建立公共问题和学术缺口。</dd></dl></article>
-          <article class="skill"><h3><code>project-specific-writing-exemplar-workflow</code></h3><p>为每篇稿件维护私有 exemplar 生命周期和作者审批门。</p><dl><dt>输入</dt><dd>MANUSCRIPT_ID、Master 20、稿件证据和目标期刊。</dd><dt>输出</dt><dd>Core 3 approval、section exemplars、证据/论证地图。</dd><dt>边界</dt><dd>不得复制来源原文、跨项目继承私有状态或绕过作者审批。</dd></dl></article>
+          <article class="skill"><h3><a href="skills/project-specific-writing-exemplar-workflow.html"><code>project-specific-writing-exemplar-workflow</code></a></h3><p>为每篇稿件维护私有 exemplar 生命周期和作者审批门。</p><dl><dt>输入</dt><dd>MANUSCRIPT_ID、Master 20、稿件证据和目标期刊。</dd><dt>输出</dt><dd>Core 3 approval、section exemplars、证据/论证地图。</dd><dt>边界</dt><dd>不得复制来源原文、跨项目继承私有状态或绕过作者审批。</dd></dl></article>
           <article class="skill"><h3><code>kdense-scicomm-selected</code></h3><p>K-Dense 精选写作、审稿、引用、slides、posters、schematics。</p><dl><dt>输入</dt><dd>写作、引用、展示或示意图技术问题。</dd><dt>输出</dt><dd>模板、结构和工具参考。</dd><dt>边界</dt><dd>不替代领域贡献和期刊证据门槛。</dd></dl></article>
         </div></div></div>
       </div>
