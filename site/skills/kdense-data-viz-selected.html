@@ -23,7 +23,7 @@
 设计 EDA、统计检验、图表脚本和补充材料表格，并说明每张图支撑哪个 claim。</pre></section>
   <section><h2>Codex 部署</h2><pre>git clone https://github.com/Lzy599775/agent-auto-sci-skills.git
 cd agent-auto-sci-skills
-.\scripts\install.ps1</pre><p>推荐与 <code>agent-auto-sci-data-viz</code> 和 <code>scipilot-figure-skill</code> 联合使用：前者定论文图表逻辑，本 skill 补工具链，SciPilot 做视觉 QA。</p></section>
+.\scripts\install.ps1</pre><p>推荐与 <code>agent-auto-sci-data-viz</code> 联合使用：前者定论文图表逻辑，本 skill 补工具链，最后由 <code>agent-auto-sci-scicomm</code> 负责 caption、图文证据一致性和投稿材料审计。</p></section>
   <section><h2>边界</h2><ul><li>不为了“复杂”而引入大数据工具。</li><li>统计检验必须匹配数据结构、尺度和研究设计。</li><li>图表必须有明确论文功能：回答问题、支撑 claim 或解除审稿疑虑。</li></ul></section>
   <section><h2>文件入口</h2><p><a href="https://github.com/Lzy599775/agent-auto-sci-skills/tree/main/skills/kdense-data-viz-selected">查看 GitHub 文件</a></p></section>
 </main></body></html>

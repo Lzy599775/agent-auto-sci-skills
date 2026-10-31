@@ -14,7 +14,7 @@ description: >
   /ars-unmark-read, /ars-cache-invalidate, /ars-rebuttal-audit, /ars-full.
   Prompts, references, templates, and contracts live under ars/.
 metadata:
-  version: "3.23.0"
+  version: "3.24.0"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
@@ -27,7 +27,7 @@ This is a Codex adapter for the ARS suite. The vendored ARS content lives under
 
 ## Versioning
 
-This Codex package is version `3.23.0`. The repo-root `VERSION`, this
+This Codex package is version `3.24.0`. The repo-root `VERSION`, this
 `SKILL.md` metadata version, and `manifest.json` `adapter_version` must match.
 Starting at `3.22.0`, this release number also matches the vendored ARS suite.
 The exact upstream version, tag, and commit are recorded in `manifest.json`;
@@ -52,7 +52,7 @@ new requests; after compaction or resume, continue the settled workflow and
 perform the run-ledger handoff check instead of routing the active run again.
 
 <!-- routing-core:begin -->
-**Step 0 — Escape hatch check (before any classification):** If the user's first message begins with `[direct-mode]` (case-insensitive byte-0 token, optionally preceded by whitespace/newlines that are stripped on parse), record this fact, strip the prefix and surrounding whitespace from the message, and skip directly to **Step 1 explicit-intent handling** on the stripped content. The literal `[direct-mode]` is NOT passed through to the dispatched agent. If the stripped message itself has no clear skill named, Step 1 falls through to Step 3 clarification (the escape hatch bypasses cross-phase clarification (Step 2), not all routing). When the token is honored and the named agent or skill needs inputs the message does not supply, read that agent's or skill's file and ask for what it requires, in its terms. Without the byte-0 token, naming an agent is not explicit intent: such a message goes through Steps 1-3 like any other, so cross-phase materials still get Step 2 clarification.
+**Step 0 — Escape hatch check (before any classification):** If the user's first message begins with `[direct-mode]` (case-insensitive byte-0 token, optionally preceded by whitespace/newlines that are stripped on parse), record this fact, strip the prefix and surrounding whitespace from the message, and skip directly to **Step 1 explicit-intent handling** on the stripped content. The literal `[direct-mode]` is NOT passed through to the dispatched agent. If the stripped message itself has no clear skill named, Step 1 falls through to Step 3 clarification (the escape hatch bypasses cross-phase clarification (Step 2), not all routing). When the token is honored and the named agent or skill needs inputs the message does not supply, read that agent's or skill's file and ask for what it requires, in its terms. A `[direct-mode]` token after any other non-whitespace character is not the escape hatch, even when the message asks to skip questions: classify the message through Steps 1-3 as if the token were absent, and do not forward the token. Without the byte-0 token, naming an agent is not explicit intent: such a message goes through Steps 1-3 like any other, so cross-phase materials still get Step 2 clarification.
 
 Otherwise, classify the user's input:
 
@@ -275,10 +275,38 @@ following any vendored instruction that says a lookup happens automatically:
 | Script-backed citation-existence gate | Do not infer this from an `ars-full` request alone. Stage 2.5 and 4.5 remain mandatory integrity checkpoints, but default Codex routing performs their source work through browsing unless the user also requests programmatic verification. | An explicit request to run `verify_passport.py`, `verification_gate`, or equivalent programmatic reference verification. Once invoked, cache misses may call Crossref, OpenAlex, and Semantic Scholar for non-manual references; arXiv runs only when `arxiv_id` is present. Manual references skip all four. |
 | Claim-standing discovery | Offer only after an eligible Claim Registry row at Stage 2.5 or 4.5. It is advisory and separate from citation verification. | A separate user request plus affirmative, plan-bound consent. It uses the v3.21 keyword-discovery adapters, not the four single-reference resolver clients; absent, cancelled, invalidated, or stale consent means no call. |
 | Contamination backfill or migration | No automatic migration. | Only the explicitly selected migration CLI and its documented indexes. |
+| Suggested-reference check (v3.24.0, #1001) | Do not run `verify_panel_recommendations.py` automatically after a review. The letter's attachment section is the single line saying the suggested-reference check did not run. | An explicit request to check the works the panel suggests. It then runs live through the same four clients, without the verification cache, sending only the suggested titles and any DOI or arXiv ID. |
 
 The canonical upstream network map remains available at
 `ars/docs/DATA_FLOWS.md`; this section is the Codex adapter override for when
 those flows are actually launched here.
+
+### ARS v3.24.0 Review-Letter Attachments
+
+- **Order:** after `check_panel_synthesis.py` passes and any consented
+  cross-model decision check has written, the dispatching session appends the
+  suggested-reference check, then the reviewer claim check, then the acronym
+  check, which stays the letter's last section. Follow
+  `ars/academic-paper-reviewer/WORKFLOW.md` for the exact commands and wording.
+- **Suggested-reference check (#1001):** Reviewer 2 and Reviewer 3 still emit
+  their `yaml suggested-references` blocks. The network trigger is the
+  Bibliographic Network Routing row above; a found record does not show that
+  the work supports the reviewer's recommendation.
+- **Reviewer claim check (#1002):** on by default; `ARS_PANEL_CLAIM_CHECK=0`
+  turns it off. Run `ars/scripts/audit_panel_claims.py prompt`, send the
+  written `prompt.md` unchanged to one fresh native worker of the active Codex
+  model with no tools, browsing, file access, or inherited conversation, then
+  run `render` on its saved reply. The manuscript stays with the active model.
+  When the host cannot provide that isolation, the section is the single line
+  saying the check did not run; never judge the findings inline, because the
+  calling session has seen which seat wrote each one. The upstream contrast gate
+  passed `gpt-6-astra` through Codex, Gemini 4 Argon, and two Claude models;
+  `gpt-6-astra` is the only Codex model measured, so other Codex models are
+  unmeasured judges.
+- Neither attachment feeds the decision, revision roadmap, response
+  requirements, or re-review criteria, and a missing or failed check never
+  reads as clean. `ars/scripts/dispatch_panel_claim_audit.py` is held-out
+  evaluation tooling with live provider calls; it is inactive in Codex.
 
 ### ARS v3.22.2 Caller Contracts
 
@@ -539,7 +567,19 @@ Use `ars/shared/` for cross-workflow contracts and quality gates:
 - `ars/academic-pipeline/references/claim_verification_protocol.md` defines the
   v3.18 high-impact-first sampling gate plus advisory-only scope-conformance
   and search-bounded novelty classifications, and the v3.19 revision-round
-  claim-strength drift audit.
+  claim-strength drift audit. Its v3.23.2 Phase E rule permits only the version
+  cited by the manuscript: unreadable or ambiguous versions produce
+  `UNVERIFIABLE_ACCESS` and a request for that version's PDF, with
+  `VERSION_INCONSISTENT_CITATION` for an ambiguous reference. Never substitute
+  a different version; identify the version in `source.display_label` and keep
+  a source's access limitation separate from distortion found in another.
+- Stage 2.5 always runs before Stage 3, including mid-entry. A fresh, current,
+  `VERIFIED` prior report is context for that check, never a replacement.
+  Missing required inputs return `HANDOFF_INCOMPLETE` and block transition
+  until backfilled; missing recommended inputs are disclosed without blocking.
+  Since v3.24.0 a prior report is fresh only when it is less than 24 hours old,
+  within one session too, and a revised paper entering at Stage 5 runs Stage
+  4.5 first; Stage 4' follows Stage 3' only after a Major decision.
 - `ars/shared/references/claim_strength_ladder.md` and
   `ars/scripts/check_revision_token_conservation.py` define the v3.19 semantic
   and deterministic revision-drift guards.

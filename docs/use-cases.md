@@ -9,9 +9,9 @@
 | 任务拆解 | `auto-sci-research` | 研究路线、子 skill 顺序、质量门控 |
 | 论文定位 | `sport-geography-sci-writing` | 目标期刊、gap chain、IMRAD 结构 |
 | 空间处理 | `agent-auto-sci-geospatial` | CRS 审计、可达性算法、暴露/使用区分 |
-| 统计与图件 | `agent-auto-sci-data-viz`, `scipilot-figure-skill` | figure plan、统计路线、投稿级图件 QA |
+| 统计与图件 | `agent-auto-sci-data-viz`, `kdense-data-viz-selected` | figure plan、统计路线、工具参考和投稿级检查 |
 | 解释边界 | `agent-auto-sci-methodology` | 机制链、因果语言、限制 |
-| 最后润色 | `scipilot-writing-skill` | 改后文本、回译、修改日志、lint 报告 |
+| 最后润色 | `agent-auto-sci-scicomm` | 论文结构、投稿信、审稿回复和表达检查 |
 
 ## 2. 绿地或热暴露与城市健康综述
 
@@ -27,17 +27,15 @@
 
 | 阶段 | 推荐 skill | 产出 |
 |---|---|---|
-| 写作适配 | `geors-sci-writing-adapter` | 标题、摘要、IMRAD 段落、cover letter |
 | 空间与遥感 | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected` | 数据产品、空间尺度、遥感处理路线 |
 | 建模与解释 | `agent-auto-sci-ai-ml`, `kdense-ml-ai-selected` | 模型路线、验证切分、解释边界 |
-| 图件 | `agent-auto-sci-data-viz`, `scipilot-figure-skill` | 主图和补充图设计、视觉 QA |
-| 最后文本 | `scipilot-writing-skill` | 语言润色、回译核对、投稿文本 |
+| 图件 | `agent-auto-sci-data-viz`, `kdense-data-viz-selected` | 主图和补充图设计、工具参考、视觉检查 |
+| 最后文本 | `agent-auto-sci-scicomm` | 语言、论证、投稿文本和审稿回复 |
 
 ## 4. 论文图件和可视化
 
 | 情况 | 推荐 skill | 注意点 |
 |---|---|---|
-| 不知道该画什么 | `scipilot-figure-skill` | 先说明图要支持的 claim |
 | 需要统计或 EDA 路线 | `agent-auto-sci-data-viz` | 先做数据质量和变量审计 |
 | 需要具体库技术参考 | `kdense-data-viz-selected` | 可调用 Matplotlib、Seaborn、NetworkX、Polars、Dask、统计分析子包 |
 | 需要论文叙事 | `agent-auto-sci-scicomm` | caption 和正文必须互相支持 |
@@ -57,6 +55,4 @@
 |---|---|---|
 | 论文整体论证 | `agent-auto-sci-scicomm` | claim-evidence map、结构重写、审稿风险 |
 | 体育地理实证论文 | `sport-geography-sci-writing` | 领域化 IMRAD、讨论和政策启示 |
-| 地理/遥感 SCI 章节 | `geors-sci-writing-adapter` | 章节写作、空间语言风险检查 |
-| 润色、翻译、去 AI 味 | `scipilot-writing-skill` | 改后文本、回译、修改日志、lint |
 | 模板和展示材料 | `kdense-scicomm-selected` | slides、posters、schematics、citation 技术参考 |

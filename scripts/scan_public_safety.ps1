@@ -54,6 +54,8 @@ $allowedFalsePositiveText = @(
   'client = _client(ncbi_api_key="test-ncbi-key")',
   'assert "api_key=test-ncbi-key" in transport.requests[0]',
   '"https://evil.invalid/a?api_key=test-ncbi-key",',
+  'token = CLAUDE_TOKEN_FILE.read_text(encoding="utf-8").strip()',
+  'export GOOGLE_AI_API_KEY="AIza-your-key-here"    # For Gemini 4 Argon / Gemini 3.1 Pro',
   "print(""  export OPENROUTER_API_KEY='your_api_key'"")",
   "echo 'export OPENROUTER_API_KEY=""sk-or-v1-your_key""' >> ~/.zshrc"
 )

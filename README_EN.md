@@ -6,16 +6,14 @@
 
 `Auto-sci-research` is a reusable research workbench, not a one-click paper generator. It helps ChatGPT and Codex route research tasks across topic design, literature review, source manifests, GIS/RS processing, exposure/accessibility measurement, statistics, ML/XAI, publication figures, manuscript writing, cover letters, rebuttals, and project memory.
 
-The repository contains **19 installable skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
+The repository contains **17 installable skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: **2026-10-12**.
+Latest upstream refresh: **2026-10-31**.
 
-- ARS Codex package updated to `v3.23.0` (`52228e8`), locking ARS content to `6ab4b03`; it adds `sr-screener`, run-ledger, acronym, and citation-locale checks.
-- K-Dense checked at `92ace75`; 27 registered selected directories were synchronized.
-- AutoSci checked at `f5c2fe0`; new experiment/tool content remains reference-only and does not overwrite the local original router.
-- SciPilot Figure remains `v2.1.0-1-g43098dd`.
-- SciPilot Writing remains `v1.0.0` (`51c5fd3`).
-- GeoRS SCI Writing Adapter remains an original adapter because the checked upstream source still has no explicit LICENSE file.
+- ARS Codex package updated to `v3.24.0` (`a155655`), locking ARS content to `b34c63f`.
+- K-Dense checked at `5f2bc03`; 27 registered selected directories were synchronized.
+- AutoSci checked at `3c3922f`; it remains reference-only and does not overwrite the local original router.
+- SciPilot Figure, SciPilot Writing, and GeoRS were last updated before the `2026-09-11` cutoff and were removed under the 50-day retention rule.
 
 ## Installation
 
@@ -62,9 +60,7 @@ Before public release:
 | Route urban exposure reviews, radar scans, and health database linkage | `urban-exposure-review-radar-workflow` |
 | Use a full academic research and paper pipeline | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` |
 | Explicitly screen existing records, define eligibility, resolve conflicts, or audit exclusions | ARS `sr-screener` (explicit invocation only) |
-| Decide what chart to use and produce publication-grade figures | `scipilot-figure-skill` |
-| Polish, translate, humanize, write cover letters, or rebut reviews | `scipilot-writing-skill` |
-| Write geography/remote-sensing SCI sections | `geors-sci-writing-adapter` |
+| Build a manuscript-specific exemplar profile with author approval gates | `project-specific-writing-exemplar-workflow` |
 | Use selected upstream technical playbooks | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` |
 
 ## Skill Categories
@@ -73,10 +69,10 @@ Before public release:
 |---|---|
 | Router and automation | `research-orchestrator`, `auto-sci-research`, `agent-auto-sci-automation` |
 | Methodology and evidence design | `agent-auto-sci-methodology`, `urban-exposure-review-radar-workflow` |
-| Geospatial, RS, exposure, accessibility | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected`, `geors-sci-writing-adapter` |
-| Data, visualization, ML | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected`, `scipilot-figure-skill` |
+| Geospatial, RS, exposure, accessibility | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected` |
+| Data, visualization, ML | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected` |
 | Review and bibliometrics | `literature`, `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow`, `academic-research-suite` |
-| Writing and submission | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `geors-sci-writing-adapter`, `kdense-scicomm-selected` |
+| Writing and submission | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `project-specific-writing-exemplar-workflow`, `kdense-scicomm-selected` |
 
 ## Detailed Skill Index
 
@@ -99,9 +95,7 @@ Before public release:
 | `kdense-data-viz-selected` | Upstream wrapper | EDA, statistics, plotting, large tables | Library-level route and code guidance | Does not design manuscript claims |
 | `kdense-geospatial-rs-selected` | Upstream wrapper | GeoPandas, GeoMaster, GIS/RS details | Spatial processing guidance | Does not bypass CRS/scale audit |
 | `kdense-scicomm-selected` | Upstream wrapper | Writing, peer review, citation, slides/posters/schematics | Templates and technical references | Does not replace domain judgment |
-| `scipilot-figure-skill` | Figure advisor | Chart choice and publication-grade visual QA | Chart advice, plotting route, export checks | First decide what the figure proves |
-| `scipilot-writing-skill` | Writing polish | Translation, polishing, de-AI, cover letters, rebuttals | Revised text, back-translation, lint report | Does not alter facts, values, citations |
-| `geors-sci-writing-adapter` | Geo/RS writing | Inversion, spatiotemporal change, exposure/accessibility papers | Section drafting, journal positioning, spatial writing checks | Original adapter, no unlicensed upstream text |
+| `project-specific-writing-exemplar-workflow` | Manuscript-specific writing workflow | Build and refresh a private exemplar profile for substantive drafting and major revision | Core 3 approval gate, section exemplar sets, evidence/argument maps | Private manuscript state only; never copies source prose or bypasses author approval |
 
 ## Typical Workflows
 
@@ -113,7 +107,7 @@ auto-sci-research
 -> agent-auto-sci-geospatial
 -> agent-auto-sci-data-viz
 -> agent-auto-sci-methodology
--> scipilot-writing-skill
+-> agent-auto-sci-scicomm
 ```
 
 ### Green or heat exposure review
@@ -131,28 +125,26 @@ auto-sci-research
 
 ```text
 auto-sci-research
--> geors-sci-writing-adapter
+-> agent-auto-sci-geospatial
 -> agent-auto-sci-geospatial
 -> agent-auto-sci-ai-ml
 -> agent-auto-sci-data-viz
--> scipilot-writing-skill
+-> agent-auto-sci-scicomm
 ```
 
 ## Evidence-first writing exemplar routing
 
-Target-journal benchmarking is treated as evidence-first exemplar decomposition, not language imitation. Build `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE`, select 3–5 function-matched papers per substantive section, record `FULLTEXT`, `ABSTRACT_ONLY`, or `METADATA_ONLY`, draft from the user's evidence, and then hand off to the Academic Prose Style Guard and SciPilot. The reference protocol lives under `agent-auto-sci-scicomm`; it does not replace literature, domain-writing, or polishing owners. Official journal requirements outrank the soft empirical abstract profile, and journal recommendations must use the full manuscript when available rather than IF alone. See [the cross-client matrix](docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md).
+Target-journal benchmarking is treated as evidence-first exemplar decomposition, not language imitation. Build `OUR_EVIDENCE_MAP` and `OUR_ARGUMENT_OUTLINE`, select 3–5 function-matched papers per substantive section, record `FULLTEXT`, `ABSTRACT_ONLY`, or `METADATA_ONLY`, draft from the user's evidence, and then hand off to the local academic prose and consistency checks. The reference protocol lives under `agent-auto-sci-scicomm`; manuscript-specific lifecycle control is provided by `project-specific-writing-exemplar-workflow`. Official journal requirements outrank the soft empirical abstract profile, and journal recommendations must use the full manuscript when available rather than IF alone. See [the cross-client matrix](docs/CROSS_CLIENT_WRITING_ROUTING_MATRIX_V1.md).
 
 V2 adds a reusable global academic-writing contract: story-relevance, sentence-increment, paragraph-contribution, Results/Introduction/Discussion selection, Methods reproducibility, robustness placement, three-line tables, no manual prose breaks, figure/table citation and fact-placement ledgers, and conservative redundancy lint. Copy [CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2](CHATGPT_GLOBAL_ACADEMIC_WRITING_INSTRUCTIONS_V2.txt) into Project Instructions or account-level Custom Instructions when desired; this repository cannot modify ChatGPT account settings.
 
 ## Upstream And Licensing
 
-- `Haojae/scipilot-writing-skill`: MIT, fully packaged with LICENSE and NOTICE.
-- `Haojae/scipilot-figure-skill`: MIT, packaged as a figure-advisor skill.
-- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v3.23.0`.
+- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v3.24.0`.
 - `K-Dense-AI/scientific-agent-skills`: selected wrappers only, not a full import.
-- `xiangyu-Ge/sci-writing-geors`: no explicit LICENSE detected, so this repo keeps only attribution and an original adapter.
+- SciPilot Figure, SciPilot Writing, and GeoRS are retired from the installable set because their latest commits predate the 50-day cutoff; their historical source records remain in the audit document.
 
-See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20261012.md](docs/upstream-update-20261012.md).
+See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20261031.md](docs/upstream-update-20261031.md).
 
 ## ChatGPT and Codex cross-surface use
 

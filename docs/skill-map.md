@@ -16,11 +16,9 @@ Research OS 是通用科研工作流；领域专长按需加载，不预设城�
 | L1 自动化与安全 | source manifest、checkpoint、长期记忆、公开安全 | `agent-auto-sci-automation` |
 | L2 方法论 | 研究问题、机制、证据等级、因果语言 | `agent-auto-sci-methodology` |
 | L3 空间与暴露 | GIS、遥感、可达性、暴露、空间公平 | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected` |
-| L4 数据、图表与模型 | EDA、统计、ML/XAI、论文图件 | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected`, `scipilot-figure-skill` |
-| L5 综述与领域路线 | 体育地理综述、城市暴露综述、前沿雷达 | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
-| L6 写作与投稿 | SCI 写作、证据优先 exemplar 拆解、润色、投稿信、审稿回复 | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `kdense-scicomm-selected`；exemplar protocol 为 `agent-auto-sci-scicomm` 参考文件 |
+| L4 数据、图表与模型 | EDA、统计、ML/XAI、论文图件 | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected` |
 | L5 综述与领域路线 | 通用文献证据、体育地理综述、城市暴露综述、前沿雷达 | `literature`, `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
-| L6 写作与投稿 | SCI 写作、润色、投稿信、审稿回复 | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `kdense-scicomm-selected` |
+| L6 写作与投稿 | SCI 写作、证据优先 exemplar 拆解、投稿信、审稿回复 | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `project-specific-writing-exemplar-workflow`, `kdense-scicomm-selected`；exemplar protocol 为 `agent-auto-sci-scicomm` 参考文件 |
 
 ## 2. 子 Skill 作用矩阵
 
@@ -42,9 +40,7 @@ Research OS 是通用科研工作流；领域专长按需加载，不预设城�
 | `kdense-data-viz-selected` | 上游 wrapper | EDA、统计、绘图、大表处理 | 绘图和分析工具路线 | 不替代 claim 设计 |
 | `kdense-geospatial-rs-selected` | 上游 wrapper | GeoPandas、GeoMaster、遥感/GIS 技术 | 空间处理技术路线 | 不绕过 CRS/尺度审计 |
 | `kdense-scicomm-selected` | 上游 wrapper | 写作、审稿、引用、slides/posters/schematics | 模板和技术参考 | 不替代领域贡献判断 |
-| `scipilot-figure-skill` | 图件顾问 | 图型选择、投稿级绘图、视觉 QA | 图型建议、代码方向、导出检查 | 先确定图要证明什么 |
-| `scipilot-writing-skill` | 写作润色 | 翻译、润色、去 AI 味、cover letter、rebuttal | 改后文本、回译、日志、lint 报告 | 不改事实、数值、引用 |
-| `geors-sci-writing-adapter` | 地理/遥感写作 | 遥感反演、时空变化、暴露/可达性 SCI 写作 | 章节写法、期刊定位、空间写作检查 | 原创适配，不复制未授权上游全文 |
+| `project-specific-writing-exemplar-workflow` | 项目写作工作流 | 为实质性写作或大修建立稿件专属 exemplar profile | Core 3 审批门、section exemplar、证据/论证地图 | 只读写作项目私有状态，不复制来源原文，不绕过作者审批 |
 
 ## 3.1 Evidence-first writing exemplar handoff
 
@@ -58,20 +54,20 @@ auto-sci-research
 -> exemplar protocol (REQUIRED/AUTO only)
 -> draft from our evidence
 -> Academic Prose Style Guard
--> scipilot-writing-skill
+-> final consistency checks
 ```
 
 `REQUIRED` 对应明确的模仿/对标/目标期刊适配；`AUTO` 对应有可获取功能近邻的 substantive writing；`SKIP` 对应 proofreading、grammar-only、citation-format-only、minor typo、single-caption micro-edit 和纯代码任务。每个 substantive section 默认独立选择 3–5 篇，且必须记录 `FULLTEXT`、`ABSTRACT_ONLY` 或 `METADATA_ONLY`。
 
 ### 3.2 V2 global academic-writing contract
 
-所有 substantive academic-writing route 自动加载 `DEFAULT_ACADEMIC_WRITING_PREFERENCES`：先做 whole-document/story audit 和自有 evidence/argument map，再按 exemplar mode 工作，之后执行 sentence academic increment、paragraph story contribution、`STORY_RELEVANCE_AND_DEFENSE_AUDIT`、Results/Introduction/Discussion selection、Academic Prose Style Guard 与 SciPilot lint。Methods reproducibility 优先于故事压缩；非核心 robustness/sensitivity 遵守 `ROBUSTNESS_PLACEMENT_RULE`。最终表格遵守 `THREE_LINE_TABLE_CONTRACT`，Chat Markdown 只标 `PREVIEW_ONLY`，正文遵守 `NO_MANUAL_LINE_BREAK_IN_PROSE`，图表与事实分别使用两个 ledger。`PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`。
+所有 substantive academic-writing route 自动加载 `DEFAULT_ACADEMIC_WRITING_PREFERENCES`：先做 whole-document/story audit 和自有 evidence/argument map，再按 exemplar mode 工作，之后执行 sentence academic increment、paragraph story contribution、`STORY_RELEVANCE_AND_DEFENSE_AUDIT`、Results/Introduction/Discussion selection、Academic Prose Style Guard 与本地一致性 lint。Methods reproducibility 优先于故事压缩；非核心 robustness/sensitivity 遵守 `ROBUSTNESS_PLACEMENT_RULE`。最终表格遵守 `THREE_LINE_TABLE_CONTRACT`，Chat Markdown 只标 `PREVIEW_ONLY`，正文遵守 `NO_MANUAL_LINE_BREAK_IN_PROSE`，图表与事实分别使用两个 ledger。`PROVENANCE_METADATA_STRIPPING = EXPLICIT_OPT_IN_ONLY`。
 
 ## 3. 内置 Academic Research Suite
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.23.0` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、本地 PDF 阅读预检、实验规划；`sr-screener` 仅在明确要求筛选时调用 |
+| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.24.0` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、本地 PDF 阅读预检、实验规划；`sr-screener` 仅在明确要求筛选时调用 |
 
 使用原则：
 
@@ -85,13 +81,13 @@ auto-sci-research
 
 | 任务 | 推荐顺序 |
 |---|---|
-| 体育设施可达性实证论文 | `auto-sci-research -> sport-geography-sci-writing -> agent-auto-sci-geospatial -> agent-auto-sci-data-viz -> scipilot-writing-skill` |
+| 体育设施可达性实证论文 | `auto-sci-research -> sport-geography-sci-writing -> agent-auto-sci-geospatial -> agent-auto-sci-data-viz -> agent-auto-sci-scicomm` |
 | 绿地/热暴露综述 | `auto-sci-research -> urban-exposure-review-radar-workflow -> sport-geography-review-bibliometric -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
 | 通用文献核验与 citation–claim 审计 | `literature -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
-| 遥感反演/时空变化 SCI 写作 | `auto-sci-research -> geors-sci-writing-adapter -> agent-auto-sci-geospatial -> agent-auto-sci-ai-ml -> scipilot-writing-skill` |
-| 论文图件 | `agent-auto-sci-data-viz -> kdense-data-viz-selected -> scipilot-figure-skill -> agent-auto-sci-scicomm` |
+| 遥感反演/时空变化 SCI 写作 | `auto-sci-research -> agent-auto-sci-geospatial -> agent-auto-sci-ai-ml -> agent-auto-sci-data-viz -> agent-auto-sci-scicomm` |
+| 论文图件 | `agent-auto-sci-data-viz -> kdense-data-viz-selected -> agent-auto-sci-scicomm` |
 | 机器学习解释 | `agent-auto-sci-ai-ml -> kdense-ml-ai-selected -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
-| 目标期刊近邻论文驱动的 Discussion 结构修改 | `auto-sci-research -> agent-auto-sci-scicomm -> exemplar protocol -> Academic Prose Style Guard -> scipilot-writing-skill` |
+| 目标期刊近邻论文驱动的 Discussion 结构修改 | `auto-sci-research -> agent-auto-sci-scicomm -> project-specific-writing-exemplar-workflow -> exemplar protocol -> Academic Prose Style Guard` |
 
 ## 5. 选择规则
 
@@ -100,9 +96,8 @@ auto-sci-research
 - 任务核心是文献、DOI、Zotero、citation 或证据支持：用 `literature`。
 - 任务是“该不该这样研究”：先进 `agent-auto-sci-methodology`。
 - 任务涉及空间数据、地图、暴露或可达性：先进 `agent-auto-sci-geospatial`。
-- 任务涉及图表：先 `agent-auto-sci-data-viz`，再 `scipilot-figure-skill`。
-- 任务涉及语言最后一公里：用 `scipilot-writing-skill`。
-- 任务是地理/遥感 SCI 章节写作：用 `geors-sci-writing-adapter`。
+- 任务涉及图表：先 `agent-auto-sci-data-viz`，再使用 `kdense-data-viz-selected` 的工具参考。
+- 任务涉及语言最后一公里：用 `agent-auto-sci-scicomm`。
 - 任务是体育地理实证论文：用 `sport-geography-sci-writing`。
 - 任务是城市暴露综述或前沿雷达：用 `urban-exposure-review-radar-workflow`。
 - 任务是目标期刊近邻论文驱动的 substantive writing：先建自有 evidence/argument map，再按 exemplar protocol 选择功能近邻；不要把它宣传成 AI imitation 或一键生成顶刊论文。

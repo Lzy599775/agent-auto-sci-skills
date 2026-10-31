@@ -88,8 +88,24 @@ Instead it provides an explicit Codex orchestration contract:
   `medium` for routine work and `xhigh` for complex judgement, preserves explicit
   choices, and distinguishes requested settings from observed execution;
   upstream `sonnet` hints do not select a Codex model;
-- ARS v3.23.0 retains model tiering as advisory metadata; it is applied only
+- `gemini-4-argon` is the upstream provisional Google verifier recommendation,
+  while `gemini-3.1-pro-preview` retains its upstream validated status; no Gemini
+  smoke script ships and no live Codex-provider validation is claimed;
+- Phase E checks only the manuscript's cited version and requests that version's
+  PDF when it cannot be read; ambiguous citations retain a version-access note;
+- Stage 2.5 always runs before Stage 3; prior reports are context only, and
+  missing required inputs block handoff with `HANDOFF_INCOMPLETE`;
+- upstream SessionStart user notices and Pi structured prompts remain inactive
+  reference integrations; Claude fixture results are not Codex measurements;
+- review letters append the suggested-reference check only on explicit request
+  (otherwise a did-not-run line) and the reviewer claim check through one fresh,
+  tool-less native worker unless `ARS_PANEL_CLAIM_CHECK=0`; neither feeds the
+  decision or roadmap, and the held-out #1002 dispatcher is inactive;
+- ARS v3.24.0 retains model tiering as advisory metadata; it is applied only
   when a Codex runtime provides explicit per-dispatch model selection;
+- the upstream write-scope guard's plugin-prefix and Windows timeout repairs
+  remain inactive Claude-hook references; Codex has no `PreToolUse` write
+  fence, and the optional Codex hook pack only announces metadata;
 - canonical cross-model handoffs are validated and transported by the
   dispatching context, not by least-privilege owner roles;
 - the fixed Reviewer 2 substrate swap and Priority-1 re-review judge pass run
