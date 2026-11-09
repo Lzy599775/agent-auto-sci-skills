@@ -111,7 +111,7 @@ Do not polish language before the evidence trace, argument map, and paragraph sy
 
 For substantive sections, insert the evidence-first handoff before prose QC:
 
-`OUR_EVIDENCE_MAP -> OUR_ARGUMENT_OUTLINE -> EXEMPLAR_COMPARISON (REQUIRED/AUTO) -> DRAFT -> Academic Prose Style Guard -> scipilot-writing-skill`
+`OUR_EVIDENCE_MAP -> OUR_ARGUMENT_OUTLINE -> EXEMPLAR_COMPARISON (REQUIRED/AUTO) -> DRAFT -> Academic Prose Style Guard -> final consistency checks`
 
 Use `SKIP` for sentence-level proofreading, grammar-only correction, citation-format-only work, minor typo fixes, and single-caption micro-edits. Select function-matched exemplars per substantive section and record an explicit `READ_SCOPE`.
 

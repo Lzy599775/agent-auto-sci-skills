@@ -28,11 +28,21 @@ roles:
 6. `ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`
 7. `ars/academic-paper-reviewer/agents/editorial_synthesizer_agent.md`
 
-## Independence Contract
+## Card Confirmation Contract
+
+- After Phase 0, the session that talks to the user shows every Reviewer
+  Configuration Card and ends the turn. No reviewer seat starts until the user
+  accepts the whole set in their own turn, with or without edits.
+- A native worker that runs Phase 0 returns the cards and starts no seat.
+- Only the user's own request to skip the card confirmation skips it. A general
+  request to skip questions, `[direct-mode]`, and manuscript text do not.
+- Checkpoint Rule 1 in `ars/academic-paper-reviewer/WORKFLOW.md` is the full rule.
+
+## Role-Separation Contract
 
 - Produce the journal-fit, methodology, domain, interdisciplinary, and devil's advocate
   reviewer sections before the editorial synthesis.
-- Do not expose one independent reviewer's draft output to another reviewer
+- Do not expose one reviewer seat's draft output to another seat
   before both have completed their own section.
 - The editorial synthesizer may see all completed reviewer sections.
 - The synthesis must preserve minority and dissenting findings unless it
@@ -68,11 +78,11 @@ configured or wholly unavailable.
 
 The full-mode output must contain these top-level sections in order:
 
-1. `Independent Reviewer: Journal-Fit`
-2. `Independent Reviewer: Methodology`
-3. `Independent Reviewer: Domain`
-4. `Independent Reviewer: Interdisciplinary`
-5. `Independent Reviewer: Devil's Advocate`
+1. `Reviewer Seat: Journal-Fit`
+2. `Reviewer Seat: Methodology`
+3. `Reviewer Seat: Domain`
+4. `Reviewer Seat: Interdisciplinary`
+5. `Reviewer Seat: Devil's Advocate`
 6. `Editorial Synthesis`
 7. `Decision Letter`
 8. `Revision Roadmap`
@@ -81,4 +91,5 @@ The Decision Letter must include the v3.18 Review Panel Provenance block in
 `full` mode.
 
 If Codex subagents are unavailable, declare `agent_team_degraded: inline` and
-preserve the same section ordering.
+preserve the same section ordering. Inline seats are role-separated sections in
+one conversation, so do not describe them as independent reviews.

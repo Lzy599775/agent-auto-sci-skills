@@ -26,7 +26,7 @@ Route by the current deliverable, not by topic keywords alone. Green exposure, h
 - External literature synthesis, review corpus construction, paper-level extraction, Evidence Trace, cross-paper synthesis, conflicting evidence, heterogeneity, literature gaps, review coding, or review drafting routes to `sport-geography-review-bibliometric`. If the review type or domain route is still undecided, place `urban-exposure-review-radar-workflow` before it.
 - The user's own data/method/results manuscript drafting or revision routes through `agent-auto-sci-scicomm` as the argument owner, with `sport-geography-sci-writing` added as the domain writing helper when applicable. Add geospatial, ML, data-viz, or methodology helpers only when the immediate deliverable requires them.
 - For mixed tasks, choose the owner for the current handoff. A frozen empirical Results/Discussion remains scientifically bounded by `sport-geography-sci-writing` when applicable, while `agent-auto-sci-scicomm` coordinates the argument handoff; review skills may be helpers and must not take over. Do not load both domain owners merely because the topic contains literature and empirical terms; make a later handoff explicit when the deliverable changes.
-- If the immediate deliverable is only review evidence structure and explicitly says not to write prose, do not add `sport-geography-sci-writing`, `scipilot-writing-skill`, or `agent-auto-sci-scicomm` as primary owners.
+- If the immediate deliverable is only review evidence structure and explicitly says not to write prose, do not add `sport-geography-sci-writing` or `agent-auto-sci-scicomm` as primary owners.
 
 ### Evidence-first writing exemplar handoff
 
@@ -40,7 +40,7 @@ auto-sci-research
   -> academic_writing_exemplar_protocol (REQUIRED/AUTO)
   -> draft from our evidence
   -> Academic Prose Style Guard
-  -> scipilot-writing-skill
+  -> final consistency checks
 ```
 
 For every substantive academic-writing conversation, load the shared V2 academic-writing contract from
@@ -67,16 +67,12 @@ Any route that produces manuscript prose, Discussion, Introduction, Conclusion, 
 | Integrating Sportpark writing/figure memories or deduplicating local skills | Read `references/11_sportpark_skill_integration_notes.md` |
 | Build or update the overall research-agent workflow | `agent-auto-sci-automation` |
 | Machine learning, AI model design, SHAP, model evaluation | `agent-auto-sci-ai-ml` |
-| Upstream K-Dense ML/AI technical playbooks: scikit-learn, PyTorch Lightning, Transformers, SHAP, time-series ML, GNN, UMAP | `kdense-ml-ai-selected` |
 | EDA, statistics, publication figures, tables, dashboards | `agent-auto-sci-data-viz` |
-| Upstream K-Dense EDA/statistics/visualization playbooks: matplotlib, seaborn, scientific visualization, NetworkX, Polars, Dask | `kdense-data-viz-selected` |
-| Data figure advisor, chart selection, journal-ready plotting, CJK font setup, visual QA | `scipilot-figure-skill` |
+| Data figure advisor, chart selection, journal-ready plotting, CJK font setup, visual QA | `agent-auto-sci-data-viz` |
 | GIS, spatial accessibility, remote sensing, spatial ML | `agent-auto-sci-geospatial` |
-| Upstream K-Dense geospatial and remote-sensing playbooks: geomaster, GeoPandas | `kdense-geospatial-rs-selected` |
 | Manuscript argument, slides, posters, peer review, journal strategy, rebuttal | `agent-auto-sci-scicomm` |
-| Academic polishing, translation, de-AI/humanizing, cover letter, response-to-reviewers, writing lint | `scipilot-writing-skill` |
+| Academic polishing, translation, cover letter, response-to-reviewers, writing review | `agent-auto-sci-scicomm` |
 | Geography and remote-sensing SCI writing: inversion, spatiotemporal change, exposure/accessibility IMRAD sections | `geors-sci-writing-adapter` |
-| Upstream K-Dense scientific communication playbooks: writing, peer review, citations, literature review, slides, posters, schematics | `kdense-scicomm-selected` |
 | Hypothesis, research design, critical appraisal, evidence grading | `agent-auto-sci-methodology` |
 | Urban exposure review workflow, systematic/scoping review, bibliometric + critical review, remote-sensing frontier radar, CV-to-RS idea generation, public health database linkage | `urban-exposure-review-radar-workflow` |
 | Sport geography empirical SCI manuscript writing | `sport-geography-sci-writing` |
@@ -153,12 +149,6 @@ Treat a result file that conflicts with `CURRENT_STATE` on effect direction or a
 - `references/11_sportpark_skill_integration_notes.md`: Sportpark writing/figure lessons, duplicate handling, and Darwin-style evaluation boundary.
 - `../agent-auto-sci-scicomm/references/academic_writing_exemplar_protocol.md`: evidence-first exemplar selection, article maps, anti-copying contract, and cross-client writing handoff.
 - `../urban-exposure-review-radar-workflow/references/workflow_playbook.md`: route-specific workflow for reviews, bibliometrics, urban exposure, remote sensing radar, and health database linkage.
-- `../kdense-ml-ai-selected/SKILL.md`: selected K-Dense ML/AI package and upstream subskills.
-- `../kdense-data-viz-selected/SKILL.md`: selected K-Dense data analysis and visualization package.
-- `../kdense-geospatial-rs-selected/SKILL.md`: selected K-Dense geospatial and remote-sensing package.
-- `../kdense-scicomm-selected/SKILL.md`: selected K-Dense scientific communication package.
-- `../scipilot-figure-skill/SKILL.md`: SciPilot scientific figure advisor and visual QA workflow.
-- `../scipilot-writing-skill/SKILL.md`: SciPilot writing, polishing, de-AI/humanizing, cover letter, and rebuttal workflow.
 - `../geors-sci-writing-adapter/SKILL.md`: original geography/remote-sensing SCI writing adapter for inversion, spatiotemporal change, exposure, accessibility, and urban-health manuscripts.
 
 ## Local Project Files
@@ -184,5 +174,5 @@ Treat a result file that conflicts with `CURRENT_STATE` on effect direction or a
 - Do not copy long text from private prompt PDFs into public skill files.
 - Do not create a new subskill when an existing subskill can be extended cleanly.
 - Do not skip the HTML evolution archive after a meaningful skill change.
-- Do not create a duplicate top-level academic-writing skill when the existing scicomm and SciPilot owners can carry
+- Do not create a duplicate top-level academic-writing skill when the existing scicomm owner can carry
   the contract.

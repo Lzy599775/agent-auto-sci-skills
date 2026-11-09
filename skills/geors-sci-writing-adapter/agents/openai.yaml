@@ -1,0 +1,4 @@
+interface:
+  display_name: "GeoRS SCI Writing Adapter"
+  short_description: "Geography and remote-sensing SCI writing adapter for titles, abstracts, IMRAD sections, cover letters, and exposure/accessibility writing checks."
+  default_prompt: "Use geors-sci-writing-adapter to classify the paper type, build a claim-evidence map, revise the target SCI section, and check geospatial or remote-sensing writing risks."

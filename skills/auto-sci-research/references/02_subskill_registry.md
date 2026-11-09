@@ -14,15 +14,9 @@ Use this file to choose the right local skill.
 |---|---|---|
 | `agent-auto-sci-automation` | Long-horizon research workflow, source ingestion, memory, checkpoints, automation, API setup | workflow plan, source manifest, memory schema, update protocol |
 | `agent-auto-sci-ai-ml` | ML/AI modeling, baselines, XAI, model validation | model plan, leakage checklist, SHAP plan, experiment matrix |
-| `kdense-ml-ai-selected` | Selected upstream K-Dense ML/AI subskills | scikit-learn, PyTorch Lightning, Transformers, SHAP, time-series ML, GNN, UMAP technical playbooks |
 | `agent-auto-sci-data-viz` | EDA, statistics, tables, figures, dashboards | EDA report, statistical plan, publication figure plan |
-| `kdense-data-viz-selected` | Selected upstream K-Dense data/viz subskills | EDA, statistical analysis, matplotlib, seaborn, scientific visualization, NetworkX, Polars, Dask |
-| `scipilot-figure-skill` | Scientific figure advisor and plotter | data profiling, chart selection, publication export, CJK font setup, visual QA loop |
 | `agent-auto-sci-geospatial` | GIS, remote sensing, spatial accessibility, spatial ML | spatial workflow, CRS audit, map plan, accessibility pipeline |
-| `kdense-geospatial-rs-selected` | Selected upstream K-Dense geospatial and remote-sensing subskills | geomaster and GeoPandas technical workflows |
 | `agent-auto-sci-scicomm` | Manuscript writing, slides, posters, peer review, rebuttal | manuscript plan, section draft, response letter, presentation plan |
-| `kdense-scicomm-selected` | Selected upstream K-Dense scientific communication subskills | scientific writing, peer review, citations, literature review, slides, posters, schematics |
-| `scipilot-writing-skill` | SciPilot writing and polishing companion | polished text, back-translation, change log, writing_lint report, cover letter, rebuttal |
 | `geors-sci-writing-adapter` | Geography and remote-sensing SCI writing adapter | title, abstract, IMRAD sections, cover letter, geospatial/RS writing checks |
 | `agent-auto-sci-methodology` | Hypothesis, research design, critical appraisal, evidence grading | hypothesis matrix, method critique, risk-of-bias table |
 | `urban-exposure-review-radar-workflow` | Urban exposure review workflow, remote-sensing frontier radar, CV-to-RS idea generation, formal corpus/radar handoff | route decision, search/radar protocol, extraction/coding framework, journal evidence gate, project scaffold |
@@ -40,16 +34,11 @@ Each `agent-auto-sci-*` subskill now has two layers of references:
 | `sport-geography-review-bibliometric` | Review, systematic review, scoping review and bibliometric manuscripts in sport geography | Search strategy, PRISMA, WoS/Scopus analysis, coding framework, policy agenda. |
 | `urban-exposure-review-radar-workflow` | Review/radar workflow for urban exposure, remote sensing, public health linkage, and high-impact journal routing | When the task must first decide among bibliometric review, systematic review, scoping review, narrative review, frontier radar, or empirical design. |
 
-## 4. Related K-Dense Helper Skills
+## 4. External Skill Lifecycle
 
 These are not subskills of this project, but they can be invoked as technical helpers when already installed:
 
-- `kdense-ml-ai-selected`: selected K-Dense ML/AI bundle.
-- `kdense-data-viz-selected`: selected K-Dense data analysis and visualization bundle.
-- `kdense-geospatial-rs-selected`: selected K-Dense geospatial and remote-sensing bundle.
-- `kdense-scicomm-selected`: selected K-Dense scientific communication bundle.
-- `scipilot-figure-skill`: SciPilot figure advisor for chart selection, plotting, and visual QA.
-- `scipilot-writing-skill`: SciPilot writing/polishing workflow for translation, de-AI/humanizing, cover letters, and rebuttals.
+- K-Dense selected bundles and SciPilot Figure/Writing are retired under the 30-day rule. See `docs/upstream-update-20261109.md`.
 - `geors-sci-writing-adapter`: original geography/remote-sensing SCI writing adapter inspired by xiangyu-Ge/sci-writing-geors without copying unlicensed upstream text.
 - `hypothesis-generation`, `scientific-critical-thinking`, `scholar-evaluation`
 
@@ -81,13 +70,13 @@ Apply the following precedence before matching topic keywords: route by the imme
 8. If the immediate deliverable is the user's own empirical sport-geography manuscript or its Results/Discussion/figures/method chain, use `sport-geography-sci-writing`.
 9. If the task asks for recent remote-sensing, Geospatial AI, CV-to-RS, heat/green exposure radar, use `urban-exposure-review-radar-workflow` plus `agent-auto-sci-geospatial`.
 10. If the task involves spatial data or maps, add `agent-auto-sci-geospatial`.
-11. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`; add `kdense-ml-ai-selected` when upstream package-level technical playbooks are needed.
-12. If the task ends in figures/tables/statistics, add `agent-auto-sci-data-viz`; add `kdense-data-viz-selected` for upstream EDA/statistics/visualization playbooks and `scipilot-figure-skill` for chart selection or publication-grade data figures.
-13. If the task is final-language polishing, translation, de-AI/humanizing, cover letter, or rebuttal, add `scipilot-writing-skill`.
+11. If the task involves ML or SHAP, add `agent-auto-sci-ai-ml`.
+12. If the task ends in figures/tables/statistics, add `agent-auto-sci-data-viz`.
+13. If the task is final-language polishing, translation, cover letter, or rebuttal, add `agent-auto-sci-scicomm`.
 14. If the task is geography/remote-sensing SCI writing, especially inversion, spatiotemporal change, exposure, accessibility, or urban health manuscripts, add `geors-sci-writing-adapter`.
-15. If the task ends in text, slides, poster, or rebuttal at the argument/package level, add `agent-auto-sci-scicomm`; add `kdense-scicomm-selected` for upstream writing, citation, peer-review, slide, poster, or schematic workflows.
+15. If the task ends in text, slides, poster, or rebuttal at the argument/package level, add `agent-auto-sci-scicomm`.
 16. If the task is about research logic, evidence quality, or hypotheses, add `agent-auto-sci-methodology`.
-17. For substantive manuscript writing, keep `agent-auto-sci-scicomm` as the argument owner and invoke `academic_writing_exemplar_protocol` only when `WRITING_EXEMPLAR_MODE` is `REQUIRED` or `AUTO`; then hand off to the Academic Prose Style Guard and `scipilot-writing-skill`.
+17. For substantive manuscript writing, keep `agent-auto-sci-scicomm` as the argument owner and invoke `academic_writing_exemplar_protocol` only when `WRITING_EXEMPLAR_MODE` is `REQUIRED` or `AUTO`; then hand off to the Academic Prose Style Guard and final consistency checks.
 18. If the task is external web research, use `gpt-researcher` only after checking privacy and source needs.
 19. If the task is local paper reading, use `codex-paper-reader` before ad hoc PDF scanning.
 20. If the task is broad academic paper orchestration, use `academic-research-suite` or route through `auto-sci-research`.
@@ -101,8 +90,8 @@ Apply the following precedence before matching topic keywords: route by the imme
 | Topic and feasibility | `agent-auto-sci-methodology`, `agent-auto-sci-automation` |
 | Literature and corpus | `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
 | Data and spatial processing | `agent-auto-sci-automation`, `agent-auto-sci-geospatial` |
-| Modeling and analysis | `agent-auto-sci-ai-ml`, `kdense-ml-ai-selected`, `agent-auto-sci-data-viz`, `kdense-data-viz-selected`, `agent-auto-sci-methodology` |
-| Publication figures | `agent-auto-sci-data-viz`, `scipilot-figure-skill`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` |
-| Draft and revision | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm`, `scipilot-writing-skill`, `kdense-scicomm-selected` |
+| Modeling and analysis | `agent-auto-sci-ai-ml`, `agent-auto-sci-data-viz`, `agent-auto-sci-methodology` |
+| Publication figures | `agent-auto-sci-data-viz`, `agent-auto-sci-geospatial`, `agent-auto-sci-scicomm` |
+| Draft and revision | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm` |
 | Reviewer risk and rebuttal | `agent-auto-sci-methodology`, `agent-auto-sci-scicomm` |
 | Skill evolution and release | `auto-sci-research`, `agent-auto-sci-automation` |

@@ -81,7 +81,7 @@
         <div class="actions">
           <a class="btn" href="../README.md">README</a>
           <a class="btn" href="../docs/skill-map.md">Skill Map</a>
-          <a class="btn" href="../docs/upstream-update-20261031.md">2026-10-31 更新记录</a>
+          <a class="btn" href="../docs/upstream-update-20261109.md">2026-11-09 更新记录</a>
           <a class="btn" href="agent-auto-sci-evolution.html">进化档案</a>
         </div>
       </div>
@@ -90,10 +90,10 @@
 
   <main>
     <div class="wrap stats">
-      <div class="stat"><strong>17</strong><span>可安装 Codex skills</span></div>
+      <div class="stat"><strong>14</strong><span>可安装 Codex skills</span></div>
       <div class="stat"><strong>1</strong><span>ARS 内置科研管线子 skill</span></div>
       <div class="stat"><strong>6</strong><span>任务分类入口</span></div>
-      <div class="stat"><strong>2026-10-31</strong><span>最新上游检查</span></div>
+      <div class="stat"><strong>2026-11-09</strong><span>最新上游检查</span></div>
     </div>
 
     <section>
@@ -129,26 +129,23 @@
           <article class="skill"><h3><code>urban-exposure-review-radar-workflow</code></h3><p>城市暴露、体育地理、遥感热环境和公共健康连接的路线判别。</p><dl><dt>输入</dt><dd>主题、目标期刊、语料来源、数据类型。</dd><dt>输出</dt><dd>route decision、journal gate、formal corpus/radar handoff。</dd><dt>边界</dt><dd>正式综述语料和前沿雷达候选必须分开。</dd></dl></article>
           <article class="skill"><h3><a href="skills/literature.html"><code>literature</code></a></h3><p>证据可追溯的通用文献 workflow。</p><dl><dt>输入</dt><dd>研究问题、seed papers、Zotero/DOI、待核查 claim。</dd><dt>输出</dt><dd>verified corpus、paper notes、evidence trace、citation-support 结论。</dd><dt>边界</dt><dd>先手工 workflow 与 golden set，不猜测缺失字段。</dd></dl></article>
           <article class="skill"><h3><code>sport-geography-review-bibliometric</code></h3><p>体育地理系统综述、scoping review 和文献计量。</p><dl><dt>输入</dt><dd>主题、数据库、关键词、目标期刊。</dd><dt>输出</dt><dd>检索式、PRISMA、编码表、图表计划、政策议程。</dd><dt>边界</dt><dd>文献计量必须服务机制框架或政策议程。</dd></dl></article>
-          <article class="skill"><h3><a href="skills/academic-research-suite.html"><code>academic-research-suite</code></a></h3><p>ARS 子 skill，处理深度研究、论文管线、审稿模拟、PDF 阅读预检和引用完整性。</p><dl><dt>位置</dt><dd><code>urban-exposure-review-radar-workflow/subskills</code></dd><dt>版本</dt><dd><code>3.24.0</code></dd><dt>新增</dt><dd>面向 v3.24 的研究管线、质量门和审计能力更新。</dd><dt>边界</dt><dd><code>sr-screener</code> 仅在用户明确要求记录筛选、纳排标准、冲突裁决或排除审计时调用。</dd></dl></article>
+          <article class="skill"><h3><a href="skills/academic-research-suite.html"><code>academic-research-suite</code></a></h3><p>ARS 子 skill，处理深度研究、论文管线、审稿模拟、PDF 阅读预检和引用完整性。</p><dl><dt>位置</dt><dd><code>urban-exposure-review-radar-workflow/subskills</code></dd><dt>版本</dt><dd><code>3.24.2</code></dd><dt>新增</dt><dd>路由核心校验、审稿席位配置与复现锁检查。</dd><dt>边界</dt><dd><code>sr-screener</code> 仅在用户明确要求记录筛选、纳排标准、冲突裁决或排除审计时调用。</dd></dl></article>
         </div></div></div>
 
         <div class="band"><div class="wrap band-grid"><div><h3>GIS、遥感与暴露</h3><p>空间数据处理、暴露/可达性定义、遥感写作和技术 playbook。</p></div><div class="skill-grid">
           <article class="skill"><h3><code>agent-auto-sci-geospatial</code></h3><p>GIS、遥感、可达性、绿色/热暴露、空间公平和地图。</p><dl><dt>输入</dt><dd>空间数据、指标、代码、地图或方法描述。</dd><dt>输出</dt><dd>CRS 审计、暴露窗口、可达性流程、地图检查。</dd><dt>边界</dt><dd>区分 exposure、accessibility、availability、quality、use。</dd></dl></article>
-          <article class="skill"><h3><code>kdense-geospatial-rs-selected</code></h3><p>K-Dense 精选 GeoPandas、GeoMaster 等 GIS/RS 技术参考。</p><dl><dt>输入</dt><dd>具体 GIS/遥感工具问题。</dd><dt>输出</dt><dd>库级技术路线和注意点。</dd><dt>边界</dt><dd>不替代本地 CRS/尺度/暴露定义审计。</dd></dl></article>
         </div></div></div>
 
         <div class="band"><div class="wrap band-grid"><div><h3>数据、图表与模型</h3><p>EDA、统计、机器学习、XAI、图件设计和可视化自检。</p></div><div class="skill-grid">
           <article class="skill"><h3><code>agent-auto-sci-data-viz</code></h3><p>EDA、统计、文献计量图、论文图表和 caption。</p><dl><dt>输入</dt><dd>数据、结果、图表需求或已有图。</dd><dt>输出</dt><dd>figure plan、统计路线、caption、table shell。</dd><dt>边界</dt><dd>每张图必须服务一个 claim。</dd></dl></article>
           <article class="skill"><h3><code>agent-auto-sci-ai-ml</code></h3><p>ML、SHAP/XAI、泄漏检查、空间/时间验证。</p><dl><dt>输入</dt><dd>特征、标签、模型、验证方式、结果。</dd><dt>输出</dt><dd>baseline、切分方案、泄漏清单、解释边界。</dd><dt>边界</dt><dd>SHAP 和特征重要性不是因果证据。</dd></dl></article>
-          <article class="skill"><h3><code>kdense-data-viz-selected</code></h3><p>K-Dense 精选 EDA、统计、Matplotlib、Seaborn、NetworkX、Polars、Dask。</p><dl><dt>输入</dt><dd>库级分析或绘图问题。</dd><dt>输出</dt><dd>技术路线、代码参考、工具注意点。</dd><dt>边界</dt><dd>不替代论文 claim 设计。</dd></dl></article>
-          <article class="skill"><h3><code>kdense-ml-ai-selected</code></h3><p>K-Dense 精选 scikit-learn、Lightning、Transformers、SHAP、TimesFM、GNN、UMAP。</p><dl><dt>输入</dt><dd>建模任务、技术栈、评估目标。</dd><dt>输出</dt><dd>模型路线、训练评估建议、解释方法。</dd><dt>边界</dt><dd>验证和结论强度仍由本地 skill 把关。</dd></dl></article>
         </div></div></div>
 
         <div class="band"><div class="wrap band-grid"><div><h3>写作、投稿与审稿</h3><p>文本最后一公里、论文论证、投稿信、审稿回复和展示材料。</p></div><div class="skill-grid">
           <article class="skill"><h3><code>agent-auto-sci-scicomm</code></h3><p>论文结构、claim-evidence map、投稿信、rebuttal、PPT 和海报。</p><dl><dt>输入</dt><dd>草稿、结果、目标期刊、审稿意见。</dd><dt>输出</dt><dd>IMRAD 大纲、审稿风险、回复矩阵。</dd><dt>边界</dt><dd>语言润色不能改变证据强度。</dd></dl></article>
           <article class="skill"><h3><code>sport-geography-sci-writing</code></h3><p>体育设施、体育公园、暴露公平和城市健康实证论文写作。</p><dl><dt>输入</dt><dd>研究问题、方法、结果、目标期刊。</dd><dt>输出</dt><dd>期刊定位、gap chain、结果叙事、讨论和政策启示。</dd><dt>边界</dt><dd>先建立公共问题和学术缺口。</dd></dl></article>
           <article class="skill"><h3><a href="skills/project-specific-writing-exemplar-workflow.html"><code>project-specific-writing-exemplar-workflow</code></a></h3><p>为每篇稿件维护私有 exemplar 生命周期和作者审批门。</p><dl><dt>输入</dt><dd>MANUSCRIPT_ID、Master 20、稿件证据和目标期刊。</dd><dt>输出</dt><dd>Core 3 approval、section exemplars、证据/论证地图。</dd><dt>边界</dt><dd>不得复制来源原文、跨项目继承私有状态或绕过作者审批。</dd></dl></article>
-          <article class="skill"><h3><code>kdense-scicomm-selected</code></h3><p>K-Dense 精选写作、审稿、引用、slides、posters、schematics。</p><dl><dt>输入</dt><dd>写作、引用、展示或示意图技术问题。</dd><dt>输出</dt><dd>模板、结构和工具参考。</dd><dt>边界</dt><dd>不替代领域贡献和期刊证据门槛。</dd></dl></article>
+          <article class="skill"><h3><a href="skills/geors-sci-writing-adapter.html"><code>geors-sci-writing-adapter</code></a></h3><p>地理与遥感 SCI 写作原创适配。</p><dl><dt>输入</dt><dd>论文类型、研究问题、真实方法与结果、目标期刊。</dd><dt>输出</dt><dd>claim-evidence map、IMRAD 章节与投稿前核查。</dd><dt>边界</dt><dd>不复制无许可上游正文，不改科学结论。</dd></dl></article>
         </div></div></div>
       </div>
     </section>
@@ -183,8 +180,8 @@
       <div class="wrap">
         <h2 class="section-title">上游与许可证状态</h2>
         <div class="notice">
-          <p>ARS 已同步到 <code>v3.24.0</code>（Codex 包 <code>a155655</code>，ARS source lock <code>b34c63f</code>）。K-Dense 已检查到 <code>5f2bc03</code>，本轮同步 27 个精选目录；AutoSci 检查到 <code>3c3922f</code>，新内容仍作为参考，不覆盖本地 router。</p>
-          <p>截至 <code>2026-09-11</code> 的 50 天保留规则，SciPilot Figure、SciPilot Writing 和 GeoRS 因上游超过 50 天未更新而从当前安装集合移除。<code>sr-screener</code> 仍是显式调用工作流，不会因普通综述请求自动触发。详细记录见 <a href="../docs/external-skills.md">external-skills.md</a> 和 <a href="../docs/upstream-update-20261031.md">upstream-update-20261031.md</a>。</p>
+          <p>ARS 已同步到 <code>v3.24.2</code>（Codex 包 <code>82725ac</code>，ARS source lock <code>fd5ff1b</code>）。GeoRS 上游检查到 <code>f515996</code>，恢复原创适配；AutoSci 检查到 <code>3c3922f</code>，仍为参考源。</p>
+          <p>按 2026-10-10 截止的 30 天规则，K-Dense 的 27 个精选子目录均已超期，四个封装移出当前集合；SciPilot Figure/Writing 保持退役。<code>sr-screener</code> 仍是显式调用工作流。逐项日期与来源见 <a href="../docs/upstream-update-20261109.md">2026-11-09 审计</a>。</p>
         </div>
       </div>
     </section>

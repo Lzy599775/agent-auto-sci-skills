@@ -10,12 +10,12 @@
 
 仓库根目录的 [AGENTS.md](AGENTS.md) 提供精简的长期规则和路由入口；详细架构、工作流、证据标准、Research Vault、模板与评估体系从 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/index.md](docs/index.md) 进入。核心原则是：给 agent 一张可导航的地图，而不是把全部规则塞进一个巨大提示词。
 
-当前仓库包含 **17 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-10-31**：
+当前仓库包含 **14 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-11-09**：
 
-- ARS Codex 包已同步到 `v3.24.0` (`a155655`)，上游 ARS 内容锁定到 `b34c63f`。
-- K-Dense 已检查到 main `5f2bc03`，本轮同步 27 个已登记精选目录。
+- ARS Codex 包已同步到 `v3.24.2` (`82725ac`)，上游 ARS 内容锁定到 `fd5ff1b`。
+- K-Dense 仓库已检查到 `a25cf9e`，但 27 个精选子目录最近更新均为 2026-10-01，按 30 天规则移除四个封装。
 - AutoSci 已检查到 `3c3922f`，仍作为参考源，不覆盖本地原创 router。
-- SciPilot Figure、SciPilot Writing 和 GeoRS 在 2026-09-11 前均未更新，已按 50 天规则移除。
+- SciPilot Figure、SciPilot Writing 仍已退役。GeoRS 上游在 2026-11-03 更新，恢复本地原创适配；因无明确许可证，不复制上游内容。
 
 ## 安装
 
@@ -63,7 +63,7 @@ $env:USERPROFILE\.codex\skills
 | 判断城市暴露综述、前沿雷达、医学数据库连接路线 | `urban-exposure-review-radar-workflow` |
 | 需要通用深度研究、论文管线、审稿模拟 | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` |
 | 明确要求筛选已有文献记录、制定纳排标准或生成排除审计 | ARS `sr-screener`（仅显式调用） |
-| 需要上游 K-Dense 技术 playbook | `kdense-ml-ai-selected`、`kdense-data-viz-selected`、`kdense-geospatial-rs-selected`、`kdense-scicomm-selected` |
+| 写地理学或遥感 SCI 论文 | `geors-sci-writing-adapter` |
 
 ## 六类入口
 
@@ -89,7 +89,6 @@ $env:USERPROFILE\.codex\skills
 | Skill | 作用 | 输入 | 输出 | 边界 |
 |---|---|---|---|---|
 | `agent-auto-sci-geospatial` | GIS、遥感、可达性、绿色/热暴露、空间公平和地图合规。 | 空间数据、指标、代码、地图或方法描述。 | CRS 审计、暴露窗口、可达性流程、空间公平指标、地图检查表。 | 必须区分 exposure、accessibility、availability、quality、use。 |
-| `kdense-geospatial-rs-selected` | K-Dense 精选 GeoPandas、GeoMaster 等 GIS/RS 技术 playbook。 | 具体 GIS/遥感工具问题。 | 库级技术路线、矢量/栅格处理提示、遥感处理注意点。 | 只提供技术参考，研究设计仍由 geospatial/methodology 把关。 |
 
 ### D. 数据分析、图表与机器学习
 
@@ -97,8 +96,6 @@ $env:USERPROFILE\.codex\skills
 |---|---|---|---|---|
 | `agent-auto-sci-data-viz` | EDA、统计分析、论文图表、文献计量图和 policy matrix。 | 数据、结果、图表需求、已有图件。 | 数据质量审计、统计路线、figure plan、caption、table shell。 | 每张图必须服务一个 claim。 |
 | `agent-auto-sci-ai-ml` | 机器学习、SHAP/XAI、空间/时间验证、泄漏检查。 | 特征、标签、模型、验证方式、结果。 | baseline、特征/标签审计、验证切分、指标表、解释边界。 | SHAP 和特征重要性不是因果证据。 |
-| `kdense-data-viz-selected` | K-Dense 精选 EDA、统计、Matplotlib、Seaborn、NetworkX、Polars、Dask。 | 库级分析或绘图问题。 | 技术路线、代码参考、工具注意点。 | 不替代论文 claim 设计。 |
-| `kdense-ml-ai-selected` | K-Dense 精选 scikit-learn、PyTorch Lightning、Transformers、SHAP、TimesFM、GNN、UMAP。 | 建模任务、技术栈、评估目标。 | 模型路线、训练评估建议、解释方法。 | 需要和 methodology/AI-ML skill 一起控制验证和解释边界。 |
 
 ### E. 写作、投稿与审稿
 
@@ -107,13 +104,13 @@ $env:USERPROFILE\.codex\skills
 | `agent-auto-sci-scicomm` | 科学交流、论文结构、claim-evidence map、投稿信、审稿回复、PPT/海报。 | 草稿、结果、目标期刊、审稿意见。 | IMRAD 大纲、审稿风险扫描、cover letter、response matrix。 | 需要整体论证、投稿材料或审稿回复时。 |
 | `project-specific-writing-exemplar-workflow` | 稿件专属 exemplar 生命周期和作者审批门。 | `MANUSCRIPT_ID`、Master 20、稿件证据、目标期刊。 | Core 3 approval、section exemplars、证据/论证地图。 | 只使用项目私有状态，不复制来源原文，不跨项目继承。 |
 | `sport-geography-sci-writing` | 体育地理实证 SCI 写作。 | 研究问题、方法、结果、目标期刊。 | 期刊定位、引言 gap chain、方法叙事、结果段落、讨论和政策启示。 | 体育设施可达性、体育公园暴露、空间公平、城市健康机制论文。 |
-| `kdense-scicomm-selected` | K-Dense 精选科学写作、审稿、引用、slides、posters、schematics。 | 写作、引用、展示或示意图技术问题。 | 模板、结构建议、工具参考。 | 作为上游技术/模板库，不替代本地领域写作判断。 |
+| `geors-sci-writing-adapter` | 地理学、遥感、暴露与可达性 SCI 写作原创适配。 | 论文类型、研究问题、真实方法与结果、目标期刊。 | claim-evidence map、IMRAD 章节与投稿前核查。 | 不复制无许可上游正文；不改变科学结论。 |
 
 ### F. 内置上游子 skill
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `skills/urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.24.0` | 通用深度研究、文献综述、论文写作、同行评审模拟、research-to-paper pipeline、实验规划、PDF/引用检查；`sr-screener` 只处理用户明确要求的记录筛选、纳排标准、pilot、冲突裁决和排除审计。 |
+| `academic-research-suite` | `skills/urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.24.2` | 通用深度研究、文献综述、论文写作、同行评审模拟、research-to-paper pipeline、实验规划、PDF/引用检查；`sr-screener` 只处理用户明确要求的记录筛选、纳排标准、pilot、冲突裁决和排除审计。 |
 
 ARS 只在父 skill 判定需要“通用科研生产管线”时调用。`sr-screener` 不会因为用户提到“综述”或“系统综述”而自动触发；只有用户明确要求筛选已有记录、纳排标准、筛选 pilot、冲突裁决、排除审计或筛选报告时才使用。城市暴露、体育地理、暴露/可达性定义、因果语言和正式语料库规则仍由父 skill 把关。
 
@@ -156,7 +153,6 @@ auto-sci-research
 ```text
 auto-sci-research
 -> agent-auto-sci-ai-ml
--> kdense-ml-ai-selected
 -> agent-auto-sci-geospatial
 -> agent-auto-sci-methodology
 -> agent-auto-sci-scicomm
@@ -167,7 +163,6 @@ auto-sci-research
 ```text
 auto-sci-research
 -> agent-auto-sci-data-viz
--> kdense-data-viz-selected
 -> agent-auto-sci-scicomm
 ```
 
@@ -185,11 +180,11 @@ V2 进一步把学术写作契约扩展为可复用的全局偏好：先做 stor
 
 ## 上游与许可证策略
 
-- `Imbad0202/academic-research-skills-codex`：ARS Codex 包，已同步到 `v3.24.0`；许可证和来源见 subskill 内 `LICENSE`、`NOTICE.md`、`manifest.json`。
-- `K-Dense-AI/scientific-agent-skills`：只保留 4 个与本研究方向强相关的精选 wrapper，不全量引入。
-- 超过 50 天未更新的 SciPilot Figure、SciPilot Writing 和 GeoRS 适配已从当前安装集合移除；历史来源保留在审计记录中。
+- `Imbad0202/academic-research-skills-codex`：ARS Codex 包，已同步到 `v3.24.2`；许可证和来源见 subskill 内 `LICENSE`、`NOTICE.md`、`manifest.json`。
+- `K-Dense-AI/scientific-agent-skills`：27 个精选子目录最近更新均早于 2026-10-10，四个 wrapper 已按 30 天规则退役。
+- SciPilot Figure/Writing 保持退役。GeoRS 已恢复原创适配，不分发无许可上游正文。
 
-详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20261031.md](docs/upstream-update-20261031.md)。
+详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20261109.md](docs/upstream-update-20261109.md)。
 
 ## 公开安全原则
 

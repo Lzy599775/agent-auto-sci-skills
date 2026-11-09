@@ -34,38 +34,39 @@
     <header>
       <h1>Agent Auto Sci 进化档案</h1>
       <p class="subtitle">记录本地科研 skill 套件如何从体育地理工作流，逐步扩展到城市暴露、遥感、机器学习、图件、证据优先写作、跨表面科研路由、上游精选封装和 ARS 通用科研管线。</p>
-      <p><a href="index.html">返回本地介绍页</a> · <a href="../docs/upstream-update-20261031.md">查看 2026-10-31 上游检查</a></p>
+      <p><a href="index.html">返回本地介绍页</a> · <a href="../docs/upstream-update-20261109.md">查看 2026-11-09 上游检查</a></p>
     </header>
 
     <section class="stats">
-      <div class="stat"><strong>17</strong><span>顶层可安装 skill</span></div>
+      <div class="stat"><strong>14</strong><span>顶层可安装 skill</span></div>
       <div class="stat"><strong>1</strong><span>内置 ARS 子 skill</span></div>
       <div class="stat"><strong>6</strong><span>任务分类入口</span></div>
-      <div class="stat"><strong>1.0.0</strong><span>当前整理版本</span></div>
+      <div class="stat"><strong>1.2.0</strong><span>当前整理版本</span></div>
     </section>
 
     <h2>来源脉络</h2>
     <section class="sources">
       <article class="card"><span class="pill">本地原创</span><h3>体育地理与城市暴露</h3><p>围绕绿地公园可达性、体育设施暴露、空间公平和城市健康机制，形成领域判断与写作路线。</p></article>
-      <article class="card"><span class="pill">精选封装</span><h3>K-Dense Scientific Agent Skills</h3><p>只保留 ML/AI、数据可视化、GIS/RS、科学交流四类高相关 playbook，避免全量仓库过载。</p></article>
+      <article class="card"><span class="pill">来源审计</span><h3>K-Dense Scientific Agent Skills</h3><p>27 个原精选子目录最近更新均为 2026-10-01，四个 wrapper 按 30 天规则退役；仓库级新提交不改变子目录日期。</p></article>
       <article class="card"><span class="pill">写作扩展</span><h3>证据优先写作与跨表面路由</h3><p><code>agent-auto-sci-scicomm</code> 负责论文论证、投稿和审稿回复；<code>project-specific-writing-exemplar-workflow</code> 管理稿件专属 exemplar 生命周期；<code>research-orchestrator</code> 负责 ChatGPT/Codex 跨表面路由。</p></article>
       <article class="card"><span class="pill">研究管线</span><h3>Academic Research Suite</h3><p>作为隔离子 skill 放在城市暴露 workflow 下，处理深度研究、论文管线和审稿模拟；<code>sr-screener</code> 只在明确要求筛选时调用。</p></article>
       <article class="card"><span class="pill">工作流灵感</span><h3>AutoSci</h3><p>吸收长期科研记忆、idea pipeline 和失败恢复思路，但不直接 vendoring 当前仓库。</p></article>
-      <article class="card"><span class="pill">生命周期</span><h3>50 天更新规则</h3><p>有明确 GitHub 上游的外部封装按最近提交检查；SciPilot Figure、SciPilot Writing 和 GeoRS 已因超过 50 天未更新而退休。本地原创 skill 不适用该删除规则。</p></article>
+      <article class="card"><span class="pill">生命周期</span><h3>30 天更新规则</h3><p>有明确 GitHub 上游的外部封装按实际子技能路径检查；SciPilot Figure/Writing 与 K-Dense 精选封装已退役。GeoRS 上游近期更新，本地原创适配恢复；无许可证的上游内容不复制。</p></article>
     </section>
 
     <h2>当前分类</h2>
     <section class="skills">
       <article class="card"><h3>总控与自动化</h3><p><code>auto-sci-research</code>、<code>agent-auto-sci-automation</code></p></article>
       <article class="card"><h3>方法论与综述路线</h3><p><code>agent-auto-sci-methodology</code>、<code>urban-exposure-review-radar-workflow</code>、<code>sport-geography-review-bibliometric</code></p></article>
-      <article class="card"><h3>GIS、遥感与暴露</h3><p><code>agent-auto-sci-geospatial</code>、<code>kdense-geospatial-rs-selected</code></p></article>
-      <article class="card"><h3>数据、图表与模型</h3><p><code>agent-auto-sci-data-viz</code>、<code>agent-auto-sci-ai-ml</code>、<code>kdense-data-viz-selected</code>、<code>kdense-ml-ai-selected</code></p></article>
-      <article class="card"><h3>写作、投稿与审稿</h3><p><code>agent-auto-sci-scicomm</code>、<code>sport-geography-sci-writing</code>、<code>project-specific-writing-exemplar-workflow</code>、<code>kdense-scicomm-selected</code></p></article>
-      <article class="card"><h3>内置研究套件</h3><p><code>academic-research-suite</code> 当前为 <code>3.24.0</code>，由父 workflow 控制调用范围；筛选工作流为 explicit-only。</p></article>
+      <article class="card"><h3>GIS、遥感与暴露</h3><p><code>agent-auto-sci-geospatial</code></p></article>
+      <article class="card"><h3>数据、图表与模型</h3><p><code>agent-auto-sci-data-viz</code>、<code>agent-auto-sci-ai-ml</code></p></article>
+      <article class="card"><h3>写作、投稿与审稿</h3><p><code>agent-auto-sci-scicomm</code>、<code>sport-geography-sci-writing</code>、<code>geors-sci-writing-adapter</code>、<code>project-specific-writing-exemplar-workflow</code></p></article>
+      <article class="card"><h3>内置研究套件</h3><p><code>academic-research-suite</code> 当前为 <code>3.24.2</code>，由父 workflow 控制调用范围；筛选工作流为 explicit-only。</p></article>
     </section>
 
     <h2>版本事件</h2>
     <section class="timeline">
+      <article class="event"><h3>1.2.0 - 2026-11-09</h3><p>同步 ARS Codex <code>v3.24.2</code>（包 <code>82725ac</code>，source lock <code>fd5ff1b</code>），按逐目录 30 天规则移除 K-Dense 四个精选封装，恢复近期更新的 GeoRS 原创适配，刷新路由、清单、审计和本地导航。</p></article>
       <article class="event"><h3>1.1.0 - 2026-10-31</h3><p>同步 ARS Codex 包到 <code>v3.24.0</code>（包 <code>a155655</code>，source lock <code>b34c63f</code>），将 K-Dense 27 个精选目录更新到 <code>5f2bc03</code>，复核 AutoSci <code>3c3922f</code>，并按 50 天规则移除 SciPilot Figure、SciPilot Writing 和 GeoRS；同步刷新 README、技能地图、审计文档和本地导航页。</p></article>
       <article class="event"><h3>Writing Exemplar V1 - 2026-10-11</h3><p>在 <code>agent-auto-sci-scicomm</code> 下加入 evidence-first writing exemplar decomposition protocol，建立 <code>REQUIRED/AUTO/SKIP</code> 路由、逐 section 近邻论文选择、read-scope 记录、own-evidence-first 和 anti-copying contract；未新增顶层 Skill，并加入 Codex/ChatGPT Web parity matrix 与 G01–G12 golden set。</p></article>
       <article class="event"><h3>Global Academic Writing Contract V2 - 2026-10-11</h3><p>加入 source-rule mapping、story relevance 与 sentence academic increment 审计、Methods 可复现性保护、robustness placement、三线表、正文禁手动换行、figure/table 与 fact ledgers、R01–R12/E01–E06 golden set，以及可复制到 ChatGPT Web 的全局 instructions。</p></article>

@@ -1,11 +1,11 @@
 # Academic Research Skills for Claude Code
 
-[![Version](https://img.shields.io/badge/version-v3.24.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.24.0)
+[![Version](https://img.shields.io/badge/version-v3.24.2-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.24.2)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
-[English](README.md) | [简体中文版](README.zh-CN.md) | [日本語版](README.ja-JP.md) | [한국어](README.ko-KR.md) | [Español](README.es-ES.md)
+[English](README.md) | [简体中文版](README.zh-CN.md) | [日本語版](README.ja-JP.md) | [한국어](README.ko-KR.md) | [Español](README.es-ES.md) | [Português](README.pt-BR.md)
 
 一套完整的學術研究 Claude Code 技能包，涵蓋從研究到論文出版的全流程。
 
@@ -17,6 +17,8 @@
 ```
 
 裝完跑 `/ars-plan`，ARS 會用蘇格拉底對話幫你規劃章節結構。需要前置條件或傳統 symlink 安裝請看 [快速安裝](#快速安裝)。
+
+使用 claude.ai 或 Claude Desktop（付費方案）時，在 **Customize → Plugins → Add → Add marketplace → Add from a repository** 加入同一個 repository，再安裝 `academic-research-skills`。在那裡的一般對話不執行 hook 與 plugin 代理程式，詳見 [SETUP 方法零](docs/SETUP.zh-TW.md#從-claudeai-或-claude-desktop-安裝帳號市集)。
 
 > **AI 是你的副駕駛，不是機長。** 它可以起草文字，full mode 甚至會起草整篇論文；但決定權在你，pipeline 每個階段都會停下來等你確認。它處理苦工（搜文獻、排格式、驗數據、查邏輯一致性），讓你專注在真正需要你腦子的事：定義問題、選方法、詮釋數據的意義、決定「我認為」後面要接什麼。作者是你，送出的每一個主張都由你負責。
 >
@@ -32,7 +34,7 @@ ARS 建立在這個前提上：**人類研究者 + AI 的組合，比純自動�
 
 v3.8 補上 L3 缺口的另一半。v3.7.3 讓每一筆引用都帶 locator anchor，v3.8 在這個基礎上加一道 opt-in 稽核（`ARS_CLAIM_AUDIT=1`）：抓回每一個 anchor 指向的原始文本，判斷論文裡的 claim 是否真有被該引用支撐。五類新的 HIGH-WARN annotation（claim-not-supported、negative-constraint-violation、fabricated-reference、anchorless、constraint-violation-uncited）會在 formatter terminal hard gate 直接攔下輸出。Calibration runner 隨 release 附一組 25 筆的合成 gold set，採 FNR<0.15、FPR<0.10 雙閾值。隨附的測試用的是直接回傳標準答案的替身裁判，所以它驗證的是工具本身，不是真正的 AI 裁判；目前還沒有真裁判的 calibration 結果，正式放大投入要等這份證據（v3.8 spec §5）。
 
-[**Ren 等人**](https://arxiv.org/abs/2607.13104)（2026，*Self-Improvements in Modern Agentic Systems: A Survey*）補上第三個、survey 層級的錨點。其科學發現章節的綜合結論（§7.4）指出：發現型 agent 難以自行驗證 novelty、正確性與可重現性，反而可能鑽弱代理指標的漏洞；證據管理必須跨異質工具與文獻維持；並帶有治理疑慮——「證據薄弱時，科學寫作也會放大錯誤資訊」。其生成迴圈章節（§5.1–§5.2）把人工稽核與保留人類標註列為自生成評估迴圈的實務防護；歷史章節（§2.2）則記下同一課題最早的版本：Lenat 的 EURISKO 的實務成功高度依賴使用者充當外部評估訊號、修剪無效的 heuristic 漂移——survey 明言此限制延續到現代 agentic 系統。ARS 引用這篇 survey 作為 human-in-the-loop 立場的設計依據，而非「人機協作必然勝過全自動」的實證證明；survey 對 ARS 可落地的增量記錄在 #539–#541 與 #547–#550。
+[**Ren 等人**](https://arxiv.org/abs/2607.13104)（2026，*Self-Improvements in Modern Agentic Systems: A Survey*）補上第三個、survey 層級的錨點。其科學發現章節的綜合結論（§7.4）指出：發現型 agent 難以自行驗證 novelty、正確性與可重現性，反而可能鑽弱代理指標的漏洞；證據管理必須跨異質工具與文獻維持；並帶有「證據薄弱時，科學寫作也會放大錯誤資訊」的治理疑慮。其生成迴圈章節（§5.1–§5.2）把人工稽核與保留人類標註列為自生成評估迴圈的實務防護；歷史章節（§2.2）則記下同一課題最早的版本：Lenat 的 EURISKO 的實務成功高度依賴使用者充當外部評估訊號、修剪無效的 heuristic 漂移。這篇 survey 明言此限制延續到現代 agentic 系統。ARS 引用這篇 survey 作為 human-in-the-loop 立場的設計依據，而非「人機協作必然勝過全自動」的實證證明；survey 對 ARS 可落地的增量記錄在 #539–#541 與 #547–#550。
 
 [**Gartenberg 等人**](https://doi.org/10.1287/orsc.2026.ed.v37.n3)（2026，*Organization Science* 37(3):795-812，*More versus better*）補上第四個錨點，也是第一個來自期刊端的錨點。*Organization Science* 的 AI 工作小組用商用 AI 寫作分類器與標準可讀性指標，量了該刊 2021 年 1 月到 2026 年 2 月收到的全部首次投稿（6,957 篇）與文字型審查意見（10,389 份）。被判為大量由 AI 撰寫的稿件在這些指標上更難讀、也更常被 desk reject；AI 味較重的審查意見偏向理論、遠離資料；編輯群的結論是，現行 AI 工具加上「不發表就出局」的誘因，「看來正把系統推向『更多而非更好』的均衡」。其 §5 把「認知投降」（cognitive surrender，該文引 Shaw & Nave, 2026）與「人先行」的用法對比，並要求作者揭露稿件如何產出。這些證據是觀察性、總體層次、且只來自一本期刊，分類器也是專有工具。ARS 引用這篇社論作為「產量不是目標」（見 `POSITIONING.md`）、Collaboration Depth Observer 與 claim-strength ladder 的設計依據，不是關於 ARS 產出的證據；可落地的增量記錄在 #829–#833。
 
@@ -67,13 +69,13 @@ v3.3 的靈感來自 [**PaperOrchestra**](https://arxiv.org/abs/2604.05018)（So
 
 **驗證可用：** 跑 `/ars-plan` 並描述你正在寫的論文，ARS 會用蘇格拉底對話幫你規劃章節結構。想要單次測試的話改跑 `/ars-lit-review "你的主題"`。
 
-**👉 [docs/SETUP.zh-TW.md](docs/SETUP.zh-TW.md)** — 完整指南：安裝 Claude Code、設定 API key、選用的 Pandoc/tectonic（DOCX/PDF）、跨模型驗證（`ARS_CROSS_MODEL`），以及六種安裝方式（Plugin、專案 skills、全域 skills、claude.ai Project、repo clone、Claude Science 匯入）。
+**👉 [docs/SETUP.zh-TW.md](docs/SETUP.zh-TW.md)** — 完整指南：安裝 Claude Code、設定 API key、選用的 Pandoc/tectonic（DOCX/PDF）、跨模型驗證（`ARS_CROSS_MODEL`），以及六種安裝方式（Plugin（Claude Code／claude.ai／Claude Desktop）、專案 skills、全域 skills、claude.ai Project、repo clone、Claude Science 匯入）。
 
 > **你的安裝管道實際啟用哪些控制機制？** 可用性依安裝管道而異，請查逐管道對照表：[docs/CONTROL_AVAILABILITY.md](docs/CONTROL_AVAILABILITY.md)（英文）。
 
 **👉 [docs/DATA_FLOWS.md](docs/DATA_FLOWS.md)** — 哪些資料會離開你的電腦（書目 resolver、選用且需明確同意的跨模型呼叫、更新檢查）、本機快取存什麼與存多久、每條路徑怎麼關閉。（英文）
 
-**使用 Claude Science？** 五個 skill 可直接匯入：**Skills → Import from GitHub**，貼上 `https://github.com/Imbad0202/academic-research-skills`，按 **Preview**，再按 **Import**（需本 repo v3.14.0+——匯入器讀取 marketplace manifest 中明列的 skill 路徑）。匯入是單次快照：ARS 更新後需重新匯入。匯入的 skill 承載 ARS 方法論（研究／寫作／審查協定）；Claude Code 專屬機制——slash commands、hooks、subagent 編排——不會轉移。細節見 [docs/SETUP.zh-TW.md](docs/SETUP.zh-TW.md) 方法五。
+**使用 Claude Science？** 五個 skill 可直接匯入：**Skills → Import from GitHub**，貼上 `https://github.com/Imbad0202/academic-research-skills`，按 **Preview**，再按 **Import**（需本 repo v3.14.0+，因為匯入器讀取 marketplace manifest 中明列的 skill 路徑）。匯入是單次快照：ARS 更新後需重新匯入。匯入的 skill 承載 ARS 方法論（研究／寫作／審查協定）；Claude Code 專屬機制（slash commands、hooks、subagent 編排）不會轉移。細節見 [docs/SETUP.zh-TW.md](docs/SETUP.zh-TW.md) 方法五。
 
 **使用 Pi？** 執行 `pi install git:github.com/Imbad0202/academic-research-skills` 安裝 repo 內的社群維護 wrapper。它持續以原始 ARS 內容為準，並記錄 Pi 在編排與 hooks 方面的限制。詳見 [`pi/README.md`](pi/README.md)。
 
@@ -276,7 +278,7 @@ ARS Stage 2 寫作      →  用驗證過的實驗結果撰寫論文
 
 7 個 Agent 的多視角審查，採 **逐準則、證據錨定的敘事判斷**。模式：full、re-review、quick、methodology-focus、guided、calibration。目前 live review 與 Schema 6 package 一律為 `NOT_CALIBRATED`；完整 calibration 可產生有界候選 profile，但尚未接上 live review。不得以固定總分對照接受、小修、大修或退稿。第一輪審查面板 vs. 契約治理再審派送的分界：見 ARCHITECTURE.md §3 Stage 3 / Stage 3'。
 
-### Academic Pipeline (v3.24.0)
+### Academic Pipeline (v3.24.2)
 
 10 階段調度器，含誠信驗證、兩階段審查、蘇格拉底指導、協作品質評估。Pipeline 規則（由 agent 依流程遵守，不是執行期保證）：每個階段都需使用者確認 checkpoint；誠信驗證（Stage 2.5 + 4.5）為 MANDATORY 且沒有不留紀錄的繞過路徑（所有覆寫都須記錄使用者理由、供 Stage 6 使用）；R&R 追溯矩陣（Schema 11）把每一項審查意見對應到作者的修訂宣稱，並記錄複審是否驗證通過。v3.4 新增 Compliance Agent（PRISMA-trAIce + RAISE）於 Stage 2.5 / 4.5。v3.5 新增 **協作深度觀察員**（`collaboration_depth_agent`，僅諮詢性質、永不阻擋流程）於每一次 FULL/SLIM checkpoint 與 pipeline 完成時。MANDATORY 誠信閘門（2.5 / 4.5）明確跳過觀察員，避免稀釋合規檢查。理論基礎：Wang & Zhang (2026), IJETHE 23:11。逐階段矩陣（agent、產出物、閘門）：見 ARCHITECTURE.md §3。
 
@@ -302,7 +304,7 @@ ARS Stage 2 寫作      →  用驗證過的實驗結果撰寫論文
 - **跨模型驗證**：設定 `ARS_CROSS_MODEL` 啟用第二 AI 模型獨立審查。詳見 [docs/SETUP.zh-TW.md](docs/SETUP.zh-TW.md)。
 - **AI 自我反思報告**：Pipeline 結束後自動產出 AI 行為自評。
 
-這些優化不能完全解決 AI 的結構性限制——它們讓限制變得可見、可追蹤、可被人類介入。
+這些優化不能完全解決 AI 的結構性限制，但能讓限制變得可見、可追蹤、可被人類介入。
 
 ---
 
@@ -348,14 +350,15 @@ https://github.com/Imbad0202/academic-research-skills
 
 這裡只列最近三個版本。完整更新紀錄在英文版 [CHANGELOG.md](CHANGELOG.md)。到 v3.21.2 為止的繁體中文版本摘要已凍結存放於 [docs/changelog-archive/zh-TW.md](docs/changelog-archive/zh-TW.md)，之後不再更新。
 
+### v3.24.2（2026-11-06）— 實驗可如實表示沒有 lock 值、repro_lock 規則對齊，以及 sr-screener 方法段落更正
+
+> **修復與文件；沒有新 skill 或模式，提示層的改動未經量測：**`experiment_provenance[]` 的條目現在可以如實表示沒有可填的 lock 值，寫法是 `repro_lock: null` 加上 `repro_lock_reason`（#1049）。問卷或沒有使用 LLM 的分析，以前只能填佔位值才能通過。舊版 ARS 不接受這個寫法，所以用這個寫法的 passport 需要這一版。`check_repro_lock.py` 現在會擋下違反欄位型別或值規則的必填值，例如 `null` 的 model id；`cross_model.secondary_model_id` 仍可為 `null`。`planned_vs_executed[].value` 只收數字或文字，所以有些以前通過的 passport 現在會失敗（#1050）。`sr-screener` 的方法段落不再說審查代理只能讀記錄檔：工具清單拿掉的是網路與寫入權限，只讀指定檔案是一項指示（#1039）。SETUP 記錄了兩次檢查：上傳的 skill 在對話中重試後派出內建子代理；多代理階段仍未測試（#1040）。
+
+### v3.24.1（2026-11-02）— 從 claude.ai 帳號市集安裝 plugin、審稿前確認設定卡，以及巴西葡萄牙文 README
+
+> **claude.ai 與 Claude Desktop 的安裝修復；沒有新 skill 或模式：**ARS 現在可以從 claude.ai 帳號市集安裝。這一版之前，這種安裝方式下，五個核心 skill 全都無法載入（#1035），而且四個 plugin 代理程式的名稱含底線，claude.ai 不收（#1037）。在 Claude Desktop 上，一般對話裡有一個 skill 與 `/ars-lit-review` 實際執行；專案對話直接派工給 plugin 代理程式 `synthesis-agent`；資料夾工作時出現 SessionStart 開場訊息。寫入範圍防護、工具白名單與完整 pipeline 在 claude.ai 與 Claude Desktop 上尚未測試。審稿時現在會等使用者確認 Reviewer Configuration Cards（#1030），README 也新增巴西葡萄牙文版（#1032）。
+
 ### v3.24.0（2026-10-27）— 審查小組建議文獻與審查意見的參考檢查、write-scope guard 啟動器改為單一行程，以及誠信檢查規則修復
 
 > **兩項審查參考檢查與數項修復；沒有新 skill，這兩項檢查在真實審查上的準確度尚未量測：**v3.24.0 在 Editorial Decision Letter 加上兩份附件。第一份即時查詢 Reviewer 2 與 Reviewer 3 推薦的每一篇著作，查詢範圍是引用驗證閘門使用的四個索引，只回報有沒有這筆紀錄，不判斷該著作是否支持推薦理由（#1001）。第二份把每一項 weakness，以及 Devil's Advocate 每一列 CRITICAL 或 MAJOR 意見，拿掉審稿人席位標籤後交給 session 模型的一個 subagent，由它判斷稿件是否與該意見矛盾。只有判定者的引文通過腳本對稿件的比對檢查，附件才列為矛盾；其他判定為錯誤的意見列為未確認（#1002）。這項檢查預設開啟，設定 `ARS_PANEL_CLAIM_CHECK=0` 可以關閉。兩份附件都不影響審查決定、修訂路線圖或複審標準。第二項檢查上線前，一項預先登記的 held-out 稽核檢查了 805 則審查小組意見，估計錯誤意見的比例介於 1.5% 到 12.9%；Claude Opus 5.5 與 Claude Fable 5.1 擔任判定者時都通過了它的對照關卡。write-scope guard 的啟動器每次工具呼叫只啟動一個 Python 行程，原本是三個，Windows 上 AppXSvc 的記憶體洩漏預計因此降為原來的三分之一左右，但 Windows 上的實際行為尚未測試（#1015）；guard 的程式註解也寫明它檢查哪些工具名稱（#1022）。三條誠信檢查規則在 Stage 5 入口、報告有效期限與 Stage 4′ 三點上取得一致（#1011），啟動通知也改為只在有新版時顯示（#1027）。#1015、#1022 與 #1027 由外部使用者回報。
 
-### v3.23.2（2026-10-24）— 誠信檢查只讀引用的版本、Stage 2.5 一律執行，以及轉接器、啟動通知與 Windows 修復
-
-> **修復；沒有新 skill。一項提示層級變更做了小規模行為檢查，其餘尚未量測：**v3.23.2 讓 Stage 2.5 與 4.5 的宣稱查核只拿稿件引用的那個版本來比對（#1006）。讀不到引用的版本時，查核會記一筆存取附註並請使用者提供 PDF，不再改讀工作論文或預印本。在一份合成測試稿上跑六次（Claude Opus 5.5 與 Claude Fable 5.1 各三次，關閉網路工具），六次都遵守這條規則。先前的誠信報告不再能讓 pipeline 跳過 Stage 2.5，改為附上當作參考（#995）。缺少必要輸入時，每一份規則文件都會擋下階段轉換（#990）；蘇格拉底導師的範例不再替使用者的想法排名次（#992）。SessionStart 啟動通知會把更新提醒顯示給使用者，給模型看的啟動內容約少 2.1 KB（#999）。Obsidian 轉接器接受未加引號的 ISO 日期年份，並拒絕布林值與上標數字年份（#988、#989）；六個 lint 在 Windows 上改用 POSIX 形式比對路徑（#964、#978）；Pi 包裝器改與 Pi 的結構化提示區段組合（#985）；`CITATION.cff` 加上作者的 ORCID iD（#1007）。#978、#985、#988 由外部貢獻者提供。
-
-### v3.23.1（2026-10-16）— write-scope guard 修復、sr-screener 依 RFC 4180 讀取 CSV、模型現況對齊（Gemini 4 Argon）
-
-> **修復與模型現況對齊；沒有新 skill，也不宣稱任何準確度或效能提升：**v3.23.1 補上 write-scope guard 兩條未經檢查就放行寫入的路徑，一條出現在 plugin 派發的 agent，一條出現在 Windows 內建的 `timeout.exe`（#972），文件也改為說明防護實際在哪些情況下啟動（#974）。`sr-screener` 改依 RFC 4180 的引號規則讀取 CSV 匯出檔，不再使用從樣本推測的引號規則（#979）。Gemini 4 Argon 以 provisional 身分列入，並成為建議的 Google 驗證模型；`gemini-3.1-pro-preview` 維持 validated（#980）。路由核心寫明：訊息中段出現的 `[direct-mode]` 標記不是跳脫機制（#892）；在 plugin 安裝環境的冒煙測試中，Claude Fable 5.1 修改後仍有 6 次中 3 次遵從該標記（修改前 6 次中 6 次），未達到驗收標準，#892 仍未結案。另有數項由外部貢獻者提供的 lint 與 Windows 修復（#956、#963、#965、#977），`THIRD_PARTY.md` 也列入 md-to-word（#969）。

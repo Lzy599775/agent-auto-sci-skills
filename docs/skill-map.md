@@ -15,10 +15,10 @@ Research OS 是通用科研工作流；领域专长按需加载，不预设城�
 | L0 总控 | 跨 ChatGPT/Codex 读取 workflow source、判断任务类型、安排子 skill | `research-orchestrator`, `auto-sci-research` |
 | L1 自动化与安全 | source manifest、checkpoint、长期记忆、公开安全 | `agent-auto-sci-automation` |
 | L2 方法论 | 研究问题、机制、证据等级、因果语言 | `agent-auto-sci-methodology` |
-| L3 空间与暴露 | GIS、遥感、可达性、暴露、空间公平 | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected` |
-| L4 数据、图表与模型 | EDA、统计、ML/XAI、论文图件 | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected` |
+| L3 空间与暴露 | GIS、遥感、可达性、暴露、空间公平 | `agent-auto-sci-geospatial` |
+| L4 数据、图表与模型 | EDA、统计、ML/XAI、论文图件 | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml` |
 | L5 综述与领域路线 | 通用文献证据、体育地理综述、城市暴露综述、前沿雷达 | `literature`, `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow` |
-| L6 写作与投稿 | SCI 写作、证据优先 exemplar 拆解、投稿信、审稿回复 | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `project-specific-writing-exemplar-workflow`, `kdense-scicomm-selected`；exemplar protocol 为 `agent-auto-sci-scicomm` 参考文件 |
+| L6 写作与投稿 | SCI 写作、证据优先 exemplar 拆解、投稿信、审稿回复 | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm`, `project-specific-writing-exemplar-workflow`；exemplar protocol 为 `agent-auto-sci-scicomm` 参考文件 |
 
 ## 2. 子 Skill 作用矩阵
 
@@ -36,10 +36,7 @@ Research OS 是通用科研工作流；领域专长按需加载，不预设城�
 | `sport-geography-review-bibliometric` | 领域综述 | 体育公园、体育设施、绿地公平、城市健康综述 | 检索式、PRISMA、编码表、政策议程 | 文献计量必须上升到框架 |
 | `sport-geography-sci-writing` | 领域写作 | 体育设施可达性、体育公园暴露、空间公平实证论文 | 期刊定位、IMRAD 段落、讨论 | 从公共问题进入，不从技术指标开篇 |
 | `urban-exposure-review-radar-workflow` | 领域 workflow | 城市暴露综述、前沿雷达、医学数据库连接 | route decision、journal gate、radar handoff | 正式语料和雷达候选分开 |
-| `kdense-ml-ai-selected` | 上游 wrapper | ML/AI 技术 playbook | 技术路线、模型注意点 | 只作技术参考 |
-| `kdense-data-viz-selected` | 上游 wrapper | EDA、统计、绘图、大表处理 | 绘图和分析工具路线 | 不替代 claim 设计 |
-| `kdense-geospatial-rs-selected` | 上游 wrapper | GeoPandas、GeoMaster、遥感/GIS 技术 | 空间处理技术路线 | 不绕过 CRS/尺度审计 |
-| `kdense-scicomm-selected` | 上游 wrapper | 写作、审稿、引用、slides/posters/schematics | 模板和技术参考 | 不替代领域贡献判断 |
+| `geors-sci-writing-adapter` | 原创适配 | 地理学、遥感、暴露与可达性 SCI 论文 | claim-evidence map、IMRAD 章节检查 | 不复制无许可上游文本，不改科学结论 |
 | `project-specific-writing-exemplar-workflow` | 项目写作工作流 | 为实质性写作或大修建立稿件专属 exemplar profile | Core 3 审批门、section exemplar、证据/论证地图 | 只读写作项目私有状态，不复制来源原文，不绕过作者审批 |
 
 ## 3.1 Evidence-first writing exemplar handoff
@@ -67,7 +64,7 @@ auto-sci-research
 
 | Subskill | 位置 | 版本 | 作用 |
 |---|---|---:|---|
-| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.24.0` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、本地 PDF 阅读预检、实验规划；`sr-screener` 仅在明确要求筛选时调用 |
+| `academic-research-suite` | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` | `3.24.2` | 深度研究、文献综述、论文管线、同行评审模拟、引用完整性、本地 PDF 阅读预检、实验规划；`sr-screener` 仅在明确要求筛选时调用 |
 
 使用原则：
 
@@ -85,8 +82,8 @@ auto-sci-research
 | 绿地/热暴露综述 | `auto-sci-research -> urban-exposure-review-radar-workflow -> sport-geography-review-bibliometric -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
 | 通用文献核验与 citation–claim 审计 | `literature -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
 | 遥感反演/时空变化 SCI 写作 | `auto-sci-research -> agent-auto-sci-geospatial -> agent-auto-sci-ai-ml -> agent-auto-sci-data-viz -> agent-auto-sci-scicomm` |
-| 论文图件 | `agent-auto-sci-data-viz -> kdense-data-viz-selected -> agent-auto-sci-scicomm` |
-| 机器学习解释 | `agent-auto-sci-ai-ml -> kdense-ml-ai-selected -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
+| 论文图件 | `agent-auto-sci-data-viz -> agent-auto-sci-scicomm` |
+| 机器学习解释 | `agent-auto-sci-ai-ml -> agent-auto-sci-methodology -> agent-auto-sci-scicomm` |
 | 目标期刊近邻论文驱动的 Discussion 结构修改 | `auto-sci-research -> agent-auto-sci-scicomm -> project-specific-writing-exemplar-workflow -> exemplar protocol -> Academic Prose Style Guard` |
 
 ## 5. 选择规则
@@ -96,7 +93,7 @@ auto-sci-research
 - 任务核心是文献、DOI、Zotero、citation 或证据支持：用 `literature`。
 - 任务是“该不该这样研究”：先进 `agent-auto-sci-methodology`。
 - 任务涉及空间数据、地图、暴露或可达性：先进 `agent-auto-sci-geospatial`。
-- 任务涉及图表：先 `agent-auto-sci-data-viz`，再使用 `kdense-data-viz-selected` 的工具参考。
+- 任务涉及图表：用 `agent-auto-sci-data-viz`，同时核对真实结果和图注。
 - 任务涉及语言最后一公里：用 `agent-auto-sci-scicomm`。
 - 任务是体育地理实证论文：用 `sport-geography-sci-writing`。
 - 任务是城市暴露综述或前沿雷达：用 `urban-exposure-review-radar-workflow`。

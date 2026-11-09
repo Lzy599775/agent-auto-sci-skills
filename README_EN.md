@@ -6,14 +6,14 @@
 
 `Auto-sci-research` is a reusable research workbench, not a one-click paper generator. It helps ChatGPT and Codex route research tasks across topic design, literature review, source manifests, GIS/RS processing, exposure/accessibility measurement, statistics, ML/XAI, publication figures, manuscript writing, cover letters, rebuttals, and project memory.
 
-The repository contains **17 installable skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
+The repository contains **14 installable skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: **2026-10-31**.
+Latest upstream refresh: **2026-11-09**.
 
-- ARS Codex package updated to `v3.24.0` (`a155655`), locking ARS content to `b34c63f`.
-- K-Dense checked at `5f2bc03`; 27 registered selected directories were synchronized.
+- ARS Codex package updated to `v3.24.2` (`82725ac`), locking ARS content to `fd5ff1b`.
+- K-Dense checked at `a25cf9e`; all 27 selected skill directories were last changed on 2026-10-01, so the four wrappers were retired under the 30-day rule.
 - AutoSci checked at `3c3922f`; it remains reference-only and does not overwrite the local original router.
-- SciPilot Figure, SciPilot Writing, and GeoRS were last updated before the `2026-09-11` cutoff and were removed under the 50-day retention rule.
+- SciPilot Figure and Writing remain retired. GeoRS was updated on 2026-11-03 and its original local adapter was restored; no unlicensed upstream content is copied.
 
 ## Installation
 
@@ -61,7 +61,7 @@ Before public release:
 | Use a full academic research and paper pipeline | `urban-exposure-review-radar-workflow/subskills/academic-research-suite` |
 | Explicitly screen existing records, define eligibility, resolve conflicts, or audit exclusions | ARS `sr-screener` (explicit invocation only) |
 | Build a manuscript-specific exemplar profile with author approval gates | `project-specific-writing-exemplar-workflow` |
-| Use selected upstream technical playbooks | `kdense-ml-ai-selected`, `kdense-data-viz-selected`, `kdense-geospatial-rs-selected`, `kdense-scicomm-selected` |
+| Write a geography or remote-sensing SCI manuscript | `geors-sci-writing-adapter` |
 
 ## Skill Categories
 
@@ -69,10 +69,10 @@ Before public release:
 |---|---|
 | Router and automation | `research-orchestrator`, `auto-sci-research`, `agent-auto-sci-automation` |
 | Methodology and evidence design | `agent-auto-sci-methodology`, `urban-exposure-review-radar-workflow` |
-| Geospatial, RS, exposure, accessibility | `agent-auto-sci-geospatial`, `kdense-geospatial-rs-selected` |
-| Data, visualization, ML | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml`, `kdense-data-viz-selected`, `kdense-ml-ai-selected` |
+| Geospatial, RS, exposure, accessibility | `agent-auto-sci-geospatial` |
+| Data, visualization, ML | `agent-auto-sci-data-viz`, `agent-auto-sci-ai-ml` |
 | Review and bibliometrics | `literature`, `sport-geography-review-bibliometric`, `urban-exposure-review-radar-workflow`, `academic-research-suite` |
-| Writing and submission | `sport-geography-sci-writing`, `agent-auto-sci-scicomm`, `project-specific-writing-exemplar-workflow`, `kdense-scicomm-selected` |
+| Writing and submission | `sport-geography-sci-writing`, `geors-sci-writing-adapter`, `agent-auto-sci-scicomm`, `project-specific-writing-exemplar-workflow` |
 
 ## Detailed Skill Index
 
@@ -91,10 +91,7 @@ Before public release:
 | `sport-geography-sci-writing` | Domain writing | Sport facilities, sport parks, spatial equity empirical papers | Journal positioning, IMRAD sections | Start from the public problem, not only metrics |
 | `urban-exposure-review-radar-workflow` | Domain workflow | Urban exposure reviews, formal corpus, frontier radar | Route decision, journal gate, radar handoff | Formal corpus and radar candidates stay separate |
 | `academic-research-suite` | Research pipeline | Deep research, paper pipeline, review simulation, citation/PDF checks | Research route, workflow artifacts, audit outputs | `sr-screener` is only for explicitly requested screening; it is not an automatic consequence of a review request |
-| `kdense-ml-ai-selected` | Upstream wrapper | ML/AI technical playbooks | Model and training guidance | Technical reference only |
-| `kdense-data-viz-selected` | Upstream wrapper | EDA, statistics, plotting, large tables | Library-level route and code guidance | Does not design manuscript claims |
-| `kdense-geospatial-rs-selected` | Upstream wrapper | GeoPandas, GeoMaster, GIS/RS details | Spatial processing guidance | Does not bypass CRS/scale audit |
-| `kdense-scicomm-selected` | Upstream wrapper | Writing, peer review, citation, slides/posters/schematics | Templates and technical references | Does not replace domain judgment |
+| `geors-sci-writing-adapter` | Original writing adapter | Geography/RS, exposure and accessibility manuscripts | Claim-evidence map, IMRAD sections, submission checks | Does not copy unlicensed upstream text or change scientific results |
 | `project-specific-writing-exemplar-workflow` | Manuscript-specific writing workflow | Build and refresh a private exemplar profile for substantive drafting and major revision | Core 3 approval gate, section exemplar sets, evidence/argument maps | Private manuscript state only; never copies source prose or bypasses author approval |
 
 ## Typical Workflows
@@ -140,11 +137,11 @@ V2 adds a reusable global academic-writing contract: story-relevance, sentence-i
 
 ## Upstream And Licensing
 
-- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v3.24.0`.
-- `K-Dense-AI/scientific-agent-skills`: selected wrappers only, not a full import.
-- SciPilot Figure, SciPilot Writing, and GeoRS are retired from the installable set because their latest commits predate the 50-day cutoff; their historical source records remain in the audit document.
+- `Imbad0202/academic-research-skills-codex`: ARS Codex package, synced to `v3.24.2`.
+- `K-Dense-AI/scientific-agent-skills`: selected wrappers retired because their 27 skill directories predate the 30-day cutoff.
+- SciPilot Figure and Writing remain retired. GeoRS is restored as an original adapter without upstream text redistribution.
 
-See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20261031.md](docs/upstream-update-20261031.md).
+See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20261109.md](docs/upstream-update-20261109.md).
 
 ## ChatGPT and Codex cross-surface use
 

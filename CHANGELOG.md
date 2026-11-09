@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0
+
+- Audited external skills on 2026-11-09 using a 30-day cutoff of 2026-10-10, checking K-Dense's 27 packaged directories individually.
+- Updated the isolated ARS Codex package to `v3.24.2` and its source lock to `fd5ff1b`; retained the nested standalone quality-gate adaptation.
+- Retired four K-Dense wrappers because all 27 selected directories were last changed on 2026-10-01. SciPilot Figure and Writing remain retired.
+- Restored the original GeoRS writing adapter after its upstream 2026-11-03 update, without vendoring unlicensed upstream content.
+- Updated the current routing registry, Chinese/English README, skill map, use cases, HTML navigator, evolution page, and dated audit.
+
 ## Unreleased
 
 - Candidate `1.1.0-rc.4`: added a discipline-neutral methodology/research-design primary route,

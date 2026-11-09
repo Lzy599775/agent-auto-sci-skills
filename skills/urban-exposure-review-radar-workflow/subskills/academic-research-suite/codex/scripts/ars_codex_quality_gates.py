@@ -26,6 +26,7 @@ FULL_RUNTIME_MANIFEST = CODEX_ROOT / "full-runtime-manifest.json"
 PACKAGE_MANIFEST = SUITE_ROOT / "manifest.json"
 HOOK_PACK = CODEX_ROOT / "hooks" / "hooks.json"
 TOPOLOGY_RUNNER = CODEX_ROOT / "scripts" / "ars_codex_topology_experiment.py"
+ROUTING_CORE_CHECKER = ARS_ROOT / "scripts" / "check_routing_core_sync.py"
 
 FORBIDDEN_HOOK_PATTERNS = (
     r"\benv\b",
@@ -81,6 +82,7 @@ _REQUIRED_WORKFLOWS = frozenset(
         "academic-paper-reviewer",
         "academic-pipeline",
         "experiment-agent",
+        "sr-screener",
     }
 )
 
@@ -105,7 +107,7 @@ def _top_level_source_paths(source: object) -> set[str]:
 def _external_workflow_names(package: dict[str, Any]) -> set[str]:
     """Return separately sourced top-level names, excluding primary overlaps.
 
-    A secondary source such as ``experiment-agent`` may live beside the four
+    A secondary source such as ``experiment-agent`` may live beside the five
     canonical ARS workflows without becoming part of the ARS inventory parity
     contract. A name also declared by the primary ARS source remains core: a
     secondary lock must never make a canonical workflow disappear from this
@@ -247,10 +249,7 @@ def check_manifest() -> list[str]:
     plugin_manifest_path = PLUGIN_ROOT / ".codex-plugin" / "plugin.json"
     if plugin_manifest_path.is_file():
         plugin_version = _json(plugin_manifest_path).get("version")
-        _require(
-            plugin_version == adapter_version,
-            f"Desktop plugin version {plugin_version!r} != adapter version {adapter_version!r}",
-        )
+        _require(plugin_version == adapter_version, f"Desktop plugin version {plugin_version!r} != adapter version {adapter_version!r}")
     else:
         messages.append("Desktop plugin version check skipped for standalone skill package")
     repo_version_path = SUITE_ROOT.parents[3] / "VERSION"
@@ -418,6 +417,60 @@ def check_single_root_skill() -> list[str]:
     ]
 
 
+def check_root_router() -> list[str]:
+    """Check the sole Codex loader's routing bytes and parsed description.
+
+    Reuse the upstream marker grammar without calling its carrier inventory:
+    Codex loads this root router, not the excluded Claude project loader.
+    """
+    try:
+        import yaml
+    except ImportError as exc:
+        raise GateFailure("root router validation requires PyYAML") from exc
+
+    spec = importlib.util.spec_from_file_location("ars_routing_core_checker", ROUTING_CORE_CHECKER)
+    _require(spec is not None and spec.loader is not None, "routing-core checker cannot be loaded")
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except (OSError, ImportError) as exc:
+        raise GateFailure(f"routing-core checker cannot be loaded: {exc}") from exc
+
+    root_skill = SUITE_ROOT / "SKILL.md"
+    canonical = ARS_ROOT / module.CANONICAL
+    contents = {}
+    for path in (root_skill, canonical):
+        try:
+            # Preserve CRLF so byte drift is not normalized away before the
+            # upstream parser compares the marker-delimited blocks.
+            with path.open(encoding="utf-8", newline="") as stream:
+                contents[path] = stream.read()
+        except (OSError, UnicodeDecodeError) as exc:
+            raise GateFailure(f"required routing file cannot be read: {path}: {exc}") from exc
+    root_block, root_errors = module.extract_block(contents[root_skill], "root SKILL.md")
+    canonical_block, canonical_errors = module.extract_block(contents[canonical], "canonical routing core")
+    _require(not (root_errors or canonical_errors), "; ".join(root_errors + canonical_errors))
+    _require(root_block == canonical_block, "root SKILL.md routing-core block differs from canonical routing core")
+
+    lines = contents[root_skill].splitlines(keepends=True)
+    _require(bool(lines) and lines[0].strip() == "---", "root SKILL.md missing opening frontmatter fence")
+    end = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
+    _require(end is not None, "root SKILL.md missing closing frontmatter fence")
+    try:
+        frontmatter = yaml.safe_load("".join(lines[1:end]))
+    except yaml.YAMLError as exc:
+        raise GateFailure(f"root SKILL.md invalid frontmatter: {exc}") from exc
+    _require(isinstance(frontmatter, dict), "root SKILL.md frontmatter must be a mapping")
+    description = frontmatter.get("description")
+    _require(isinstance(description, str), "root SKILL.md description must be a string")
+    _require(bool(description.strip()), "root SKILL.md description must not be blank")
+    _require(len(description) <= 1024, "root SKILL.md description exceeds 1024 code points")
+    return [
+        "root router routing-core block is byte-identical to the canonical ARS core",
+        f"root router description uses {len(description)}/1024 Unicode code points",
+    ]
+
+
 def check_hook_safety() -> list[str]:
     pack = _json(HOOK_PACK)
     _require(pack.get("default_enabled") is False, "hook pack must be disabled by default")
@@ -435,14 +488,14 @@ def check_hook_safety() -> list[str]:
 
 
 def check_reviewer_fixture(fixture: Path | None = None) -> list[str]:
-    fixture = fixture or CODEX_ROOT / "tests" / "fixtures" / "reviewer_full_independent_sections.md"
+    fixture = fixture or CODEX_ROOT / "tests" / "fixtures" / "reviewer_full_seat_sections.md"
     text = fixture.read_text(encoding="utf-8")
     required = [
-        "## Independent Reviewer: Journal-Fit",
-        "## Independent Reviewer: Methodology",
-        "## Independent Reviewer: Domain",
-        "## Independent Reviewer: Interdisciplinary",
-        "## Independent Reviewer: Devil's Advocate",
+        "## Reviewer Seat: Journal-Fit",
+        "## Reviewer Seat: Methodology",
+        "## Reviewer Seat: Domain",
+        "## Reviewer Seat: Interdisciplinary",
+        "## Reviewer Seat: Devil's Advocate",
         "## Editorial Synthesis",
     ]
     positions = []
@@ -450,7 +503,7 @@ def check_reviewer_fixture(fixture: Path | None = None) -> list[str]:
         matches = list(re.finditer(r"^" + re.escape(heading) + r"\s*$", text, re.MULTILINE))
         _require(len(matches) == 1, f"reviewer fixture requires one heading: {heading}")
         positions.append(matches[0].start())
-    _require(positions == sorted(positions), "editorial synthesis must appear after independent reviewer sections")
+    _require(positions == sorted(positions), "editorial synthesis must appear after reviewer seat sections")
     synthesis = text[positions[-1]:]
     for marker in (
         "journal-fit concern retained", "methodology concern retained",
@@ -458,7 +511,7 @@ def check_reviewer_fixture(fixture: Path | None = None) -> list[str]:
         "devil's advocate dissent retained",
     ):
         _require(marker in synthesis, f"synthesis dropped minority marker: {marker}")
-    return ["paper-reviewer full-mode fixture preserves independent reviewer sections before synthesis"]
+    return ["paper-reviewer full-mode fixture preserves reviewer seat sections before synthesis"]
 
 
 def check_upstream_lock() -> list[str]:
@@ -586,6 +639,7 @@ GATES: dict[str, Callable[[], list[str]]] = {
     "desktop-plugin-bundle": check_desktop_plugin_bundle,
     "manifest": check_manifest,
     "single-root-skill": check_single_root_skill,
+    "root-router": check_root_router,
     "hook-safety": check_hook_safety,
     "reviewer-fixture": check_reviewer_fixture,
     "upstream-lock": check_upstream_lock,

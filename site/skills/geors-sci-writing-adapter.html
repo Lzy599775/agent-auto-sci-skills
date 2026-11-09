@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GeoRS SCI Writing Adapter</title>
+<style>body{margin:0;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#f6f7f4;color:#17211f;line-height:1.7}main{max-width:900px;margin:auto;padding:36px 20px 70px}a{color:#0f766e}header,section{border-bottom:1px solid #dce4df;padding:25px 0}h1{font-size:clamp(32px,5vw,52px);overflow-wrap:anywhere}h2{font-size:24px}pre{white-space:pre-wrap;background:#14211e;color:#ecf4ef;padding:18px;border-radius:6px}li{margin:6px 0}</style></head><body><main><a href="../index.html">返回技能索引</a>
+<header><h1>geors-sci-writing-adapter</h1><p>地理学、遥感、绿色与热暴露、体育设施可达性、空间公平论文的原创写作适配。</p></header>
+<section><h2>什么时候用</h2><p>当交付物是地理或遥感 SCI 论文的标题、摘要、Introduction、Methods、Results、Discussion、Conclusion 或 cover letter 时使用。若先要核定空间分析，请先用 <code>agent-auto-sci-geospatial</code>；若要核定模型与验证，请先用 <code>agent-auto-sci-ai-ml</code>。全文论证与投稿回复由 <code>agent-auto-sci-scicomm</code> 协同。</p></section>
+<section><h2>输入和产出</h2><ul><li>输入：论文类型、目标期刊、研究问题、空间与时间单位、数据来源、真实方法、已验证结果和待修改章节。</li><li>产出：claim-evidence map、章节论证顺序、改写文本、空间方法及因果语言检查、投稿前核查。</li></ul></section>
+<section><h2>使用示例</h2><pre>使用 geors-sci-writing-adapter 检查这篇城市热暴露论文的 Methods 和 Discussion。研究单位是街道，输入是已核验的方法与结果。请先建立 claim-evidence map，再标出 CRS、尺度、暴露窗口、空间验证和因果表述的疑点；不要修改数值或补造文献。</pre></section>
+<section><h2>边界与来源</h2><p>上游 <a href="https://github.com/xiangyu-Ge/sci-writing-geors">sci-writing-geors</a> 最近提交为 2026-11-03，但未找到明确再分发许可证。本适配是本地原创工作流，不复制上游正文或代码。不会把 SHAP、空间相关或模型精度写成因果证据。</p><p><a href="../../skills/geors-sci-writing-adapter/SKILL.md">查看使用说明</a> · <a href="../../docs/upstream-update-20261109.md">查看上游审计</a></p></section></main></body></html>
