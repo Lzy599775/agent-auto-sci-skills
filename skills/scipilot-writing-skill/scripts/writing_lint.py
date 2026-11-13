@@ -432,56 +432,6 @@ _NOT_BUT_PATTERNS = (
 )
 
 
-def _check_not_but_cluster(text: str) -> list:
-    """Flag clustered contrastive templates without banning one necessary contrast."""
-    matches = []
-    for name, pattern in _NOT_BUT_PATTERNS:
-        for hit in re.finditer(pattern, text, re.IGNORECASE):
-            matches.append((hit.start(), hit.end(), name, hit.group(0)))
-    matches.sort()
-    if len(matches) < 2:
-        return []
-
-    paragraph_counts = {}
-    for start, _end, _name, _value in matches:
-        paragraph = text.count("\n\n", 0, start)
-        paragraph_counts[paragraph] = paragraph_counts.get(paragraph, 0) + 1
-    sentence_index = []
-    for start, _end, _name, _value in matches:
-        # This intentionally tolerates mixed Chinese/English punctuation.
-        sentence_index.append(len(re.findall(r"[.!?。！？；]", text[:start])))
-    local_cluster = any(
-        sentence_index[i + 1] - sentence_index[i] <= 2
-        for i in range(len(sentence_index) - 1)
-    )
-    same_paragraph_cluster = any(count >= 2 for count in paragraph_counts.values())
-    document_template_cluster = len(matches) >= 3
-    if not (local_cluster or same_paragraph_cluster or document_template_cluster):
-        return []
-
-    examples = [value.strip()[:80] for _start, _end, _name, value in matches[:4]]
-    out = [Issue(
-        SEV_WARN,
-        "NOT_BUT_CLUSTER",
-        "NOT_BUT_CONSTRUCTION_CLUSTER：对比/防御句式在局部或全文聚集；保留必要边界并优先正面直陈",
-        line=_line_of(text, matches[0][0]),
-        count=len(matches),
-        examples=examples,
-    )]
-    # A separate stable code makes the repeated-defensive-contrast contract easy
-    # for downstream workflows to consume without treating one contrast as an error.
-    if same_paragraph_cluster or document_template_cluster:
-        out.append(Issue(
-            SEV_WARN,
-            "REPEATED_DEFENSIVE_CONTRAST",
-            "同一段或全文重复表达防御性边界；检查 STORY_RELEVANCE_AND_DEFENSE_AUDIT，必要边界只保留最精确的一次",
-            line=_line_of(text, matches[0][0]),
-            count=len(matches),
-            examples=examples,
-        ))
-    return out
-
-
 def _check_manual_line_break(text: str, mode: str) -> list:
     """Detect prose line-break artifacts while allowing syntax-oriented lines."""
     hits = []
@@ -866,6 +816,7 @@ def _check_not_but_cluster(text: str) -> list:
         return []
     paragraph_ids = [text.count("\n\n", 0, hit["start"]) for hit in hits]
     same_paragraph = len(set(paragraph_ids)) < len(paragraph_ids)
+    document_template_cluster = len(hits) >= 3
     adjacent_paragraph_shells = all(paragraph_ids[i + 1] - paragraph_ids[i] <= 1 for i in range(len(paragraph_ids) - 1))
     sentence_ids = [len(re.findall(r"[.!?。！？]", text[:hit["start"]])) for hit in hits]
     local_repetition = any(sentence_ids[j] - sentence_ids[i] <= 2 for i in range(len(sentence_ids)) for j in range(i + 1, len(sentence_ids)))
@@ -880,7 +831,20 @@ def _check_not_but_cluster(text: str) -> list:
     }
     canonical = Issue(code="NOT_BUT_CLUSTER", **issue_args)
     legacy_alias = Issue(code="AI_NEG_PARALLEL", alias_of="NOT_BUT_CLUSTER", **issue_args)
-    return [canonical, legacy_alias]
+    issues = [canonical, legacy_alias]
+    if same_paragraph or document_template_cluster:
+        issues.append(Issue(
+            severity=SEV_WARN,
+            code="REPEATED_DEFENSIVE_CONTRAST",
+            message=(
+                "Repeated defensive boundaries in one paragraph or across the document; "
+                "review story relevance while preserving every necessary scientific qualification."
+            ),
+            line=issue_args["line"],
+            count=issue_args["count"],
+            examples=issue_args["examples"],
+        ))
+    return issues
 
 
 def _check_paragraph_rhythm(text: str) -> list:

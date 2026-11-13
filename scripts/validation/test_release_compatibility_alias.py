@@ -1,6 +1,8 @@
 """Compatibility tests for the canonical and legacy contrast issue identifiers."""
 from contextlib import redirect_stdout
 from io import StringIO
+import ast
+from collections import Counter
 import importlib.util
 import sys
 import unittest
@@ -33,7 +35,7 @@ class IssueCodeCompatibilityTests(unittest.TestCase):
 
     def test_summary_counts_one_logical_warning(self):
         summary = LINT.summarize(self.issues)
-        self.assertEqual(summary["warn"], 1)
+        self.assertEqual(summary["warn"], 2)
         self.assertEqual(summary["total"], len(self.issues) - 1)
         self.assertEqual(summary["info"], 1)
 
@@ -44,6 +46,23 @@ class IssueCodeCompatibilityTests(unittest.TestCase):
         self.assertEqual(exit_code, 1)
         self.assertEqual(output.getvalue().count("NOT_BUT_CLUSTER"), 1)
         self.assertNotIn("AI_NEG_PARALLEL", output.getvalue())
+        self.assertEqual(output.getvalue().count("REPEATED_DEFENSIVE_CONTRAST"), 1)
+
+    def test_repeated_defensive_contrast_remains_a_visible_advisory(self):
+        repeated = [i for i in self.issues if i.code == "REPEATED_DEFENSIVE_CONTRAST"]
+        self.assertEqual(len(repeated), 1)
+        self.assertEqual(repeated[0].severity, "WARN")
+        self.assertIsNone(repeated[0].alias_of)
+
+    def test_top_level_definitions_are_unique(self):
+        tree = ast.parse(LINT_PATH.read_text(encoding="utf-8"))
+        names = [
+            node.name
+            for node in tree.body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+        ]
+        duplicates = sorted(name for name, count in Counter(names).items() if count > 1)
+        self.assertEqual(duplicates, [])
 
 
 if __name__ == "__main__":
