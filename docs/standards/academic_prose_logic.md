@@ -8,6 +8,26 @@ Scientific precision has priority over rhetorical smoothness. A slightly abrupt 
 
 This standard governs how an already bounded scientific claim is expressed in prose. It complements, but does not replace, [Academic Claim Standard](academic_claims.md), which governs whether the claim itself exceeds the evidence.
 
+## Narrative priority and review boundary
+
+Organize the scientific argument around:
+
+`Research question -> Evidence -> Findings -> Scientific explanation -> Contribution`
+
+Build the necessary claim-evidence chain before drafting. Include content that answers the research question or enables the reader to evaluate or reproduce that answer. This is an argument priority, not a required five-part paragraph template: include explanation and contribution only to the extent supported, and retain necessary context, methods, null results, conflicting evidence, and limitations.
+
+Keep internal risk review separate from manuscript narration. A possible reviewer objection, audit flag, or imagined misreading is not by itself a reason to add text. Retain a qualification if deleting it would materially change the estimand, research design, measurement meaning, uncertainty (including statistical uncertainty), causal status, applicability, interpretation, or conclusion strength. Otherwise assess its independent information gain before deleting, merging, or relocating it; preserve any distinct scientific information and reproducibility-critical detail. Place a necessary qualification where it governs the claim; retain it independently in a self-contained section when needed. Do not conceal an unresolved material problem by leaving it only in an internal record: resolve it, narrow the claim, or seek researcher judgment before finalizing.
+
+Use the existing `STORY_RELEVANCE_AND_DEFENSE_AUDIT` in the Academic Prose Style Guard to review repeated qualifications. Do not add another audit, sentence quota, word blacklist, or automatic rewriting step. A distinct scientific boundary stays even when its wording resembles another boundary; an already expressed boundary with no independent information may be merged or removed.
+
+### Literature as the foundation for the question
+
+Prefer `Established findings -> Specific extension question -> Present evidence and answer`. Similar studies supply the knowledge base; their existence alone neither invalidates a study nor establishes its contribution. Identify the actual additional knowledge, test, measurement, method, replication, or scope supported by the present work. If that increment is unclear, resolve it in the argument/evidence map rather than inventing novelty.
+
+Do not default to criticizing prior work or claiming that a topic is rarely studied, first addressed, not systematically examined, or seriously neglected. Such claims require a traceable literature assessment at the stated scope. A question may extend, test, or refine established findings without a documented absence of research. Do not convert missing retrieval into evidence of a literature gap.
+
+This standard governs narrative decisions in the existing workflow, exemplar preferences, and style guard. Those aids do not require every paragraph to add a mechanism, implication, contrast, or caveat. Journal and reporting requirements and the evidence/claim boundary remain in force. No discipline is a default research subject.
+
 ## 1. Do not manufacture causal relations
 
 Do not add causal, explanatory, or inferential relations unsupported by the study design, analysis, or cited evidence. Association, spatial co-occurrence, feature importance, SHAP values, model prediction, statistical significance, and temporal ordering do not by themselves establish causation, mechanism, or intervention effects.
@@ -28,7 +48,7 @@ Retain a discourse or emphasis marker only when it expresses a real, necessary, 
 
 ## 4. Control defensive writing
 
-Add anticipatory qualification only when it communicates a genuine uncertainty, limitation, alternative explanation, inferential boundary, or reviewer-relevant ambiguity. Necessary qualification protects accuracy and must be retained; generic self-protection does not.
+Apply the review boundary above to genuine uncertainty, limitations, alternative explanations, and inferential ambiguity. Reviewer relevance alone is insufficient. Necessary qualification protects accuracy and must be retained; generic self-protection does not.
 
 Avoid default constructions such as *it should be noted that*, *it is important to emphasize that*, *this does not necessarily mean that*, *this should be interpreted with caution*, *the present study does not attempt to*, and *it cannot simply be assumed that*. Do not manufacture an objection merely to rebut it.
 
@@ -51,6 +71,8 @@ Before moving from a result to an interpretation, mechanism, recommendation, or 
 3. Is `C` supported by the present analysis, theory, or cited evidence?
 
 If a required premise is missing or unsupported, do not write `A` as implying `B`.
+
+Keep descriptive diagnosis, decision-priority judgments, and intervention-effect claims distinct. Model associations alone establish neither a priority ranking nor an intervention effect: priority judgments require explicit objectives and relevant context-specific evidence, while intervention-effect claims require a design and analysis that identify those effects.
 
 ## 8. Keep model interpretation distinct from mechanism
 
@@ -87,7 +109,7 @@ Vary sentence length and syntax only as informational load requires. Do not manu
 
 ## 14. Apply the standard by section
 
-- **Introduction:** Separate established evidence, the unresolved gap, and study motivation. Do not manufacture a gap through rhetorical contrast.
+- **Introduction:** Connect established evidence to a specific extension question, study motivation, and the supported contribution. Describe an unresolved gap only when the literature assessment establishes it; similarity to earlier work does not require a defensive contrast.
 - **Methods:** Prioritize procedural precision. Avoid persuasive or evaluative transitions.
 - **Results:** Report findings before interpretation. Do not add unsupported mechanisms, causes, implications, or literature comparisons.
 - **Discussion:** Permit interpretation while keeping evidence, inference, alternative explanations, limitations, and implications distinguishable.

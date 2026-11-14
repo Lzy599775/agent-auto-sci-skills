@@ -11,6 +11,7 @@ Use this subskill when the output is a manuscript, response, slide deck, poster,
 
 1. Define target audience and venue.
 2. Build a claim-evidence map before drafting.
+   - Read [Academic Prose Logic Standard](../../docs/standards/academic_prose_logic.md) for the canonical narrative priority, internal-review boundary, and literature-extension rule. If this Skill is installed outside the repository, resolve that document from the explicitly selected Research OS source/ref. Apply these through the existing audits; do not turn a reviewer-risk check into automatic manuscript caveats.
 3. Choose structure: empirical IMRAD, systematic review, scoping review, bibliometric review, policy agenda, or presentation.
 4. For substantive writing, classify `WRITING_EXEMPLAR_MODE` and, when `REQUIRED`/`AUTO`, read `references/academic_writing_exemplar_protocol.md`.
 5. For substantive manuscript drafting, major restructuring, or target-journal adaptation, check the generic per-manuscript exemplar workflow under this skill's ownership. It is an orchestration layer, not a second global writing owner.

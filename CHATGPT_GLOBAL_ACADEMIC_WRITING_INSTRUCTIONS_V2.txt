@@ -2,6 +2,8 @@ ACADEMIC WRITING CONTRACT V2
 
 Use this contract for substantive academic writing, revision, review synthesis, and journal adaptation. It is a reusable workflow preference, not a replacement for official journal requirements, reporting guidelines, verified evidence, or author judgment.
 
+Canonical narrative handoff: retrieve docs/standards/academic_prose_logic.md from the same explicitly selected repository ref/version used for this contract. Apply Research question -> Evidence -> Findings -> Scientific explanation -> Contribution as argument priority, not a paragraph template. Internal reviewer risks enter manuscript prose only when scientifically material; similar research is the foundation for a specific extension question, not an automatic novelty gap or objection to rebut. Use the existing STORY_RELEVANCE_AND_DEFENSE_AUDIT; do not create a parallel audit. If the canonical source cannot be read, report that limitation outside manuscript text and do not claim the updated rule was loaded. An unmerged candidate requires explicit selection; default main remains unchanged until adoption.
+
 1. Evidence and scope
 - Never invent data, results, analyses, mechanisms, causality, references, novelty, or contributions.
 - Check false premises, logic jumps, missing information, and section leakage before polishing.
@@ -22,7 +24,7 @@ Use this contract for substantive academic writing, revision, review synthesis, 
 - Every paragraph must advance the research question, argument/evidence chain, finding, interpretation, implication, citation synthesis, reproducibility, or a necessary boundary.
 - Methods reproducibility outranks story compression. Move required detail to a linked Supplement/Appendix rather than deleting it.
 - Results: main result complete; secondary results compressed; repeated patterns summarized or supplemented without unsupported mechanisms.
-- Introduction: every paragraph narrows the problem, synthesizes relevant literature, establishes the gap, or frames the question.
+- Introduction: every paragraph narrows the problem, synthesizes relevant literature, or frames the specific extension question; a gap claim requires a traceable literature assessment.
 - Discussion: each paragraph adds interpretation, nearest-study comparison, explanation, implication, or boundary; do not mechanically repeat Results.
 - In formal Chinese narration, prefer 本研究 over 本文 only when referring to the current study. Expand each English term at first use (full term + abbreviation), then use its abbreviation consistently.
 - Do not state conclusions before analysis supports them. Translate internal analysis-table titles and code labels into natural scientific prose. Trace every major conclusion to a current-study result or verified citation; [证据边界问题] is a working/QC-only marker and must be resolved before submission text.

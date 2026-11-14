@@ -8,9 +8,11 @@ Do not draft factual scientific prose beyond the available evidence. Build or in
 
 Drafting and revision must comply with [Academic Claim Standard](../standards/academic_claims.md), [Academic Prose Logic Standard](../standards/academic_prose_logic.md), and [Evidence Trace Standard](../standards/evidence_trace.md).
 
+Use the Academic Prose Logic Standard's narrative priority and review boundary before drafting and in final QC. Internal risk review does not automatically become manuscript text; apply its literature-extension rule without adding a second writing owner or audit.
+
 ## Section boundaries
 
-- **Introduction:** established context, unresolved gap, research question, and contribution.
+- **Introduction:** established findings, specific extension question, and supported contribution; an unresolved literature gap requires evidence.
 - **Methods:** reproducible design, data, processing, models, parameters, validation, and ethics/licensing where applicable.
 - **Results:** what the analysis found; no unsupported mechanisms or literature comparison.
 - **Discussion:** interpretation, comparison with literature, alternative explanations, limitations, and implications.
@@ -20,7 +22,7 @@ Drafting and revision must comply with [Academic Claim Standard](../standards/ac
 
 Before substantive drafting, rewriting, restructuring, or target-journal adaptation, automatically follow [Per-Manuscript Writing Exemplar Workflow V1](PER_MANUSCRIPT_WRITING_EXEMPLAR_WORKFLOW_V1.md) and read the same manuscript's authoritative private state. This is the default route and does not require the user to name a Skill. Typo, grammar-only, citation-format-only, one-sentence, and minor-caption edits use the lightweight route. Any paper entering that manuscript's Master 20 must also have a `PAPER_ARTIFACT_RECORD_V1`; availability is secondary to scientific and exemplar fit.
 
-1. Define audience, article type, target venue, contribution, and required reporting standards.
+1. Define the research question, audience, article type, target venue, and required reporting standards; identify the contribution from the evidence and findings.
 2. Build an outline tied to verified claims and artifacts.
 3. Draft from evidence records, analysis outputs, and methods documentation.
 4. After drafting each substantive paragraph, run a sentence-pair logic audit and prose anti-pattern audit under [Academic Prose Logic Standard](../standards/academic_prose_logic.md).
