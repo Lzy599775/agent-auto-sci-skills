@@ -8,7 +8,7 @@
 
 Run this guard after the scientific content is stable and before final prose or reviewer-risk QC. It applies to manuscript prose, Introduction, Methods interpretation, Results interpretation, Discussion, Conclusion, Abstract, review synthesis, rebuttal prose, and substantial academic interpretation.
 
-This is a writing-quality control, not a primary research router, evidence validator, or permission to weaken a claim. Preserve uncertainty, null results, conflicting findings, causal limits, estimand exclusions, scale limits, and reviewer-relevant caveats. `Style strength <= evidence strength`.
+This is a writing-quality control, not a primary research router, evidence validator, or permission to weaken a claim. Preserve uncertainty, null results, conflicting findings, causal limits, estimand exclusions, scale limits, and scientifically material caveats. Apply the [Academic Prose Logic Standard](../../../docs/standards/academic_prose_logic.md)'s narrative priority, internal-review boundary, and literature-extension rule; reviewer relevance alone does not require manuscript text. `Style strength <= evidence strength`.
 
 The default rule is:
 
@@ -19,6 +19,8 @@ The default rule is:
 Prefer the following discourse sequence when a paragraph makes a scientific claim:
 
 `core finding -> interpretation -> mechanism/context -> implication -> necessary qualification`
+
+This is an optional local sequence under the canonical argument priority, not a checklist. Include only the functions supported and needed here; do not generate a mechanism, implication, or qualification to fill a slot.
 
 Do not default to:
 
@@ -63,7 +65,7 @@ The following boundaries may remain explicit when they prevent a real scientific
 - exposure is not equivalent to use;
 - accessibility is not equivalent to realized behavior;
 - clearly defined estimand exclusions;
-- explicit reviewer-risk boundaries.
+- explicit reviewer-risk boundaries that materially affect evaluation of the scientific claim.
 
 Even necessary negatives should not be repeated in adjacent sentences. Keep the most precise formulation once, combine boundaries at the same level into one scope sentence, or move the detail to a limitation paragraph.
 
@@ -221,7 +223,7 @@ Before accepting a rewrite, verify that it has not:
 - changed a conditional estimate into a universal claim;
 - deleted null or conflicting findings;
 - hidden a method limitation;
-- removed a reviewer-relevant caveat.
+- removed a scientifically material caveat under the canonical review boundary.
 
 If a positive-first rewrite cannot preserve the evidence boundary, retain the negative statement and explain why it is necessary. The guard improves discourse function; it does not optimize away scientific caution.
 
