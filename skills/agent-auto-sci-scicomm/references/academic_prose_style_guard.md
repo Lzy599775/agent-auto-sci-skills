@@ -40,7 +40,7 @@ The rewrite must remain faithful to the estimand, population, spatial support, d
 
 In Chinese scientific prose, avoid habitual negative prefaces such as “并不自动” when the sentence can directly identify the measured outcome and the separate inference that still needs evidence. Avoid metaphorical labels such as “底盘” for a research environment, methodological foundation, data infrastructure, or workflow; name the actual component or capability. Review these choices in ordinary research explanations and reviewer replies as well as manuscripts, using this existing guard rather than adding keyword-based enforcement.
 
-For example, revise “覆盖率提高并不自动说明分配公平” as “覆盖率衡量基础服务覆盖；分配公平需依据不同居民群体获得的机会与收益进行评价”. Revise “科研环境是整个研究的底盘” as “现有 Codex、Python 与 Research OS 配置支持文献处理和分析任务” only when those capabilities are demonstrated.
+For example, revise “服务覆盖率提高并不自动说明分配公平改善” as “全市服务覆盖率提高，说明覆盖范围扩大；公平的变化需要比较不同居民群体改善前后的覆盖机会和差距”. Revise “科研环境是整个研究的底盘” as “现有 Codex、Python 与 Research OS 配置支持文献处理和分析任务” only when those capabilities are demonstrated.
 
 These examples illustrate sentence reconstruction, not prohibited strings or fixed replacements. Retain explicit negative wording when needed to prevent a material causal, measurement, or scope error. Do not alter direct quotes, official names, or defined technical terms. Final prose review should be silent by default; do not create an extra audit artifact.
 
