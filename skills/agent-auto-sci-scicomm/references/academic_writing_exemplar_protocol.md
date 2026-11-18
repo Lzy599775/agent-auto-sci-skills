@@ -362,6 +362,8 @@ DEFAULT_ACADEMIC_WRITING_PREFERENCES:
     evidence_led_explanation: true
     natural_sentence_variation: true
     low_template_density: true
+    direct_scope_over_rhetorical_negation: true
+    precise_technical_nouns_over_vague_metaphors: true
   contrast_overuse_review:
     chinese_patterns: [不是…而是…, 并非…而是…, 不能只…还…, 不仅…还…, 不仅仅…更…, 与其…不如…, 不应只…还应…, 没有…反而…]
     english_patterns: [not ... but ..., not merely ... but also ..., not only ... but also ..., rather than ..., instead of ...]
