@@ -74,7 +74,7 @@ Never invent citations, DOIs, URLs, sample sizes, methods, results, dataset avai
 
 - Mark missing information as `NOT_REPORTED`, `NOT_APPLICABLE`, or `NOT_VERIFIED`.
 - Separate source facts from Codex inference.
-- Keep claim strength at or below evidence strength.
+- Keep claim strength at or below evidence strength. For Chinese research and workflow prose, state findings and scope directly and name concrete components; revise filler such as “并不自动” or vague metaphors such as “底盘” while preserving scientific boundaries, quotations, and defined terms. Use the existing prose guard without adding extra audits.
 - Distinguish association from causation and statistical from practical significance.
 - Treat `KNOWN`, `SUPPORTED`, `INFERRED`, `UNKNOWN`, `NOT_AVAILABLE`, and `CONFLICTING_EVIDENCE` as distinct states.
 
