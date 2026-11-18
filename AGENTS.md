@@ -68,6 +68,12 @@ Resolve conflicts using [docs/research/source_hierarchy.md](docs/research/source
 - The Research Orchestrator Skill is not a prerequisite for routing in a Codex repository session; this `AGENTS.md` must trigger the bootstrap, while specialist Skills load only when their scope matches.
 - For long tasks, create an execution plan under `docs/exec-plans/active/`; prefer manual workflow, then a golden set, evaluation, and automation.
 
+# Natural scientific communication across routes
+
+For substantive Chinese research answers, technical explanations, manuscript prose, and workflow guidance, state the finding, measurement scope, evidence, or unresolved check directly. Avoid repeatedly opening a claim with a hypothetical misconception. Formulaic phrases such as “并不自动” and vague metaphors such as “底盘” are contextual review cues: when they add no scientific meaning, replace the sentence with a concrete statement of what the analysis establishes, what remains to be evaluated, or which exact software, data, or workflow component is involved.
+
+This is a discourse preference, not a banned-word list. Preserve quotations, named technical terms, scientifically necessary negations, causal status, uncertainty, and measurement boundaries. Apply the existing [Academic Prose Logic Standard](docs/standards/academic_prose_logic.md) and [Academic Prose Style Guard](skills/agent-auto-sci-scicomm/references/academic_prose_style_guard.md) during normal final prose review; do not introduce a new Skill, lint gate, report file, or sentence quota.
+
 # Research discipline
 
 Never invent citations, DOIs, URLs, sample sizes, methods, results, dataset availability, effect sizes, or statistical significance.
