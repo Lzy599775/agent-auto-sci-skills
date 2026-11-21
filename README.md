@@ -10,12 +10,12 @@
 
 仓库根目录的 [AGENTS.md](AGENTS.md) 提供精简的长期规则和路由入口；详细架构、工作流、证据标准、Research Vault、模板与评估体系从 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [docs/index.md](docs/index.md) 进入。核心原则是：给 agent 一张可导航的地图，而不是把全部规则塞进一个巨大提示词。
 
-当前仓库包含 **14 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-11-09**：
+当前仓库包含 **14 个可安装 Codex skill**，并在 `urban-exposure-review-radar-workflow` 内置一个隔离的 `academic-research-suite` 子 skill。最新上游检查为 **2026-11-21**（30 天截止日：2026-10-22）：
 
-- ARS Codex 包已同步到 `v3.24.2` (`82725ac`)，上游 ARS 内容锁定到 `fd5ff1b`。
-- K-Dense 仓库已检查到 `a25cf9e`，但 27 个精选子目录最近更新均为 2026-10-01，按 30 天规则移除四个封装。
-- AutoSci 已检查到 `3c3922f`，仍作为参考源，不覆盖本地原创 router。
-- SciPilot Figure、SciPilot Writing 仍已退役。GeoRS 上游在 2026-11-03 更新，恢复本地原创适配；因无明确许可证，不复制上游内容。
+- ARS Codex 包仍为最新 `v3.24.2` (`82725ac`)，内容锁定到 `fd5ff1b`；ARS 原始仓库已到 `bd57330`，但 Codex 包尚未发布对应更新，因此不混入未适配的内容。
+- K-Dense 仓库已到 `ec59a29`，但原精选 27 个子目录最近更新仍均为 2026-10-01，四个封装继续退役。
+- AutoSci 更新到 `aa852fd`（文档中的群二维码变更），仍只是参考源，不覆盖本地原创 router。
+- SciPilot Figure、SciPilot Writing 继续退役。GeoRS 上游仍为 2026-11-03 的 `f515996`，原创适配保留；因无明确许可证，不复制上游内容。本轮无新增删除。
 
 ## 安装
 
@@ -181,10 +181,10 @@ V2 进一步把学术写作契约扩展为可复用的全局偏好：先做 stor
 ## 上游与许可证策略
 
 - `Imbad0202/academic-research-skills-codex`：ARS Codex 包，已同步到 `v3.24.2`；许可证和来源见 subskill 内 `LICENSE`、`NOTICE.md`、`manifest.json`。
-- `K-Dense-AI/scientific-agent-skills`：27 个精选子目录最近更新均早于 2026-10-10，四个 wrapper 已按 30 天规则退役。
+- `K-Dense-AI/scientific-agent-skills`：27 个精选子目录最近更新均早于 2026-10-22，四个 wrapper 继续按 30 天规则退役。
 - SciPilot Figure/Writing 保持退役。GeoRS 已恢复原创适配，不分发无许可上游正文。
 
-详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20261109.md](docs/upstream-update-20261109.md)。
+详见 [docs/external-skills.md](docs/external-skills.md)、[docs/skill-map.md](docs/skill-map.md) 与 [docs/upstream-update-20261121.md](docs/upstream-update-20261121.md)。
 
 ## 公开安全原则
 

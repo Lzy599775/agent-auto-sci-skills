@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1
+
+- Audited packaged and previously retired upstream skills on 2026-11-21 against the 2026-10-22 cutoff; no new retirements or package updates were warranted.
+- Confirmed ARS Codex remains at `v3.24.2` (`82725ac`), while its source repository advanced to `bd57330`; retained the package's `fd5ff1b` source lock.
+- Rechecked all 27 formerly selected K-Dense directories individually: their last path commits remain dated 2026-10-01 despite repository HEAD advancing to `ec59a29`.
+- Rechecked GeoRS, both SciPilot projects, the separately pinned experiment-agent, and AutoSci (`aa852fd`, documentation-only); refreshed the provenance audit, README files, and HTML navigation.
+
 ## 1.2.0
 
 - Audited external skills on 2026-11-09 using a 30-day cutoff of 2026-10-10, checking K-Dense's 27 packaged directories individually.

@@ -8,12 +8,12 @@
 
 The repository contains **14 installable skills**, plus an isolated `academic-research-suite` subskill inside `urban-exposure-review-radar-workflow`.
 
-Latest upstream refresh: **2026-11-09**.
+Latest upstream audit: **2026-11-21** (30-day cutoff: 2026-10-22).
 
-- ARS Codex package updated to `v3.24.2` (`82725ac`), locking ARS content to `fd5ff1b`.
-- K-Dense checked at `a25cf9e`; all 27 selected skill directories were last changed on 2026-10-01, so the four wrappers were retired under the 30-day rule.
-- AutoSci checked at `3c3922f`; it remains reference-only and does not overwrite the local original router.
-- SciPilot Figure and Writing remain retired. GeoRS was updated on 2026-11-03 and its original local adapter was restored; no unlicensed upstream content is copied.
+- ARS Codex remains at its latest package, `v3.24.2` (`82725ac`), locking source content to `fd5ff1b`. The original ARS repository advanced to `bd57330`, but no corresponding Codex package has been released; unpublished content is not mixed into the adapter.
+- K-Dense advanced to `ec59a29`, but all 27 formerly selected skill directories were last changed on 2026-10-01. Their four wrappers remain retired.
+- AutoSci advanced to `aa852fd` with a documentation-only QR-code change. It remains reference-only.
+- SciPilot Figure and Writing remain retired. GeoRS remains at `f515996` (2026-11-03); its original local adapter remains available without copying unlicensed source. No additional skill was removed in this audit.
 
 ## Installation
 
@@ -141,7 +141,7 @@ V2 adds a reusable global academic-writing contract: story-relevance, sentence-i
 - `K-Dense-AI/scientific-agent-skills`: selected wrappers retired because their 27 skill directories predate the 30-day cutoff.
 - SciPilot Figure and Writing remain retired. GeoRS is restored as an original adapter without upstream text redistribution.
 
-See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20261109.md](docs/upstream-update-20261109.md).
+See [docs/external-skills.md](docs/external-skills.md), [docs/skill-map.md](docs/skill-map.md), and [docs/upstream-update-20261121.md](docs/upstream-update-20261121.md).
 
 ## ChatGPT and Codex cross-surface use
 
