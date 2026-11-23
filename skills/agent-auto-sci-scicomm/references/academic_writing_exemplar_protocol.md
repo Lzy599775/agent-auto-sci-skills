@@ -73,6 +73,7 @@ Do not accommodate an obviously false premise merely to preserve tone. Record un
 
 ### Source-specific terminology, labels, and claim timing
 
+- For scholarly prose in any language, prefer established field terminology and conventional academic collocations evidenced in verified, topic- and method-matched published studies (especially recent papers in the target field/journal). Check usage in original titles, abstracts, keywords, and full-text passages when available. A term's prevalence or accepted meaning must not be claimed from a metadata-only record. Prefer plain, precise wording when no standard term can be verified; avoid literal translations, improvised labels, and false equivalence between distinct measures. A genuinely new construct may be introduced only with an explicit definition, operationalization, and rationale. Learn shared terminology, never copy distinctive source sentences or claims. Apply the existing terminology consistency review; do not create a second term database or new audit gate.
 - In formal Chinese narration, prefer `本研究` over `本文` only when the sentence refers to the current study; do not apply a blind global replacement.
 - At first use, write the full English term followed by its abbreviation, then use the defined abbreviation consistently. Keep a terminology ledger across the title, abstract, text, figures/tables, and conclusion.
 - Do not write a result or conclusion before the supporting analysis has been completed and checked. A prospective expectation remains a research question or hypothesis, not a finding.
