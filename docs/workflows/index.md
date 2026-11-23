@@ -56,6 +56,8 @@ method consultation, search, analysis, and micro-edits do not initialize Master2
 - Any online paper search automatically applies the paper artifact protocol to every user-facing, shortlisted, evidence-table, method-comparison, exemplar, or synthesis paper. Raw monitor candidates remain exempt until qualified; see the protocol's tiered triggers.
 - Any substantive manuscript writing automatically checks the isolated per-manuscript state before drafting or restructuring. Micro-edits bypass heavy initialization. Users do not need to name a Skill or repeat either trigger.
 
+- Whenever a task actually discovers or searches for scholarly papers (whether Literature is primary or a companion to methodology, writing, replication, or idea evaluation), automatically follow the [Literature Workflow's Zotero-first and targeted current-search procedure](literature_review.md#zotero-first-current-and-venue-aware-discovery). This does not require a new workflow or a full manuscript-state initialization.
+
 ## Universal gates
 
 - Verify current or uncertain external information.
