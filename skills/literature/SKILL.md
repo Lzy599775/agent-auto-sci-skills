@@ -22,8 +22,8 @@ Read [references/contracts.md](references/contracts.md) for input and output con
 ## Follow the pipeline
 
 1. Define the research question, scope, eligibility, and expected output.
-2. Inspect existing Zotero and local sources before duplicating discovery work.
-3. Search authoritative scholarly sources when the corpus is incomplete or current information matters.
+2. **Before every actual scholarly-paper search**, inspect the relevant Zotero collection/library through narrow read-only searches for concepts, known DOI/title/author, and existing attachments. Follow [Zotero Integration Map](references/zotero-integration.md). If inaccessible, report `ZOTERO_UNAVAILABLE` and continue; never report an unchecked library as empty.
+3. **Then run precise, current external discovery** using question-, outcome-, method-, and context-matched queries. Apply the [canonical recency and venue-priority strategy](../../docs/workflows/literature_review.md#zotero-first-current-and-venue-aware-discovery): start with current 12-month research, extend 3–5 years and foundational works as needed, prioritize fitting Nature/Science/PNAS and listed urban-field journals for urban tasks, and cross-check the full field so relevant lower-profile or other-discipline papers are retained. Scientific relevance and evidence quality govern inclusion.
    - Automatically apply [Paper Artifact Availability Protocol V1](../../docs/workflows/PAPER_ARTIFACT_AVAILABILITY_PROTOCOL_V1.md) to every paper surfaced to the user, shortlisted, entered into an evidence table, considered as an exemplar, used in method comparison, or included in synthesis. Check publisher/supplement and data/code statements plus bounded repository searches; the user need not separately request code/data. For monitors, defer Level 1 until qualification and Level 2 until reading/exemplar/reproduction use.
 4. Deduplicate by DOI or authoritative identifier, then title/author/year evidence.
 5. Verify metadata and full-text availability.
